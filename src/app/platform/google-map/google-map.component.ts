@@ -486,14 +486,14 @@ export class GoogleMapComponent implements OnInit {
               const endIcon = 'assets/images/iol/icon-map-pin-end.png';
 
               // Actual Start and End Points
-              const trailMarker1 = this.createDummyMarker(startIcon, locations[0].lat, locations[0].lng, info[0]);
-              const trailMarker2 = this.createDummyMarker(endIcon, locations[locations.length - 1].lat, locations[locations.length - 1].lng, info[1]);
+              // const trailMarker1 = this.createDummyMarker(startIcon, locations[0].lat, locations[0].lng, info[0]);
+              // const trailMarker2 = this.createDummyMarker(endIcon, locations[locations.length - 1].lat, locations[locations.length - 1].lng, info[1]);
               // Snapped Start and End Points with Google
               // const trailMarker1 = this.createDummyMarker(startIcon, this.snappedCoordinates[0].lat(), this.snappedCoordinates[0].lng(), info[0]);
               // const trailMarker2 = this.createDummyMarker(endIcon, this.snappedCoordinates[this.snappedCoordinates.length - 1].lat(), this.snappedCoordinates[this.snappedCoordinates.length - 1].lng(), info[1]);
               // Snapped Start and End Points with OSRM
-              // const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0].location[1], arrayToProcess[0].location[0], info[0]);
-              // const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1].location[1], arrayToProcess[arrayToProcess.length - 1].location[0], info[1]);
+              const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0].location[1], arrayToProcess[0].location[0], info[0]);
+              const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1].location[1], arrayToProcess[arrayToProcess.length - 1].location[0], info[1]);
 
               tempMarkersArr.push(trailMarker1, trailMarker2);
               trailMarker1.setMap(this.map);
