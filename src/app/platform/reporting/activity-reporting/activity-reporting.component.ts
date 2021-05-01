@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {AppLoader} from '../../data/model/app-loader';
 import {ReportResponse} from '../../model/reportResponse';
-import {DateUtils} from '../../../core/date.utils';
 import {HttpController} from '../../../core/services/loading-controller';
 import {LoginApiResponse} from '../../../core/model/api.response';
 import {TruckResponse} from '../../data/response/entity-response';
@@ -10,6 +9,7 @@ import {format} from 'date-fns';
 import {GotoPageService} from '../../services/goto-page.service';
 import {Router} from '@angular/router';
 import {SwalService} from '../../../core/services/swal.service';
+import { DateUtils } from 'src/app/Utils/DateUtils';
 
 @Component({
   selector: 'app-activity-reporting',
