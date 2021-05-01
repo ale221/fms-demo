@@ -1,0 +1,115 @@
+<div class="margin-bottom-10 margin-right-10 row">
+  <app-reporting-buttons [selected]="'month'" [type]="'collections'" (btnClicked)="getReport($event)"
+                         [showGenerateReport]="false"
+                         (generate)="generatePDFReport('collections')">
+
+  </app-reporting-buttons>
+  <app-export-csv [fileName]="entity.name + ' Collection Report ' + collectionsDateRange[0] + ' to ' + collectionsDateRange[1]"
+                  [rows]="collections"
+                  [dateGenerated]="false"
+                  [cols]="csvCols"
+                  *ngIf="collections.length"></app-export-csv>
+
+
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="vscroll padding-right-10" style="height:400px;">
+      <p-progressBar *ngIf="collectionsLoader.visibility" [style]="{'height': '5px'}"
+                     mode="indeterminate"></p-progressBar>
+
+      <ngx-datatable
+        #detailTable
+        class="material table table-condensed expandable  margin-bottom-0"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="7"
+        [scrollbarH]="true"
+        [rows]="collections">
+        <ngx-datatable-column [cellClass]="'pointer'" name="Driver" prop="actor_name">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                   <span (click)="$event.stopPropagation()">
+                                    {{value || '-'}}
+                                   </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column *ngIf="!isEntityTruck" [cellClass]="'pointer'" name="Truck" prop="entity_name">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                   <span>
+                                    {{value || '-'}}
+                                   </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Status" prop="status_label">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                   <span class="label" [ngClass]="getClass(row.status)">
+                                     {{value || '-'}}
+                                   </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Contract" prop="contract_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Client" prop="client_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Area" prop="area_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Bin" prop="action_item_name">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Weight" prop="weight">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value | getNullOrUndefined}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Invoice" prop="invoice">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Verified" prop="verified">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value ? 'Yes' : 'No' || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Timestamp" prop="timestamp">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{(value |  date: 'medium') || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Timestamp 2" prop="timestamp_2">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{(value |  date: 'medium') || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Activity Duration">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <span>{{getActivityDuration(row) || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Pre-Weight" prop="pre_weight">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value | getNullOrUndefined}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Post-Weight" prop="post_weight">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{value | getNullOrUndefined}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

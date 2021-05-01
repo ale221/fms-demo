@@ -1,0 +1,33 @@
+<!--<div class="mapbox  margin-bottom-10 ">-->
+  <!--<input [hidden]="!showSearchBar" id="pac-input" class="controls" type="text" placeholder="Search Box">-->
+<!--</div>-->
+<!--<div id="totalimage">-->
+  <!--<div id="map" #gmap style="width:100%;" [ngStyle]="{'height':height}"></div>-->
+<!--</div>-->
+
+<!--<div id="show_img"></div>-->
+<!--<div id="img_val"></div>-->
+<!--<button id="divclick" (click)="convertToImage()">print</button>-->
+<!-- <div  class="mapbox"> -->
+  <!-- <div *ngIf="currentpage=='poi'">
+  <input  [hidden]="!showSearchBar" id="pac-input" class="controls" style=" position:absolute;right:0;margin-left: 15px;" type="text" placeholder="Search Box">
+</div> -->
+<div class="">
+  <input  [hidden]="!showSearchBar" id="pac-input" class="controls" style="        position: absolute !important;
+  right: 15px;
+  z-index: 99999;
+  top: 10px;
+  padding: 7px;
+  margin-top: 0px
+" type="text" placeholder="Search location on map">
+</div>
+
+  <div id="map" #gmap style="width:100%;" [ngStyle]="{'height':height}">
+  </div>
+<!-- </div> -->
+<img id="imgMap" alt="" style="display: none" [src]="imageUrl" />
+<!--<input *ngIf="showExportImage" type="button" id="btnExport" value="Generate PDF" (click)="export()" />-->
+
+<button  *ngIf="showExportImage" type="button" [disabled]="disableGenerate" class="btn btn-success btn-sm margin-left-5 margin-bottom-5" (click)="export()">Generate PDF Report</button>
+
+

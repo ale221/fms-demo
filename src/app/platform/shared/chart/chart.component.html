@@ -1,0 +1,20 @@
+<div id="chart">
+  <div class="filter-position">
+    <app-chart-filters *ngIf="chartFilter && chartFilter?.length > 0" (selectedFilters)="getSelectedGraphData($event)"
+      [filterData]="chartFilter" [selectedGraph]="selectedGraphFilter">
+    </app-chart-filters>
+  </div>
+
+  <!-- amchart code -->
+  <div [hidden]="chartOptions?.categories?.length == 0">
+    <div id="xcv" style="height: 300px"></div>
+  </div>
+  <!-- amchart code -->
+
+</div>
+
+<div style="display: flex; align-items: center; justify-content: center; flex-direction: column;"
+  *ngIf="chartOptions?.categories?.length==0">
+  <img style="opacity:0.3; margin-top: 55px!important;" src="assets/images/no-graph.png" alt="" width="80px"><br>
+  <span>No record found!</span>
+</div>

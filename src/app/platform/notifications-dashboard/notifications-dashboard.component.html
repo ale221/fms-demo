@@ -1,0 +1,80 @@
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "   style="padding-bottom:200px">
+  <div class="padding-top-0 panel panel-default padding-20  padding-0 margin-0" style="max-height: 600px;">
+    <div class="panel-heading ">
+      <h3 class="panel-title font-weight-600">Notifications</h3>
+      <div class="panel-actions">
+        <!--<a class="panel-action icon " data-toggle="tooltip" data-original-title="View All" (click)="getNotifications()"> View All</a>-->
+        <!--<a class="panel-action icon ion-loop" data-toggle="tooltip" data-original-title="Refresh"></a>-->
+      </div>
+    </div>
+    <div class="panel-body padding-0">
+      <div class="row">
+        <!-- <div class="col-lg-4">
+          <p-dropdown [options]="dropdownOptions" [(ngModel)]="selectedOption" (ngModelChange)="modelChanged($event)"
+            styleClass="prime-dropdown" placeholder="Select Activity Type">
+          </p-dropdown>
+        </div> -->
+        <div class="col-lg-12">
+          <div class="row">
+            <app-reporting-buttons [selected]="'today'" [calendarDimension]="'col-sm-4'" [btnsDimension]="'col-sm-7'"
+              (btnClicked)="setupReport($event)"></app-reporting-buttons>
+          </div>
+        </div>
+      </div>
+      <div class="margin-top-15">
+        <div class="vscroll" style="min-height:400px; max-height: 500px">
+          <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+          </p-progressBar>
+          <div class="table-responsive">
+
+            <table matSort class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+              (matSortChange)="sortData($event)" mat-table [dataSource]="notifications_list" mat-elevation-z8>
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>TITLE / VIOLATION TYPE</th>
+                <td mat-cell *matCellDef="let row">
+                  <!-- <div class=""> -->
+                  <!-- <a class="font-weight-600"> -->
+                  {{row.title ||'N/A'}}
+                  <!-- </a> -->
+                  <!-- </div> -->
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="minutes_ago">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>LAST UPDATED</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.minutes_ago || 'N/A' }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="driver_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>DRIVER NAME</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.driver_name || '-' }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="assigned_device">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>VEHICLE</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.assigned_device || 'N/A' }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns">
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+              </tr>
+            </table>
+            <div *ngIf="notifications_list?.length === 0" class="no-records">No records found</div>
+
+            <!-- <mat-paginator translate="no" #paginator [length]="notifications_list?.length" [hidePageSize]="true" showFirstLastButtons
+              [pageSize]="10" (page)="onPaginateChange($event)">
+            </mat-paginator> -->
+
+            <!-- <app-spin-loading [appLoader]="appLoader" [size]="'sm'"></app-spin-loading> -->
+          </div>
+        </div>
+        <div *ngIf="notifications_list?.length > 0"><b>Count:</b> {{notifications_list?.length}}</div>
+        <app-spin-loading [appLoader]="appLoader"></app-spin-loading>
+      </div>
+    </div>
+  </div>
+</div>

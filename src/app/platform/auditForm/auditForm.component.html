@@ -1,0 +1,214 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <!-- <li><a> Documents</a></li> -->
+    <li><a routerLink="/iol/audit">Audit Form</a></li>
+  </ol>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "  style="padding-bottom:200px" [hidden]="!isAuthorized">
+  <div class="panel-heading font-weight-600 margin-bottom-0">
+  </div>
+
+  <div class="panel-body padding-0">
+    <div class="tab-content">
+      <div class="tab-pane active" id="Summary">
+        <div class="panel panel-default margin-bottom-0 " style="background-color:transparent ;">
+          <div class="panel-body padding-15 ">
+            <div class="row">
+              <div class="col-lg-4  card-group-row__col ">
+                <div class="panel panel-default card round shadow  ">
+                  <div class="panel-heading margin-bottom-0">
+                    <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Choose Parameters</h3>
+                    <div class="panel-actions">
+                      <a></a>
+                    </div>
+                  </div>
+                  <div class="panel-body padding-15" style="height: 570.2px;">
+
+                    <div class="form-group margin-bottom-10">
+                      <form>
+                        <fieldset class="form-fieldset">
+                          <legend class="legendShow">Filter</legend>
+                          <div class="form-group">
+                            <select class="form-control " placeholder="Select Category"
+                              (change)="searchStatusDropDownChangeforCategory($event.target.value)">
+                              <option value="">Select Category</option>
+                              <option *ngFor="let category of getCategories; let i = index" [value]="category">
+                                {{category}}</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <select class="form-control "
+                              (change)="searchStatusDropDownChangeforType($event.target.value)" required>
+                              <option value="">Select Type</option>
+                              <option *ngFor="let type of getTypes; let i = index" [value]="type">{{type}}</option>
+                            </select>
+                          </div>
+                        </fieldset>
+                        <hr>
+                      </form>
+                    </div>
+
+                    <div class="form-group margin-bottom-10">
+                      <a (click)="generateReport()" class="btn btn-success btn-block bg-theme btn-round">Generate Audit
+                        Reports</a>
+                    </div>
+                    <!-- <div class="form-group"  *ngIf="statusForExport == true">
+
+                              <p class="text-danger text-center">No record found</p>
+
+                            </div> -->
+
+                    <hr>
+                    <div class="form-group margin-bottom-0" *ngIf="showExportFile == true">
+                      <label class="font-size-14 font-weight-600 ">Export:</label>
+                      <div class="btn-group btn-group-justified">
+                        <div class="btn-group" role="group">
+                          <a [href]="downloadableLink">
+                            <button type="button" class="btn btn-outline btn-default"> <img
+                                src="../../../assets/images/icon-xls.png" height="50">
+                              <div class="font-size-12">
+                                <a [href]="downloadableLink" class="enabled">
+                                  Download XLS </a>
+                              </div>
+                            </button>
+                          </a>
+                        </div>
+                        <div class="btn-group" role="group">
+                          <a [href]="downloadableLink1">
+                            <button type="button" class="btn btn-outline btn-default"> <img
+                                src="../../../assets/images/icon-pdf.png" height="50">
+                              <a [href]="downloadableLink1">
+                                <div class="font-size-12">Download PDF</div>
+                              </a>
+                            </button>
+                          </a>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group margin-bottom-0" *ngIf="showExportFile == false">
+                      <label class="font-size-14 font-weight-600 ">Export:</label>
+                      <div class="btn-group btn-group-justified">
+                        <div class="btn-group" role="group">
+
+                          <button type="button" class="btn btn-outline btn-default"> <img
+                              src="../../../assets/images/icon-xls-1.png" height="50">
+                            <div class="font-size-12">
+                              <a class="disabled" [href]="downloadableLink">
+                                Download XLS </a>
+                            </div>
+                          </button>
+
+                        </div>
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn btn-outline btn-default"> <img
+                              src="../../../assets/images/icon-pdf-1.png" height="50">
+                            <div class="font-size-12">Download PDF</div>
+                          </button>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8 card-group-row__col">
+
+                <div class="panel panel-default card round shadow  ">
+                  <div class="panel-heading margin-bottom-0">
+                    <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">List</h3>
+                    <div class="panel-actions">
+                      <a></a>
+                    </div>
+                  </div>
+                  <div class="panel-body padding-15 pt-0">
+                    <div class="table-responsive margin-top-20" style="border: 1px solid #ebebeb;">
+                      <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+                      </p-progressBar>
+                      <!-- <form [formGroup]="searchForm" class="formStyle" *ngIf="showExportFile == true" >
+                              <div class="showSearchFilter"  >
+                                <label class=" font-weight-400  ">Search : </label>
+
+                                <input type="text" class="form-control input-sm inputStyle" formControlName="search"
+                                  (keyup)='keyUp.next($event)'>
+                              </div>
+
+
+                              <hr *ngIf="showExportFile == true">
+                            </form> -->
+                      <table matSort (matSortChange)="sortUserList($event)"
+                        class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                        [dataSource]="users" mat-elevation-z8>
+                        <ng-container matColumnDef="id">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{(row.id == null) ? 'N/A': row.id}}
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="entity">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>ENTITY</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{(row.entity == null) ? 'N/A': row.entity}}
+                          </td>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="action">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>ACTION</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.action == null) ? 'N/A': row.action }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="change">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>ACTION DETAILS</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.change == null) ? 'N/A': row.change }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="created_at">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>ACTION DATE</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.created_at | date: 'dd/MM/yyyy') || 'N/A' }}
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="created_at_time">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>ACTION TIME</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.created_at | date: 'mediumTime') || 'N/A' }}
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="user">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>ACTION BY</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.user == null) ? 'N/A': row.user }}
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedUserList"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedUserList;"></tr>
+                      </table>
+                      <div *ngIf="users?.length === 0 || !users" class="no-records">No records found</div>
+                      <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                        showFirstLastButtons (page)="onUserPagination($event)" [pageSize]="10">
+                      </mat-paginator>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

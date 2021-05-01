@@ -1,0 +1,51 @@
+<div class="panel-heading filters-bar pull-left" [ngStyle]="theme" style="width: 100%;">
+    <h3 class="panel-title font-weight-600">
+        Choose Parameters
+    </h3>
+</div>
+<!-- Add buttons -->
+<div class="col-lg-12" style="padding:0px; margin-top: 10px; margin-bottom: 15px;" *ngIf="activePage === 'vehicle'">
+
+    <button type="button" (click)="openTabModal(0)" *ngIf="activeTab == 0" class="btn btn-lg btn-primary btn-block"
+        style="font-size: 14px;border-radius: 20px;">Add New
+        Vehicle</button>
+
+    <button type="button" *ngIf="activeTab == 1" class="btn btn-lg btn-primary btn-block"
+        style="font-size: 14px;border-radius: 20px;">Add New
+        Vehicle Type</button>
+
+    <button type="button" *ngIf="activeTab == 2" class="btn btn-lg btn-primary btn-block"
+        style="font-size: 14px;border-radius: 20px;">Add New
+        Fleet</button>
+
+    <button type="button" *ngIf="activeTab == 3" class="btn btn-lg btn-primary btn-block"
+        style="font-size: 14px;border-radius: 20px;">Add New
+        Category</button>
+
+
+
+    <!-- <button type="button" *ngIf="add_btn == 0" class="btn btn-lg   btn-primary  btn-block " (click)="clearForm()"
+        data-target="#editpop1" data-toggle="modal" style="font-size: 14px;border-radius: 20px;">Add New
+        Vehicle</button>
+
+    <button type="button" *ngIf="add_btn == 1" class="btn btn-lg   btn-primary  btn-block " (click)="clearForm()"
+        data-target="#editpop2" data-toggle="modal" style="font-size: 14px;border-radius: 20px;">Add New
+        Vehicle Type</button>
+
+    <button type="button" *ngIf="add_btn == 2" class="btn btn-lg   btn-primary  btn-block " (click)="clearForm()"
+        data-target="#editpop3" data-toggle="modal" style="font-size: 14px;border-radius: 20px;">Add New
+        Fleet </button>
+
+    <button type="button" *ngIf="add_btn == 3" class="btn btn-lg   btn-primary  btn-block " (click)="clearForm()"
+        data-target="#editpop4" data-toggle="modal" style="font-size: 14px;border-radius: 20px;">Add New
+        Category</button> -->
+
+
+
+</div>
+
+<!-- <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+    <form [formGroup]="searchForm" id="filtersForm">
+
+    </form>
+</div> -->

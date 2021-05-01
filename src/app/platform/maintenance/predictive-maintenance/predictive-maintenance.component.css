@@ -1,0 +1,8 @@
+@media (min-width: 980px) {
+ .after-run .bottom {
+      margin-left: 200px;
+  }
+  .bottom {
+    margin-left: 0px;
+          }
+}

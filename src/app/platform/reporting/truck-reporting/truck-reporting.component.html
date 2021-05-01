@@ -1,0 +1,214 @@
+<div class="col-lg-12">
+  <div class=" padding-right-10">
+    <div class="row">
+      <div class="col-md-2" *ngIf="truckReporting">
+        <div class="form-group">
+          <p-dropdown
+            [(ngModel)]="selectedTruckType"
+            (ngModelChange)="reportErrorMessages = null"
+            [options]="truckTypes"
+            styleClass="prime-dropdown razzaki"
+            placeholder="Vehicle types">
+          </p-dropdown>
+        </div>
+        <div *ngIf="reportErrorMessages"
+             class="error text-danger font-weight-600">{{reportErrorMessages}}</div>
+
+      </div>
+      <div [class]="truckReporting? 'col-md-5' : 'col-md-6'">
+        <!-- <app-reporting-buttons [calendarType]="'basic'" [calendarDimension]="'col-md-6 padding-left-0'" [btnsDimension]="'col-md-5'"
+                               [type]="'all'"
+                               (btnClicked)="generateReport($event)" [hideBtn]="['week', 'month']"
+                               [buttonGroupSize]="'btn-group-sm'"></app-reporting-buttons> -->
+        <app-reporting-buttons [selected]="'month'"
+            [calendarDimension]="'col-md-6 padding-left-0'" [btnsDimension]="'col-md-5'"
+            [type]="'all'" [hideBtn]="['week', 'month']"
+            (btnClicked)="generateReport($event)"></app-reporting-buttons>
+      </div>
+      <div class="col-md-3 pull-right">
+        <app-table-search [tooltipArray]="'Name'" [rows]="temp" [args]="['truck', 'driver']" (filter)="updateFilter($event)"></app-table-search>
+      </div>
+
+
+    </div>
+    <div class="row  margin-bottom-15 padding-left-10" [ngClass]="{'margin-top-10' : driverReporting}" >
+      <app-export-csv
+        *ngIf="!reportLoader.visibility && !isNullOrUndefined(reportingRows) && reportingRows.length > 0"
+        [fileName]="fileName" [dateGenerated]="reportDate" [cols]="reportingCols"
+        [rows]="csvRows"></app-export-csv>
+    </div>
+
+    <div class="row">
+      <p-progressBar *ngIf="reportLoader.visibility" [style]="{'height': '5px'}"
+                     mode="indeterminate"></p-progressBar>
+      <ngx-datatable
+        #reportingTable
+        class="material"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="10"
+        [rows]='reportingRows'>
+        <!-- Row Detail Template -->
+        <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <div class="bg-cyan-100 padding-10  ">
+              <div class="">
+                <div class="">
+                  <div class="">
+                    <table class="table  table-condensed margin-bottom-0 bg-white">
+                      <thead>
+                      <tr>
+                        <th class="text-center">Total Collections</th>
+                        <th class="text-center">Total Trips</th>
+                        <th class="text-center">Total Weight (kg)</th>
+                        <th class="text-center">240 litres</th>
+                        <th class="text-center">1.1 <br/> cbm</th>
+                        <th class="text-center">2.5 <br/> cbm</th>
+                        <th class="text-center">5 <br/> cbm</th>
+                        <th class="text-center">8 <br/> cbm</th>
+                        <th class="text-center">10 <br/> cbm</th>
+                        <th class="text-center">12 <br/> cbm</th>
+                        <th class="text-center">14 <br/> cbm</th>
+                        <th class="text-center">18 <br/> cbm</th>
+                        <th class="text-center">20 <br/> cbm</th>
+                        <th class="text-center">26 <br/> cbm</th>
+                        <th class="text-center">30 <br/> cbm</th>
+                        <th class="text-center">40 <br/> cbm</th>
+                        <th class="text-center">Medical <br/> Waste</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+
+                        <td class="text-center">
+                          {{row.total_collections | getNullOrUndefined}}
+                        </td>
+                        <td class="text-center">
+                          {{row.total_trips | getNullOrUndefined}}
+                        </td>
+                        <td class="text-center">
+                          {{(row.total_weight | getNullOrUndefined)}}
+                        </td>
+                        <td class="text-center">
+                          {{(row['240 litres'] | getNullOrUndefined)}}
+                        </td>
+                        <td class="text-center">{{(row['1.1 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['2.5 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['5 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['8 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['10 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['12 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['14 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['18 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['20 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['26 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['30 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['40 cbm'] | getNullOrUndefined)}}</td>
+                        <td class="text-center">{{(row['Medical Waste'] | getNullOrUndefined)}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-row-detail>
+
+
+        <ngx-datatable-column *ngIf="truckReporting" name="Vehicle" prop="truck">
+          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+            <div>
+              <a [routerLink]="gotoService.gotoTruck(row.truck_id)"> {{value || '-'}} </a>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column *ngIf="!truckReporting" name="Driver" prop="driver">
+          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+            <div>
+              <a [routerLink]="gotoService.gotoDriver(row.driver_id)"> {{value || '-'}} </a>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column *ngIf="driverReporting" name="Vehicle" prop="truck">
+          <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+            <div>
+              <a [routerLink]="gotoService.gotoTruck(row.truck_id)"> {{value || '-'}} </a>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- <ngx-datatable-column name="No. of<br/>Shifts" prop="shifts">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value | getNullOrUndefined}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column> -->
+        <ngx-datatable-column prop="total_distance" name="Distance <br/> Travelled (km) ">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{(value | number: '1.0-2') | getNullOrUndefined}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Fuel<br/>Consumed (L)" prop="volume_consumed">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{(value | getNullOrUndefined)}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Fuel Avg <br/> (km/l)" prop="fuel_avg">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{(value | number: '1.0-2') | getNullOrUndefined}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+<!--        <ngx-datatable-column name="Shift Status" prop="running">-->
+<!--          <ng-template let-value="value" ngx-datatable-cell-template>-->
+<!--            <div class="label" [ngClass]="value | getShiftClass">-->
+<!--              {{-->
+<!--              (value | getNullOrUndefined) === '-' ? '-' : (value === true ? 'Running' : 'Completed')-->
+<!--              }}-->
+<!--            </div>-->
+<!--          </ng-template>-->
+<!--        </ngx-datatable-column>-->
+        <!-- <ngx-datatable-column name="Shift<br/>Duration" prop="total_duration">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value || '-'}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column> -->
+        <!-- <ngx-datatable-column prop="manpower" name="Manpower<br/>(cbm/hour)">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{ (value | number: '1.0-2') || '-'}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column> -->
+        <!-- <ngx-datatable-column
+          [width]="50"
+          [resizeable]="false"
+          [sortable]="false"
+          [draggable]="false"
+          [canAutoResize]="false">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+            <button type="button" (click)="toggleReportingTable(1, row)"
+                    class="btn btn-icon btn-outline btn-round btn-default btn-xs margin-bottom-0"
+                    pTooltip="View Details"><i class="icon ion-information"></i>
+            </button>
+          </ng-template>
+        </ngx-datatable-column> -->
+
+
+      </ngx-datatable>
+    </div>
+
+
+  </div>
+</div>

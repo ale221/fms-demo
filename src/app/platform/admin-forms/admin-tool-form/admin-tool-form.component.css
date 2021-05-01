@@ -1,0 +1,64 @@
+/*.ng-valid {*/
+  /*border-left: 5px solid #42A948; !* green *!*/
+/*}*/
+
+.bs-datepicker {
+    z-index: 9999 !important;
+  }
+  bs-datepicker-container,
+  bs-daterangepicker-container {
+    z-index: 9999 !important; }
+  .alert-md-color {
+    background-color: #7B1FA2;
+    border-color: #4A148C;
+    color: #fff;
+  }
+  i::after { content: ' '; width: 1px; height: 1px; }
+  
+.no-records {
+  color: black;
+}
+
+.no-records {
+  color: black;
+}
+
+.btncolor{
+  background-color: #e60000 !important;
+}
+.ri-add-circle-fill:before {
+  content: "\ea0e";
+}
+.form-fieldset {
+  border: 2px solid #eee !important;
+  margin: 0;
+  padding: 15px;
+  position: relative;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.form-fieldset legend {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: -5px;
+  border: 0px solid #ddd;
+  padding: 5px 5px;
+  background-color: #fff;
+  display: inline-block;
+  width: auto;
+  color: #777;
+  margin-left: -10px;
+}
+.input-search .form-control {
+  border-radius: 0px;
+}
+.btn-round {
+  border-radius: 1000px;
+
+}
+.btn-block1{
+  margin-right: 6px;
+}
+.no-records{
+  color: black !important;
+}

@@ -1,0 +1,4 @@
+<label class="control-label">{{text}}
+  <span class="pull-right text-danger font-weight-100" *ngIf="msg"> {{msg}}</span>
+  <span [ngClass]="!showLoader?'hidden':''" class="pull-right"><img src="/assets/images/iol/label-loader.gif" height="25px" width="25px"></span>
+</label>

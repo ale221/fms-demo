@@ -1,0 +1,13 @@
+<div class="form-group1">
+  <label class="control-label" *ngIf="showLabel">Location</label>
+  <p-dropdown
+    [(ngModel)]="selectedValue"
+    [disabled]="disableRecord"
+    [showClear]="true"
+    [options]="location_list"
+    (onChange)="onLocationChange($event.value)"
+    styleClass="prime-dropdown"
+    filter="true"
+    [placeholder]="locationLoader.visibility? 'Fetching Location':'Select Location'">
+  </p-dropdown>
+</div>

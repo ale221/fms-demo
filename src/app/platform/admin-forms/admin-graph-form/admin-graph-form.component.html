@@ -1,0 +1,305 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+    #scrollToTop [hidden]="!isAuthorized">
+    <ol class="breadcrumb breadcrumb-arrow ">
+        <li><a class="icon ion-ios-home" routerLink="/iol/admin/config"> Admin </a></li>
+        <li><a href="javascript:void(0)">Graph-Settings</a></li>
+    </ol>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' " [hidden]="!isAuthorized">
+    <div class="tab-content">
+        <div class="tab-pane active" id="addnew">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">Select Usecase</label>
+                        <div class="input-icon">
+                            <p-dropdown [options]="usecases" [(ngModel)]="selectedUsecaseObj" name="selectedUsecase"
+                                (onChange)="usecaseChange($event)" optionLabel="name" styleClass="prime-dropdown"
+                                [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+                                placeholder="Select Usecase">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">Select Dashboard</label>
+                        <div class="input-icon">
+                            <p-dropdown [options]="dashboards" [(ngModel)]="selectedDashboardObj"
+                                name="selectedDashboard" (onChange)="dashboardChange($event)" optionLabel="name"
+                                styleClass="prime-dropdown" [readonly]="false" filter="true" [scrollHeight]="'120px'"
+                                filterPlaceholder="Search" placeholder="Select Dashboard">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+
+                </div>
+            </div>
+
+
+            <div class="panel panel-dark" style="min-height: 300px;">
+                <div class="panel-heading theme-color">
+                    <h3 class="panel-title font-weight-600"> {{selectedUsecase}}</h3>
+                    <div class="panel-actions">
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="margin-bottom-0 clearfix">
+                    </div>
+
+                    <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                        <table class="table  margin-bottom-0  table-condensed1 table-bordered1 text-wrap theme-table1">
+                            <thead style="max-width: 100px;">
+                                <tr class="">
+                                    <th class="col-md-10 text-left">Preview</th>
+                                    <th class="col-md-2">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody *ngIf="usecasesDashboard">
+                                <tr *ngFor="let graph of usecasesDashboard; let i = index" [attr.data-index]="i">
+
+                                    <td class="col-md-10 text-left">
+                                        <!-- Average statistics  -->
+                                        <div class="chartbox"
+                                            *ngIf="graph.type === 12  && graph.name ==='Average Statistics'">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-statisticschart [chartOptions]="graph?.data"
+                                                [graphHeight]="graphHeight" [horizontal]="true"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph?.id"
+                                                [graphType]="graph?.type" [graphUseCaseId]="graph?.use_case_id">
+                                            </app-statisticschart>
+                                        </div>
+                                        <!------------------------>
+
+
+                                        <!-- Vehicle Statistics  -->
+                                        <div class="chartbox"
+                                            *ngIf="graph?.type === 88 && (graph?.name === 'Vehicle Statistics' || graph?.name === 'Vehicles by Fleet') ">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-multi-bar-chart [chartOptions]="graph?.data"
+                                                [graphHeight]="graphHeight" [chartFilter]="graph?.ui_filter?.data"
+                                                [graphId]="graph.id" [graphType]="graph?.type"
+                                                [graphUseCaseId]="graph?.use_case_id">
+                                            </app-multi-bar-chart>
+                                        </div>
+                                        <!----------------------->
+
+
+                                        <!-- Driver Tasks Status  -->
+                                        <div class="chartbox"
+                                            *ngIf="graph.type === 15  && graph.name ==='Driver Tasks Status' && graph.id === 60">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                                                [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
+                                            </app-chart>
+                                        </div>
+                                        <!------------------------>
+
+
+                                        <!-----------Driver Safety Scorecard------------>
+                                        <div class="chartbox pie-chart-legends"
+                                            *ngIf="graph.type === 4 && graph.name ==='Driver Safety Scorecard'">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-pie-chart [chartOptions]="graph?.data" [graphHeight]="graphHeight"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph?.id"
+                                                [graphType]="graph?.type" [graphUseCaseId]="graph?.use_case_id">
+                                            </app-pie-chart>
+                                        </div>
+                                        <!-----------Driver Safety Scorecard------------>
+
+
+                                        <!-----------Maintenance status------------>
+                                        <div class="chartbox" style="width: 300px;"
+                                            *ngIf="graph.type === 14 && graph.name === 'Maintenance status '">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-radial-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                                                [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
+                                            </app-radial-chart>
+                                        </div>
+                                        <!-----------Maintenance status------------>
+
+
+                                        <!-----------#Sixth Graph------------>
+                                        <div class="chartbox"
+                                            style="height: 330px !important; width: 310px !important; "
+                                            *ngIf="graph.type === 9 && graph.name === 'Driver Violations'">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <!-- <app-tree-chart [chartOptions]="graph?.data" [graphHeight]="graphHeight"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph?.id"
+                                                [graphType]="graph?.type" [graphUseCaseId]="graph?.use_case_id">
+                                            </app-tree-chart> -->
+
+
+                                            <app-clustered-bar-chart [chartOptions]="graph?.data"
+                                                [graphHeight]="graphHeight" [chartFilter]="graph?.ui_filter?.data"
+                                                [graphId]="graph?.id" [graphType]="graph?.type"
+                                                [graphUseCaseId]="graph?.use_case_id">
+
+                                            </app-clustered-bar-chart>
+
+
+
+
+                                        </div>
+                                        <!-----------#sixth Graph------------>
+
+                                        <!-----------#Seventh Graph------------>
+                                        <div class="chartbox"
+                                            *ngIf="graph.type === 11 && graph.name === 'Fuel Efficient Vehicles'">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-bar-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                                                [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
+                                            </app-bar-chart>
+                                        </div>
+                                        <!-----------#seventh Graph------------>
+
+
+                                        <!-----------#Eigth Graph------------>
+                                        <div class="chartbox"
+                                            *ngIf="graph.type === 1 && graph.name ==='Probability of Vehicle Maintenance'">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-mantinanceprobabilitychart [chartOptions]="graph.data"
+                                                [graphHeight]="graphHeight" [horizontal]="true"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                                                [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
+                                            </app-mantinanceprobabilitychart>
+                                        </div>
+                                        <!-----------#eigth Graph------------>
+
+
+                                        <!-----------#Ninth Graph------------>
+                                        <div class="chartbox" style="width: 300px"
+                                            *ngIf="graph.type === 1 && graph.name === 'Driver Allocations'">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-custom-graph [chartOptions]="graph?.data?.fleets"
+                                                [graphHeight]="graphHeight" [horizontal]="true"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                                                [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
+                                            </app-custom-graph>
+                                        </div>
+                                        <!-----------#Ninth Graph------------>
+
+
+                                        <!-----------#Last Graph------------>
+                                        <div class="chartbox" *ngIf="graph?.type === 10 ">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-area-chart [chartOptions]="graph?.data" [graphHeight]="graphHeight"
+                                                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                                                [graphType]="graph?.type" [graphUseCaseId]="graph?.use_case_id">
+                                            </app-area-chart>
+                                        </div>
+                                        <!-----------#Last Graph------------>
+
+
+                                        <!-----------#Last Graph-1------------>
+                                        <!-- <div class="chartbox" *ngIf="graph?.type === 88 && graph.is_selected">
+                                            <span>
+                                                <p><b>{{graph.name}}:</b></p>
+                                            </span>
+                                            <app-fleetdashboardchart [chartOptions]="graph.data"
+                                                [graphHeight]="graphHeight" [horizontal]="false" [graphId]="graph.id"
+                                                [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
+                                            </app-fleetdashboardchart>
+                                        </div> -->
+                                        <!-----------#Last Graph-1------------>
+
+                                    </td>
+
+                                    <td class="col-md-2" style="vertical-align: inherit; width: 50%"
+                                        *ngIf="graph?.name !== 'Vehicle Maintenance Graph'">
+                                        <div class="theme-color">
+                                            <div class="onoffswitch ">
+                                                <input type="checkbox" (change)="setGraphId(graph, $event)"
+                                                    name="onoffswitch{{i}}" class="onoffswitch-checkbox"
+                                                    id="onoffswitch{{i}}" [value]="graph.is_selected"
+                                                    [checked]="graph.is_selected">
+                                                <label class="onoffswitch-label" for="onoffswitch{{i}}">
+                                                    <span class="onoffswitch-inner"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                                <tr *ngIf="this.vehicleMaintenanceObject">
+                                    <!-----------#Vehicle Maintenance Graph------------>
+                                    <td class="col-md-10">
+                                        <div class="chartbox"
+                                            *ngIf="vehicleMaintenanceObject?.type == 14 && vehicleMaintenanceObject?.name === 'Vehicle Maintenance Graph'">
+                                            <span>
+                                                <p><b>{{vehicleMaintenanceObject.name}}:</b></p>
+                                            </span>
+                                            <div id="chartdiv" style="width: 300px; height: 300px"></div>
+                                        </div>
+                                    </td>
+                                    <!-----------#Vehicle Maintenance Graph------------>
+
+                                    <td class="col-md-2" style="vertical-align: inherit; width: 50%">
+                                        <div class="theme-color">
+                                            <div class="onoffswitch ">
+                                                <input type="checkbox"
+                                                    (change)="setGraphId(this.vehicleMaintenanceObject, $event)"
+                                                    name="onoffswitch+99" class="onoffswitch-checkbox"
+                                                    id="onoffswitch+99"
+                                                    [value]="this.vehicleMaintenanceObject?.is_selected"
+                                                    [checked]="this.vehicleMaintenanceObject.is_selected">
+                                                <label class="onoffswitch-label" for="onoffswitch+99">
+                                                    <span class="onoffswitch-inner"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12" *ngIf="loggedInUser.read_only != true">
+                    <hr />
+                    <div class="form-group1">
+                        <button type="button" [disabled]="usecasesDashboard?.length === 0" (click)="saveCardSettings()"
+                            class="btn btn-dark pull-right btn-round">
+                            Update Graphs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<div class="multi-dropdown">
+    <p-dropdown [options]="filterData" name="data" (onChange)="filterChanged($event)"
+        optionLabel="name" styleClass="prime-dropdown" [(ngModel)]="selectedGraphObj"
+        [readonly]="false" placeholder="Filter">
+    </p-dropdown>
+    <p-dropdown *ngIf="secondaryFilter" [options]="secondaryFilter" name="data" (onChange)="secondaryFilterChanged($event)"
+        optionLabel="name" styleClass="prime-dropdown" [readonly]="false" placeholder="Filter">
+    </p-dropdown>
+</div>

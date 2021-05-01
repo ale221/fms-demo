@@ -1,0 +1,291 @@
+<div class="breadcrumb-box" #scrollToTop>
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li class="pointer"><a class="icon ion-ios-home" href="/iol"> Dashboard </a></li>
+    <li><a [routerLink]="gotoService.gotoDrivers()"> Staff </a></li>
+    <li><a href="javascript:void(0)">{{driver?.name}}</a></li>
+  </ol>
+</div>
+
+
+<div class="page-content   container-fluid  full-open-sidebar"   >
+  <ng-template #notFound>
+    <div class="text-center">
+      <app-data-not-found [appLoader]="appLoader" [alignClass]="'text-center'" [fontSize]="'font-size-16'">
+      </app-data-not-found>
+    </div>
+  </ng-template>
+
+  <div class="row">
+    <div class="col-lg-3">
+      <app-item-meta-information [name]="driver?.name"
+                                 [height]="'141px'"
+                                 [imageStyle]="{'height': '140px', 'max-width': '100%', 'border-radius': '50%'}"
+                                 [showBadge]="true"
+                                 [status]="[{label:driver?.status_label, class:driver?.status == 1? 'badge-success': 'badge-danger'}]"
+                                 [image]="driver?.photo_method? driver?.photo_method : 'assets/images/iol/driver_placeholder.png'"
+                                 [list]="driverMetaInfo">
+      </app-item-meta-information>
+      <app-spin-loading [appLoader]="appLoader" [size]="'sm'"></app-spin-loading>
+    </div>
+    <div class="col-lg-9 ">
+      <div class="row">
+        <div class="col-lg-3 col-sm-3">
+          <div class="widget shadow pointer"
+               [routerLink]="driver?.truck ? gotoService.gotoTruck(driver?.truck.id) : null">
+            <div class="widget-content padding-10 height-100 text-center relative bg-blue-700">
+              <div class="white">
+                <div class="counter-label margin-bottom-5   clearfix">
+                  <span class="font-size-14 ">Assigned Vehicle</span>
+                </div>
+                <div class="">
+                  <b class=" font-size-20">{{driver?.truck ? driver?.truck.name : '-'}}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-sm-3">
+          <app-stats-icon-card [bgColor]="'bg-teal-700'" [label]="'Distance Travelled'" [footerText]="'Last Shift'"
+                               [unit]="'km'" [icon]="'assets/images/iol/icon-distance-travelled.png'"
+                               [data]="shift_distance_travelled || '0'"></app-stats-icon-card>
+        </div>
+        <div class="col-lg-3 col-sm-3">
+          <app-stats-icon-card [bgColor]="'bg-green-700'" [label]="'Fuel Consumed'"
+                               [data]="shift_volume_consumed || '0'" [footerText]="'Last Shift'" [unit]="'gal'"
+                               [icon]="'assets/images/iol/icon-volume-consumed.png'">
+          </app-stats-icon-card>
+        </div>
+        <div class="col-lg-3 col-sm-3">
+          <div class="no-space row  margin-bottom-30 ">
+            <div class="col-sm-6">
+              <div class="counter  padding-10  shadow counter-lg white bg-orange-600 vertical-align height-100 ">
+                <div class="vertical-align-middle">
+                  <div class="white">
+                    <div class="counter-label margin-bottom-5 clearfix">
+                      <span class="font-size-12 ">
+                        Shift Status
+                      </span>
+                    </div>
+                    <div class="">
+                      <b class="counter-number font-size-14"> {{driver?.on_shift ? 'On Shift' : 'Off Shift'}}</b>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="counter  padding-10  shadow counter-lg white bg-orange-600 vertical-align height-100 ">
+                <div class="vertical-align-middle">
+                  <div class="white">
+                    <div class="counter-label margin-bottom-5 clearfix">
+                      <span class="font-size-12 ">
+                        Activity Status
+                      </span>
+                    </div>
+                    <div class="">
+                      <b
+                        class="counter-number font-size-14"> {{currentActivities.length > 0 ? 'On Activity' : '-'}} </b>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="mapbox   margin-bottom-0 ">
+            <app-google-map #driverMap [height]="'282px'"></app-google-map>
+            <!-- <app-map-overlay [msg]="getMessage()"
+                             [visibility]="!(driver?.truck && driver?.truck.last_latitude)"></app-map-overlay> -->
+          </div>
+
+        </div>
+        <div class="col-lg-6">
+          <div class="panel panel-default nav-tabs-horizontal padding-0 margin-bottom-0">
+            <div class="panel-heading font-weight-600">
+              <ul class="nav nav-tabs nav-tabs-line  " data-plugin="nav-tabs" role="tablist">
+                <li class=""><a data-toggle="tab" href="#otherJobs" role="tab" class="">Accepted Activity</a></li>
+              </ul>
+            </div>
+
+            <div class="panel-body  padding-0">
+              <div class="tab-content">
+                <div class="tab-pane active" id="otherJobs" role="tabpanel">
+                  <div class="panel-body padding-0">
+                    <div class="bg-green-100 padding-10">
+                      <div class="padding-10  bg-white  margin-bottom-0 ">
+                        <div class="table-responsive vscroll" style="height:196px;">
+                          <table class="table  table-condensed  no-border  margin-bottom-0">
+                            <tbody *ngIf="driverAcceptedActivity.length ;else notFound">
+                            <tr>
+                              <th width=""><b> Assigned Truck </b></th>
+                              <td class="text-left text-break">
+                                <div class="media">
+                                  <div class="media-body" style="vertical-align:middle;">
+                                    <a
+                                      [routerLink]="gotoService.gotoTruck(driverAcceptedActivity[0].primary_entity_id)">{{driverAcceptedActivity[0].primary_entity_name || '-'}}</a>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th width=""><b> Start Date </b></th>
+                              <td class="text-left">
+                                {{driverAcceptedActivity[0].created_datetime | date: 'mediumDate'}}
+                              </td>
+                            </tr>
+                            <tr>
+                              <th width=""><b> Start Time </b></th>
+                              <td class="text-left">
+                                {{driverAcceptedActivity[0].created_datetime | date: 'mediumTime'}}
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <app-spin-loading [size]="'sm'" [appLoader]="appLoader"></app-spin-loading>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col-lg-12">
+      <div class="col-lg-12 padding-0 ">
+        <div class="panel panel-default nav-tabs-horizontal padding-0 margin-bottom-10 ">
+          <div class="panel-heading font-weight-600 margin-bottom-15" (click)="resizeDatatableSerivce.recalculate();">
+            <ul class="nav nav-tabs nav-tabs-line  " data-plugin="nav-tabs" role="tablist">
+              <li class="active"><a data-toggle="tab" href="#Activities" role="tab">Activities</a></li>
+              <!-- <li class=""><a data-toggle="tab" href="#Collections" role="tab">Collections</a></li> -->
+
+              <li class=""><a data-toggle="tab" href="#Maintenance" role="tab">Maintenances</a></li>
+              <li class=""><a data-toggle="tab" href="#Shifts" role="tab">Shifts</a></li>
+              <li class=""><a data-toggle="tab" href="#Violations" role="tab">Violations</a></li>
+              <li class=""><a data-toggle="tab" href="#Fines" role="tab">Fines</a></li>
+            </ul>
+          </div>
+          <div class="panel-body padding-0">
+            <div class="">
+              <div class="">
+                <div class="tab-content padding-10">
+
+                  <!--Activities Tab-->
+                  <div class="tab-pane active " id="Activities" role="tabpanel">
+                    <app-activity-reporting [entity]="entityId" [serviceObj]="scheduleActivityService" (pdfReportObj)="generatePDFReport('activities', $event)" [isEntityTruck]="false"></app-activity-reporting>
+
+                  </div>
+                  <!--Activities tab-->
+
+                  <!--Collections Tab-->
+                  <div class="tab-pane" id="Collections" role="tabpanel">
+                    <app-collection-reporting [entity]="{id:entityId,type:5}" (pdfReportObj)="generatePDFReport('collections', $event)" [isEntityTruck]="false" ></app-collection-reporting>
+                  </div>
+                  <!--Collections tab-->
+
+                  <!--Maintenance Tab-->
+                  <div class="tab-pane " id="Maintenance" role="tabpanel">
+                    <app-maintenance-reporting [entity]="entityId" [isEntityTruck]="false" [serviceObj]="maintenanceService" (pdfReportObj)="generatePDFReport('maintenances', $event)" ></app-maintenance-reporting>
+
+                  </div>
+                  <!--Maintenance tab-->
+
+                  <!--Shift Tab-->
+                  <div class="tab-pane " id="Shifts" role="tabpanel">
+                    <app-shift-reporting [entity]="entityId" [serviceObj]="driverService" [isEntityTruck]="false"
+                                         (pdfReportObj)="generatePDFReport('shifts', $event)"></app-shift-reporting>
+
+                  </div>
+                  <!--Shift tab-->
+
+                  <!-- Violation Tab-->
+                  <div class="tab-pane" id="Violations" role="tabpanel">
+                    <app-violation-reporting [entity]="entityId" [isEntityTruck]="false"></app-violation-reporting>
+                  </div>
+                  <!--/Violation Tab-->
+
+
+                  <!--Fines Tab-->
+                  <div class="tab-pane " id="Fines" role="tabpanel">
+                    <div class="margin-bottom-10  row">
+                      <app-reporting-buttons [selected]="'month'" [type]="'fines'" (btnClicked)="setupReport($event)"
+                                             [showGenerateReport]="false"
+                                             (generate)="generatePDFReport('fines')">
+
+                      </app-reporting-buttons>
+
+                      <!-- <app-export-csv
+                        [fileName]="driver?.name + ' Fines Report ' + finesDateRange[0] + ' to ' + finesDateRange[1] "
+                        [dateGenerated]="false"
+                        [rows]="fines"
+                        [cols]="csvFinesCols"
+                        *ngIf="fines.length"></app-export-csv> -->
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="padding-right-10" style="height:400px;">
+                          <p-progressBar *ngIf="fineLoader.visibility" [style]="{'height': '5px'}" mode="indeterminate">
+                          </p-progressBar>
+
+                          <ngx-datatable #shiftTable class="material" [columnMode]="'force'" [headerHeight]="50"
+                                         [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [rows]='fines'>
+                            <!-- ID required for  patch call-->
+                            <ngx-datatable-column name="Asset" prop="truck_name"></ngx-datatable-column>
+                            <ngx-datatable-column name="Asset Type" prop="asset_type">
+                              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                <div class="media ">
+                                  <div class="media-left padding-right-10">
+                                    <img [src]="getAssetTypeImage(value)" alt="img" height="16" class="inline">
+                                  </div>
+                                  <div class="media-body margin-0">{{value}}</div>
+                                </div>
+                              </ng-template>
+
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Driver" prop="driver_name"></ngx-datatable-column>
+                            <ngx-datatable-column name="Cost" prop="cost"></ngx-datatable-column>
+                            <ngx-datatable-column name="Timestamp" prop="timestamp">
+                              <ng-template let-value="value" ngx-datatable-cell-template>
+                                <div>
+                                  {{value | date: 'medium'}}
+                                </div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Notes" prop="notes"></ngx-datatable-column>
+
+
+                          </ngx-datatable>
+                        </div>
+                      </div>
+
+
+                    </div>
+                    <!--                    <app-spin-loading [appLoader]="shiftLoader"></app-spin-loading>-->
+
+                  </div>
+                  <!--Fines tab-->
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

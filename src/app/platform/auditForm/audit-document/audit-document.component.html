@@ -1,0 +1,408 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <!-- <li><a> Documents</a></li> -->
+    <li><a routerLink="/iol/audit/document">Document</a></li>
+  </ol>
+</div>
+<!-- [hidden]="!isAuthorized" -->
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "  style="padding-bottom:200px">
+  <button type="button" #showP class="btn btn-icon btn-outline btn-round btn-default btn-xs hidden"
+    data-target="#showProgressFiles" data-toggle="modal">
+    <i class="icon ion-edit"></i>
+  </button>
+  <div class="modal fade  modal-success text-left" data-backdrop="static" data-backdropclass="foo"
+    (hide)="false;$event.preventDefault();$event.stopPropagation();" id="showProgressFiles" role="dialog" tabindex="-1"
+    style="z-index: 2000;">
+    <div class="modal-dialog modal-center modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close hidden" data-dismiss="modal">
+            <span>x</span>
+          </button>
+          <h4 class="modal-title">File Upload Progress!</h4>
+        </div>
+        <div class="modal-body">
+          <div class="col-sm-offset-1 col-sm-10 col-sm-offset-1 padding-bottom-10">
+            <div style="height:40px;position: relative;" class="progress margin-bottom-0"
+              data-labeltype="absentPercentage" data-plugin="progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" style="padding: 14px;"
+                [ngStyle]="{'width': (uploadedPercentage || 0) +'%' }">
+                <span class="progress-bar-title">{{(uploadedPercentage) + '%'}}</span>
+              </div>
+            </div>
+            <button type="button" #closeP class="hidden btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade  modal-success text-left" id="editpop1" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center  modal-lg">
+      <div class="modal-content" style="overflow: scroll">
+        <div class="modal-header" [ngStyle]="theme">
+          <button type="button" class="close" data-dismiss="modal">
+            <span>x</span>
+          </button>
+          <h4 class="modal-title">{{inactiveRecord ? 'View Contract' : formTitle}}</h4>
+        </div>
+        <form novalidate [formGroup]="contractForm" id="tryFormID" (ngSubmit)="onSubmit1(contractForm.value)">
+          <div class="modal-body">
+            <fieldset [disabled]="inactiveRecord">
+              <div class="">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div *ngIf="(clients_loader_flag || areas_loader_flag || locations_loader_flag)"
+                      class="alert alert-success alert-dismissible">
+                      <strong>Fetching data...</strong>
+                    </div>
+                  </div>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="control-label">Select Driver Group <span
+                              class="required  text-danger2">*</span></label>
+
+                          <p-dropdown [options]="driverGroup" styleClass="prime-dropdown" name="select_group"
+                            filter="true" (onChange)="onDriverGroupChange($event.value)" filterPlaceholder="Search"
+                            formControlName="select_group" optionLabel="name" placeholder="Select Driver Group">
+                          </p-dropdown>
+                          <span class="error-message"
+                            *ngIf="contractForm.get('select_group').getError('required') && submitted ">
+                            Please Select Driver Group
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="control-label">Select Driver <span
+                              class="required  text-danger2">*</span></label>
+                          <p-dropdown [options]="drivers" styleClass="prime-dropdown" name="select_driver" filter="true"
+                            filterPlaceholder="Search" formControlName="select_driver" optionLabel="name"
+                            placeholder="Select Driver">
+                          </p-dropdown>
+                          <span class="error-message"
+                            *ngIf="contractForm.get('select_driver').getError('required') && submitted ">
+                            Please Select Driver
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="control-label">Select Document type <span
+                              class="required  text-danger2">*</span></label>
+                          <p-dropdown [options]="documentType" styleClass="prime-dropdown" name="document_type"
+                            filter="true" filterPlaceholder="Search" formControlName="document_type" optionLabel="name"
+                            placeholder="Select Document Type">
+                          </p-dropdown>
+                          <span class="error-message"
+                            *ngIf="contractForm.get('document_type').getError('required') && submitted ">
+                            Please Select Document Type
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="padding-bottom-0 padding-top-0">
+                          <div class="form-group">
+                            <p-progressBar *ngIf="showIndeterminateProgressforFile" [style]="{'height': '5px'}" mode="indeterminate">
+                            </p-progressBar>
+                            <label class="control-label">Attachments<small class="text-danger"> (Upload upto 10
+                                files)</small> </label>
+                            <!-- <p-progressBar *ngIf="fileUploadProgressBar" [style]="{'height': '5px'}"
+                                  mode="indeterminate">
+                                </p-progressBar> -->
+                            <p-fileUpload #fileuploader filename="myfile[]" customUpload="true" previewWidth="10"
+                              [showUploadButton]="false" (onSelect)="fileSelected($event)"
+                              (onBeforeUpload)="fileSelected($event)" multiple="multiple" accept=".pdf"
+                              maxFileSize="5243000">
+                              <div class="ui-g">
+
+                                <ng-template let-file pTemplate="file">
+                                  <td class="ui-g-4 padding-3">
+                                    <div class="ui-fileupload-row">
+                                      <!-- <i class="fa fa-file-o  margin-right-5" aria-hidden="true"></i> -->
+                                      <img id="icn" src="../../../../assets/images/icon-pdf.png" alt="">
+                                      <span [pTooltip]="file.tooltip" tooltipPosition="top"
+                                        tooltipStyleClass="ptooltip-class">{{getTruncatedFileName(file.name)}}
+                                        <button type="button" icon="pi pi-times" pButton
+                                          (click)="remove(file,fileuploader)"></button>
+                                      </span>
+                                    </div>
+                                  </td>
+                                </ng-template>
+
+                              </div>
+                              <ng-template pTemplate="content">
+                                <div>
+                                  <ul *ngIf="uploadedFiles.length">
+                                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                                  </ul>
+                                </div>
+                              </ng-template>
+                            </p-fileUpload>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- <div class="col-lg-12" *ngIf="sizeGreaterThanFive">
+                        <div *ngFor="let index of filesGreaterThanFive">
+                          <span>{{index.filename}}</span>
+                        </div>
+                      </div> -->
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="modal-footer">
+            <button (click)="AdButtonClick(null)" type="button" #closeForm class="btn btn-default btn-round btn-block1"
+              data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success btn-round btn-block1" form="tryFormID">{{btnText}}
+            </button>
+            <!-- [disabled]="!contractForm.valid || btnLoading || !isFileImage || !source_latlong" -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade  modal-success text-left" id="editpop2" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center  modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" #cc class="close" data-dismiss="modal">
+            <span>x</span>
+          </button>
+          <h4 class="modal-title">Contract Attachment</h4>
+        </div>
+        <div class="modal-body" style="text-align:center;">
+          <img #cImage [src]="avatar_url" style="max-width: 400px;max-height: 400px">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" (click)="rotate()">Rotate Image
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-default card shadow light">
+        <div class="col-lg-10" *ngIf="loggedInUser.read_only != true"
+          style="padding:0px; margin-top: 10px; margin-bottom: 15px; margin-left: 20px;">
+          <button type="button" class="btn btn-lg btn-primary btn-block btncolor" (click)="AdButtonClick(null)"
+            data-target="#editpop1" data-toggle="modal" style="font-size: 14px;border-radius: 20px;">
+            <i class="ri-add-circle-fill"></i> New Document
+          </button>
+        </div>
+
+        <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)">
+            <div class="form-group margin-bottom-10">
+              <fieldset class="form-fieldset">
+                <legend>Search</legend>
+
+                <div class="form-group margin-bottom-10">
+                  <div class="input-search">
+                    <i class="input-search-icon ri-search-line"></i>
+                    <input type="text" class="form-control" formControlName="search" [(ngModel)]="inputValue"
+                      name="search" placeholder="Search...">
+                    <button type="button" class="input-search-close icon " data-toggle="popover" data-original-title=""
+                      data-trigger="hover" data-container="body" data-placement="top" data-html="true" id="help2"
+                      pTooltip='Id, Entity' tooltipPosition="top"><i class="ri-question-line"></i></button>
+                    <div id="popover-content-help2" class="hide">
+                      Some help information goes here
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <div class="form-group margin-bottom-0 text-center">
+                  <button href="" type="submit" (click)='updateFilter(inputValue)'
+                    class="btn btn-success btn-round btn-block1"> <i class=" ri-search-line "></i> Search</button>
+                  <button (click)="onClearSearch()" href=" " class="btn btn-default btn-round "> <i
+                      class="ri-refresh-line "></i>
+                    Clear
+                  </button>
+                </div>
+              </fieldset>
+            </div>
+            <hr>
+            <!-- Download Buttons start-->
+            <div class="form-group margin-bottom-0">
+              <label class="font-size-14 font-weight-600 ">Export:</label>
+              <div class="btn-group btn-group-justified">
+                <div class="btn-group" role="group">
+                  <a [href]="downloadableLink">
+                    <button type="button" class="btn btn-outline btn-default"> <img
+                        src="../../../assets/images/icon-xls.png" height="50">
+                      <div class="font-size-12">
+                        <a [href]="downloadableLink" class="enabled">
+                          Download XLS </a>
+                      </div>
+                    </button>
+                  </a>
+                </div>
+                <div class="btn-group" role="group">
+                  <a [href]="downloadableLink1">
+                    <button type="button" class="btn btn-outline btn-default"> <img
+                        src="../../../assets/images/icon-pdf.png" height="50">
+                      <div class="font-size-12">Download PDF</div>
+                    </button>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+            <!-- Download Buttons ends-->
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="panel panel-default card shadow light">
+        <div class="panel-heading" style="margin-bottom: 0px;">
+          <div class="panel-actions"> </div>
+          <h3 class="panel-title "><b>List</b></h3>
+        </div>
+        <div class="panel-body padding-0">
+          <div class="padding-10">
+            <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '5px'}" mode="indeterminate">
+            </p-progressBar>
+            <div class="table-responsive margin-top-20" style="border: 1px solid #ebebeb;">
+
+              <table matSort (matSortChange)="sortData($event)"
+                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                [dataSource]="contracts" mat-elevation-z8 multiTemplateDataRows>
+
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+                  <td mat-cell *matCellDef="let row">
+                    <div style="float: left; position: relative;">
+                      <span style="float: left; margin-left: -10px!important; margin-top: 3px;" id="content" class=""
+                        (click)="expandedElement = expandedElement === row ? null : row">
+                      </span>
+                    </div>
+                    <div class="padding-left-15">
+                      {{ row.id || 'N/A' }}
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="entity">
+                  <th mat-header-cell *matHeaderCellDef>Entity</th>
+                  <td mat-cell *matCellDef="let row">{{ row.driver_name || 'N/A' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="document_type">
+                  <th mat-header-cell *matHeaderCellDef>Document Type</th>
+                  <td mat-cell *matCellDef="let row">{{ row.document_type || 'N/A' }}
+                  </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="uploaded_documents">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Uploaded Documents</th>
+                  <td mat-cell *matCellDef="let row">{{row.document_file.length ||
+                    '-'}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="upload_date">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Uploaded Date</th>
+                  <td mat-cell *matCellDef="let row">{{(row.created_at | date:
+                    'mediumDate') || '-'}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="upload_by">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Uploaded By</th>
+                  <td mat-cell *matCellDef="let row">{{row.uploaded_by || '-'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+                  <td mat-cell *matCellDef="let row; let i = index;">
+                    <button type="button" *ngIf="loggedInUser.read_only != true" class="btn btn-icon  btn-info btn-xs "
+                      [hidden]="disableButton(row)" data-target="#editpop1" (click)="openEditModal(row, i)"
+                      data-toggle="modal" pTooltip="Edit">
+                      <i class="icon ion-edit"></i>
+                    </button>
+                    <button type="button" *ngIf="loggedInUser.read_only != true" pTooltip="Delete"
+                      class="btn btn-icon  btn-danger btn-xs " (click)="showDeleteCategoryConfirmation(row)"
+                      data-original-title="Delete"><i class="icon ion-android-delete"></i>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expandedDetail">
+                  <td mat-cell *matCellDef="let search" [attr.colspan]="displayedColumns.length"
+                    style="padding-left: 28px;padding-right: 8px;padding-top:0px;padding-bottom:0px">
+                    <div class="example-element-detail"
+                      [@detailExpand]="search === expandedElement ? 'expanded' : 'collapsed'">
+                      <div class="example-element-description">
+                        <div class="mat-row detail-row"
+                          style="display: flex; padding: 10px 0px 10px 50px; overflow: hidden;visibility: visible;">
+
+                          <div *ngFor="let item of search?.document_file; let i=index"
+                            style="border-bottom: 1p solid inherit;">
+
+                            <div class="btn-group" role="group" style="display: inline-block!important;">
+                              <a>
+                                <button type="button" (click)="showPDF(item)" class="btn btn-outline btn-default">
+                                  <img src="../../../assets/images/icon-pdf.png" height="30">
+                                  <div class="font-size-12">{{getFileName(item)}}</div>
+                                </button>
+                              </a>
+                            </div>
+                          </div>
+
+                          <div *ngIf="search?.document_file?.length === 0 " class="no-records"
+                            style=" padding: 10px 0px 10px 80px; overflow: hidden; margin-left: -62px;">
+                            There is no file to show
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"
+                  class="element-row example-element-row" [class.example-expanded-row]="expandedElement === row"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+              </table>
+
+              <div *ngIf="contracts?.length === 0 && !showIndeterminateProgress" class="no-records">
+                No records found
+              </div>
+              <mat-paginator translate="no" [length]="totalContractsLength" [hidePageSize]="true"
+                (page)="onPaginateTool($event)">
+              </mat-paginator>
+
+            </div>
+          </div>
+          <app-spin-loading [appLoader]="appLoader"></app-spin-loading>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

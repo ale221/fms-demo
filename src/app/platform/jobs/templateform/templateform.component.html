@@ -1,0 +1,929 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+  #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <li><a routerLink="/iol/templates">Manage Jobs</a></li>
+  </ol>
+</div>
+
+<div
+  [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+  [hidden]="!isAuthorized">
+  <!--  Modal Form-->
+  <div class="modal fade  modal-success text-left" data-backdrop="static"
+    (hide)="false;$event.preventDefault();$event.stopPropagation();" id="editpop1" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center" [ngClass]="'modal-lg'">
+      <div class="modal-content">
+        <div [ngStyle]="branding" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" (click)="resetEverything()">
+            <span>x</span>
+          </button>
+          <h4 class="modal-title">{{formTitle}} Job</h4>
+        </div>
+        <div class="modal-body padding-bottom-20">
+          <div class="">
+            <div class="row1">
+              <form [formGroup]="templateForm" id="binFormID" (ngSubmit)="onSubmitTemplate(templateForm)">
+                <!-- <div class="row1 ">
+
+                  <div class="bg-green-100 padding-15">
+
+                    <div class="row">
+                      <div class="col-lg-10">
+                        <div class="row">
+                          <div class="col-lg-3">
+                            <app-client-dropdown #clientDropdownComponent [showLabel]="false" [multiSelect]="false"
+                              (valueChanged)="onClientChanged($event)"></app-client-dropdown>
+                          </div>
+                          <div class="col-lg-3">
+                            <app-contracts-dropdown #contractDropdownComponent
+                                                    [client_id]="selectedClients"
+                                                    [showLabel]="false"
+                                                    (selected)="onContractChanged($event)"></app-contracts-dropdown>
+                          </div>
+                          <div class="col-lg-3">
+
+                            <app-area-dropdown #areaDropdownComponent [showLabel]="false"
+                                               (valueChanged)="onAreaChanged($event)"></app-area-dropdown>
+                          </div>
+
+                          <div class="col-lg-3">
+
+                            <app-location-dropdown #locationDropdownComponent [showLabel]="false"
+                                                   (valueChanged)="onLocationChanged($event)"></app-location-dropdown>
+                          </div>
+                        </div>
+
+
+                      </div>
+                      <div class="col-lg-2">
+                        <button type="button" class="btn bg-warning btn-block pull-right"
+                                (click)="getBins()">Get Stops
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div> -->
+                <div *ngIf="true" class="form-group1 row">
+                  <div class="col-lg-12">
+                    <div class="">
+
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group1 row1">
+                            <div class="">
+                              <div class="form-group">
+                                <label class="control-label">Name <span class="required  text-danger2">*</span></label>
+                                <input type='text' class="form-control input-sm" required
+                                  formControlName="activity_route" />
+                                <span class="error-message"
+                                  *ngIf="templateForm.get('activity_route').getError('required') && submitted">Please
+                                  provide name.
+                                </span>
+                                <span class="error-message"
+                                  *ngIf="templateForm.get('activity_route').getError('isAlphabetsAndNumbers') && submitted">Enter
+                                  Alphabets/Numbers only.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                          <div class="form-group1 row1">
+                            <div class="">
+                              <div class="form-group">
+                                <label class="control-label">Driver <span
+                                    class="required  text-danger2">*</span></label>
+                                <p-dropdown [options]="trucks_list" styleClass="prime-dropdown" filter="true"
+                                  filterPlaceholder="Search" formControlName="primary_entity"
+                                  placeholder="Select Driver">
+                                </p-dropdown>
+                                <span class="error-message"
+                                  *ngIf="templateForm.get('primary_entity').getError('required') && submitted">Please
+                                  provide driver.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group1 row1">
+                            <div class="">
+                              <div class="form-group margin-bottom-0">
+                                <label class="control-label">Start Date <span
+                                    class="required  text-danger2">*</span></label>
+                                <p-calendar [formControlName]="'start_date'" [monthNavigator]="true"
+                                  [yearNavigator]="true" [minDate]="currentDate" [(ngModel)]="contractStartDate"
+                                  [yearRange]="'1950:'+(currentDate.getFullYear())" showTime="true" hourFormat="24"
+                                  placeholder="MM/DD/YYYY" styleClass="prime-datetime">
+                                </p-calendar>
+
+                              </div>
+                              <span class="error-message"
+                                *ngIf="templateForm.get('start_date').getError('required') && submitted">Please provide
+                                start date.
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                          <div class="form-group1 row1">
+                            <div class="">
+                              <div class="form-group margin-bottom-0">
+                                <label class="control-label">End Date <span
+                                    class="required  text-danger2">*</span></label>
+                                <p-calendar [disabled]="!contractStartDate" [formControlName]="'end_date'"
+                                  [monthNavigator]="true" [yearNavigator]="true" [minDate]="contractStartDate"
+                                  [yearRange]="'1950:'+(currentDate.getFullYear())" showTime="true" hourFormat="24"
+                                  placeholder="MM/DD/YYYY" styleClass="prime-datetime">
+                                </p-calendar>
+                              </div>
+                              <span class="error-message"
+                                *ngIf="templateForm.get('end_date').getError('required') && submitted">Please provide
+                                end date.
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group1 row1">
+                            <div class="">
+                              <div class="form-group margin-top-20">
+                                <label class="control-label">Job Type <span
+                                    class="required  text-danger2">*</span></label>
+                                <p-dropdown [options]="jobTypes" styleClass="prime-dropdown"
+                                  formControlName="schedule_type_id" placeholder="Select Job Type">
+                                </p-dropdown>
+                                <span class="error-message"
+                                  *ngIf="templateForm.get('schedule_type_id').getError('required') && submitted">Please
+                                  provide job type.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div class="col-lg-12">
+                          <div class="form-group">
+                            <label style="display: inline-block; margin-right: 5px; margin-bottom: 15px;"
+                              class="control-label">Tasks</label>
+
+                            <span *ngIf="taskHide">
+                              <button (click)="addTask()" type="button" style="width: 20px"
+                                class="btn btn-xs btn-success">+</button>
+                            </span>
+                            <div class="row">
+                              <div style="text-align: center;" class="col-lg-2">
+                                Priority <span class="required  text-danger2">*</span>
+                              </div>
+
+                              <div style="text-align: center;" class="col-lg-4">
+                                Pick Up <span class="required  text-danger2">*</span>
+                              </div>
+
+                              <div style="text-align: center;" class="col-lg-4">
+                                Dropoff <span class="required  text-danger2">*</span>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                        <div class="col-lg-12">
+                          <div style="border-left: 0px !important;" formArrayName="job_tasks">
+                            <div style="border-left: 0px !important;" class="row"
+                              *ngFor="let task of templateForm.controls.job_tasks['controls']; let i = index"
+                              formGroupName="{{i}}">
+
+                              <div *ngIf="!edit" class="col-lg-2">
+                                <button style="float: left;
+                                margin-top: 6px;
+                                border-radius: 15px;
+                                width: 20px;" (click)="removeTaskAtIndex(i)" type="button"
+                                  class="btn btn-xs btn-danger">X</button>
+
+                                <div style="width: 88px;
+                                display: inline-block;
+                                margin-left: 10px;">
+                                  <select class="form-control prime-dropdown" formControlName="priority"
+                                    name="priority">
+                                    <option *ngFor="let priority of priority" [value]="priority.value">
+                                      {{priority.label}} </option>
+                                  </select>
+                                  <span class="error-message"
+                                    *ngIf="checkError(i, 'priority').errors && submitted">Please provide priority
+                                  </span>
+                                  <!-- <p-dropdown styleClass="prime-dropdown" formControlName="priority"
+                                    [options]="priority" placeholder="Select priority">
+                                  </p-dropdown> -->
+                                </div>
+                              </div>
+
+                              <div *ngIf="edit" class="col-lg-2">
+                                <div class="form-group">
+                                  <select class="form-control prime-dropdown" formControlName="priority"
+                                    name="priority">
+                                    <option *ngFor="let priority of priority" [value]="priority.value">
+                                      {{priority.label}} </option>
+                                  </select>
+                                  <span class="error-message"
+                                    *ngIf="checkError(i, 'priority').errors && submitted">Please provide priority.
+                                  </span>
+                                  <!-- <p-dropdown styleClass="prime-dropdown" formControlName="priority"
+                                    [options]="priority" placeholder="Select priority">
+                                  </p-dropdown> -->
+                                </div>
+                              </div>
+
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <select (change)="onContractChanged($event, i)" class="form-control prime-dropdown"
+                                    formControlName="source_contract1" name="source_contract1">
+                                    <option *ngFor="let contract of contract_list" [value]="contract.id">
+                                      {{contract.name}} </option>
+                                  </select>
+                                  <span class="error-message"
+                                    *ngIf="checkError(i, 'source_contract1').errors && submitted">Please provide pickup.
+                                  </span>
+                                  <!-- <p-dropdown [options]="contract_list" styleClass="prime-dropdown" filter="true" [(ngModel)]="selectedPickup"
+                                  name="source_contract1"
+                                    formControlName="source_contract1" (onChange)="onContractChanged($event, i)"
+                                    placeholder="Select pickup">
+                                  </p-dropdown> -->
+                                </div>
+                              </div>
+
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <select class="form-control prime-dropdown" (change)="onContractChanged1($event, i)"
+                                    formControlName="destination_contract1" name="destination_contract1">
+                                    <option *ngFor="let contract of contract_list" [value]="contract.id">
+                                      {{contract.name}} </option>
+                                  </select>
+                                  <span class="error-message"
+                                    *ngIf="checkError(i, 'destination_contract1').errors && submitted">Please provide
+                                    dropoff.
+                                  </span>
+                                  <!-- <p-dropdown styleClass="prime-dropdown" formControlName="destination_contract1"
+                                    filter="true" name="source_contract1" [options]="contract_list"
+                                    (onChange)="onContractChanged1($event,i)" placeholder="Select dropoff">
+                                  </p-dropdown> -->
+                                </div>
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <!-- <div class="col-lg-12">
+                          <div class="form-group">
+
+                            <label class="control-label">Bins
+                              <span class="pull-right font-weight-100"
+                                    [ngClass]="!bins_list.length? 'text-danger' : 'label label-warning'"> {{!bins_list.length ? 'No Bins to display' : bins_list.length}}</span>
+                              <span [ngClass]="binLoader.visibility?'':'hidden'" class="pull-right"><img
+                                src="/assets/images/iol/label-loader.gif" height="25px" width="25px"></span>
+                            </label>
+
+                            <p-multiSelect
+                              [maxSelectedLabels]="1"
+                              [options]="bins_list"
+                              [(ngModel)]="selectedBins"
+                              (onChange)="onBinsSelected($event)"
+                              styleClass="prime-dropdown"
+                              defaultLabel="Choose Bins"
+                              filterPlaceHolder="Search"
+                              formControlName="action_items">
+                            </p-multiSelect>
+                          </div>
+
+                        </div> -->
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel panel margin-bottom-0" *ngIf="selectedBins.length">
+
+                  <!--Row Starts-->
+                  <div class="panel-heading margin-0" id="">
+                    <div class="font-size-14 font-weight-400">
+                      {{recommendations.length}} Recommendations Found
+                      <span *ngIf="recommendations.length" class="blue-800 pointer" data-toggle="collapse"
+                        data-target="#demo">(View)</span>
+                    </div>
+                  </div>
+
+                  <div id="demo" class="collapse">
+                    <div class="table-responsive vscroll" style="height:150px;border: 1px solid #ebebeb;">
+                      <table class="table  table-bordered table-hover table-condensed table-striped1 margin-bottom-0"
+                        id="table">
+                        <tbody>
+                          <tr *ngFor="let recommendation of recommendations">
+                            <td class="text-left" colspan="2"><b>{{recommendation.client__name}}</b>
+                              has <b>{{recommendation.count_of_bins}}</b> bins available
+                              <span *ngIf="selectedAreas">in <b>{{recommendation.area_name}} </b> <b
+                                  *ngIf="selectedLocations">, {{recommendation.location_name}}</b></span>.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!--Row Ends-->
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-round" (click)="resetEverything()" data-dismiss="modal"
+            #closeModalBtn>
+            &nbsp;Close
+          </button>
+          <button type="button" class="btn btn-success btn-round" (click)="onSubmitTemplate(templateForm.value)"
+            [disabled]="btnLoading">
+            {{btnText}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  Modal Form-->
+
+
+
+  <!--  Modal View-->
+  <div class="modal fade  modal-success text-left" data-backdrop="static"
+    (hide)="false;$event.preventDefault();$event.stopPropagation();" id="editpop2" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center" [ngClass]="'modal-lg'" style="margin-top:50px;">
+      <div class="modal-content">
+        <div [ngStyle]="branding" class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span>x</span>
+          </button>
+          <h4 class="modal-title">View Job</h4>
+        </div>
+        <div class="modal-body padding-bottom-20" style="overflow: visible;">
+          <div class="">
+            <div style="margin-top: -20px;" class="row1">
+              <form>
+                <div class=" margin-top-20 margin-bottom-20 padding-20 bg-blue-00 shadow1 card1"
+                  style="border: 1px solid #eee; background-color: #f9f9f9;">
+
+                  <div class="row">
+
+                    <div class="col-md-3">
+
+                      <div class="media">
+                        <div class="media-left">
+                          <figure class="">
+                            <img src="assets/images/icon-datetime.png" class="img-bordered" style="height: 50px">
+                          </figure>
+                        </div>
+                        <div class="media-body">
+                          <div class="font-size-16">
+                            {{start_dateViewJob}}
+                          </div>
+                          <div class="font-size-12"> Start Date</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="media">
+                        <div class="media-left">
+                          <figure class="">
+                            <img src="assets/images/icon-datetime.png" class="img-bordered" style="height: 50px">
+                          </figure>
+                        </div>
+                        <div class="media-body">
+                          <div class="font-size-16  ">
+                            {{end_dateViewjob}}
+                          </div>
+                          <div class="font-size-12"> End Date</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="media">
+                        <div class="media-left">
+                          <figure class="">
+                            <img src="assets/images/iol/icon_fleet_management.png" class="img-bordered"
+                              style="height: 50px">
+                          </figure>
+                        </div>
+                        <div class="media-body">
+                          <div class="font-size-16  ">
+                            {{viewJob?.job_name}}
+                          </div>
+                          <div class="font-size-12  "> {{viewJob?.schedule_type_id == "215" ? "Ad-Hoc" : "Scheduled"}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="media">
+                        <div class="media-left">
+                          <figure class="">
+                            <img src="assets/images/default_user.png" class="img-bordered" style="height: 50px">
+                          </figure>
+                        </div>
+                        <div class="media-body">
+                          <div class="font-size-16  ">
+                            {{viewJob?.driver_name}}
+                          </div>
+                          <div class="font-size-12  "> Driver</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 20px;margin-left: 0px;margin-right: 0px;" class="row">
+                  <div class="col-lg-4 padding-0">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="panel panel-dark margin-bottom-0">
+                          <div class="panel-heading margin-bottom-0">
+                            <h3 class="panel-title">Details</h3>
+                          </div>
+
+                          <div class="vscroll" style="max-height: 135px;">
+                            <table class="table table-hover table-striped margin-bottom-0">
+                              <tbody>
+                                <tr>
+                                  <th> <b> Job Name</b> </th>
+                                  <td class="text-left">{{viewJob?.job_name}}</td>
+                                </tr>
+
+                                <tr>
+                                  <th> <b> Travelled Distance</b>
+                                  </th>
+                                  <td class="text-left">
+                                    {{(viewJob?.distance_travelled | number: '1.0-0') || 0}} Km
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th> <b> Speed </b> </th>
+                                  <td class="text-left text-break">
+                                    <!-- <div> Min: {{min_speed | number : '1.0-0' || '-'}} km/h </div> -->
+                                    <div>
+                                      Max: {{viewJob?.max_speed || 0 }}
+                                      km/h </div>
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <th> <b> Violations </b> </th>
+                                  <td class="text-left text-break">
+                                    {{viewJob?.violation_count}}
+                                  </td>
+                                </tr>
+                                <!-- <tr>
+                                  <th> <b> Maintenances </b> </th>
+                                  <td class="text-left text-break">
+                                    {{viewJob?.maintainance_count}}
+                                  </td>
+                                </tr> -->
+                                <tr>
+                                  <th> <b> Fillups </b> </th>
+                                  <td class="text-left text-break">
+                                    {{viewJob?.fillup_count}}
+                                  </td>
+                                </tr>
+                                <!-- <tr>
+                                  <th> <b> Aborted Reason </b> </th>
+                                  <td class="text-left text-break aborted_reason">
+                                    {{viewJob?.aborted_reason || '-' }}
+                                  </td>
+                                </tr> -->
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-12 padding-top-20">
+                        <div class="panel panel-dark margin-bottom-0">
+                          <div class="panel-heading margin-bottom-0 ">
+                            <h3 class="panel-title">Job Trail</h3>
+                            <!-- <div class="mapbox   margin-bottom-0 "> -->
+
+                            <!-- <div class="form-control" #gmap style="width:100%;height:295px"></div> -->
+
+                            <app-google-map #gmap mapType="false" style="width:100%;height:295px" [height]="'295px'"
+                              [showSearchBar]="false"></app-google-map>
+                            <!-- </div> -->
+
+                          </div>
+
+                        </div>
+                      </div>
+
+
+
+                    </div>
+
+                  </div>
+
+                  <div class="col-lg-8 ">
+                    <div class="row">
+                      <div class="col-sm-4  ">
+                        <div class="text-center  margin-bottom-10 font-size-16 ">
+                          Completed Tasks
+                        </div>
+
+                        <div class="c100 small1  red "
+                          [ngClass]="getFillClass(viewJob?.job_tasks, TaskStatus.COMPLETED)">
+                          <span class="pointer">{{getProgress(viewJob?.job_tasks, TaskStatus.COMPLETED )}}</span>
+                          <div class="slice">
+                            <div class="bar"></div>
+                            <div class="fill"></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-4 ">
+                        <div class="text-center  margin-bottom-10 font-size-16 ">
+                          Pending Tasks
+                        </div>
+
+                        <div class="c100 small1  red" [ngClass]="getFillClass(viewJob?.job_tasks, TaskStatus.PENDING)">
+                          <span class="pointer">{{getProgress(viewJob?.job_tasks, TaskStatus.PENDING )}}</span>
+                          <div class="slice">
+                            <div class="bar"></div>
+                            <div class="fill"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-4  ">
+                        <div class="text-center  margin-bottom-10 font-size-16 ">
+                          Aborted Tasks
+                        </div>
+
+                        <div class="c100 small1  red "
+                          [ngClass]="getFillClass(viewJob?.job_tasks, TaskStatus.COMPLETED)">
+                          <span class="pointer">{{getProgress(viewJob?.job_tasks, TaskStatus.ABORTED )}}</span>
+                          <div class="slice">
+                            <div class="bar"></div>
+                            <div class="fill"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-12 padding-top-40">
+
+                        <div class="panel panel-dark margin-bottom-0">
+                          <div class="panel-heading margin-bottom-0 ">
+                            <h3 class="panel-title">Listing</h3>
+                          </div>
+                          <div class="panel-body padding-15 padding-left-0 padding-right-0">
+                            <div class="table-responsive   vscroll" style="height: auto;">
+                              <div id="ppp_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer"
+                                style="width: 100%;">
+
+                                <div class="row">
+                                  <div class="col-sm-12">
+                                    <div class="dataTables_scroll">
+                                      <div class="dataTables_scrollBody"
+                                        style="position: relative; overflow: auto; max-height: 250px; height: 250px; width: 100%;">
+                                        <table
+                                          class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap dataTable no-footer dtr-inline collapsed"
+                                          id="ppp" role="grid" aria-describedby="ppp_info" style="width: 100%;">
+                                          <thead>
+                                            <tr role="row" style="height: 0px;">
+                                              <th class="sorting_asc" tabindex="0" aria-controls="ppp" rowspan="1"
+                                                colspan="1" style="width: 53px;" aria-sort="ascending"
+                                                aria-label=" Job Name: activate to sort column descending">
+                                                Task Priority</th>
+                                              <th class="sorting" tabindex="0" aria-controls="ppp" rowspan="1"
+                                                colspan="1" style="width: 79px;"
+                                                aria-label=" Start Date : activate to sort column ascending">
+                                                Status</th>
+
+
+                                              <th class="sorting" tabindex="0" aria-controls="ppp" rowspan="1"
+                                                colspan="1" style="width: 112px;"
+                                                aria-label="Description: activate to sort column ascending">
+                                                Aborted Reason</th>
+
+                                            </tr>
+                                          </thead>
+
+                                          <tbody>
+
+                                            <!-- <tr role="row" class="odd" *ngFor="let job of viewJob?.job_tasks; "> -->
+                                            <tr role="row" class="odd" *ngFor="let job of viewJob?.job_tasks; ">
+                                              <td> {{job.priority || 'N/A'}}
+                                              </td>
+                                              <td>{{getTaskProgress(job?.job_status) || 'N/A'}}</td>
+
+                                              <td style="white-space: break-spaces;">
+                                                {{job.aborted_status}}:{{job.aborted_reason}}</td>
+
+                                              <td style="display: none;">
+                                                <button type="button" class="btn btn-icon  btn-info btn-xs "> <i
+                                                    class="ri-pencil-fill"></i> </button>
+                                                <button type="button" class="btn btn-icon  btn-danger btn-xs "> <i
+                                                    class="ri-delete-bin-6-line"></i> </button>
+                                              </td>
+                                            </tr>
+
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  Modal View-->
+
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-default card shadow light" style="height: 530px;">
+
+        <div class="col-lg-10" *ngIf="loggedInUser?.read_only != true"
+          style="padding:0px; margin-top: 10px; margin-bottom: 15px; margin-left: 20px;">
+          <button type="button" class="btn btn-lg btn-primary btn-block btncolor" (click)="clearForm()"
+            data-target="#editpop1" data-toggle="modal" style="font-size: 14px;border-radius: 20px;"><i
+              class="ri-add-circle-fill"></i>New </button>
+        </div>
+
+        <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)">
+
+            <!-- dropdown start -->
+            <div class="form-group margin-bottom-10">
+              <fieldset class="form-fieldset">
+                <legend>Filter</legend>
+
+                <p-dropdown [options]="jobTypes" styleClass="prime-dropdown" formControlName="jobtype"
+                  placeholder="Select Job Type" (onChange)="onChange($event)">
+                </p-dropdown>
+
+              </fieldset>
+            </div>
+            <!-- dropdown end -->
+            <div class="form-group margin-bottom-10">
+              <fieldset class="form-fieldset">
+                <legend>Search</legend>
+
+                <div class="form-group margin-bottom-10">
+                  <div class="input-search">
+                    <i class="input-search-icon ri-search-line"></i>
+                    <input type="text" class="form-control" formControlName="search" name="" placeholder="Search...">
+                    <button type="button" class="input-search-close icon " data-toggle="popover" data-original-title=""
+                      data-trigger="hover" data-container="body" data-placement="top" data-html="true" id="help2"
+                      pTooltip='Search by name' tooltipPosition="top"><i class="ri-question-line"></i></button>
+                    <div id="popover-content-help2" class="hide">
+                      Some help information goes here
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="form-group margin-bottom-0 text-center">
+                  <button href="" type="submit" class="btn btn-success btn-round btn-block1"> <i
+                      class=" ri-search-line "></i> Search</button>
+                  <button (click)="onClearSearch()" href=" " class="btn btn-default btn-round "> <i
+                      class="ri-refresh-line "></i>
+                    Clear
+                  </button>
+                </div>
+
+
+              </fieldset>
+            </div>
+            <!-- <div class="form-group">
+            <h5 class=" font-weight-600 ">Search</h5>
+            <div class="panel-actions">
+              <a class="panel-action "></a>
+            </div>
+            <input type="text" class="form-control input-sm" formControlName="search" placeholder="Search"
+              (keyup)='keyUp.next($event)' style="height: 36px;">
+          </div> -->
+
+            <hr>
+
+            <!-- Download Buttons start-->
+            <div class="form-group margin-bottom-0">
+              <label class="font-size-14 font-weight-600 ">Export:</label>
+              <div class="btn-group btn-group-justified">
+                <div class="btn-group" role="group">
+                  <a [href]="downloadableLink">
+                    <button type="button" class="btn btn-outline btn-default"> <img
+                        src="../../../assets/images/icon-xls.png" height="50">
+                      <div class="font-size-12">
+                        <a [href]="downloadableLink" class="enabled">
+                          Download XLS </a>
+                      </div>
+                    </button>
+                  </a>
+                </div>
+                <div class="btn-group" role="group">
+                  <a [href]="downloadableLink1">
+                    <button type="button" class="btn btn-outline btn-default"> <img
+                        src="../../../assets/images/icon-pdf.png" height="50">
+                      <div class="font-size-12">Download PDF</div>
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!--  Download Buttons ends -->
+          </form>
+        </div>
+
+      </div>
+    </div>
+    <!-- table start -->
+    <div class="col-lg-8">
+      <div class="panel card shadow light panel-default nav-tabs-horizontal padding-0 margin-bottom-30">
+        <div class="panel-heading font-weight-600" (click)="resizeDatatableSerivce.recalculate();">
+          <div class="panel-title">Jobs List</div>
+          <div class="panel-actions">
+            <!-- <a class="panel-action icon ion-loop" pTooltip="Refresh" tooltipPosition="top" (click)="getTemplates()"></a>
+            <a class="btn btn-sm white no-border   btn-success " href="" data-target="#editpop1" data-toggle="modal"
+              (click)="createNewTemplate()"> <i class="ion-plus"></i> Create Job </a> -->
+          </div>
+        </div>
+
+        <div class="panel-body padding-10">
+          <div class="tab-content">
+            <div class="col-lg-12">
+              <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+              </p-progressBar>
+              <div class="table-responsive" style="border: 1px solid #ebebeb;">
+
+                <!-- (matSortChange)="sortUserList($event)" -->
+                <table matSort (matSortChange)="sortUserList($event)"
+                  class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                  [dataSource]="templates" mat-elevation-z8>
+                  <ng-container matColumnDef="job_name" (click)=$event.stopPropagation()>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                    <td mat-cell *matCellDef="let row" [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl" matRipple>
+                      <div style="float: left;position: relative;">
+                        <span style="float: left;margin-left: -10px!important;margin-top: 3px;" id="content"
+                          class=""></span>
+                      </div>
+                      <div class="padding-left-15">
+                        {{(row.job_name == null) ? 'N/A': row.job_name}}
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="driver_name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      {{(row.driver_name == null) ? 'N/A': row.driver_name}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="schedule_type_label">
+                    <th mat-header-cell *matHeaderCellDef>Job Type</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      {{(row.schedule_type_label == null) ? 'N/A': row.schedule_type_label}}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="job_tasks">
+                    <th mat-header-cell *matHeaderCellDef>Pending</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      <span>{{getProgress(row.job_tasks, TaskStatus.PENDING)}}</span>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="job_tasks1">
+                    <th mat-header-cell *matHeaderCellDef>In Progress</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      <span>{{getProgress(row.job_tasks, TaskStatus.STARTED)}}</span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="job_tasks3">
+                    <th mat-header-cell *matHeaderCellDef>Aborted</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      <span>{{getProgress(row.job_tasks, TaskStatus.ABORTED)}}</span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="job_tasks2">
+                    <th mat-header-cell *matHeaderCellDef>Completed</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      <span>{{getProgress(row.job_tasks, TaskStatus.COMPLETED)}}</span>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="modified_by_name">
+                    <th mat-header-cell *matHeaderCellDef>Modified By</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      {{(row.modified_by_name == null) ? 'N/A': row.modified_by_name}}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="created_datetime">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Created date</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      {{(row.created_datetime | date:'mediumDate') || '-'}}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="schedule_activity_status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                    <td (click)=$event.stopPropagation() mat-cell *matCellDef="let row">
+                      <div class="label"
+                        [ngClass]="row?.schedule_activity_status_label === 'Completed' ? 'label-success' : row?.schedule_activity_status_label === 'Started' ? 'label-warning' : 'label-danger'">
+                        {{row?.schedule_activity_status_label}}
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                    <td mat-cell *matCellDef="let row">
+                      <button
+                        *ngIf="(row?.schedule_activity_status_label !== 'Completed' && row?.schedule_activity_status_label !== 'Aborted') && loggedInUser.read_only != true"
+                        type="button" pTooltip="Edit" tooltipPosition="top" class="btn btn-icon  btn-info btn-xs"
+                        data-target="#editpop1" (click)="openEditModal(row, 1)" data-toggle="modal"
+                        data-original-title="Edit">
+                        <i class="icon ion-edit"></i>
+                      </button>
+                      <button
+                        *ngIf="(row?.schedule_activity_status_label === 'Completed' || row?.schedule_activity_status_label === 'Aborted') && loggedInUser.read_only != true"
+                        type="button" pTooltip="View" tooltipPosition="top" class="btn btn-icon  btn-info btn-xs"
+                        data-target="#editpop2" (click)="openEditModal2(row, 2)" data-toggle="modal"
+                        data-original-title="View">
+                        <i class="icon ion-eye"></i>
+                      </button>
+
+                      <button *ngIf="loggedInUser.read_only != true" type="button" pTooltip="Delete"
+                        class="btn btn-icon  btn-danger btn-xs" (click)="showSwal(row)" data-original-title="Delete"> <i
+                          class="icon ion-android-delete"></i>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedUserList"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedUserList;" class="element-row"></tr>
+                </table>
+
+
+                <ng-template #tpl let-row>
+                  <div class="mat-row detail-row" [@detailExpand]
+                    style="overflow: hidden; margin-top:35px;margin-left: -88px;">
+                    <div *ngFor="let item of row?.job_tasks" style="border-bottom: 1p solid inherit;">
+                      <div><b style="margin-left: 7px;">Pickup: </b>{{item?.source_address}}</div>
+                      <div><b style="margin-left: 7px;">Dropoff: </b>{{item?.destination_address}}</div>
+                      <div><b style="margin-left: 7px;">Status: </b><span
+                          style="text-transform: lowercase;">{{getTaskProgress(item?.job_status)}}</span></div>
+                      <div *ngIf="item?.aborted_status"><b style="margin-left: 7px;">Aborted Reason:
+                        </b><span style="white-space: break-spaces;">{{item?.aborted_status}} :
+                          {{item?.aborted_reason}}</span></div>
+                    </div>
+
+
+                  </div>
+                </ng-template>
+
+                <div *ngIf="templates?.length === 0 && !showIndeterminateProgress" class="no-records">No records found
+                </div>
+                <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                  showFirstLastButtons (page)="onUserPagination($event)" [pageSize]="10">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

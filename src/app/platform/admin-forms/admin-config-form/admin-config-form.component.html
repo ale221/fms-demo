@@ -1,0 +1,233 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<!-- <app-default-loader [defaultLoader]="defaultLoader"></app-default-loader> -->
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " [hidden]="!isAuthorized">
+    <ol class="breadcrumb breadcrumb-arrow ">
+        <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+        <!-- <li><a> User & Admin</a></li>
+        <li><a routerLink="/iol/admin/config">Admin</a></li> -->
+        <!-- <li><a (click)="pageReload()"> User & Admin</a></li> -->
+        <li><a (click)="pageReload()">Admin</a></li>
+    </ol>
+</div>
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' " style="padding-bottom:200px" [hidden]="!isAuthorized">
+    <div class="page-content ">
+        <div class="padding-0">
+            <div class="row" style="display: flex; flex-wrap: wrap;align-items: center;justify-content: left;">
+                <div class="col-md-3">
+                    <a [routerLink]="'/iol/admin/permissions'" [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10 primary-800">
+                                <img src="/assets/images/Role form w.png" alt="img" width="20"
+                                    style="color:#fff !important">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor ">Roles & Access</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a [routerLink]="'/iol/admin/user'" (click)="navItemClicked()" [queryParams]="{ usecase: useCaseId}"
+                        class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10   primary-800">
+                                <img src="/assets/images/employee form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add User</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a [routerLink]="'/iol/admin/fuel'" [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/Fuel form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Fuel Fillup Form</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a [routerLink]="'/iol/admin/truck'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/fleet form w.png" alt="img" width="20">
+                            </div>
+                            <span class="font-weight-600 text-uppercase textColor">Manage Fleet</span>
+                        </div>
+                    </a>
+                </div>
+
+
+                <!-- <div class="col-md-3">
+                    <a [routerLink]="'/iol/admin/truck'" [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/vehicle form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Vehicle Form</span>
+                        </div>
+                    </a>
+                </div> -->
+
+
+                <div class="col-md-3">
+                    <a [routerLink]="'/iol/admin/territory'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/location form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add New Geozone</span>
+                        </div>
+                    </a>
+                </div>
+
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/admin/tool'" [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/tool form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Tool Form</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/admin/staff'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/staff form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add Staff</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/admin/customer'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/client form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add Customer</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/admin/contract'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/contract form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add Contract</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- <div class="col-md-3">
+                    <a [routerLink]="'/iol/admin/permission-iol'" [queryParams]="{ usecase: useCaseId}"
+                        class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/contract form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Permission - IOL</span>
+                        </div>
+                    </a>
+                </div> -->
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/admin/card-setting'" [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/contract form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Card Settings</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/admin/graph-setting'" [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/contract form w.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Graph Settings</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3">
+                    <a [routerLink]="'/iol/fleets/flt/poi'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/icon-job-completed.png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add New POI</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/drivers/shifts'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/icon-jobs-unassinged (1).png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add New Shift</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/maintenance/manage/maintenance'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/icon-maintenances (1).png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add New Maintenance</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/admin/route'" (click)="navItemClicked()"
+                        [queryParams]="{ usecase: useCaseId}" class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/route (1).png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add New Route</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-3" [hidden]="loggedInUser.package[0].package_id != packageType.standard">
+                    <a [routerLink]="'/iol/drivers'" (click)="navItemClicked()" [queryParams]="{ usecase: useCaseId}"
+                        class="grey-700">
+                        <div class="padding-15 bg-primary-100 text-center card  margin-bottom-30">
+                            <div class="margin-bottom-10    primary-800">
+                                <img src="/assets/images/icon-admin (1).png" alt="img" width="20">
+                            </div>
+                            <span class=" font-weight-600 text-uppercase textColor">Add New Driver</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- <hr> -->
+            <!-- <img src="/assets/images/Dashboard-2.png" title="img" class="img-responsive"> -->
+        </div>
+    </div>
+</div>

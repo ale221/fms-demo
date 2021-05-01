@@ -1,0 +1,515 @@
+<div class="breadcrumb-box" #scrollToTop>
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li class="pointer"><a class="icon ion-ios-home" href="/iol"> Dashboard </a></li>
+    <li>Staff</li>
+  </ol>
+</div>
+<div class="page-content   container-fluid  full-open-sidebar"   >
+
+  <div class="modal fade  modal-success text-left" id="editpop1" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center  modal-lg">
+      <div class="modal-content">
+        <app-admin-fine-form (submitForm)="fineSaved($event)"></app-admin-fine-form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row  ">
+    <div class="col-md-3">
+      <div class="widget shadow">
+
+        <div style="background-color: rgb(235,151,0) !important;" class="card widget-content padding-10 bg-blue-600 height-160 text-center relative pointer"
+          (click)="switchTabs(1)">
+          <div class="white">
+            <div class="counter-label margin-bottom-20 clearfix">
+              <span class="font-size-18 ">
+                Total Staff
+              </span>
+
+            </div>
+            <div class="">
+              <span class="counter-icon margin-right-5 ">
+                <i> <img src="assets/images/icon-employees.png" alt="img" height="60"> </i>
+              </span>
+              <span
+                class="counter-number font-size-30">{{(driversLength + laborsLength + techniciansLength) || 0}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-4">
+          <div style="background-color: rgb(94,39,80) !important;"
+            class="card widget-content padding-10 padding-right-15 padding-left-15  bg-blue-800 white shadow height-70  margin-bottom-20  clearfix pointer"
+            (click)="switchTabs(3)">
+            <div class="pull-left white absolute">
+              <i> <img src="assets/images/iol/icon-driver-online.png" alt="img" height="35"> </i>
+            </div>
+            <div class="text-right pull-right" href="#driver">
+              <div class="white">
+                <span class="font-size-20">{{driversLength || 0}}</span>
+              </div>
+              <div class="counter-label text-capitalize font-size-12">Total Drivers</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-4">
+          <div style="background-color: rgb(0,124,146) !important"
+            class="card widget-content padding-10 padding-right-15 padding-left-15  bg-teal-700 white shadow height-70  margin-bottom-20  clearfix pointer"
+            (click)="switchTabs(4)">
+            <div class="pull-left white absolute">
+              <i> <img src="assets/images/icon-labor.png" alt="img" height="35"> </i>
+            </div>
+            <div class="text-right pull-right">
+              <div class="white">
+                <span class="font-size-20">{{techniciansLength || 0}}</span>
+              </div>
+              <div class="counter-label text-capitalize font-size-12">Total technicians</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-4">
+          <div style="background-color: rgb(49, 140, 12) !important;"
+            class="card widget-content padding-10 padding-right-15 padding-left-15  bg-red-500 white shadow height-70  margin-bottom-20  clearfix pointer"
+            (click)="switchTabs(5)">
+            <div class="pull-left white absolute">
+              <i> <img src="assets/images/iol/icon-driver-online.png" alt="img" height="35"> </i>
+            </div>
+            <div class="text-right pull-right">
+              <div class="white ">
+                <span class="font-size-20">{{ available || 0}}</span>
+              </div>
+              <div class="counter-label text-capitalize font-size-12">Available for Activities</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div style="background-color: rgb(134, 96, 126) !important;;"
+            class="card widget-content padding-10 padding-right-15 padding-left-15  bg-green-800 white shadow height-70  margin-bottom-20  clearfix pointer"
+            (click)="switchTabs(2)">
+            <div class="pull-left white absolute">
+              <i> <img src="assets/images/icon-labor.png" alt="img" height="35"> </i>
+            </div>
+            <div class="text-right pull-right">
+              <div class="white">
+                <span class="font-size-20">{{laborsLength || 0}}</span>
+              </div>
+              <div class="counter-label text-capitalize font-size-12">Total Labours</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+          <div style="background-color: rgb(68, 156, 172) !important;"
+          class="card widget-content padding-10 padding-right-15 padding-left-15  bg-green-800 white shadow height-70  margin-bottom-20  clearfix pointer"
+          (click)="switchTabs(8)">
+          <div class="pull-left white absolute">
+            <i> <img src="assets/images/icon-labor.png" alt="img" height="35"> </i>
+          </div>
+          <div class="text-right pull-right">
+            <div class="white">
+              <span class="font-size-20">{{assigned || 0}}</span>
+            </div>
+            <div class="counter-label text-capitalize font-size-12">Assigned To Vehicle</div>
+          </div>
+        </div>
+
+
+
+          <!-- <div class="no-space row  margin-bottom-30 ">
+            <div class="col-sm-6 pointer" (click)="switchTabs(8)">
+              <div class="counter counter-lg white bg-orange-700 vertical-align height-70  shadow">
+                <div class="vertical-align-middle">
+                  <div>Assigned To Vehicle</div>
+                  <span class="counter-number font-size-20">{{assigned || 0}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 pointer" (click)="switchTabs(7)">
+              <div class="counter counter-lg white bg-orange-600  vertical-align height-70  shadow">
+                <div class="vertical-align-middle">
+                  <div>
+                    Unassigned To Vehicle
+                  </div>
+                  <span class="counter-number font-size-20">{{unassigned || 0}}</span>
+                </div>
+              </div>
+            </div>
+
+          </div> -->
+
+          <!--          <div-->
+          <!--            class="widget-content padding-10 padding-right-15 padding-left-15  bg-orange-700 white shadow height-70  margin-bottom-20  clearfix pointer"-->
+          <!--            (click)="switchTabs('6')">-->
+          <!--            <div class="pull-left white absolute">-->
+          <!--              <i> <img src="assets/images/iol/icon-driver-online.png" alt="img" height="35"> </i>-->
+          <!--            </div>-->
+          <!--            <div class="text-right pull-right">-->
+          <!--              <div class="white">-->
+          <!--                <span class="font-size-20">{{ unassigned || 0}}</span>-->
+          <!--              </div>-->
+          <!--              <div class="counter-label text-capitalize font-size-12">Drivers Unassigned to trucks</div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+
+        </div>
+        <div class="col-lg-4">
+          <div style="background-color: rgb(102, 167, 78) !important;"
+          class="card widget-content padding-10 padding-right-15 padding-left-15  bg-green-800 white shadow height-70  margin-bottom-20  clearfix pointer"
+          (click)="switchTabs(7)">
+          <div class="pull-left white absolute">
+            <i> <img src="assets/images/icon-labor.png" alt="img" height="35"> </i>
+          </div>
+          <div class="text-right pull-right">
+            <div class="white">
+              <span class="font-size-20">{{unassigned || 0}}</span>
+            </div>
+            <div class="counter-label text-capitalize font-size-12">Unassigned To Vehicle</div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div #myElem class="panel panel-default  card shadow light" style="min-height: 530px">
+        <!-- <div style="visibility: hidden;" class="panel-heading font-weight-600 ">
+          <h3 class="panel-title"  [ngStyle]="theme"><b>Listing </b></h3>
+          <div class="panel-actions ">
+            <a class="panel-action icon ion-loop " (click)="getTrucks()" [ngStyle]="theme" data-toggle="tooltip"
+              data-original-title="Refresh"></a>
+          </div>
+
+        </div> -->
+        <div style="margin-top: -25px;" class="panel-body">
+          <div class="sidebox">
+            <div style="padding-top: 40px;" class="page-aside left-filters" [hidden]="!(activeTab === 1)">
+              <!-- [hidden]="!(activeTab === 1)" -->
+              <div class="page-aside-switch">
+                <i class="icon wb-chevron-left"></i>
+                <i class="icon wb-chevron-right"></i>
+              </div>
+              <div class="page-aside-inner">
+                <section class="page-aside-section">
+                  <div class=" padding-left-20 padding-right-20">
+
+
+                    <!-- <div class="margin-bottom-10">
+                      <input type='text' name='searchTruck' class="form-control" [placeholder]="searchPlaceHolder"
+                        [disabled]="enableSearch" [(ngModel)]="inputValue" (keyup)='updateFilter($event)' />
+                    </div> -->
+
+                    <div class="panel-group left-filters" id="AccordionFilters1">
+                      <div class="panel">
+                        <div class="panel-heading" role="tab">
+                          <a class="panel-title" data-toggle="collapse" href="#Status" data-parent="#AccordionFilters">
+                            Status
+                          </a>
+                        </div>
+                        <div class="panel-collapse collapse in" id="Status" role="tabpanel">
+                          <div class="panel-body padding-0">
+                            <ul class="list-group list-group-bordered ">
+                              <li class="list-group-item">
+                                <!-- <span class="badge badge-default">{{trucksSummaryResponse.entity_count || 0}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" checked id="All" (change)="filter($event,1)" name="status"
+                                      [value]="true">
+                                    <label for="All">All</label>
+                                  </div>
+                                </div>
+                              </li>
+
+                              <li class="list-group-item">
+                                <!-- <span
+                                  class="badge badge-default">{{trucksSummaryResponse.entity_count - (trucksSummaryResponse.total_online || 0)}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" (change)="filter($event,2)" id="labor" name="status"
+                                      [value]="false">
+                                    <label for="labor">Labor</label>
+                                  </div>
+                                </div>
+                              </li>
+
+                              <li class="list-group-item">
+                                <!-- <span
+                                  class="badge badge-default">{{trucksSummaryResponse.entity_count - (trucksSummaryResponse.total_online || 0)}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" (change)="filter($event,3)" id="driver" name="status"
+                                      [value]="false">
+                                    <label for="driver">Driver</label>
+                                  </div>
+                                </div>
+                              </li>
+
+                              <li class="list-group-item">
+                                <!-- <span
+                                  class="badge badge-default">{{trucksSummaryResponse.entity_count - (trucksSummaryResponse.total_online || 0)}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" (change)="filter($event,4)" id="technician" name="status"
+                                      [value]="false">
+                                    <label for="technician">Technician</label>
+                                  </div>
+                                </div>
+                              </li>
+
+                              <li class="list-group-item">
+                                <!-- <span class="badge badge-default">{{trucksSummaryResponse.entity_count || 0}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" id="Available" (change)="filter($event,5)" name="status"
+                                      [value]="true">
+                                    <label for="Available">Available</label>
+                                  </div>
+                                </div>
+                              </li>
+                              <li class="list-group-item">
+                                <!-- <span class="badge badge-default">{{trucksSummaryResponse.total_online || 0}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" (change)="filter($event,6)" id="on_activity" name="status"
+                                      [value]="true">
+                                    <label for="on_activity">On Activity</label>
+                                  </div>
+                                </div>
+                              </li>
+                              <li class="list-group-item">
+                                <!-- <span
+                                  class="badge badge-default">{{trucksSummaryResponse.entity_count - (trucksSummaryResponse.total_online || 0)}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" (change)="filter($event,7)" id="unassigned" name="status"
+                                      [value]="false">
+                                    <label for="unassigned">Unassigned</label>
+                                  </div>
+                                </div>
+                              </li>
+
+                              <li class="list-group-item">
+                                <!-- <span
+                                  class="badge badge-default">{{trucksSummaryResponse.entity_count - (trucksSummaryResponse.total_online || 0)}}</span> -->
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="radio" (change)="filter($event,8)" id="assigned" name="status"
+                                      [value]="false">
+                                    <label for="assigned">Assigned</label>
+                                  </div>
+                                </div>
+                              </li>
+
+
+
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                      <div class="panel" style="display: none;">
+                        <div class="panel-heading" role="tab">
+                          <a class="panel-title collapsed" data-toggle="collapse" href="#Pickup"
+                            data-parent="#AccordionFilters">
+                            Pickup
+                          </a>
+                        </div>
+                        <div class="panel-collapse collapse" id="Pickup" role="tabpanel">
+                          <div class="panel-body padding-0">
+                            <ul class="list-group list-group-bordered ">
+                              <li class="list-group-item">
+                                <span class="badge badge-default">22</span>
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="checkbox" id="Primary" name="">
+                                    <label for="Primary">Primary Pickup</label>
+                                  </div>
+                                </div>
+                              </li>
+                              <li class="list-group-item list-group-item blue-grey-500">
+                                <span class="badge badge-default">14</span>
+                                <div class="inline-block ">
+                                  <div class="checkbox-custom checkbox-info margin-0 ">
+                                    <input type="checkbox" id="Secondry " name="">
+                                    <label for="Secondry ">Secondry Pickup</label>
+                                  </div>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+              </div>
+            </div>
+            <div class="page-main" [ngClass]="{'full-main-page': activeTab !== 1}">
+              <!-- [class]="(activeTab === 1 && !showMap) ? 'col-lg-6': 'col-lg-12'"  -->
+              <div class="col-lg-12">
+                <div class="panel panel-default nav-tabs-horizontal padding-0 margin-bottom-10 border-0">
+                  <div class="panel-heading font-weight-600 margin-bottom-15 "
+                    (click)="resizeDatatableSerivce.recalculate();">
+                    <ul class="nav nav-tabs nav-tabs-line  " data-plugin="nav-tabs" role="tablist">
+                      <li class="active" (click)="activeTab = 1;currentActiveTab = 1"><a data-toggle="tab" href="#staff" role="tab"
+                          class=" ">Staff
+                          List</a></li>
+                      <li class="" (click)="activeTab = 2;"><a data-toggle="tab" href="#allReporting" role="tab"
+                          class=" ">Driver
+                          Reporting</a></li>
+                      <li class="" (click)="activeTab = 3;"><a data-toggle="tab" href="#monthlyReporting" role="tab"
+                          class=" ">Monthly
+                          Driver Reporting</a></li>
+                      <!--<li class="" (click)="activeTab = 4;"><a data-toggle="tab" href="#graphicalRepresentation" role="tab" class=" ">Graphs</a></li>-->
+                    </ul>
+                    <!--<h3 class="panel-title "> <b>Trucks List  </b></h3>-->
+
+                    <div *ngIf="activeTab === 1" class="panel-actions ng-star-inserted">
+                      <a class="btn btn-sm white no-border  btn-success " data-target="#editpop1" data-toggle="modal"
+                        href="">Fine
+                        Management</a>
+                      <a class="panel-action icon ion-loop" data-toggle="tooltip" [pTooltip]="'Refresh'"
+                        tooltipPosition="top" (click)="refreshCurrentTabData()"></a>
+                    </div>
+
+                    <!-- <div *ngIf="!enableSearch && activeTab === 1" class="panel-actions">
+                      <a class="panel-action icon ion-loop" data-toggle="tooltip" [pTooltip]="'Refresh'"
+                        tooltipPosition="top" (click)="mimickPageLoad();"></a>
+                      <a class="panel-action icon ion-android-map" data-toggle="tooltip"
+                        [pTooltip]="showMap? 'Show Map' : 'Hide Map'" tooltipPosition="top"
+                        (click)="showMap = !showMap;"></a>
+                    </div> -->
+
+                  </div>
+
+                  <div class="panel-body padding-0">
+                    <div class="tab-content">
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 1 && activeTab === 1}" id="All" role="tabpanel">
+                        <div class="vscroll" style="overflow-x:hidden; overflow-y: visible">
+
+                          <app-staff-listing-table [temp]="temp" [rows]="allStaffList"
+                            [loader]="showIndeterminateProgress">
+                            <div class="col-lg-3 form-group  pull-left">
+                              <p-dropdown [(ngModel)]="selectedRole" (ngModelChange)="filtersChanged()"
+                                [options]="itemListRole" [showClear]="true" styleClass="prime-dropdown"
+                                placeholder="Sort By Role">
+                              </p-dropdown>
+                            </div>
+                          </app-staff-listing-table>
+                        </div>
+                      </div>
+
+                      <!--Total Labor-->
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 2 }" id="labor" role="tabpanel">
+                        <div class="vscroll" style="overflow-x:hidden;">
+                          <app-staff-listing-table [temp]="tempTotalLabors" [rows]="totalLabors"
+                            [loader]="laborLoader.visibility"></app-staff-listing-table>
+                        </div>
+
+                      </div>
+                      <!--Total Labor-->
+                      <!--Total Driver-->
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 3 }" id="driver" role="tabpanel">
+                        <div class="vscroll" style="overflow-x:hidden;">
+                          <app-staff-listing-table [rows]="totalDrivers" [temp]="tempTotalDrivers"
+                            [loader]="appLoader.visibility || showIndeterminateProgress"></app-staff-listing-table>
+                        </div>
+                      </div>
+                      <!-- total Driver -->
+
+                      <!--Total technicians-->
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 4 }" id="technicians"
+                        role="tabpanel">
+                        <div class="vscroll" style="overflow-x:hidden;">
+                          <app-staff-listing-table [temp]="tempTotalTechnicians" [rows]="totalTechnicians"
+                            [loader]="technicianLoader.visibility"></app-staff-listing-table>
+
+                        </div>
+
+                      </div>
+                      <!--Total Labor-->
+
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 5 }" id="Available"
+                        role="tabpanel">
+                        <div class="vscroll" style="overflow-x:hidden;">
+                          <app-staff-listing-table [loader]="showIndeterminateProgress" [rows]="availableList"
+                            [temp]="tempavailable">
+                          </app-staff-listing-table>
+
+                        </div>
+
+                      </div>
+
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 6 }" id="OnActivity"
+                        role="tabpanel">
+                        <div class="vscroll" style="height:400px; overflow-x:hidden;">
+                          <app-staff-listing-table [loader]="showIndeterminateProgress" [rows]="onActivityList"
+                            [temp]="tempactivity"></app-staff-listing-table>
+                        </div>
+
+
+                      </div>
+
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 7 }" id="Unassigned"
+                        role="tabpanel">
+                        <div class="vscroll" style="overflow-x:hidden;">
+                          <app-staff-listing-table [temp]="tempunassigned" [rows]="unassignedList"
+                            [loader]="showIndeterminateProgress"></app-staff-listing-table>
+
+                        </div>
+                      </div>
+                      <!--Assigned Tab-->
+                      <div class="tab-pane" [ngClass]="{'active': currentActiveTab == 8 }" id="Assigned"
+                        role="tabpanel">
+                        <div class="vscroll" style="overflow-x:hidden;">
+                          <app-staff-listing-table [loader]="showIndeterminateProgress" [rows]="assignedList"
+                            [temp]="tempassigned"></app-staff-listing-table>
+                        </div>
+                      </div>
+
+                      <!--Truck Reporting Tab-->
+                      <div class="tab-pane" id="allReporting" role="tabpanel">
+                        <div class="row" *ngIf="activeTab !== 1">
+                          <app-truck-reporting [driverReporting]="true"></app-truck-reporting>
+                        </div>
+                      </div>
+                      <!--Truck Reporting Tab End-->
+                      <!--Monthly Truck Reporting Tab-->
+                      <div class="tab-pane" id="monthlyReporting" role="tabpanel">
+                        <div class="row">
+                          <app-truck-monthly-reporting [driverReporting]="true"></app-truck-monthly-reporting>
+                        </div>
+                      </div>
+                      <!--Monthly Truck Reporting Tab End-->
+
+                      <app-spin-loading [size]="'sm'" [appLoader]="appLoader"></app-spin-loading>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

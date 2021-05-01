@@ -1,0 +1,9 @@
+.mat-table {
+    /* overflow-y: auto; */
+}
+
+.table-responsive {
+    overflow: auto;
+    max-height: 400px !important;
+    /* overflow-y: auto; */
+}

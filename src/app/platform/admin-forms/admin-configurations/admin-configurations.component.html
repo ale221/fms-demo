@@ -1,0 +1,343 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+    [hidden]="!isAuthorized">
+    <ol class="breadcrumb breadcrumb-arrow ">
+        <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+        <!-- <li><a> User & Admin</a></li>
+        <li><a routerLink="/iol/admin/configurations">Configurations</a></li> -->
+        <!-- <li><a (click)="pageReload()"> User & Admin</a></li> -->
+        <li><a (click)="pageReload()">Configurations</a></li>
+    </ol>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+    style="padding-bottom:200px" [hidden]="!isAuthorized">
+    <div class="panel-heading font-weight-600 margin-bottom-0">
+    </div>
+
+    <div class="panel-body padding-0">
+        <div class="tab-content">
+            <div class="col-lg-12 ">
+                <div class="panel panel-default round ">
+
+                    <mat-tab-group (selectedTabChange)="activeTabFuction($event)">
+                        <mat-tab label="Gateway">
+                            <div class="tab-content padding-20">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group margin-bottom-10" style="max-width: 100%;">
+                                            <select class="form-control selectpicker" title="Select Type " data-size="5"
+                                                font-size-24="" data-style="btn-select" tabindex="-98" #selectType
+                                                name="selectType" (change)="typeDropdownChange($event.target.value)">
+                                                <option value="">Select Vehicle Type</option>
+                                                <option *ngFor="let data of DropDowmData" class="bs-title-option"
+                                                    [(value)]="data.id">{{data.label}}
+                                                </option>
+                                            </select>
+                                            <span class="error-message margin-bottom-10"
+                                                style="margin-bottom: 15px !important;"
+                                                *ngIf="showInputErrorMsg && submitted">
+                                                Vehicle Type is required
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8" style="text-align: right;">
+                                        <button type="button" *ngIf="loggedInUser.read_only != true"
+                                            class="btn btn-icon  btn-info btn-sm1" (click)="saveGatway()">
+                                            Save All
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 padding-top-10">
+                                        <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}"
+                                            mode="indeterminate"></p-progressBar>
+                                        <div class="table-responsive" style="border: 1px solid #ebebeb;">
+
+                                            <table matSort
+                                                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                mat-table [dataSource]="gatewayThreshold" mat-elevation-z8>
+
+                                                <ng-container matColumnDef="vehicle_type">
+                                                    <th mat-header-cell *matHeaderCellDef>NOTIFICATION TYPE
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        {{row.threshold}}
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="values">
+                                                    <th mat-header-cell *matHeaderCellDef>VALUES <small>(in
+                                                            mins)</small></th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div class="form-group">
+                                                            <input #inputElement type="number" placeholder="mins"
+                                                                min="0" maxLength="25" class="form-control" />
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+
+                                                <tr mat-header-row *matHeaderRowDef="displayedGatewayColumns"></tr>
+                                                <tr mat-row
+                                                    *matRowDef="let row; columns: displayedGatewayColumns; let i = index">
+                                                </tr>
+                                            </table>
+
+                                            <div>
+                                                <span class="error-message" *ngIf="showVehicleInputMsg && submitted">
+                                                    Please enter atleast one threshold value
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab label="Driver Score Card">
+                            <div class="tab-content padding-20">
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8" *ngIf="loggedInUser.read_only != true"
+                                        style="text-align: right;">
+                                        <button type="button" class="btn btn-icon  btn-info btn-sm1"
+                                            (click)="saveDriverScoreCard()">
+                                            Save All
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 padding-top-10">
+                                        <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}"
+                                            mode="indeterminate"></p-progressBar>
+                                        <div class="table-responsive">
+
+                                            <table matSort
+                                                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                mat-table [dataSource]="DriverScoreArray" mat-elevation-z8>
+
+                                                <ng-container matColumnDef="parameter">
+                                                    <th mat-header-cell *matHeaderCellDef>PARAMETERS
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        {{row.vehicle}}
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="values">
+                                                    <th mat-header-cell *matHeaderCellDef>VALUES</th>
+                                                    <td mat-cell *matCellDef="let row; let i = index;">
+                                                        <div class="form-group">
+                                                            <input #inputElementDriveScore type="number"
+                                                                (keyup)="getInputValue(i)" placeholder="100" min="0"
+                                                                [value]="row.value" maxLength="25"
+                                                                class="form-control" />
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+
+                                                <tr mat-header-row *matHeaderRowDef="displayedDriverColumns"></tr>
+                                                <tr mat-row
+                                                    *matRowDef="let row; columns: displayedDriverColumns; let i = index;">
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+
+                        <mat-tab label="Geozone">
+                            <div class="tab-content padding-20">
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8" *ngIf="loggedInUser.read_only != true"
+                                        style="text-align: right;">
+                                        <button (click)="saveGeozone()" type="button"
+                                            class="btn btn-icon  btn-info btn-sm1">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}"
+                                        mode="indeterminate"></p-progressBar>
+
+                                    <div class="col-md-12 padding-top-10">
+                                        <div class="table-responsive">
+                                            <table matSort
+                                                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                mat-table [dataSource]="geoZoneArray" mat-elevation-z8>
+
+                                                <ng-container matColumnDef="label">
+                                                    <th mat-header-cell *matHeaderCellDef>PARAMETERS
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        {{row.label}}
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="value">
+                                                    <th mat-header-cell *matHeaderCellDef>VALUES
+                                                        <small>(METERS)</small>
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div class="form-group">
+                                                            <input #inputElementGeozone type="number" placeholder="200"
+                                                                min="1" [value]="row.value" maxLength="25"
+                                                                oninput="validity.valid||(value='');"
+                                                                class="form-control" />
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+
+                                                <tr mat-header-row *matHeaderRowDef="displayedGeoZoneColumns"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedGeoZoneColumns;">
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab label="Fuel Threshold">
+                            <div class="tab-content padding-20">
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8" *ngIf="loggedInUser.read_only != true"
+                                        style="text-align: right;">
+                                        <button (click)="saveFuelThreshold()" type="button"
+                                            class="btn btn-icon btn-info btn-sm1">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}"
+                                        mode="indeterminate"></p-progressBar>
+
+                                    <div class="col-md-12 padding-top-10">
+                                        <div class="table-responsive">
+                                            <table matSort
+                                                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                mat-table [dataSource]="fuelThresholdArray" mat-elevation-z8>
+
+                                                <ng-container matColumnDef="label">
+                                                    <th mat-header-cell *matHeaderCellDef>PARAMETERS
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        {{row.label}}
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="value">
+                                                    <th mat-header-cell *matHeaderCellDef>VALUES
+                                                        <small>(PERCENT)</small>
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div class="form-group">
+                                                            <input #inputElementFuelThres type="number"
+                                                                placeholder="100" min="5" max="100" maxlength="3"
+                                                                [value]="row.value"
+                                                                oninput="this.value = !!this.value && this.value <= 100 ? this.value : this.value=''"
+                                                                class="form-control" />
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+
+                                                <tr mat-header-row *matHeaderRowDef="fuelThresholdColumns"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: fuelThresholdColumns;"></tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab label="Notification">
+                            <div class="tab-content padding-20">
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8" *ngIf="loggedInUser.read_only != true"
+                                        style="text-align: right;">
+                                        <button (click)="saveNotification()" type="button"
+                                            class="btn btn-icon  btn-info btn-sm1">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}"
+                                        mode="indeterminate"></p-progressBar>
+
+                                    <div class="col-md-12 padding-top-10">
+                                        <div class="table-responsive">
+                                            <table matSort
+                                                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                mat-table [dataSource]="geoZoneArray" mat-elevation-z8>
+
+                                                <ng-container matColumnDef="label">
+                                                    <th mat-header-cell *matHeaderCellDef>Title
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div>Email Notification</div>
+                                                        <hr>
+                                                        <div>SMS Alerts</div>
+                                                        <hr>
+                                                        <div>Notifications</div>
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="value">
+                                                    <th mat-header-cell *matHeaderCellDef>VALUES</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div>
+                                                            <mat-checkbox (change)="setAll($event.checked,'email')"
+                                                                [checked]="notifications?.email" class="example-margin">
+                                                            </mat-checkbox>
+                                                        </div>
+                                                        <hr>
+                                                        <div>
+                                                            <mat-checkbox (change)="setAll($event.checked,'sms')"
+                                                                [checked]="notifications?.sms" class="example-margin">
+                                                            </mat-checkbox>
+                                                        </div>
+                                                        <hr>
+                                                        <div>
+                                                            <mat-checkbox
+                                                                (change)="setAll($event.checked,'notification')"
+                                                                [checked]="notifications?.notification"
+                                                                class="example-margin">
+                                                            </mat-checkbox>
+                                                        </div>
+                                                    </td>
+
+                                                </ng-container>
+
+                                                <tr mat-header-row *matHeaderRowDef="displayedNotificationColumns"></tr>
+                                                <tr mat-row
+                                                    *matRowDef="let row; columns: displayedNotificationColumns;">
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,34 @@
+<div class="form-group1" *ngIf="multiSelect;else singleSelect">
+  <app-label-loader *ngIf="showLabel" [showLoader]="clientLoader.visibility"
+                    [text]="clientLoader.visibility"></app-label-loader>
+
+  <p-multiSelect
+    [required]="markAsRequired"
+    [maxSelectedLabels]="2"
+    [options]="client_list"
+    [(ngModel)]="selectedValue"
+    (onChange)="onClientChange($event.value)"
+    styleClass="prime-dropdown"
+    filterPlaceHolder="Search"
+    [defaultLabel]="clientLoader.visibility ? 'Fetching Clients..' : 'Select Clients' ">
+  </p-multiSelect>
+<!--  <app-spin-loading [size]="'sm'" [appLoader]="clientLoader"></app-spin-loading>-->
+</div>
+
+
+<ng-template #singleSelect>
+  <div class="form-group">
+    <label class="control-label" *ngIf="showLabel">Client
+      <app-label-loader [showLoader]="clientLoader.visibility"></app-label-loader>
+    </label>
+    <p-dropdown
+      styleClass="prime-dropdown"
+      name="selected"
+      [(ngModel)]="selected"
+      filter="true"
+      [options]="client_list"
+      (onChange)="onClientChange($event.value)"
+      placeholder="Select Client">
+    </p-dropdown>
+  </div>
+</ng-template>

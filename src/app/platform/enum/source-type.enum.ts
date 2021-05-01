@@ -1,0 +1,8 @@
+// Created by soban on 17-12-2017.
+export enum SourceTypeEnum {
+  HYPERNET_POST_DATA = 1,
+  HYPERNET_NOTIFICATION = 2,
+  HYPERNET_MAINTENANCE = 3,
+  LOGISTIC_JOBS = 4,
+  LOGISTIC_TRIPS = 5,
+}

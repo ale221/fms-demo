@@ -1,0 +1,19 @@
+import { ISignalRConnection } from './connection/i.signalr.connection';
+import { SignalRConfiguration } from './signalr.configuration';
+import { SignalRConnection } from './connection/signalr.connection';
+import { NgZone } from '@angular/core';
+import { IConnectionOptions } from './connection/connection.options';
+import * as ɵngcc0 from '@angular/core';
+export declare class SignalR {
+    private _configuration;
+    private _zone;
+    private _jHubConnectionFn;
+    constructor(configuration: SignalRConfiguration, zone: NgZone, jHubConnectionFn: Function);
+    createConnection(options?: IConnectionOptions): SignalRConnection;
+    connect(options?: IConnectionOptions): Promise<ISignalRConnection>;
+    private merge(overrides);
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<SignalR, never>;
+    static ɵprov: ɵngcc0.ɵɵInjectableDef<SignalR>;
+}
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2lnbmFsci5kLnRzIiwic291cmNlcyI6WyJzaWduYWxyLmQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7QUFDQSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IElTaWduYWxSQ29ubmVjdGlvbiB9IGZyb20gJy4vY29ubmVjdGlvbi9pLnNpZ25hbHIuY29ubmVjdGlvbic7XHJcbmltcG9ydCB7IFNpZ25hbFJDb25maWd1cmF0aW9uIH0gZnJvbSAnLi9zaWduYWxyLmNvbmZpZ3VyYXRpb24nO1xyXG5pbXBvcnQgeyBTaWduYWxSQ29ubmVjdGlvbiB9IGZyb20gJy4vY29ubmVjdGlvbi9zaWduYWxyLmNvbm5lY3Rpb24nO1xyXG5pbXBvcnQgeyBOZ1pvbmUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgSUNvbm5lY3Rpb25PcHRpb25zIH0gZnJvbSAnLi9jb25uZWN0aW9uL2Nvbm5lY3Rpb24ub3B0aW9ucyc7XHJcbmV4cG9ydCBkZWNsYXJlIGNsYXNzIFNpZ25hbFIge1xyXG4gICAgcHJpdmF0ZSBfY29uZmlndXJhdGlvbjtcclxuICAgIHByaXZhdGUgX3pvbmU7XHJcbiAgICBwcml2YXRlIF9qSHViQ29ubmVjdGlvbkZuO1xyXG4gICAgY29uc3RydWN0b3IoY29uZmlndXJhdGlvbjogU2lnbmFsUkNvbmZpZ3VyYXRpb24sIHpvbmU6IE5nWm9uZSwgakh1YkNvbm5lY3Rpb25GbjogRnVuY3Rpb24pO1xyXG4gICAgY3JlYXRlQ29ubmVjdGlvbihvcHRpb25zPzogSUNvbm5lY3Rpb25PcHRpb25zKTogU2lnbmFsUkNvbm5lY3Rpb247XHJcbiAgICBjb25uZWN0KG9wdGlvbnM/OiBJQ29ubmVjdGlvbk9wdGlvbnMpOiBQcm9taXNlPElTaWduYWxSQ29ubmVjdGlvbj47XHJcbiAgICBwcml2YXRlIG1lcmdlKG92ZXJyaWRlcyk7XHJcbn1cclxuIl19

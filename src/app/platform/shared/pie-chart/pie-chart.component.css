@@ -1,0 +1,9 @@
+.chart-legend-icon{
+  display: block;
+
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}

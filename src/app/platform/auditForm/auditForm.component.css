@@ -1,0 +1,60 @@
+.form-fieldset {
+    border: 2px solid #eee !important;
+    margin: 0;
+    padding: 15px;
+    position: relative;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.card:after {
+right: unset;
+}
+.text-danger {
+    color: red !important; 
+    text-align: center !important;
+}
+.showSearchFilter {
+    display:flex !important;
+    flex-direction: row !important; 
+    justify-content: flex-end !important; 
+    align-items: center !important;
+}
+.inputStyle {
+    width: 20%;
+    margin-left: 5px;
+    height: 36px;
+}
+.legendShow {
+    margin-bottom: 0px !important;
+    font-size: 14px !important;
+    width: 11% !important;
+}
+.btn-round {
+    border-radius: 1000px !important;
+}
+.bg-theme {
+    background-color: #e60000 !important;
+}
+.btn-success {
+  
+    border-color: #46be8a !important;
+}
+.pt-0 {
+padding-top: 0px !important;
+}
+.formStyle {
+    height: 37px !important;
+    margin-bottom: 12px !important;
+}
+.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+  .enabled {
+    pointer-events:visible;
+    cursor: pointer;
+  }
+  .font-weight-400 {
+      font-weight: 400 !important;
+  }
+  

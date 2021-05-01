@@ -1,0 +1,86 @@
+.translate-loader {
+  position: fixed;
+  left: 0;
+  top: 0%;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-wrapper {
+  position: absolute;
+}
+
+.mat-drawer-container {
+  height: 92%;
+  overflow: scroll;
+  overflow-x: hidden;
+  /* z-index: 0 !important; */
+}
+
+.mat-list-base .mat-list-item {
+  font-size: 13px;
+}
+
+.sidenav-container.mat-drawer-container.mat-sidenav-container {
+  width: 220px;
+  float: left;
+  /* position: fixed; */
+}
+
+.mat-list-base {
+  width: 220px;
+}
+
+.collapse-view {
+  position: fixed;
+  background: #242F35;
+  z-index: 99;
+  display: flex;
+  left: 90px;
+  width: 220px;
+}
+
+.nav-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.collapse-view .nav-container .sub-nav {
+  padding-left: 20px;
+}
+
+.collapse-view .nav-container .sub-nav a{
+  width: 100%;
+  color: #FFF;
+}
+
+.collapse-view .nav-container .sub-nav a:hover{
+  text-decoration: none;
+}
+
+.mat-list-item-content:hover + .collapse-view {
+  display: block !important;
+  position: absolute;
+}
+
+/*------------------------- AGHA CSS -------------------*/
+.icon-hover:hover i::before {
+  display: none !important;
+}
+
+.icon-hover:hover  .text-show{
+  display: block !important;
+    position: relative;
+    left: -59px;
+    max-width: 70px;
+}
+
+.text-show{
+  display: none;
+}

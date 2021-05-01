@@ -1,0 +1,948 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <li><a> Reports</a></li>
+    <li>{{tableHeading}}</li>
+  </ol>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' " style="padding-bottom:200px" [hidden]="!isAuthorized">
+  <div class="panel-heading font-weight-600 margin-bottom-0">
+  </div>
+
+  <div class="panel-body padding-0">
+    <div class="tab-content">
+      <div class="tab-pane active" id="Summary">
+        <div class="panel-body padding-15 ">
+          <div class="row">
+
+            <div class="col-lg-4 card-group-row__col">
+              <div class="panel panel-default round " style="overflow: visible !important;">
+                <div class="panel-heading margin-bottom-0">
+                  <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Choose Parameters</h3>
+                  <div class="panel-actions">
+                    <a></a>
+                  </div>
+                </div>
+
+                <form [formGroup]="reportSearchForm" (ngSubmit)="onSubmit(reportSearchForm)">
+
+                  <div class="panel-body padding-15">
+                    <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+                      <div class="row" *ngIf="pngUser=='6'">
+                        <div class="col-md-12" style="padding-left: 0px;padding-right: 0px;">
+                          <select class="form-control" formControlName="reportDropDown" name="selectedGroup"
+                            placeholder="Choose Report Class " (change)="ReportClassChange($event.target.value)">
+                            <option value="">Choose Report Class</option>
+                            <option *ngFor="let vehicle of driverReportclass" [value]="vehicle.id">{{vehicle.name}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row" style="border: 1px solid #c0c0c0; border-radius: 5px;">
+                        <div class="col-md-12">
+                          <p style="margin-top: -13px; background-color: white; max-width: 26%;">Report Type</p>
+                          <select class="form-control" style="margin-bottom: 12px;" formControlName="typeDropDown"
+                            name="selectedGroup" placeholder="Select Driver"
+                            (change)="reportTypeChange($event.target.value)">
+                            <option value="">Report Type</option>
+                            <option *ngFor="let vehicle of reportType" [value]="vehicle.id">{{vehicle.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row" *ngIf="forDriversDropdown"
+                        style="border: 1px solid #c0c0c0; border-radius: 5px;">
+                        <div class="col-md-12">
+                          <p style="margin-top: -13px; background-color: white; max-width: 12%;">Driver</p>
+                          <div class="form-group">
+                            <p-multiSelect [disabled]="dropDownDisable" [options]="driverGroup" name="selectedGroup"
+                              formControlName="groupDriver" optionLabel="name" styleClass="prime-dropdown" filter="true"
+                              filterPlaceHolder="Select Driver Group" (onChange)="searchStatusDropDownChange($event)"
+                              defaultLabel="Select Driver Group">
+                            </p-multiSelect>
+                          </div>
+
+                          <div class="form-group">
+                            <p-multiSelect [disabled]="dropDownDisable" [options]="statusLists"
+                              formControlName="driverDropDown" optionLabel="name" styleClass="prime-dropdown"
+                              filter="true" filterPlaceHolder="Select Driver" (onChange)="DriverDropDownChange($event)"
+                              defaultLabel="Select Driver">
+                            </p-multiSelect>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row" *ngIf="forFleetDropdown" style="border: 1px solid #c0c0c0; border-radius: 5px;">
+                        <div class="col-md-12">
+                          <p style="margin-top: -13px; background-color: white; max-width: 12%;">Fleets</p>
+                          <div class="form-group">
+                            <!-- <select class="form-control" formControlName="fleetGroup" name="selectedGroup"
+                              placeholder="Select Fleet Group" (change)="FleetGroupDropDownChange($event.target.value)">
+                              <option value="">Select Fleet Group</option>
+                              <option *ngFor="let fleetGroup of fleetGroup" [value]="fleetGroup.id">{{fleetGroup.name}}
+                              </option>
+                            </select> -->
+                            <p-multiSelect [options]="fleetGroup" formControlName="fleetGroup" optionLabel="name"
+                              styleClass="prime-dropdown" filter="true" filterPlaceHolder="Select Fleet"
+                              (onChange)="FleetGroupDropDownChange($event)" defaultLabel="Select Fleet">
+                            </p-multiSelect>
+                          </div>
+
+                          <div class="form-group">
+                            <!-- <select class="form-control" formControlName="fleet" name="selectedGroup"
+                              placeholder="Select Vehicle" (change)="DriverDropDownChange($event.target.value)">
+                              <option value="">Select Vehicle</option>
+                              <option *ngFor="let vehicle of fleets" [value]="vehicle.id">{{vehicle.name}}
+                              </option>
+                            </select> -->
+                            <p-multiSelect [options]="fleets" formControlName="fleet" optionLabel="name"
+                              styleClass="prime-dropdown" filter="true" filterPlaceHolder="Select Fleet"
+                              (onChange)="VehicleDropDownChange($event)" defaultLabel="Select Fleet">
+                            </p-multiSelect>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row"
+                        style="border: 1px solid #c0c0c0; border-radius: 5px; padding-bottom: 12px;margin-top: 30px;"
+                        *ngIf="loggedInUser.package[0].package_id === PackageType.standard">
+                        <div class="col-md-12">
+                          <p style="margin-top: -13px; background-color: white; max-width: 28%;">Time Interval</p>
+
+                          <div class="form-group margin-bottom-10">
+                            <div class="row">
+                              <div class="col-lg-12">
+                                <div class="radio-custom checkbox-inline1 radio-warning">
+                                  <input type="radio" id="444" value="" name="radio" (change)="changeGender($event)">
+                                  <label for="444">All</label>
+                                </div>
+                              </div>
+                              <div class="col-lg-12">
+                                <div class="radio-custom checkbox-inline1 radio-warning">
+                                  <input type="radio" id="444" value="today" name="radio"
+                                    (change)="changeGender($event)">
+                                  <label for="444">Current Day</label>
+                                </div>
+                              </div>
+                              <div class="col-lg-12">
+                                <div class="radio-custom checkbox-inline1 radio-warning">
+                                  <input type="radio" id="555" value="week" name="radio"
+                                    (change)="changeGender($event)">
+                                  <label for="555">Previous Week </label>
+                                </div>
+                              </div>
+                              <div class="col-lg-12">
+                                <div class="radio-custom checkbox-inline1 radio-warning">
+                                  <input type="radio" id="666" value="month" name="radio"
+                                    (change)="changeGender($event)">
+                                  <label for="666">Previous Month </label>
+                                </div>
+                              </div>
+                              <div class="col-lg-12">
+                                <div class="radio-custom checkbox-inline1 radio-warning">
+                                  <input type="radio" id="666r" value="selectEndDate" name="radio"
+                                    formControlName="radio" (change)="changeGender($event)">
+                                  <label for="666r">Select a Period </label>
+                                </div>
+                              </div>
+                              <div class="col-lg-12">
+                                <div class="form-group margin-bottom-0">
+                                  <div class="row-filter">
+                                    <div class="col-filter">
+                                      <p-calendar placeholder="Select start date" [style]="{ 'width': '150px'}"
+                                        id="fffl" showTime="true" hourFormat="24" [disabled]="selectEndDateDisable"
+                                        (onSelect)="selectDateRange($event,'start')"></p-calendar>
+                                    </div>
+                                    <div class="col-filter">
+                                      <p-calendar placeholder="Select end date" [style]="{ 'width': '150px'}" id="fffl"
+                                        showTime="true" hourFormat="24" [disabled]="selectEndDateDisable"
+                                        (onSelect)="selectDateRange($event,'')"></p-calendar>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <hr>
+                      <div class="form-group margin-bottom-0">
+                        <label class="font-size-14 font-weight-600 ">Export:</label>
+                        <div class="btn-group btn-group-justified">
+                          <div class="btn-group" role="group">
+                            <button type="button" [disabled]="exportsid==true" (click)="exportExcel()"
+                              class="btn btn-outline btn-default"> <img src="../../../assets/images/icon-xls.png"
+                                height="50">
+                              <div class="font-size-12">
+                                <a>Download XL</a>
+                              </div>
+                            </button>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button type="button" [disabled]="exportsid==true" (click)="exportPdf()"
+                              class="btn btn-outline btn-default"> <img src="../../../assets/images/icon-pdf.png"
+                                height="50">
+                              <div class="font-size-12">Download PDF</div>
+                            </button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="col-lg-8">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="panel panel-default  padding-0  card  light">
+                    <div class="panel-heading margin-bottom-0">
+                      <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">{{tableHeading}}</h3>
+                      <div class="panel-actions">
+                        <a></a>
+                      </div>
+                    </div>
+                    <div class="table-responsive margin-top-20 padding-15">
+                      <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+                      </p-progressBar>
+
+                      <div *ngIf="reportTypeTable == 1">
+                        <table matSort (matSortChange)="sortUserList($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+                          <ng-container matColumnDef="driver_id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver ID</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div style="float: left">
+                                <span style="float: left;margin-left: -22px;margin-top: 3px;" id="content"
+                                  class=""></span>
+                              </div>
+                              {{ (row.driver_id == null) ? '-': (row.driver_id ) }}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver</th>
+                            <td mat-cell *matCellDef="let row">
+
+                              <div>
+                                <b>{{(row.driver_name == null) ? '-': row.driver_name}}</b>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="avg_speed">
+                            <th mat-header-cell *matHeaderCellDef>AVG SPEED(KM/H)</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.average_speed == null) ? '-': (row.average_speed | number: '1.0-2') }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="max_speed">
+                            <th mat-header-cell *matHeaderCellDef>MAX SPEED(KM/H)</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.maximum_speed == null) ? '-': (row.maximum_speed | number: '1.0-2') }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="harsh_con">
+                            <th mat-header-cell *matHeaderCellDef>SHARP TURNING</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.harsh_cornering_count == null) ? '-': row.harsh_cornering_count }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="displayedUserList"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedUserList;" matRipple class="element-row"
+                            [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl">
+                          </tr>
+
+                        </table>
+                        <div *ngIf="users == ''" class="no-records">No records found</div>
+
+                        <mat-paginator translate="no" #userPaginator1 [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination($event)" [pageSize]="10">
+                        </mat-paginator>
+                      </div>
+
+                      <ng-template #tpl let-row>
+                        <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+                          <div><b style="margin-left: 7px;">Harsh Accelaration:</b>
+                            {{row.harsh_acceleration_count ?
+                            row.harsh_acceleration_count : '-'}}
+                          </div>
+                          <div> <b style="margin-left: 7px;">Harsh Braking:</b> {{row.harsh_braking_count ?
+                            row.harsh_braking_count : '-'}}
+                          </div>
+
+                          <div> <b style="margin-left: 7px;">Time Travelled (Hrs):</b> {{row.total_time_traveled ?
+                            row.total_time_traveled : '-'}}
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <div *ngIf="reportTypeTable == 2">
+                        <table matSort (matSortChange)="sortUserList2($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1 hover-table"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver </th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.driver_name == null) ? '-': row.driver_name}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="total_distance">
+                            <th mat-header-cell *matHeaderCellDef>Total Distance </th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.total_distance == null) ? '-': row.total_distance}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="total_points">
+                            <th mat-header-cell *matHeaderCellDef>Total Points</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.total_points == null) ? '-': row.total_points }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="remaining_points">
+                            <th mat-header-cell *matHeaderCellDef>Negative Points</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.remaining_points == null) ? '-': row.remaining_points }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="driverSafetyReport"></tr>
+                          <tr mat-row *matRowDef="let row; columns: driverSafetyReport;" (click)="profileNewTable(row, filtersTable)">
+                          </tr>
+                        </table>
+                        <div *ngIf="users == ''" class="no-records">No records found</div>
+
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination1($event)" [pageSize]="10">
+                        </mat-paginator>
+                      </div>
+                      <div *ngIf="reportTypeTable == 3">
+
+                        <table matSort (matSortChange)="sortUserList3($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+
+
+                          <!-- <ng-container matColumnDef="buton">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Expandibles</th>
+                            <td mat-cell *matCellDef="let row">
+                              <span id="content" class=""></span>
+                            </td>
+                          </ng-container> -->
+
+                          <ng-container matColumnDef="driver_id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver ID</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div style="float: left;position: relative;">
+                                <span style="float: left; margin-left: -10px!important; margin-top: 3px;" id="content"
+                                  class="">
+                                </span>
+                              </div>
+                              <div class="padding-left-15">
+                                {{(row.driver_id == null) ? '-': row.driver_id}}
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="driver_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.driver_name == null) ? '-': row.driver_name}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="vehicle_name">
+                            <th mat-header-cell *matHeaderCellDef>VEHICLE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.vehicle_name == null) ? '-': row.vehicle_name }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="working_distance">
+                            <th mat-header-cell *matHeaderCellDef>Working HOURS Distance</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.working_distance == null) ? '-': row.working_distance + " Km"}}</td>
+                          </ng-container>
+                          <ng-container matColumnDef="working_hours">
+                            <th mat-header-cell *matHeaderCellDef>Working HOURS </th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.working_hours == null) ? '-': row.working_hours }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="non_working_distance">
+                            <th mat-header-cell *matHeaderCellDef>NON-WORKING HOURS Distance</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.non_working_distance == null) ? '-': row.non_working_distance }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="non_working_hours">
+                            <th mat-header-cell *matHeaderCellDef>NON-WORKING HOURS </th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.non_working_hours == null) ? '-': row.non_working_hours }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="total_distance_travelled">
+                            <th mat-header-cell *matHeaderCellDef>TOTAL DISTANCE TRAVELLED (KM)</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.total_distance_travelled == null) ? '-': row.total_distance_travelled }}</td>
+                          </ng-container>
+
+
+
+
+
+
+
+                          <tr mat-header-row *matHeaderRowDef="vehicleUsageReport"></tr>
+                          <tr mat-row *matRowDef="let row; columns: vehicleUsageReport;" matRipple class="element-row"
+                            [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl2">
+                          </tr>
+                        </table>
+                        <div *ngIf="users == ''" class="no-records">No records found</div>
+
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination8($event)" [pageSize]="10">
+                        </mat-paginator>
+
+                      </div>
+
+                      <ng-template #tpl2 let-row>
+                        <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+                          <div> <b style="margin-left: 7px;">TOTAL DRIVING TIME (Hrs):</b>
+                            {{(row.total_driving_time == null || row.total_driving_time == 0) ? '-':
+                            row.total_driving_time + " hrs"}}
+                          </div>
+                          <!-- <div> <b style="margin-left: 7px;">Total Distance:</b>
+                            {{(row.total_distance_travelled == null || row.total_distance_travelled == 0) ? '-': row.total_distance_travelled}}
+                          </div> -->
+                        </div>
+                      </ng-template>
+
+                      <div *ngIf="reportTypeTable == 4">
+
+                        <table matSort (matSortChange)="sortUserList4($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>Driver ID</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div style="float: left;position: relative;">
+                                <span style="float: left; margin-left: -10px!important; margin-top: 3px;" id="content"
+                                  class="">
+                                </span>
+                              </div>
+                              <div class="padding-left-15">{{(row.driver_id == null) ? '-': row.driver_id}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="driver">
+                            <th mat-header-cell *matHeaderCellDef>Driver</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.driver_name == null) ? '-': row.driver_name}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>DATE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.date == null) ? '-': row.date }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="loged_in_time">
+                            <th mat-header-cell *matHeaderCellDef>LOGGED IN TIME</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.shift_start_time == null) ? '-': timeConversion(row.shift_start_time) }}</td>
+                          </ng-container>
+                          <ng-container matColumnDef="shift_end_time">
+                            <th mat-header-cell *matHeaderCellDef>LOGGED OUT TIME</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.shift_end_time == null) ? '-': timeConversion(row.shift_end_time) }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="shift_time">
+                            <th mat-header-cell *matHeaderCellDef>SHIFT TIME</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.shift_time == null || row.shift_time == "None") ? '-': '' }} {{ (row.shift_start_time == null) ? '': timeConversion(row.shift_start_time) + ' - ' }} {{ (row.shift_end_time == null || row.shift_end_time === 'Non-Shift Record') ? '': timeConversion(row.shift_end_time) }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="deviation">
+                            <th mat-header-cell *matHeaderCellDef>DEVIATION</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.deviation == null) ? '-': row.deviation }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="punctulity_rate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>PUNCTUALITY RATE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.punctuality_score == null) ? '-': row.punctuality_score }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="driverPunctulityReport"></tr>
+                          <tr mat-row *matRowDef="let row; columns: driverPunctulityReport;" matRipple
+                            class="element-row" [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl3"></tr>
+                        </table>
+                        <div *ngIf="users == ''" class="no-records">No records found</div>
+
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination3($event)" [pageSize]="10">
+                        </mat-paginator>
+
+                      </div>
+
+                      <ng-template #tpl3 let-row>
+                        <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+                          <!-- <div><b style="margin-left: 7px;">DEVIATION:</b> {{(row.deviation == null) ? '-':
+                            row.deviation}}</div> -->
+                          <div> <b style="margin-left: 7px;">PUNCTUALITY RATE:</b>
+                            {{(row.punctuality_score == null) ?
+                            '-': row.punctuality_score}}
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <div *ngIf="reportTypeTable == 5">
+
+                        <table matSort (matSortChange)="sortUserList5($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+
+                          <ng-container matColumnDef="device_id__name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>VEHICLE</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div style="float: left; position: relative">
+                                <span style="float: left;margin-left: -22px;margin-top: 3px;" id="content"
+                                  class=""></span>
+                              </div>
+                              <div>
+                                <b>{{(row.vehicle_name == null) ? '-': row.vehicle_name}}</b>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="maintenance_type_id__value">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>MAINTENANCE TYPE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.maintenance_type == null) ? '-': row.maintenance_type }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="issued_datetime">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>PLANNED DATE OF MAINTENANCE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.planned_date == null) ? '-':
+                              (row.planned_date_unix*1000 | date:'yyyy-MM-d')
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="start_datetime">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>ACTUAL DATE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.actual_date == null) ? '-': (row.actual_date_unix*1000 | date:'yyyy-MM-d') }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="maintenance_status_id__value">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.maintenance_status == null) ? '-': row.maintenance_status }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="fleetMaintenanceReport"></tr>
+                          <tr mat-row *matRowDef="let row; columns: fleetMaintenanceReport;" matRipple
+                            class="element-row" [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl4"></tr>
+                        </table>
+                        <div *ngIf="users == ''" class="no-records">No records found</div>
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination4($event)" [pageSize]="10">
+                        </mat-paginator>
+
+                      </div>
+
+                      <ng-template #tpl4 let-row>
+                        <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+                          <div><b style="margin-left: 7px;">DEVIATION:</b> {{(row.deviation == null) ? '-':
+                            row.deviation}}</div>
+                          <div> <b style="margin-left: 7px;">NEXT MAINTENANCE DATE:</b>
+                            {{(row.next_maintenance_date_unix*1000) | date:'yyyy-MM-d'}}
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <div *ngIf="reportTypeTable == 6">
+
+                        <table matSort (matSortChange)="sortUserList6($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+                          <ng-container matColumnDef="device_id__name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>VEHICLE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.vehicle_name == null) ? '-': row.vehicle_name}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="maintenance_type_id__value">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>JOB TYPE</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.maintenance_type == null) ? '-': row.maintenance_type }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="technician_id__name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>TECHNICIAN</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.technician_name == null) ? '-': row.technician_name }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="total_jobs">
+                            <th mat-header-cell *matHeaderCellDef>Total Jobs</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.total_jobs == null) ? '-': row.total_jobs }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="completed_jobs">
+                            <th mat-header-cell *matHeaderCellDef>COMPLETED JOBS</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.completed_jobs == null) ? '-': row.completed_jobs }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="deviation">
+                            <th mat-header-cell *matHeaderCellDef>DEVIATION</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.deviation == null) ? '-': row.deviation }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="fleet_jobs"></tr>
+                          <tr mat-row *matRowDef="let row; columns: fleet_jobs;"></tr>
+                        </table>
+                        <div *ngIf="users == ''" class="no-records">No records found</div>
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination5($event)" [pageSize]="10">
+                        </mat-paginator>
+
+
+                      </div>
+
+                      <div *ngIf="reportTypeTable == 7">
+
+                        <table matSort (matSortChange)="sortUserList7($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+                          <ng-container matColumnDef="primary_entity__name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.driver_name == null) ? '-': row.driver_name}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="started_at">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>JOB BEGIN TIME</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{
+                              (row.actual_start_time == null) ? '-':
+                              (row.actual_start_time | date:'M/d/yyyy, hh:mm:ss a')
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="ended_at">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>JOB END TIME</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.actual_end_time == null) ? '-':
+                              (row.actual_end_time | date:'M/d/yyyy, hh:mm:ss a')
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="source_client_id__address">
+                            <th mat-header-cell *matHeaderCellDef>JOB BEGIN LOCATION</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.actual_start_location == null) ? '-': row.actual_start_location }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="destination_client_id__address">
+                            <th mat-header-cell *matHeaderCellDef>JOB END LOCATION</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.actual_end_location == null) ? '-': row.actual_end_location }}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="start_datetime_format">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>PLANNED JOB START TIME</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{
+                              (row.planned_start_time == null) ? '-': (row.planned_start_time |
+                              date:'M/d/yyyy,hh:mm:ss a')
+                              }}</td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="end_datetime_format">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>PLANNED JOB END TIME</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.planned_end_time == null) ? '-':
+                              (row.planned_end_time| date:'M/d/yyyy, hh:mm:ss a')
+                              }}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="planned_start_location">
+                            <th mat-header-cell *matHeaderCellDef>PLANNED JOB BEGIN LOCATION</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.planned_start_location == null) ? '-': row.planned_start_location }}
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="planned_end_location">
+                            <th mat-header-cell *matHeaderCellDef>PLANNED JOB END LOCATION</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.planned_end_location == null) ? '-': row.planned_end_location }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="planned_duration">
+                            <th mat-header-cell *matHeaderCellDef>PLANNED DURATION (hrs)</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.planned_duration == null) ? '-': row.planned_duration }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="deviation">
+                            <th mat-header-cell *matHeaderCellDef>Deviation (hrs)</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.deviation == null) ? '-': row.deviation }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="jobAnomalyReport"></tr>
+                          <tr mat-row *matRowDef="let row; columns: jobAnomalyReport;"></tr>
+                        </table>
+                        <div *ngIf="users == '' " class="no-records">No records found</div>
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination6($event)" [pageSize]="10">
+                        </mat-paginator>
+                      </div>
+
+                      <div *ngIf="reportTypeTable == 8">
+
+                        <table matSort (matSortChange)="sortUserList5($event)"
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+
+                          <ng-container matColumnDef="fill_up_date">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fillup Date</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div style="float: left; position: relative">
+                                <span style="float: left; margin-left: -22px; margin-top: 3px;" id="content"
+                                  class=""></span>
+                              </div>
+                              <div>
+                                <b>{{(row.date_of_fill_up == null) ? '-':
+                                  (row.date_of_fill_up |date:'M/d/yyyy')}}
+                                </b>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="fuel_filled">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fillup Quantity(Liters)</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.fuel_filled == null) ? '-': row.fuel_filled}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="driver_name">
+                            <th mat-header-cell *matHeaderCellDef>Driver</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.driver_name == null) ? '-': row.driver_name }}</td>
+                          </ng-container>
+                          <ng-container matColumnDef="vehicle">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.vehicle == null) ? '-': row.vehicle }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="amount_paid">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fillup Amount(Qar)</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.amount_paid == null) ? '-': row.amount_paid }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="payment_method_id__value">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Method</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.payment_method == null) ? '-': row.payment_method }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="FuelsReport"></tr>
+                          <tr mat-row *matRowDef="let row; columns: FuelsReport;" matRipple class="element-row"
+                            [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl5">
+                          </tr>
+                        </table>
+                        <div *ngIf="users == ''" class="no-records">No records found</div>
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons (page)="onUserPagination7($event)" [pageSize]="10">
+                        </mat-paginator>
+
+                      </div>
+
+
+                      <ng-template #tpl5 let-row>
+                        <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+                          <div><b style="margin-left: 7px;">Fillup Location:</b> {{row.location}}</div>
+                          <div> <b style="margin-left: 7px;">Fillup Supervisor:</b>
+                            {{row.fuel_supervisor_name}}
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <div *ngIf="reportTypeTable == 10">
+                        <table matSort
+                          class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                          style="border: 1px solid #ebebeb;" mat-table [dataSource]="users" mat-elevation-z8>
+                          <ng-container matColumnDef="vehicle_no">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle No</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{(row.vehicle_no == null) ? '-': row.vehicle_no}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="speedo_meter">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Speedo Meter</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.speedo_meter == null) ? '-': row.speedo_meter }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="driver_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver Name</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.driver_name == null) ? '-': row.driver_name }}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="ignition">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Ignition</th>
+                            <td mat-cell *matCellDef="let row">
+                              {{ (row.ignition == null) ? '-': row.ignition }}</td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="ObdReport"></tr>
+                          <tr mat-row *matRowDef="let row; columns: ObdReport;"></tr>
+                        </table>
+                        <div *ngIf="users === '' " class="no-records">No records found</div>
+                        <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                          showFirstLastButtons [pageSize]="10">
+                        </mat-paginator>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="panel panel-default  padding-0  card margin-top-40 light"
+                    *ngIf="extendedTableData.length != 0">
+                    <div class="panel-heading margin-bottom-0">
+                      <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Incidents</h3>
+                      <div class="panel-actions">
+                        <a></a>
+                      </div>
+                    </div>
+                    <div class="table-responsive margin-top-20 padding-15">
+                      <p-progressBar *ngIf="showIndeterminateProgressProfile" [style]="{'height': '3px'}" mode="indeterminate">
+                      </p-progressBar>
+                      <table matSort (matSortChange)="sortUserListProfile($event)"
+                        class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                        style="border: 1px solid #ebebeb;" mat-table [dataSource]="extendedTableData" mat-elevation-z8>
+                        <ng-container matColumnDef="latitude">
+                          <th mat-header-cell *matHeaderCellDef>Show on Map</th>
+                          <td mat-cell *matCellDef="let row">
+                            <div *ngIf="row.latitude && row.longitude">
+                              <a data-target="#editpop1" (click)="openEditModal(row)" data-toggle="modal">Show On Map</a>
+                            </div>
+                            <div *ngIf="!row.latitude || !row.longitude">
+                              <span>N/A</span>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="created_at">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.date_time == null) ? 'N/A': row.date_time }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="violation_name">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Incident Type</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.violation_name == null) ? 'N/A': row.violation_name }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="speed">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.speed == null) ? 'N/A': row.speed }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="value">
+                          <th mat-header-cell *matHeaderCellDef>Value</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ (row.value == null) ? 'N/A': row.value }}
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="violation_type__label">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Violation</th>
+                          <td mat-cell *matCellDef="let row">
+                            {{ row.vehicle_out_territory ? 'Out of Zone' : row.vehicle_in_territory ? 'In Zone' : 'N/A'
+                            }}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="extendedReport"></tr>
+                        <tr mat-row *matRowDef="let row; columns: extendedReport;"></tr>
+                      </table>
+                      <!-- <div *ngIf="extendedTableData.length === '' " class="no-records">No records found</div> -->
+                      <mat-paginator translate="no" #userPaginator (page)="onProfilePagination($event)" [length]="extendeduserlength" [hidePageSize]="true"
+                        showFirstLastButtons [pageSize]="10">
+                      </mat-paginator>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+<div class="modal fade  modal-success text-left" id="editpop1" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-center  modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span>x</span>
+        </button>
+        <h4 class="modal-title">Incident Detail</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <app-google-map #binMap mapType="false" [height]="'250px'" [showSearchBar]="false">
+            </app-google-map>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

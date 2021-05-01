@@ -1,0 +1,357 @@
+<div class="panel-heading margin-bottom-0">
+  <h3 class="panel-title font-weight-600 bg-teal-8001 white1" style="border-bottom: 1px solid rgba(0, 0, 0, .075)">
+    Choose Parameters</h3>
+  <div class="panel-actions">
+    <a></a>
+  </div>
+</div>
+
+<form novalidate [formGroup]="filtersForm" id="filtersForm" style="padding: 15px;padding-bottom: 0px;">
+  <div class="row" *ngIf="activePage === 'fleets'">
+    <div class="col-sm-6">
+      <div class="checkbox">
+        <label><input  type="checkbox" formControlName="trackVehicle" value=""><span style="margin-right: 20px;">Track
+          Vehicles</span></label>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="checkbox">
+        <label><input type="checkbox" [attr.disabled]="filtersForm.controls['trackVehicle'].value ? null : true"
+            [disabled]="filtersForm.controls['trackVehicle'].value ? false : true" (change)="followSelectedVehicle()"
+            formControlName="automaticZoom" value="">
+            <span style="margin-right: 20px;">Automatic Zoom</span>
+
+        </label>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top: 5px;margin-bottom: 30px;"
+    *ngIf="filtersForm.controls['trackVehicle'].value && activePage === 'fleets'">
+    <div class="input-icon">
+      <p-dropdown [options]="vehicleOptions" formControlName="vehicle_id" [(ngModel)]="selectedVehicleOption"
+        name="vehicleOption" (onChange)="vehicleOptionChange($event)" optionLabel="name" styleClass="prime-dropdown"
+        [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+        placeholder="Select Vehicle">
+      </p-dropdown>
+    </div>
+  </div>
+  <div style="margin-top: 5px;margin-bottom: 10px; float: left; width: 100%;" *ngIf="activePage === 'drivers'">
+    <div class="input-search">
+      <input type="text" style="border-radius: 3px;padding-right:30px" (keyup)='keyUp.next($event)' formControlName="search_key"
+        class="form-control" placeholder="Search by driver name">
+      <button type="button" class="input-search-btn">
+        <i class="icon ion-ios-search-strong"></i>
+      </button>
+    </div>
+  </div>
+  <div style="margin-top: 5px;margin-bottom: 10px; float: left; width: 100%;" *ngIf="activePage === 'maintenance'">
+    <div class="input-search">
+      <input type="text" style="border-radius: 3px;padding-right:30px" (keyup)='keyUp.next($event)' formControlName="search_key"
+        class="form-control" placeholder="Search by vehicle number">
+      <button type="button" class="input-search-btn">
+        <i class="icon ion-ios-search-strong"></i>
+      </button>
+    </div>
+  </div>
+  <div style="margin-top: 5px;margin-bottom: 10px;" *ngIf="activePage === 'fleets'">
+    <div class="input-search">
+      <input type="text" style="border-radius: 3px;padding-right:30px" (keyup)='keyUp.next($event)' formControlName="search_key"
+        class="form-control" placeholder="Search by vehicle number">
+      <button type="button" class="input-search-btn">
+        <i class="icon ion-ios-search-strong"></i>
+      </button>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 5px;margin-bottom: 15px;">
+    <div class="col-sm-12" style="padding-right: 9px;">
+    </div>
+  </div>
+  <div style="margin-top: 5px;margin-bottom: 10px;">
+    <div class="input-icon">
+      <!-- [disabled]="vehicleFleet" -->
+      <p-dropdown [options]="fleetsOptions" formControlName="fleet_id" [(ngModel)]="selectedFleetOption"
+        name="fleetsOption" (onChange)="fleetOptionChange($event)" optionLabel="name" styleClass="prime-dropdown"
+        [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+        placeholder="Select Fleet">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div class="col-lg-12" style="padding:0px; margin-top: 10px; margin-bottom: 15px;" *ngIf="activePage === 'fleets'">
+    <a class="btn btn-lg btn-primary btn-block" [routerLink]="'/iol/quick-view'" [queryParams]="{ usecase: useCaseId}"
+      style="font-size: 14px;border-radius: 20px; background-color: #e60000 !important;border-color: #e60000 !important;">Show
+      Tracking History</a>
+  </div>
+
+  <div class="row">
+    <div class="categories-filter" *ngIf="fleetCategories && fleetCategories.length > 0 && (activePage === 'fleets')">
+      <div class="col-sm-4" *ngFor="let category of fleetCategories; let i= index">
+        <div class="checkbox">
+          <label><input type="checkbox" (change)="categoryCheckbox(category, $event)" value="">{{category.name}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="margin-top-20 margin-bottom-30" *ngIf="selectedFleetOption && activePage === 'playback'">
+    <div class="input-icon">
+      <p-dropdown [options]="vehicleOptions" formControlName="vehicle_id" [(ngModel)]="selectedVehicleOption"
+        name="vehicleOption" (onChange)="vehicleOptionChange($event)" optionLabel="name" styleClass="prime-dropdown"
+        [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+        placeholder="Select Vehicle">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div class="margin-top-20 margin-bottom-20" *ngIf="activePage === 'playback'">
+    <fieldset class="form-fieldset">
+      <p style="margin-top: -27px; background-color: white; max-width: 47%;">Stop time greater than</p>
+      <div class="form-group margin-bottom-0">
+        <div class="input-group">
+          <input type="number" formControlName="stop_time" min="4" class="form-control" placeholder="4">
+          <span class="input-group-addon">[min]</span>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+
+
+
+  <!-- <div class="margin-top-10" *ngIf="activePage === 'playback' && filtersForm.controls['track_date'].value">
+        <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+    </div> -->
+
+  <div class="row"
+    style="border: 1px solid #c0c0c0; border-radius: 5px; margin-left: 1px; margin-right: 1px; margin-top: 20px; padding-bottom: 18px;"
+    *ngIf="activePage !== 'playback'">
+    <div class="col-md-12">
+      <p style="margin-top: -13px; background-color: white; max-width: 41%;"><b>Additional Options</b></p>
+      <!-- <div class="margin-top-10" *ngIf="activePage === 'fleets' || activePage === 'drivers' || activePage === 'playback'">
+                <h5 class=" font-weight-600 "></h5>
+                <div class="panel-actions">
+                    <a class="panel-action "></a>
+                </div>
+            </div> -->
+
+      <div class="margin-top-30" *ngIf="activePage === 'fleets' || activePage === 'drivers'">
+        <div class="input-icon">
+          <!-- [(ngModel)]="selectedPoiOption" -->
+          <!-- [disabled]="poiField" -->
+          <p-dropdown [options]="poiOptions" formControlName="poi_id" name="poiOptions"
+            (onChange)="poiOptionChange($event,activePage)" optionLabel="name" styleClass="prime-dropdown"
+            [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+            placeholder="Select POI">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="margin-top-30" *ngIf="activePage === 'fleets' || activePage === 'drivers'">
+        <div class="input-icon">
+          <!-- [(ngModel)]="selectedZoneOption" -->
+          <p-dropdown [options]="zoneOptions" formControlName="zone_id" name="zoneOption"
+            (onChange)="zoneOptionChange($event,activePage)" optionLabel="name" styleClass="prime-dropdown"
+            [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+            placeholder="Select Value">
+          </p-dropdown>
+        </div>
+      </div>
+
+
+      <div class="margin-top-30" *ngIf="activePage === 'playback'">
+        <div class="input-icon">
+          <p-dropdown [options]="poiOptions" formControlName="poi_id" name="poiOptions"
+            (onChange)="poiOptionChange($event,'playbackAdditional')" optionLabel="name" styleClass="prime-dropdown"
+            [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+            placeholder="Select POI">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="margin-top-30" *ngIf="activePage === 'playback' && selectedPoiString === 'Fleets'">
+        <div class="input-icon">
+          <!-- [disabled]="vehicleFleet" -->
+          <p-dropdown [options]="fleetsOptions" formControlName="fleet_id" [(ngModel)]="selectedFleetOption"
+            name="fleetsOption" (onChange)="fleetOptionChange($event)" optionLabel="name" styleClass="prime-dropdown"
+            [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+            placeholder="Select Fleet">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="margin-top-30" *ngIf="activePage === 'playback' && selectedPoiString === 'Drivers'">
+        <div class="input-icon">
+          <p-dropdown [options]="zoneOptions" formControlName="zone_id" name="zoneOption"
+            (onChange)="zoneOptionChange($event,activePage)" optionLabel="name" styleClass="prime-dropdown"
+            [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+            placeholder="Select Driver">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div style="margin-top: 30px;margin-bottom: 30px;"
+        *ngIf="(filtersForm.controls['fleet_id'].value || filtersForm.controls['zone_id'].value) && activePage === 'playback'">
+        <div class="input-icon">
+          <!-- [disabled]="vehicleFleet" -->
+          <p-dropdown [options]="vehicleOptions" formControlName="vehicle_id" [(ngModel)]="selectedVehicleOption"
+            name="vehicleOption" (onChange)="vehicleOptionChange($event)" optionLabel="name" styleClass="prime-dropdown"
+            [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+            placeholder="Select Vehicle">
+          </p-dropdown>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <div class="row padding-15" *ngIf="activePage === 'playback'">
+    <fieldset class="form-fieldset">
+      <p style="margin-top: -27px; background-color: white; max-width: 30%;">Time Interval</p>
+      <div class="form-group margin-bottom-10">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="radio-custom checkbox-inline1 radio-warning">
+              <input type="radio" id="445" value="today" formControlName="playBackTimeInterval"
+                name="playBackTimeInterval" (change)="changeRangeDate()">
+              <label for="445">Current Day</label>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="radio-custom checkbox-inline1 radio-warning">
+              <input type="radio" id="555" value="week" formControlName="playBackTimeInterval"
+                name="playBackTimeInterval" (change)="changeRangeDate()">
+              <label for="555">Current Week </label>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="radio-custom checkbox-inline1 radio-warning">
+              <input type="radio" id="666" value="month" formControlName="playBackTimeInterval"
+                name="playBackTimeInterval" (change)="changeRangeDate()">
+              <label for="666">Current Month </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="" *ngIf="activePage === 'playback'">
+        <div class="row-filter">
+          <div class="col-filter">
+            <p-calendar placeholder="Select start date" formControlName="start_time" id="fffl" showTime="true"
+              hourFormat="24" (onSelect)="selectDateRange($event,'start')"></p-calendar>
+          </div>
+          <div class="col-filter">
+            <p-calendar placeholder="Select end date" formControlName="end_time" id="fffl" showTime="true"
+              hourFormat="24" (onSelect)="selectDateRange($event,'')"></p-calendar>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- <div class="form-group margin-bottom-0">
+                <input type="date" class="form-control" value="3">
+            </div> -->
+
+    </fieldset>
+  </div>
+
+
+  <div style="margin-top: 20px;" *ngIf="activePage === 'maintenance'">
+    <div class="input-icon">
+      <p-dropdown [options]="itemListMaintenanceStatus" formControlName="maintenance_status_id"
+        [(ngModel)]="selectedMaintenanceStatus" name="statusOption" (onChange)="statusOptionChange($event)"
+        optionLabel="name" styleClass="prime-dropdown" [readonly]="false" filter="true" [scrollHeight]="'120px'"
+        filterPlaceholder="Search" placeholder="Maintenance Status">
+      </p-dropdown>
+    </div>
+  </div>
+
+  <div style="margin-top: 30px;" *ngIf="activePage === 'maintenance'">
+    <div class="input-icon">
+      <p-dropdown [options]="itemListMaintenanceType" formControlName="type_id" [(ngModel)]="selectedServiceOption"
+        name="serviceOption" (onChange)="serviceOptionChange($event)" optionLabel="name" styleClass="prime-dropdown"
+        [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search" placeholder="Service Type">
+      </p-dropdown>
+    </div>
+  </div>
+
+
+
+  <!-- <div class="margin-top-30" *ngIf="activePage === 'fleets' || activePage === 'playback'">
+        <div class="input-icon">
+            <p-dropdown [options]="routeOptions" formControlName="route_id" [(ngModel)]="selectedRouteOption"
+              name="routeOption" (onChange)="routeOptionChange($event)"
+              optionLabel="name" styleClass="prime-dropdown" [readonly]="false" filter="true"
+              [scrollHeight]="'120px'" filterPlaceholder="Search" placeholder="Select Route">
+            </p-dropdown>
+        </div>
+    </div> -->
+
+  <!-- <div class="margin-top-30" *ngIf="activePage === 'fleets'">
+        <div class="input-icon">
+            <p-dropdown [options]="routeOptions" formControlName="route_id" [(ngModel)]="selectedRouteOption"
+              name="routeOption" (onChange)="routeOptionChange($event)"
+              optionLabel="name" styleClass="prime-dropdown" [readonly]="false" filter="true"
+              [scrollHeight]="'120px'" filterPlaceholder="Search" placeholder="Select Route">
+            </p-dropdown>
+        </div>
+    </div> -->
+
+
+  <div class="row" *ngIf="activePage === 'fleets'">
+    <div class="col-md-12">
+      <h5 style="margin-top: 23px;"><b>Status</b></h5>
+    </div>
+    <div class="col-md-12" style="margin-top: -7px;">
+      <div class="col-sm-4">
+        <div class="checkbox">
+          <label><input (change)="statusCheckbox($event, 1)" type="checkbox" value="">Online</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="checkbox">
+          <label><input (change)="statusCheckbox($event, 2)" type="checkbox" value="">Offline</label>
+        </div>
+      </div>
+      <!-- <div class="col-sm-4">
+                <div class="checkbox">
+                    <label><input [attr.disabled]="true" (change)="statusCheckbox($event, 3)" type="checkbox" value="">Idle</label>
+                </div>
+            </div> -->
+    </div>
+  </div>
+
+</form>
+
+<hr>
+
+<!-- <div class="panel-heading" style="background:#E60000;margin-bottom: 0px;">
+    <h3 class="panel-title font-weight-600 " style="color: white;">
+      Export: History Travel Report
+    </h3>
+    <div class="panel-actions">
+      <a class="panel-action ">.</a>
+    </div>
+  </div>
+  <br>
+
+  <div class="row">
+    <div class="col-sm-6" style="text-align: center;">
+      <div style="margin-left: 80px;">
+        <span class=""> <img src="images/pdf.png" alt="img" style="max-height: 60px;"> </span>
+
+      </div>
+    </div>
+    <div class="col-sm-6" style="text-align: center;">
+      <div style="margin-right: 80px;">
+        <span class=""> <img src="images/xls.png" alt="img" style="max-height: 60px;"> </span>
+
+      </div>
+    </div>
+
+  </div>
+  <hr> -->

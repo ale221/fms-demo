@@ -1,0 +1,24 @@
+<div class="form-group1">
+<!--  <label class="control-label" *ngIf="showLabel">Contracts</label>-->
+  <app-label-loader *ngIf="showLabel" [showLoader]="appLoader.visibility" [text]="'Contracts'"></app-label-loader>
+  <!-- <p-multiSelect
+    [maxSelectedLabels]="2"
+    [(ngModel)]="selectedValue"
+    [options]="contract_list"
+    (onChange)="onContractChange($event.value)"
+    styleClass="prime-dropdown razzaki"
+    [defaultLabel]="appLoader.visibility ? 'Fetching Contracts.' : 'Select Contracts' ">
+
+  filterPlaceHolder="Search">
+  </p-multiSelect> -->
+
+  <p-dropdown
+  styleClass="prime-dropdown"
+  name="selected_schedule_type"
+  filter="true"
+  [options]="contract_list"
+  (onChange)="onContractChange($event.value)"
+  placeholder="Select Contract">
+</p-dropdown>
+
+</div>

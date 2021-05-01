@@ -1,0 +1,235 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <li><a routerLink="/iol/{{breadcrumbInner[0]}}"> {{breadcrumbInner[1]}} </a></li>
+    <li><a>{{driver_detail?.name}}</a></li>
+  </ol>
+</div>
+
+<div  [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' " style="padding-bottom:200px" [hidden]="!isAuthorized">
+  <div class="row">
+    <div class="col-lg-8" *ngIf="cardsArray.length > 0">
+      <div class="row margin-bottom-30" *ngIf="cardsArray.length > 0">
+        <div class="margin-bottom-30 col-md-4" *ngFor="let card of cardsArray; let i = index">
+          <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+            [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+            [footerStyle]="card.footer_color">
+          </app-stats-icon-card>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4" [className]="cardsArray.length === 0 ? 'col-lg-12' : ''">
+      <div class="panel panel-default padding-0 round card shadow light" style="min-height: 100px;">
+        <div class="panel-heading font-weight-600 margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important ">Driver Detail</h3>
+        </div>
+        <div class="panel-body padding-0">
+          <div class="tab-content">
+            <div class="tab-pane active" id="Summary">
+              <div class="panel panel-default margin-bottom-0 ">
+                <div class="panel-body padding-15 ">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="widget margin-bottom-0">
+                        <div class="padding-15 " style="height:auto">
+                          <div class="text-center ">
+                            <div class="">
+                              <div class="" style="padding: 10px;">
+                                <i>
+                                  <img
+                                    [src]="driver_detail?.image ? driver_detail.image : 'assets/images/iol/driver_placeholder.png'"
+                                    alt="img" style="height: 80px; width: 80px;" class="" />
+
+                                </i>
+                              </div>
+                              <div class="padding-0 bg-cyan-000 text-left margin-bottom-0">
+                                <div class="font-size-20 text-center">
+                                  <b>{{driver_detail?.name ? driver_detail.name : 'N/A'}} </b>
+                                </div>
+                                <div class="font-size-20 margin-bottom-15 text-center"></div>
+
+                                <div class="bg-green-100 padding-0">
+                                  <div class="padding-10 bg-white margin-bottom-0">
+                                    <div class="table-responsive vscroll"
+                                      style="height: 110px;border: 1px solid #ebebeb;">
+                                      <table class="table table-condensed no-border margin-bottom-0">
+                                        <tbody>
+                                          <tr>
+                                            <th width="" style="text-align: center;">
+                                              <b>
+                                                Work Status
+                                              </b>
+                                            </th>
+                                            <td class="" style="text-align: center;">
+
+                                              <span class="label"
+                                              [ngClass]="(driver_detail?.work_status === 'Active')? 'label-success': 'label-danger'">
+                                              {{(driver_detail?.work_status === 'Active')? 'Active' : 'Inactive'}}
+                                            </span>
+
+                                              <!-- <div class="margin-top-0 padding-5 label label-success">
+                                                {{driver_detail?.work_status ? driver_detail.work_status : 'N/A'}}
+                                              </div> -->
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th style="text-align: center;">
+                                              <b>
+                                                Cell Number
+                                              </b>
+                                            </th>
+                                            <td class="" style="text-align: center;">
+                                              {{driver_detail?.contact_number ? driver_detail.contact_number : 'N/A' }}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th style="text-align: center;">
+                                              <b> Email </b>
+                                            </th>
+                                            <td class="" style="text-align: center;">
+                                              {{driver_detail?.email ? driver_detail.email : 'N/A'}}
+                                            </td>
+                                          </tr>
+
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default padding-0 round card shadow light " style="min-height: 60px;">
+        <div class=" margin-10 margin-bottom-10">
+          <app-reporting-buttons [selected]="'month'" [btnsPosition]="'pull-right'" [calendarDimension]="'col-sm-5'"
+            [type]="'driverDetail'" (btnClicked)="setupReport($event)">
+          </app-reporting-buttons>
+        </div>
+
+      </div>
+    </div>
+  </div> -->
+
+  <div class="row round" style="margin-left: 0px;margin-right: 0px;background-color: #f8f8f8;padding: 20px;">
+    <div class=" " style="min-height: 60px;">
+      <div class="panel-heading margin-10 margin-bottom-10">
+        <app-reporting-buttons [selected]="'month'" [btnsPosition]="'pull-right'" [calendarDimension]="'col-sm-5'"
+          [type]="'driverDetail'" (btnClicked)="setupReport($event)">
+        </app-reporting-buttons>
+      </div>
+
+    </div>
+    <div class="row" style="border-radius: 20px;">
+
+      <div class="col-lg-4">
+        <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+          <div class="panel-heading font-weight-600 margin-bottom-0">
+            <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important"> Alerts</h3>
+
+          </div>
+          <div class="panel-body padding-15"
+            style="min-height: 300px!important; max-height: 335px!important ; overflow-y: scroll;">
+            <div class="table-responsive" style="border: 1px solid #ebebeb;">
+              <table mat-table [dataSource]="alertData" matSort (matSortChange)="sortData($event)"
+                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1 mat-elevation-z8">
+                <ng-container matColumnDef="title">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Notifications </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Attribute ||'N/A'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="timestamp">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                  <td mat-cell *matCellDef="let element"> {{(element.Time | date:'MM/dd/yyyy, hh:mm:ss')
+                    || '-'}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+              <div *ngIf="alertData?.length === 0" class="no-records">No records found</div>
+              <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                showFirstLastButtons (page)="onUserPagination($event)" [pageSize]="10">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+          <div class="panel-heading font-weight-600 margin-bottom-0">
+            <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important">Violations</h3>
+          </div>
+          <div class="panel-body" style="height: 300px">
+            <div class="margin-bottom-10 clearfix text-center"></div>
+            <div class="chartbox">
+              <div id="3DChartDiv" style="width: 100%; height: 300px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+          <div class="panel-heading font-weight-600 margin-bottom-0">
+            <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important ">Job Distance Travelled </h3>
+          </div>
+
+          <div class="panel-body" style="display: flex;align-items: center;justify-content: center;height: 300px;">
+            <div class="margin-bottom-10 clearfix text-center"></div>
+            <div class="c100 small1 red" style="margin: auto;">
+              <span class="pointer">
+                {{(distanceTravelledGraph) || 0}} KM
+              </span>
+              <div class="slice">
+                <div class="bar"></div>
+                <div class="fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+          <div class="panel-heading font-weight-600 margin-bottom-0">
+            <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important ">Idle History <small>(Minutes)</small></h3>
+          </div>
+          <div class="panel-body padding-15">
+            <div class="chartbox">
+              <div id="chartdiv" style="min-height: 400px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>

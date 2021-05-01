@@ -1,0 +1,19 @@
+<div class="flex-card text-center relative shadow white heightMinimum" [ngStyle]="{'background-color': bgStyle}">
+  <div class="font-size-13" [pTooltip]="label">
+    {{label}}
+  </div>
+  <!-- <div class=" margin-bottom-5">
+    <i> <img [src]="icon" alt="img" height="40"> </i>
+  </div> -->
+  <div class="font-size-18 font-weight-600 padding-bottom-20">
+    {{totalCount}}
+  </div>
+  <div class="row no-space card-row" *ngIf="footerArr">
+    <div *ngFor="let footer of footerArr" [className]="footer.footer_class">
+      <div class="font-size-10 padding-5" [ngStyle]="{'background-color': footerStyle}">
+        {{footer.label}}
+        <div class="font-size-16">{{footer.count}}</div>
+      </div>
+    </div>
+  </div>
+</div>

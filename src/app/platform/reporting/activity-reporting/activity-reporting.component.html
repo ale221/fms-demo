@@ -1,0 +1,63 @@
+<div class="margin-bottom-10  row">
+  <app-reporting-buttons [selected]="'month'"
+                         [type]="'activities'" 
+                         (btnClicked)="setupReport($event)"
+                         [showGenerateReport]="false"
+                         (generate)="generatePDFReport('activities')">
+  </app-reporting-buttons>
+  <!-- (btnClicked)="setupReport($event)" -->
+  <app-export-csv
+    [fileName]="entity.name + ' Activity Report' + activitiesDateRange[0] + ' to ' + activitiesDateRange[1]"
+    [rows]="activities"
+    [dateGenerated]="false"
+    [cols]="csvActivityCols"
+    *ngIf="activities.length"></app-export-csv>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="vscroll padding-right-10" style="height:400px;">
+      <p-progressBar *ngIf="activitiesLoader.visibility" [style]="{'height': '5px'}"
+                     mode="indeterminate"></p-progressBar>
+
+      <ngx-datatable #detailTable class="material table table-condensed expandable  margin-bottom-0"
+                     [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+                     [rowHeight]="'auto'"
+                     [limit]="10" [selected]="selected" [selectionType]="'single'"
+                     (select)='gotoActivity()'
+                     [rows]="activities">
+
+        <ngx-datatable-column *ngIf="isEntityTruck" [cellClass]="'pointer'" name="Driver" prop="actor_name">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                   <span (click)="$event.stopPropagation()">
+                                     <a [href]="'/iol/trucks/' + row.actor"> {{value || '-'}} </a>
+                                   </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column *ngIf="!isEntityTruck" [cellClass]="'pointer'" name="Vehicle" prop="primary_entity_name">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <span (click)="$event.stopPropagation()">
+                                  <a [href]="'/iol/trucks/' + row.primary_entity"> {{value || '-'}} </a>
+                                </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Status" prop="activity_status_label">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <span class="label" [ngClass]="getClass(row.activity_status)">
+                                  {{value || '-'}}
+                                </span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Start DateTime" prop="start_datetime">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{(value |  date: 'medium') || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="End DateTime" prop="end_datetime">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span>{{(value |  date: 'medium') || '-'}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</div>

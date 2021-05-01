@@ -1,0 +1,212 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li class="pointer"><a class="icon ion-ios-home" href="/iol"> Dashboard </a> </li>
+    <li><a href="javascript:void(0)">Violations</a></li>
+  </ol>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "    [hidden]="!isAuthorized">
+  <div class="row  ">
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel card shadow light panel-default nav-tabs-horizontal padding-0 margin-bottom-0">
+            <div class="panel-heading font-weight-600">
+              <h3 class="panel-title font-weight-600">All Violations</h3>
+              <div *ngIf="!enableSearch" class="panel-actions">
+                <a class="panel-action icon ion-loop" data-toggle="tooltip" [pTooltip]="'Refresh'" tooltipPosition="top"
+                  (click)="optimized_violations_call(1)"></a>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <div class="input-icon">
+                      <p-dropdown [options]="violationTypesDropDown" name="violation_type" [(ngModel)]="violation_type"
+                        (onChange)="violationTypeChanged($event)" styleClass="prime-dropdown"
+                        placeholder="Select Violation Type">
+                      </p-dropdown>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <p-dropdown [options]="trucks_list" (onChange)="driverChanged($event)" styleClass="prime-dropdown"
+                      filter="true" filterPlaceholder="Search" placeholder="Select Driver">
+                    </p-dropdown>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 pull-right" style="margin-bottom: 15px">
+                  <div class="input-icon">
+                    <input type='text' [placeholder]="searchPlaceHolder" [disabled]="enableSearch"
+                      class="form-control input-sm" [(ngModel)]="inputValue" (keyup)='updateFilter($event)'>
+                    <span class="icon fa fa-info-circle" pTooltip='Search By Reg #' tooltipPosition="top"></span>
+                  </div>
+                </div>
+
+                <div class="col-sm-12" style="margin-bottom:15px;padding-left: 0px;">
+                  <app-reporting-buttons [selected]="'month'" [btnsPosition]="'pull-right'"
+                    [calendarDimension]="'col-sm-5'" [type]="'violation'" (btnClicked)="setupReport($event)">
+                  </app-reporting-buttons>
+                </div>
+              </div>
+              <div class="vscroll" style="max-height:400px; overflow-x:hidden;padding-right: 0px;">
+                <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '5px'}" mode="indeterminate">
+                </p-progressBar>
+                <div class="table-responsive">
+
+
+
+                  <!-- <table matSort (matSortChange)="sortData($event)"
+                  class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                  mat-table [dataSource]="violations" mat-elevation-z8>
+
+                  <ng-container matColumnDef="device_name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>REG #</th>
+                    <td mat-cell *matCellDef="let row">
+                      <div style="width: 160px; float: left">
+                        <div class="media-body pointer"  [routerLink]="gotoService.gotoTruck(row.device)">
+                          <a class="font-weight-600">
+                            {{row.device_name ||'N/A'}}</a>
+                        </div>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="violation_type_name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>VIOLATION</th>
+                    <td mat-cell *matCellDef="let row">
+                      {{row.violation_type_name}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="speed">
+                    <th mat-header-cell *matHeaderCellDef>SPEED</th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ row.speed || 'N/A' }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="created_at">
+                    <th mat-header-cell *matHeaderCellDef>VIOLATION DATE TIME</th>
+                    <td mat-cell *matCellDef="let row">  {{ (row.created_at | date:'M/d/yyyy, hh:mm:ss' ) || '-'}}</td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
+                  [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl"></tr>
+                </table> -->
+                 <table matSort class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                    (matSortChange)="sortData($event)" mat-table [dataSource]="violations" mat-elevation-z8>
+                    <ng-container matColumnDef="device">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>REG #</th>
+                      <td mat-cell *matCellDef="let row">
+                        <div class="" [routerLink]="gotoService.gotoTruck(row.device)">
+                          <a class="font-weight-600" style="cursor: pointer;">
+                            {{row.device_name ||'N/A'}}</a>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="violation_type_id">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>VIOLATION TYPE</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{row.violation_type_name}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="speed">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header mat-sort-header>SPEED KM/H</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.speed || 'N/A' }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="created_at">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header mat-sort-header>VIOLATION DATE TIME</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ (row.created_at | date:'M/d/yyyy, hh:mm:ss a' ) || '-'}}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vehicle_out_territory">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>VIOLATION</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.vehicle_out_territory ? 'Out of Zone' : row.vehicle_in_territory ? 'In Zone' : 'N/A' }}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </tr>
+                  </table>
+                  <div *ngIf="violations?.length === 0" class="no-records">No records found</div>
+                  <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true" showFirstLastButtons
+                            [pageSize]="10" (page)="onPaginateChange($event)"></mat-paginator>
+
+                  <app-spin-loading [appLoader]="appLoader" [size]="'sm'"></app-spin-loading>
+                </div>
+              </div>
+              <div class="panel panel-default nav-tabs-horizontal padding-0 margin-bottom-0 margin-top-25">
+                <div class="paddingFor" style="padding-left: 0px;padding-right: 0px;">
+                  <div class="form-group margin-bottom-0">
+                    <label class="font-size-14 font-weight-600 ">Export:</label>
+                    <div class="btn-group btn-group-justified">
+                      <div class="btn-group" role="group">
+                        <a [href]="downloadableLink">
+                          <button type="button" class="btn btn-outline btn-default">
+                            <img src="../../../assets/images/icon-xls.png" height="50">
+                            <div class="font-size-12">
+                              <a>Download XLS</a>
+                            </div>
+                          </button>
+                        </a>
+                      </div>
+                      <div class="btn-group" role="group">
+                        <a [href]="downloadableLink1">
+                          <button type="button" class="btn btn-outline btn-default">
+                            <img src="../../../assets/images/icon-pdf.png" height="50">
+                            <div class="font-size-12">Download PDF</div>
+                          </button>
+                        </a>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel card shadow light panel-default nav-tabs-horizontal padding-0 margin-bottom-0">
+            <div class="panel-heading font-weight-600" >
+              <h3 class="panel-title font-weight-600">Map</h3>
+              <div *ngIf="!enableSearch" class="panel-actions">
+                <!-- <a class="panel-action icon ion-loop" data-toggle="tooltip" [pTooltip]="'Refresh'" tooltipPosition="top"
+                  (click)="optimized_violations_call(1)"></a> -->
+              </div>
+            </div>
+            <div class="panel-body" >
+              <div class="row">
+                <div class="col-sm-12">
+                  <app-google-map #map [height]="'760px'" style="width:100%"></app-google-map>
+                </div>
+
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</div>

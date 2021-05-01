@@ -1,0 +1,373 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+  <!-- [hidden]="!isAuthorized"-->
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <!-- <li><a> Maintenance</a></li> -->
+    <li><a routerLink="/iol/maintenance/predictive/maintenance">Predictive Maintenance</a></li>
+  </ol>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "  style="padding-bottom: 170px;" [hidden]="!isAuthorized">
+  <!-- [hidden]="!isAuthorized"-->
+  <div class="row card-group-row">
+    <div class="col-md-12 card-group-row__col padding-0">
+      <div class="col-lg-4 ">
+        <div class="flex-card text-center relative shadow white heightMinimum"
+          style="background-color: rgb(230, 0, 0); margin-bottom: 30px;">
+          <div class="vertical-align-middle" style="padding-bottom: 21px;padding-top: 10px;">
+            <div class="font-size-14  margin-top-0 margin-bottom-0">
+              Vehicle In Maintenance
+            </div>
+            <div class="font-size-24 font-weight-200 margin-bottom-0 grey-8001 ">
+              {{cards[0]?.health_data?.in_operation === null ? 0 :cards[0]?.health_data?.in_operation}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-2 ">
+        <div class="flex-card text-center relative shadow white heightMinimum"
+          style="background-color: rgb(230, 0, 0); margin-bottom: 30px;">
+          <div class="vertical-align-middle" style="padding-top: 10px;">
+            <div class="font-size-14  margin-top-0 margin-bottom-0">
+              Vehicles Maintenance <br>Overdue (60 Days)
+            </div>
+            <div class="font-size-24 font-weight-200 margin-bottom-0 grey-8001 ">{{cards[1]?.overdue === null ?
+              0
+              : cards[1]?.overdue}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-2 ">
+        <div class="flex-card text-center relative shadow white heightMinimum"
+          style="background-color: rgb(230, 0, 0); margin-bottom: 30px;">
+          <div class="vertical-align-middle" style="padding-top: 10px;">
+            <div class="font-size-14  margin-top-0 margin-bottom-0">
+              Vehicles Maintenance<br> Overdue (30 Days)
+            </div>
+            <div class="font-size-24 font-weight-200 margin-bottom-0 grey-8001 ">
+              {{cards[2]?.overdue === null ? 0 : cards[2]?.overdue}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-2 ">
+        <div class="flex-card text-center relative shadow white heightMinimum"
+          style="background-color: rgb(230, 0, 0); margin-bottom: 30px;">
+          <div class="vertical-align-middle" style="padding-top: 10px;">
+            <div class="font-size-14  margin-top-0 margin-bottom-0">
+              Vehicles Maintenance <br>Overdue (07 Days)
+            </div>
+            <div class="font-size-24 font-weight-200 margin-bottom-0 grey-8001 ">{{cards[3]?.overdue=== null? 0
+              : cards[3]?.overdue}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-2 ">
+        <div class="flex-card text-center relative shadow white heightMinimum"
+          style="background-color: rgb(230, 0, 0); margin-bottom: 30px;">
+          <div class="vertical-align-middle " style="padding-bottom: 21px;padding-top: 10px;">
+            <div class="font-size-14  margin-top-0 margin-bottom-0">
+              Vehicles in Good Health
+            </div>
+            <div class="font-size-24 font-weight-200 margin-bottom-0 grey-8001 ">
+              {{cards[0]?.health_data?.good_health === null? 0 :cards[0]?.health_data?.good_health}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-8">
+      <div style="height: 410px;" class="panel panel-default card light shadow margin-bottom-30">
+        <div class="panel-heading">
+          <h3 class="panel-title font-weight-600">
+            Monthly Maintenance Prediction
+          </h3>
+        </div>
+        <div class="panel-body small-ui-dropdown">
+          <div class="chartbox" *ngIf="maintenacePredictionData?.length>0">
+            <div id="columnDiv" style="width: 100%; height: 340px"></div>
+          </div>
+
+          <div *ngIf="maintenacePredictionData?.length==0"
+            style="display: flex; align-items: center;justify-content: center;flex-direction: column;">
+            <img style="opacity:0.3; margin-top: 45px!important;" src="assets/images/no-graph.png" alt=""
+              width="80px"><br>
+            <span>No record found!</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+      <div style="height: 410px; overflow-y: scroll;" class="panel panel-default card light shadow margin-bottom-30">
+        <div class="panel-heading">
+          <h3 class="panel-title font-weight-600">
+            Upcoming Maintenances
+          </h3>
+        </div>
+        <div class="panel-body small-ui-dropdown">
+          <div class="chartbox">
+            <div class="filter-position">
+              <div class="multi-dropdown">
+                <select class="form-control " placeholder="Select Fleet"
+                  (change)="fleetDropdownChanged($event.target.value)">
+                  <option value="">Select Fleet</option>
+                  <option *ngFor="let fleet of fleetDropDownData" [value]="fleet.id">
+                    {{fleet.name}}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- pie chart -->
+            <!-- <div *ngIf="pieChartData?.length>0"> -->
+            <div id="pieChartDiv" *ngIf="pieChartData?.length>0" style="width: 100%; height: 280px"></div>
+            <!-- </div> -->
+
+            <div *ngIf="pieChartData?.length==0"
+              style="display: flex; align-items: center;justify-content: center;flex-direction: column;">
+              <img style="opacity:0.3; margin-top: 45px!important;" src="assets/images/no-graph.png" alt=""
+                width="80px"><br>
+              <span>No record found!</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-12">
+      <div style="height: 520px;" class="panel panel-default card light shadow margin-bottom-30">
+        <div class="panel-heading">
+          <h3 class="panel-title font-weight-600">
+            Vehicle Operational Efficiency (Last 30 days)
+          </h3>
+        </div>
+
+        <div class="panel-body small-ui-dropdown">
+          <div class="chartbox">
+            <div class="filter-position">
+              <div class="multi-dropdown">
+                <div class="col-md-3">
+                  <select class="form-control" placeholder="Select Fleet"
+                    (change)="fleetDropdownChangedEfficiency($event.target.value)">
+                    <option value="">Select Fleet</option>
+                    <option *ngFor="let fleet of fleetDropDownData" [value]="fleet.id">
+                      {{fleet.name}}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3">
+                  <select class="form-control" placeholder="Select Performance"
+                    (change)="performanceDropdownChanged($event.target.value)">
+                    <!-- <option value="">Select Performance</option> -->
+                    <option *ngFor="let performance of performanceDropDown" [value]="performance.value">
+                      {{performance.label}}</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+              </div>
+            </div>
+            <!-- 3D column chart -->
+            <div *ngIf="vehicleEfficiencyChart?.length>0">
+              <div id="3DChartDiv" style="width: 100%; height: 380px">
+              </div>
+            </div>
+            <div *ngIf="vehicleEfficiencyChart?.length==0"
+              style="display: flex; align-items: center;justify-content: center;flex-direction: column;">
+              <img style="opacity:0.3; margin-top: 45px!important;" src="assets/images/no-graph.png" alt=""
+                width="80px"><br>
+              <span>No record found!</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Material tables -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default round shadow">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-teal-8001 white1">Data Effective Efficiency</h3>
+          <div class="panel-actions">
+            <a></a>
+          </div>
+        </div>
+
+        <div class="panel-body padding-15">
+          <p-progressBar *ngIf="showIndeterminateProgress2" [style]="{'height': '3px'}" mode="indeterminate">
+          </p-progressBar>
+          <div class="table-responsive" style="border: 1px solid #ebebeb;">
+
+            <table matSort (matSortChange)="sortDataEfficiency($event)"
+              class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+              [dataSource]="efficiencyTableData" mat-elevation-z8>
+              <ng-container matColumnDef="vehicle_id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let row">
+                  {{row.vehicle_id ||'N/A'}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="vehicle_name">
+                <th mat-header-cell *matHeaderCellDef>DRIVER</th>
+                <td mat-cell *matCellDef="let row">
+                  {{row.vehicle_name}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="total_violations">
+                <th mat-header-cell *matHeaderCellDef>TOTAL VIOLATIONS</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ (row.total_violations) || '-' }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsEffieciency">
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsEffieciency;">
+              </tr>
+            </table>
+
+            <div *ngIf="efficiencyTableData?.length === 0" class="no-records">No records found</div>
+
+            <mat-paginator translate="no" #paginator [length]="totalLengthEfficency" [hidePageSize]="true" showFirstLastButtons
+              [pageSize]="10" (page)="onPaginateChangeEfficiency($event)">
+            </mat-paginator>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="panel panel-default round shadow">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-teal-8001 white1">Upcoming Maintenances</h3>
+          <div class="panel-actions">
+            <a></a>
+          </div>
+        </div>
+
+        <div class="row margin-left-0 margin-right-0 margin-top-15">
+          <div class="col-md-5">
+
+            <div class="input-icon">
+              <select class="form-control" placeholder="Category" (change)="categoryChanged($event.target.value)">
+                <option value="">Select Category</option>
+                <option *ngFor="let fleet of categoriesArray" [value]="fleet.id">
+                  {{fleet.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-icon">
+              <select class="form-control" placeholder="Date" (change)="dateFilterChanged($event.target.value)">
+                <option value="">Select Date</option>
+                <option *ngFor="let fleet of dateFilterArray" [value]="fleet.id">
+                  {{fleet.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="panel-body padding-15">
+          <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+          </p-progressBar>
+          <div class="table-responsive" style="border: 1px solid #ebebeb;">
+
+            <table matSort (matSortChange)="sortData($event)"
+              class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+              [dataSource]="dataSource" mat-elevation-z8>
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                <td mat-cell *matCellDef="let row">
+                  {{row.device_id ||'N/A'}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="device_id__name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>VEHICLE</th>
+                <td mat-cell *matCellDef="let row">
+                  <div class="media-body pointer" [routerLink]="gotoService.gotoTruck(row.device_id)">
+                    <a class="font-weight-600">{{row.vehicle_name}}</a>
+                  </div>
+                  {{row.vehicle_name}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="driver_id__name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>DRIVER</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.driver_name || 'N/A' }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="technician_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>TECHNICIAN</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ (row.technician_name) || '-' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="maintenance_type_id__label">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>SERVICE TYPE
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  {{ (row.maintenance_type) ||
+                  'N/A'}}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="maintenance_status_id__label">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>MAINTENANCE
+                  STATUS</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ (row.maintenance_status) ||
+                  'N/A' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="start_datetime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>START DATE</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ (row.start_datetime | date:'M/d/yyyy, hh:mm:ss') || '-'}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="end_datetime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>END DATE</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ (row.end_datetime | date:'M/d/yyyy, hh:mm:ss' ) || '-'}}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns">
+              </tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+              </tr>
+            </table>
+
+            <div *ngIf="dataSource?.length === 0" class="no-records">No records found</div>
+
+            <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true" showFirstLastButtons [pageSize]="10"
+              (page)="onPaginateChange($event)">
+            </mat-paginator>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

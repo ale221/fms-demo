@@ -1,0 +1,64 @@
+<div class="widget  margin-bottom-30 ">
+  <div class="padding-15 bg-green-100 " style="height:auto">
+    <div class="text-center ">
+      <div class="-group">
+
+        <div>
+          <i> <img *ngIf="image!=0" [src]="image" alt="img" [ngStyle]="imageStyle" class=""> </i>
+        </div>
+        <div class="padding-0 bg-cyan-000 text-left  margin-bottom-0 ">
+          <div class="font-size-18 text-center margin-bottom-15 margin-top-5" style="word-break: break-all !important; ">{{name}}
+          </div>
+          <div *ngIf="showBadge" class="font-size-20  margin-bottom-10 text-center">
+            <!--<span class="badge" [ngClass]="(status)? 'badge-success': 'badge-danger'">-->
+            <!--{{statusLabel}}-->
+            <!--</span> -->
+            <span class="badge font-size-12 margin-right-3"  style="padding:5px 8px;" *ngFor="let st of status" [ngClass]="st.class">
+              {{st.label}}
+            </span>
+
+            <span class="bg-blue-700 badge font-size-14 badge-success" *ngIf="showSignals">
+              <div class="signal-bars mt1 sizing-box" [ngClass]="getSignalsClasses()">
+                <div class="first-bar bar"></div>
+                <div class="second-bar bar"></div>
+                <div class="third-bar bar"></div>
+                <div class="fourth-bar bar"></div>
+              </div>
+            </span>
+
+          </div>
+          <ng-content></ng-content>
+
+          <div class="bg-green-100 padding-0">
+            <div class="padding-10  bg-white  margin-bottom-0 ">
+              <div class="table-responsive vscroll" style="overflow-x: hidden" [ngStyle]="{'height': height}">
+                <table *ngIf="list; else notFound" class="table  table-condensed  no-border  margin-bottom-0">
+                  <tbody>
+                  <tr *ngFor="let l of list ">
+                    <th width=""><b> {{l.key}}</b></th>
+                    <td class="text-left" style="word-break: break-all;"
+                        *ngIf="l.key !== 'Record Status'; else badgeRow">
+                      {{l.value || '-'}}
+                    </td>
+                    <ng-template #badgeRow>
+                      <td class="text-left">
+                      <span class="badge1">
+                        {{l.value}}
+                      </span>
+                      </td>
+                    </ng-template>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #notFound>
+  <app-data-not-found></app-data-not-found>
+
+</ng-template>

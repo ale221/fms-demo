@@ -1,0 +1,83 @@
+<div class="row margin-bottom-15">
+  <ng-content></ng-content>
+  <div class="col-lg-offset-6 col-lg-3  pull-right">
+    <!-- <app-table-search [rows]="temp"
+                      [args]="['name']"
+                      [tooltipArray]="['Name']"
+                      [disableTextBox]="loader"
+                      (filter)="updateFilter($event)"></app-table-search> -->
+  </div>
+
+</div>
+<p-progressBar *ngIf="loader" [style]="{'height': '5px'}"
+               mode="indeterminate"></p-progressBar>
+<ngx-datatable *ngIf="rows.length;else notFound" #table class="material"
+               [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+               [rowHeight]="'auto'"
+               [limit]="10" [rows]='rows'>
+  <!-- ID required for  patch call-->
+  <ngx-datatable-column name="Name" prop="name">
+    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+      <a [routerLink]="gotoService.gotoDriver(row.id)">
+        {{value}}
+      </a>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Role" prop="type_name">
+    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+      {{value}}
+    </ng-template>
+  </ngx-datatable-column>
+
+
+  <ngx-datatable-column [headerClass]="'text-center'" [cellClass]="'text-center'" name="Reg #"
+                        prop="truck.name">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                              <span class="pointer text-center"
+                                    [routerLink]="gotoService.gotoTruck(value? row.truck.id : null)">
+                                <a>{{value || '-'}}</a>
+                              </span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column [headerClass]="'text-center'" [cellClass]="'text-center'"
+                        name="Completed Activities" prop="completed_activities">
+    <ng-template let-value="value" ngx-datatable-cell-template>
+                              <span>
+                                {{value || '-'}}
+                              </span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column [headerClass]="'text-center'" [cellClass]="'text-center'"
+                        name="Failed Activities" prop="failed_activities">
+    <ng-template let-value="value" ngx-datatable-cell-template>
+                              <span>
+                                {{value || '-'}}
+                              </span>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column [headerClass]="'text-center'" [cellClass]="'text-center'"
+                        name="Shift Status" prop="on_shift">
+    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                              <span style="color: 333"
+                                [ngClass]="value? 'label label-info' : 'label label-default'">{{value ? 'On Shift' : 'Off Shift'}}</span>
+    </ng-template>
+  </ngx-datatable-column>
+  <!-- <ngx-datatable-column [headerClass]="'text-center'" [cellClass]="'text-center'"
+                        name="Bins Collected" prop="bins_collected">
+  <ng-template let-column="column" ngx-datatable-header-template>
+                              <span>{{column.name}} <span
+                                class="panel-action icon ion-information-circled  font-size-10" data-toggle="tooltip"
+                                [pTooltip]="(now | date: 'M/1/yy') + ' - ' + (now | date: 'shortDate')"></span></span>
+    </ng-template>
+    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+      <span>{{value || '-' }}</span>
+    </ng-template>
+  </ngx-datatable-column> -->
+
+
+</ngx-datatable>
+
+
+<ng-template #notFound>
+  <app-data-not-found></app-data-not-found>
+</ng-template>

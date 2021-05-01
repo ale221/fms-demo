@@ -1,0 +1,131 @@
+<div class="modal-header" [ngStyle]="theme">
+  <button type="button" class="close" (click)="closeModal()">
+    <span>x</span>
+  </button>
+  <h4 class="modal-title">{{formTitle}}</h4>
+</div>
+<div class="modal-body">
+  <div class="">
+    <div class="row">
+      <div class="col-lg-12">
+        <form novalidate [formGroup]="maintenanceForm" id="maintenanceFormID">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Start Datetime</label>
+                <p-calendar
+                  [formControlName]="'start_datetime'"
+                  [readonlyInput]="true"
+                  [(ngModel)]="startDatetime"
+                  [monthNavigator]="true"
+                  [yearNavigator]="true"
+                  [yearRange]="'1950:'+(currentDate.getFullYear())"
+                  placeholder="MM/DD/YYYY"
+                  styleClass="prime-datetime">
+                </p-calendar>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">End Datetime</label>
+                <p-calendar
+                  [formControlName]="'end_datetime'"
+                  [readonlyInput]="true"
+                  [minDate]="startDatetime"
+                  [monthNavigator]="true"
+                  [yearNavigator]="true"
+                  [yearRange]="'1950:'+(currentDate.getFullYear())"
+                  placeholder="MM/DD/YYYY"
+                  styleClass="prime-datetime">
+                </p-calendar>
+              </div>
+            </div>
+            <!-- <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Vehicles</label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [filter]="true"
+                    [disabled]="preFilledData || isUserTechnician"
+                    [formControlName]="'truck'"
+                    [options]="itemListTrucks"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Vehicle">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div> -->
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Drivers</label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [filter]="true"
+                    [disabled]="preFilledData || isUserTechnician"
+                    [formControlName]="'driver'"
+                    [options]="itemListDrivers"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Driver">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Technicians</label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [filter]="true"
+                    [disabled]="isUserTechnician"
+                    [formControlName]="'technician'"
+                    [options]="itemListTechnicians"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Technician">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Maintenance Type </label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [filter]="true"
+                    [formControlName]="'maintenance_type'"
+                    [disabled]="preFilledData"
+                    [options]="itemListMaintenanceType"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Maintenance Type">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Maintenance Status </label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [filter]="true"
+                    [formControlName]="'status'"
+                    [options]="itemListMaintenanceStatus"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Maintenance Status">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="closeModal()">Close</button>
+    <button type="submit" class="btn btn-primary" form="maintenanceFormID"
+            [disabled]="!maintenanceForm.valid || !maintenanceForm.dirty ||disableSaveButton"
+            (click)="onSubmit(maintenanceForm.value)"> {{disableSaveButton ? 'Loading' : 'Save'}}
+    </button>
+  </div>
+</div>

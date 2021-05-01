@@ -1,0 +1,276 @@
+<div [className]="sidebarCheck ? 'page-content container-fluid half-open-sidebar' : 'page-content container-fluid full-open-sidebar'">
+  <div style="padding: 20px;" class="panel panel-default     ">
+    <div class="panel-heading  ">
+      <h3 class="panel-title "> <b>My Profile</b></h3>
+    </div>
+
+    <div class="panel-body padding-0">
+      <!--Reset Password Section-->
+      <div #formModal class="modal fade  modal-success text-left" id="editpop1" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-center  modal-xs">
+          <div class="modal-content">
+            <div class="modal-header" [ngStyle]="theme">
+              <button type="button" class="close" data-dismiss="modal">
+                <span>x</span>
+              </button>
+              <h4 class="modal-title">Reset Password</h4>
+            </div>
+            <div class="modal-body">
+              <form id="formID" [formGroup]="form" (ngSubmit)="onSubmitPassword()">
+                <div class="form-group">
+                  <label for="currentPassword">Current Password </label>
+                  <div class="input-group">
+                    <input [type]="showCurrentPassword? 'text' : 'password'" id="currentPassword" class="form-control"
+                      formControlName="oldPassword" [formGroup]="form">
+                    <span class="input-group-btn">
+                      <button (click)="showCurrentPassword = !showCurrentPassword" class="btn btn-secondary"
+                        type="button">
+                        <i [class]="showCurrentPassword? 'fa fa-eye': 'fa fa-eye-slash'"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+                <fieldset>
+                  <div class="form-group">
+                    <label for="confirmPassword">New Password</label>
+                    <div class="input-group">
+                      <input [type]="showPassword? 'text' : 'password'" id="password" class="form-control"
+                        formControlName="password" [formGroup]="form">
+
+                      <span class="input-group-btn">
+                        <button tooltip="Show/Hide Password" (click)="showPassword = !showPassword"
+                          class="btn btn-secondary" type="button">
+                          <i [class]="showPassword? 'fa fa-eye': 'fa fa-eye-slash'"></i>
+                        </button>
+                      </span>
+
+
+                    </div>
+
+                    <!-- form.getError( -->
+                    <div *ngIf="f.password.errors">
+                      <span id="txt" class="error-message" *ngIf="f.password.errors.pattern">At least one lowercase
+                        letter, one Uppercase letter, one numeric digit and length greater than 8</span>
+                    </div>
+                    <!-- <span class="error-message" *ngIf="form.get('password').getError('required') && submitted">
+                      Please provide password
+                    </span> -->
+
+
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-group">
+                      <input [type]="showConfirmPassword? 'text' : 'password'" class="form-control" id="confirmPassword"
+                        formControlName="confirmPassword" [formGroup]="form">
+                      <span class="input-group-btn">
+                        <button tooltip="Show/Hide Password" (click)="showConfirmPassword = !showConfirmPassword"
+                          class="btn btn-secondary" type="button"><i
+                            [class]="showConfirmPassword? 'fa fa-eye': 'fa fa-eye-slash'"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+
+                </fieldset>
+
+                <div class="alert error-message" *ngIf="form.getError('mismatch')">
+                  Password does not match
+                </div>
+                <div class="alert alert-danger alert-dismissible margin-top-30" *ngIf="form.getError('same')"
+                  aria-label="Close">
+                  <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  Choose a different password
+                </div>
+
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" #closeForm class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" form="formID" class="btn btn-primary" [disabled]="form.invalid">Save
+                changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/Rset Password Section-->
+
+      <!--User Profile Form-->
+      <form [formGroup]="profileForm" id="profileFormID" (ngSubmit)="onSubmit(profileForm.value)">
+        <fieldset [disabled]="restrictedForm">
+          <div class="row">
+            <div class="col-lg-9">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">First Name<span class="text-danger2">*</span></label>
+                    <input type="text" formControlName="first_name" class="form-control" />
+                    <span class="error-message"
+                      *ngIf="profileForm.get('first_name').getError('isAlphabetsAndSpace')">Choose only
+                      alphabets </span>
+                    <span class="error-message"
+                      *ngIf="profileForm.get('first_name').getError('required') && profileSubmitted">First Name is
+                      required
+                    </span>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">Last Name<span class="text-danger2">*</span></label>
+                    <input type="text" formControlName="last_name" class="form-control" />
+                    <span class="error-message"
+                      *ngIf="profileForm.get('last_name').getError('required') && profileSubmitted">Last Name is
+                      required
+                    </span>
+                    <span class="error-message"
+                      *ngIf="profileForm.get('last_name').getError('isAlphabetsAndSpace')">Choose only
+                      alphabets </span>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">Group</label>
+                    <input type="text" [readonly]="true" formControlName="role" class="form-control" />
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">Customer </label>
+                    <input type="text" [readonly]="true" formControlName="customer" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">Contact Number<span class="text-danger2">*</span></label>
+
+                    <!-- <input type="number" formControlName="contact_number" class="form-control" placeholder="00000" /> -->
+                    <p-inputMask formControlName="contact_number" mask="999-9999-9999" maxlength="15"
+                               minlength="11" characterPattern="[0-9+]" placeholder="999-9999-9999" [styleClass]="'form-control'">
+                              </p-inputMask>
+                    <!-- <p-inputMask formControlName="contact_number" mask="99999-99-9999999" characterPattern="[0-9]"
+                      placeholder="99999-99-9999999" [styleClass]="'form-control'"></p-inputMask> -->
+                    <span class="error-message"
+                      *ngIf="profileForm.get('contact_number').getError('required') && profileSubmitted">Contact
+                      Number is required
+                    </span>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">Date of Joining</label>
+                    <div class="input-icon">
+                      <p-calendar [readonlyInput]="false" [(ngModel)]="date_of_joining"
+                        styleClass="prime-datetime disabled" formControlName="date_joined"></p-calendar>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">Preferred Module </label>
+                    <p-dropdown *ngIf="!restrictedForm" styleClass="prime-dropdown" [options]="itemListModule"
+                      formControlName="preferred_module" placeholder="Select Module">
+                    </p-dropdown>
+                    <input *ngIf="restrictedForm" type="text" class="form-control" formControlName="preferred_module" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3">
+              <div class="padding-20 padding-bottom-0 padding-top-0">
+                <div>
+                  <div class="form-group">
+
+                    <div class="input-icon">
+                      <div class="margin-bottom-10" id="preview">
+                        <div class="container1">
+                          <img #img [src]="avatar_url? avatar_url : 'assets/images/iol/driver_placeholder.png'"
+                            class="image img-rounded img-bordered img-bordered-green" width="150px" height="150px">
+                          <div class="middle col-md-7">
+                            <button *ngIf="avatar_url" type="button" class="btn btn-sm btn-primary"
+                              (click)="removeImage()">Remove</button>
+                          </div>
+                        </div>
+                      </div>
+                      <input *ngIf="!avatar_url" #myInput type="file" (change)="fileChange($event)"
+                        class="btn btn-default btn-block" accept="image/*">
+                    </div>
+
+                    <span>
+                      <div *ngIf="notImage" [hidden]="!showAlert" class="alert alert-warning">
+                        <a href="#" class="close font-weight-600" style="margin-top:-4px" (click)="showAlert = false"
+                          aria-label="close" title="close">×</a>
+                        Please choose only (jpg, png images).
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-lg-12">
+              <h4>Package Selected</h4>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <input [readonly]="true" type="text" [value]="packageName" class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <hr />
+          <div class="row">
+            <div class="col-lg-12">
+              <h4>Change Password</h4>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label class="control-label">Email</label>
+                <input [readonly]="true" type="text" formControlName="email" class="form-control" />
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label class="control-label">Password</label>
+                <div class="input-group">
+                  <input readonly type="password" [readOnly]="true" value="*******" class="form-control" />
+                  <span class="input-group-btn">
+                    <a class="btn btn-sm white no-border btn-info padding-bottom-3 padding-top-7 "
+                      (click)="resetPasswordForm()" tooltip="Reset Password" data-target="#editpop1"
+                      data-toggle="modal">
+                      <span class="fa-passwd-reset fa-stack">
+                        <i class="fa fa-undo fa-stack-2x"></i>
+                        <i class="fa fa-lock fa-stack-1x"></i>
+                      </span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--<ul>-->
+          <!--<li class="alert alert-danger" *ngIf="profileForm.get('first_name').getError('isAlphabetsAndNumbers')">First Name: Please choose only alphabets/numbers </li>-->
+          <!--<li class="alert alert-danger" *ngIf="profileForm.get('first_name').getError('required')">First Name is required </li>-->
+          <!--</ul>-->
+          <hr />
+          <div class="">
+            <button [disabled]="!profileForm.valid && profileForm.get('contact_number').value.length <= 11" type="submit" class="btn btn-sm btn-primary pull-right"
+              form="profileFormID">
+              Update Details
+            </button>
+          </div>
+        </fieldset>
+        <app-spin-loading [appLoader]="appLoader"></app-spin-loading>
+
+      </form>
+      <!-- User Profile Form-->
+    </div>
+  </div>
+</div>
+<!-- <p-confirmDialog icon="fa fa-exclamation-triangle"></p-confirmDialog> -->

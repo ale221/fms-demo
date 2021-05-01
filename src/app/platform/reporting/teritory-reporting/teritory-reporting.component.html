@@ -1,0 +1,59 @@
+<app-reporting-buttons [selected]="'month'" [calendarDimension]="'col-sm-6'" [type]="'violation'" [timeRange]="true"
+  [hideBtn]="'today yesterday week month'" (btnClicked)="setupReport($event)"></app-reporting-buttons>
+
+<app-export-csv [fileName]="' Violations Report '" [dateGenerated]="false" [rows]="violations" [cols]="csvViolationCols"
+  *ngIf="violations.length"></app-export-csv>
+
+<div class="col-lg-8">
+  <div class="vscroll padding-right-10">
+    <p-progressBar *ngIf="violationLoader.visibility" [style]="{'height': '5px'}" mode="indeterminate"></p-progressBar>
+
+    <ngx-datatable #table class="material" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50"
+      [rowHeight]="'auto'" [limit]="5" [rows]='violations'>
+      <!-- ID required for  patch call-->
+      <!-- <ngx-datatable-column name="Type" prop="violation_type__value"></ngx-datatable-column> -->
+      <ngx-datatable-column name="Vehilce No" prop="device__name"></ngx-datatable-column>
+      <ngx-datatable-column name="Assigned Territory" prop="territory__name">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <div>
+            {{(value) || '-'}}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Territory Status" prop="territory_status">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <div *ngIf="value === 1 || value === 2">
+            <span class="label" [ngClass]="(value === 1)? 'label-success': 'label-danger'">
+              {{(value === 1)? 'In Zone' : 'Out of Zone'}}
+            </span>
+          </div>
+          <div *ngIf="value === 3">
+            -
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Date/Time" prop="timestamp">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <div>
+            {{(value * 1000) | date: 'medium'}}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="In Zone" prop="in_zone">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <div>
+            {{value || '-'}}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+
+    </ngx-datatable>
+  </div>
+</div>
+<div class="col-lg-4">
+  <app-google-map #violationMap [height]="'275px'"></app-google-map>
+  <!-- <app-map-overlay
+      [msg]="getMessageForOverlay(violationDateRange, selected.length, violations.length)"
+      [visibility]="!(violationDateRange && selected.length && violations.length)">
+    </app-map-overlay> -->
+</div>

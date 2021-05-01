@@ -1,0 +1,68 @@
+
+
+<div>
+  <div [hidden]="!entityId" class="row" >
+    <div  class="">
+      <div [hidden]="isDropDownHidden">
+        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-6" >
+          <angular2-multiselect
+            [data]="variableDropdown.variables"
+            [(ngModel)]="variableDropdown.selectedVariables"
+            [settings]="variableDropdownSettings"
+            (onSelect)="onItemSelect($event)"
+            (onDeSelect)="OnItemDeSelect($event)"
+            (onSelectAll)="onSelectAll($event)"
+            (onDeSelectAll)="onDeSelectAll($event)">
+          </angular2-multiselect>
+        </div>
+
+        <div class="col-lg-4 col-sm-3 col-md-3 col-xs-6">
+          <angular2-multiselect
+            [data]="(this.variableDropdown.selectedVariables.length > 0)? this.variableDropdown.selectedVariables[0].aggregations : []"
+            [(ngModel)]="this.variableDropdown.selectedVariables[0].selectedAggregations"
+            [settings]="aggregationDropdownSettings"
+            (onDeSelect)="OnItemDeSelect($event)"
+            (onSelectAll)="onSelectAll($event)"
+            (onDeSelectAll)="onDeSelectAll($event)">
+
+            <c-item>
+              <ng-template let-item="item">
+                <label style="color: #333;">{{item.itemName}}</label>
+                <label></label>
+              </ng-template>
+            </c-item>
+
+          </angular2-multiselect>
+        </div>
+        <div class="col-lg-2">
+          <button  tooltip="Generate Report"  class="btn-primary btn btn-sm font-size-14" (click)="generate()"><i class="fa fa-arrow-right"></i></button>
+        </div>
+
+        <div class="col-lg-2" [hidden]="isHideBackButton">
+          <button tooltip="Back"  class="btn-warning btn btn-sm font-size-14"
+                  (click)="onBackButtonClicked()">
+            <i class="fa fa-undo"></i>
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+  <br>
+
+  <div   class="row">
+    <div class="col-lg-12">
+    </div>
+  </div>
+
+  <app-spin-loading [appLoader]="appLoader"></app-spin-loading>
+</div>
+
+
+<ng-template #notFound>
+  <div  class="text-center">
+    <app-data-not-found [fontSize]="'font-size-16'" > </app-data-not-found>
+  </div>
+</ng-template>

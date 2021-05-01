@@ -1,0 +1,1535 @@
+<!-- <app-breadcrumbs #scrollToTop [items]="items" [home]="home"></app-breadcrumbs> -->
+<!-- <div class="breadcrumb-box" #scrollToTop>
+    <ol class="breadcrumb breadcrumb-arrow ">
+      <li class="pointer"><a class="icon ion-ios-home" href="/iol"> Dashboard </a></li>
+      <li><a [routerLink]="gotoService.gotoMaintenaces(null)"> Maintenance </a></li>
+    </ol>
+  </div>
+
+  <div class="page-content   container-fluid  full-open-sidebar"   >
+    <div class="pearls pearls-sm  row">
+      <div class="pearl done  col-xs-4">
+        <div class="pearl-icon bg-blue-800"><i class="ion-settings"></i></div>
+        <span class="pearl-title  ">Started</span>
+        <b> {{maintenance?.start_datetime | date: 'mediumDate'}}</b>
+      </div>
+
+      <div class="pearl error current col-xs-4" [ngClass]="{'done': isMaintenanceCompleted()}">
+        <div class="pearl-icon "><i class="ion-android-funnel"></i></div>
+        <span class="pearl-title ">{{maintenance?.status_label}}</span>
+        <b> {{currentState?.timestamp | date: 'mediumDate'}}</b>
+      </div>
+      <div class="pearl col-xs-4" [ngClass]="[isMaintenanceCompleted() ? 'done' : 'disabled']">
+        <div class="pearl-icon " [ngClass]="{'bg-green-800': isMaintenanceCompleted()}"><i class="ion-checkmark"></i>
+        </div>
+        <span class="pearl-title ">Expected Completion</span>
+        <b> {{(maintenance?.end_datetime | date: 'mediumDate') | getNullOrUndefined}} </b>
+      </div>
+
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="panel panel-default nav-tabs-horizontal padding-0 margin-bottom-0 border-0">
+          <div class="panel-heading font-weight-600">
+            <div class="padding-30">
+
+
+              <div class="media ">
+
+                <div class="media-left">
+                  <img [src]="assetsImage" alt="img" style="height:200px;"
+                       class="img-bordered1">
+                </div>
+                <div class="media-body">
+
+
+                  <div class="row">
+                    <div class="col-sm-12">
+
+                      <div class="margin-bottom-30 padding-bottom-10 clearfix" style="border-bottom: 1px solid #eee">
+
+                        <div class="inline-block pull-left  margin-bottom-10 margin-right-10">
+
+                          <div class="grey-800 font-weight-600 font-size-18">
+                            <span class="font-weight-400"> Maintenance Type </span> : {{maintenance?.maintenance_type_name}}
+
+                          </div>
+                        </div>
+                        <div class="inline-block pull-right   margin-bottom-10 margin-right-10">
+                          <button type="button" class="btn btn-icon btn-outline btn-round btn-default btn-xs"
+                                  data-target="#editpop2" data-toggle="modal"
+                                  pTooltip="Edit" (click)="editMaintenance()">
+                            <i class="icon ion-edit"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="table-responsive1">
+                        <table
+                          class="table  table-condensed no-border  table-striped  margin-bottom-0"
+                          style="height:120px">
+                          <tbody>
+                          <tr>
+                            <th><b> Asset Name </b></th>
+                            <td class="text-left text-break">{{maintenance?.truck_name}}
+                            </td>
+                          </tr>
+                          <tr>
+                            <th><b> Type </b></th>
+                            <td class="text-left text-break">
+                              {{maintenance?.asset_entity_type | getNullOrUndefined}}
+                            </td>
+                          </tr>
+                          <tr>
+                            <th><b> Driver</b></th>
+                            <td class="text-left text-break">
+                              {{maintenance?.driver_name | getNullOrUndefined}}
+                            </td>
+                          </tr>
+
+
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="table-responsive1">
+                        <table
+                          class="table  table-condensed no-border  table-striped  margin-bottom-0"
+                          style="height:120px">
+                          <tbody>
+
+
+                          <tr>
+                            <th width=""><b>Issued Datetime</b></th>
+                            <td
+                              class="text-left">{{(maintenance?.issued_datetime | date:'mediumDate') | getNullOrUndefined}}</td>
+                          </tr>
+
+                          <tr>
+                            <th><b> Start Datetime </b></th>
+                            <td class="text-left text-break">
+                              {{(maintenance?.start_datetime | date:'mediumDate') | getNullOrUndefined}}
+                            </td>
+                          </tr>
+                          <tr>
+                            <th><b> End Datetime </b></th>
+                            <td class="text-left text-break">
+                              {{(maintenance?.end_datetime | date:'mediumDate') | getNullOrUndefined}}
+                            </td>
+                          </tr>
+
+
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+
+                </div>
+
+                <div class="media-right">
+                  <div class="padding-15 bg-green-700 text-center relative  white margin-bottom-30"
+                       style="min-width:200px;min-height: 199px;">
+                    <div class="font-size-14 margin-bottom-10  text-uppercase ">
+                      Total Cost
+                    </div>
+                    <div class=" margin-bottom-5">
+                      <i> <img src="assets/images/iol/currency.png" alt="img" height="40"> </i>
+                    </div>
+                    <div class="font-size-18 font-weight-600 margin-bottom-10">
+                      {{totalCost | getNullOrUndefined}} <span class="font-size-10"> QAR</span>
+                    </div>
+                    <div class="row no-space">
+                      <div class="col-md-12">
+                        <div class="  bg-green-800   font-size-12 padding-5  " *ngIf="maxCost.cost > 0;else emptyMessage">
+                          <b> {{maxCost.cost_type_label}}</b> costs about <span
+                          class="font-size-12">{{maxCost.cost | number: '1.0-0'}}%</span>
+                        </div>
+                        <ng-template #emptyMessage>
+                          <div class="  bg-green-800   font-size-12 padding-5  ">
+                            -
+                          </div>
+                        </ng-template>
+
+
+                        <div class="font-size-16" *ngIf="maxCost.cost  === 0">-<span class="font-size-10"> QAR</span></div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+
+              <hr/>
+              <div class="table-responsive ">
+
+
+              </div>
+
+            </div>
+            </div>
+        </div>
+
+
+
+      </div>
+
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel panel-default nav-tabs-horizontal padding-0 margin-bottom-0">
+          <div class="panel-heading font-weight-600">
+            <ul class="nav nav-tabs nav-tabs-line nav-justified1  " data-plugin="nav-tabs" role="tablist">
+              <li class=""><a data-toggle="tab" href="#jobsdetail1" role="tab" class=" ">Maintenance Data</a></li>
+            </ul>
+            <div class="panel-actions">
+              <a class="panel-action icon ion-loop" pTooltip="Refresh" tooltipPosition="top"
+                 (click)="getMaintenanceData()"></a>
+
+              <a class="btn btn-sm white no-border  btn-success " href="" data-target="#editpop1" data-toggle="modal" >New Maintenance Data</a>
+            </div>
+          </div>
+
+          <div class="panel-body padding-0">
+            <div class="tab-content">
+              <div class="tab-pane active" id="jobsdetail1" role="tabpanel">
+                <div class="panel-body padding-0">
+                  <div class="row">
+
+                    <div class="col-lg-12">
+
+
+                      <div class="vscroll padding-right-10" style="height:235px;">
+                        <p-progressBar *ngIf="appLoader.visibility" [style]="{'height': '5px'}"
+                                       mode="indeterminate"></p-progressBar>
+                        <table class="table  margin-bottom-0 nowrap" id="">
+                          <thead>
+                          <tr class="">
+
+                            <th class="text-left">Status</th>
+                            <th class="text-left">Asset</th>
+                            <th class="text-left">Asset Type</th>
+                            <th class="text-left">Driver</th>
+                            <th class="text-left">Timestamp</th>
+                            <th class="text-left">Cost Type</th>
+                            <th class="text-left">Cost</th>
+
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr class="" *ngFor="let maintenanceData of maintenancesData;">
+                            <td class="text-left"><span class="label"
+                                                        [ngClass]="getClass(maintenanceData.action)"> {{maintenanceData.action_label || '-'}} </span>
+                            </td>
+                            <td class="text-left"> {{maintenanceData.truck_name || '-'}}  </td>
+                            <td class="text-left" width="150">
+                              <div class="media ">
+                                <div class="media-left padding-right-10">
+                                  <img [src]="getAssetTypeImage(maintenanceData.asset_type)" alt="img" height="16" class="inline">
+                                </div>
+                                <div class="media-body margin-0">{{maintenanceData.asset_type}}</div>
+                              </div>
+                            </td>
+                            <td class="text-left">{{maintenanceData.driver_name || '-' }}</td>
+                            <td>{{maintenanceData.timestamp | date: 'medium'}}</td>
+                            <td>{{maintenanceData.cost_type_label || '-'}}</td>
+                            <td>{{maintenanceData.cost || '-'}}</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade  modal-success text-left" id="editpop1"
+       role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center  modal-lg">
+      <div class="modal-content">
+        <app-maintenance-data-form *ngIf="maintenance" [maintenance]="maintenance"
+                                   (submitForm)="maintenanceDataSaved($event)"></app-maintenance-data-form>
+      </div>
+    </div>
+  </div> -->
+  <app-breadcrumbs [items]="items" [home]="home" #scrollToTop></app-breadcrumbs>
+
+<div class="page-content   container-fluid  full-open-sidebar"   >
+    <div class="row margin-bottom-30" *ngIf="cardsArray.length === 5">
+        <div *ngFor="let card of cardsArray; let i = index" [attr.data-index]="i"
+            [ngClass]="{'col-md-4': i === 0, 'col-md-2': i > 0}">
+            <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+                [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+                [footerStyle]="card.footer_color">
+            </app-stats-icon-card>
+        </div>
+    </div>
+    <div class="row margin-bottom-30" *ngIf="cardsArray.length !== 5">
+        <div *ngFor="let card of cardsArray" [className]="colWidth">
+            <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+                [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+                [footerStyle]="card.footer_color">
+            </app-stats-icon-card>
+        </div>
+    </div>
+    <div class="row" style="border-radius: 20px;">
+        <div class="col-lg-4" >
+            <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+                <div class="panel-heading font-weight-600 margin-bottom-0">
+                    <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important ">Fleet Details</h3>
+
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Summary">
+                            <div class="panel panel-default margin-bottom-0 ">
+                                <div class="panel-body padding-15 ">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="widget margin-bottom-0">
+                                                <div class="padding-15 " style="height:auto">
+                                                    <div class="text-center ">
+                                                        <div class="">
+                                                            <div class="margin-bottom-10" style="padding: 10px;">
+                                                                <i> <img [src]="truck?.photo" alt="img"
+                                                                        style="height:120px; width:120px;" class="">
+                                                                </i>
+                                                            </div>
+                                                            <div
+                                                                class="padding-0 bg-cyan-000 text-left  margin-bottom-0 ">
+                                                                <div class="font-size-20 text-center">{{truck?.name}}
+                                                                </div>
+                                                                <div class="font-size-20  margin-bottom-15 text-center">
+                                                                    <span style="height: 20px; padding-top: 6px;"
+                                                                        class="badge"
+                                                                        [ngClass]="(truck?.online_status)? 'badge-success': 'badge-danger'">{{truck?.online_status?
+                                                                        'Online' : 'Offline'}}</span>
+
+                                                                        <span class="bg-red-700 badge font-size-14 badge-success" style="margin-left: 12px;">
+                                                                            <div class="signal-bars mt1 sizing-box" [ngClass]="getSignalsClasses(truck)">
+                                                                             <div class="first-bar bar"></div>
+                                                                             <div class="second-bar bar"></div>
+                                                                             <div class="third-bar bar"></div>
+                                                                             <div class="fourth-bar bar"></div>
+                                                                             <div class="fifth-bar bar"></div>
+                                                                            </div>
+                                                                          </span>
+                                                                </div>
+                                                                <!-- <div class="font-size-20  margin-bottom-15  text-center">
+                                                                    <div class="battery">
+                                                                        <div class="battery-level" [ngStyle] = "{'height.px': truck?.signal_strength}"></div>
+                                                                      </div>
+                                                                </div>  -->
+                                                                <div class="font-size-20  margin-bottom-15 text-center">
+
+                                                                </div>
+                                                                <div class="bg-green-100 padding-0">
+                                                                    <div class="padding-10  bg-white  margin-bottom-0 ">
+                                                                        <div class="table-responsive vscroll"
+                                                                            style="height:410px;border: 1px solid #ebebeb;">
+                                                                            <table style="font-size: 12px;"
+                                                                                class="table margin-bottom-0 table-bordered1     table-condensed   ">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <th width=""> <b>Vehicle Name/ID</b>
+                                                                                        </th>
+                                                                                        <td class="text-left">
+                                                                                            {{truck?.name}}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Record Status</b></th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            N/A</td>
+                                                                                    </tr>
+                                                                                     <tr>
+                                                                                        <th> <b> Device Id</b> </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.device_id ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Type</b> </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.vehicle_type ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Make </b> </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.make || 'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Year </b> </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.year || 'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Model </b>
+                                                                                        </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.model || 'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Fuel Tank Capacity</b>
+                                                                                        </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            N/A</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Speed Threshold</b>
+                                                                                        </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{(truck?.threshold) ?
+                                                                                            truck?.threshold + '
+                                                                                            km/h' : 'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Engine Capacity </b>
+                                                                                        </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.engine_capacity ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Wheels</b></th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.wheels || 'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Chassis No.</b></th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.chassis_number ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Engine No.</b></th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.engine_number ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th> <b> Purchase Type</b>
+                                                                                        </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.leased_owned ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <!-- <tr>
+                                                                                        <th> <b> Device Id</b> </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.device_id ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr> -->
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8" >
+            <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+                <div class="panel-heading font-weight-600 margin-bottom-0">
+                    <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important "> Map</h3>
+
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Summary">
+                            <div class="panel panel-default margin-bottom-0 ">
+                                <div class="panel-body padding-15 ">
+                                    <div class="row">
+
+
+                                        <div class="col-lg-12">
+                                            <!-- <div class="panel-heading margin-bottom-0" [ngStyle]="theme">
+                                                <h3 class="panel-title font-weight-600 " style="color: white;">
+                                                    Map
+                                                </h3>
+                                                <div class="panel-actions">
+                                                    <a class="panel-action"></a>
+                                                </div>
+                                            </div> -->
+                                            <div #gmap style="width:100%;" [ngStyle]="{'height':'686px'}"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-3 card-group-row__col">
+            <div class="panel panel-default  round     " style="height: 482px;">
+                <div class="panel-heading margin-bottom-0" >
+                    <h3 class="panel-title font-weight-600 bg-theme1 white1 ">Distance & Speed</h3>
+                    <div class="panel-actions">
+                        <a class=""></a>
+                    </div>
+                </div>
+                <div class="panel-body padding-15">
+                    <!-- <div class="tab-content"> -->
+                        <!-- <div class="panel-body padding-15 "> -->
+                            <div class="row card-group-row ">
+
+
+                                <!-- <div class="col-lg-12" style="margin-left: 98px;margin-top: 14px;">
+                                    Status
+                                </div>
+                                <div class="col-lg-12" style="margin-left: 98px;">
+                                    <span style="height: 24px; padding-top: 6px;"
+                                    class="badge"
+                                    [ngClass]="(truck?.online_status)? 'badge-success': 'badge-danger'">{{truck?.online_status?
+                                    'Online' : 'Offline'}}</span>
+                                </div>
+
+
+                                <div class="col-lg-12" style="margin-left: 98px;margin-top: 14px;">
+                                    Vehicle Speed (km/h)
+                                </div>
+                                <div class="col-lg-12">
+                                    <app-spdmeterchart>
+
+                                    </app-spdmeterchart>
+
+                                </div> -->
+                                <div class="panel-body padding-15">
+                                    <div class="margin-bottom-30 text-center">
+                                        <div class="font-size-14  margin-bottom-0"> Status</div>
+                                        <div class="font-size-18  margin-bottom-0 font-weight-100">
+                                            <span
+                                    class="badge"
+                                    [ngClass]="(truck?.online_status)? 'badge-success': 'badge-danger'">{{truck?.online_status?
+                                    'Online' : 'Offline'}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="margin-bottom-15 text-center">
+                                        <div class="font-size-14  margin-bottom-10"> Vehicle Speed (km/h)</div>
+                                        <div class="">
+                                            <div class="chartbox">
+                                                <app-spdmeterchart [speed]="((((truck?.signalRresponse.spd > 5 && tooLongOrtooShortDistance) ? truck?.signalRresponse.spd : (signalRstarted < 1) ? truck?.last_speed : '0' ))) || truck?.last_speed"></app-spdmeterchart>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="margin-bottom-15 text-center">
+                                        <div class="font-size-14  margin-bottom-0"> Assigned Route</div>
+                                        <div class="font-size-24  margin-bottom-0 font-weight-100">
+                                            {{truck?.route_name ||
+                                                '-'}}
+                                        </div>
+                                    </div>
+                                    <div class="margin-bottom-0 text-center">
+                                        <div class="font-size-14  margin-bottom-0"> Assigned Distance</div>
+                                        <div class="font-size-24  margin-bottom-0 font-weight-100"> N/A</div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- </div> -->
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <div class="col-lg-3">
+            <div class="panel panel-default  padding-0 round card shadow light " style="height: 479px;">
+                <div class="panel-heading font-weight-600 margin-bottom-0"></div>
+                <div class="panel-body padding-0">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Summary">
+                            <div class="panel panel-default margin-bottom-0 ">
+                                <div class="panel-body padding-15 ">
+                                    <div class="row">
+
+                                        <div class="col-lg-12">
+                                            <div class="panel-heading margin-bottom-0" [ngStyle]="theme"
+                                                style="font-size: 12px">
+                                                <h3 class="panel-title font-weight-600 " style="color: white;">
+                                                    Distances &amp; Speed
+                                                </h3>
+                                                <div class="panel-actions"><a class="panel-action "></a></div>
+                                            </div>
+                                            <div class="padding-15 bg-cyan-100 margin-bottom-0">
+                                                <div class="vscroll" style="height: 195px;">
+                                                    <table style="font-size: 12px"
+                                                        class="table  table-condensed  table-hovered    no-border  margin-bottom-0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-7 red-800">
+                                                                        <img src="assets/images/shipped.png" alt="img"
+                                                                            height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="" style="vertical-align: middle;">
+                                                                    <div class="font-size-11  font-weight-600 " style="margin-left: -6px;margin-right: -6px;">
+
+                                                                        Today(Km)
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <div class="margin-top-0 padding-5 label red-800"
+                                                                        style="font-size: 100% !important;"
+                                                                        >
+
+                                                                        {{truck?.signalRresponse ? truck.distance_travelled : 'N/A'}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-7 red-800">
+                                                                        <img src="assets/images/in month.png" alt="img"
+                                                                            height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="" style="vertical-align: middle;">
+                                                                    <div class="font-size-12  font-weight-600 " style="margin-left: -6px;margin-right: -6px;">
+                                                                        Month(Km)
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <div
+                                                                        class="margin-top-0 padding-5 font-size-11 red-800">
+
+                                                                            {{truck?.signalRresponse ? truck.month_distance : 'N/A'}}
+                                                                            </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-7 ">
+                                                                        <img src="assets/images/lastfill up.png" alt="img"
+                                                                            height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="" style="vertical-align: middle;">
+                                                                    <div class="font-size-11  font-weight-600 ">
+                                                                        Since Last Fillup
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <div
+                                                                        class="margin-top-0 padding-5 font-size-12 red-800" style="margin-left: -6px;margin-right: -6px;">
+                                                                        {{lastFillUp || 'N/A'}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-lg-3  card-group-row__col">
+            <div class="panel panel-default  round   " style="height: 482px;">
+                <div class="panel-heading margin-bottom-0">
+                    <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Map Trail </h3>
+                    <div class="panel-actions">
+                        <a class=""></a>
+                    </div>
+                </div>
+                <div class="panel-body padding-15">
+                    <div class="">
+                        <!-- <div class="form-group margin-bottom-10">
+                            <input type="date" class="form-control daterange" value="10/25/17">
+                        </div> -->
+
+                        <div class="tracking-list margin-bottom-30 vscroll" style="max-height: 200px;">
+                            <div class="tracking-item">
+                                <div class="tracking-icon status-intransit">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="tracking-date"> 05:01 PM<span> Aug 10, 2018</span></div>
+                                <div class="tracking-content">
+                                    <div class="label label-info">Start Location</div>
+                                    <span> Ad Dawhah al Jadidah </span>
+                                </div>
+                            </div>
+
+
+                            <div class="tracking-item">
+                                <div class="tracking-icon status-intransit">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="tracking-date"> 05:01 PM<span> Aug 10, 2018</span></div>
+                                <div class="tracking-content">
+                                    <span> Ras Laffan Industrial City </span>
+                                </div>
+                            </div>
+                            <div class="tracking-item">
+                                <div class="tracking-icon status-intransit">
+                                    <img src="../assets/images/icon-vehilcle.png" height="50">
+                                </div>
+                                <div class="tracking-date"> 05:01 PM<span> Aug 10, 2018</span></div>
+                                <div class="tracking-content">
+                                    <div class="label label-warning">Current Location</div>
+                                    <span> Salatah al Jadidah Ras Laffan Industrial City  </span>
+                                </div>
+                            </div>
+
+                            <div class="tracking-item">
+                                <div class="tracking-icon status-intransit">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="tracking-date"> 05:01 PM<span> Aug 10, 2018</span></div>
+                                <div class="tracking-content">
+                                    <div class="label label-success">End Location</div>
+                                    <span> As Salatah al Jadidah </span>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+                        <div class="row card-group-row no-space1  ">
+
+                            <div class="col-lg-6 card-group-row__col">
+                                <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative   card-border light ">
+                                    <div class="vertical-align-middle">
+                                        <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                                            Fuel Consumed
+                                        </div>
+                                        <div class="font-size-18 font-weight-200 margin-bottom-0"> 105 L </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 card-group-row__col">
+                                <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative   card-border light ">
+                                    <div class="vertical-align-middle">
+                                        <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                                            Distance Travelled
+                                        </div>
+                                        <div class="font-size-18 font-weight-200 margin-bottom-0">45 km</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 card-group-row__col">
+                                <div class="card  padding-5 shadow1   margin-bottom-0 vertical-align   text-center relative   card-border light ">
+                                    <div class="vertical-align-middle">
+                                        <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+
+                                            Jobs Completed
+                                        </div>
+                                        <div class="font-size-18 font-weight-200 margin-bottom-0">11</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 card-group-row__col">
+                                <div class="card  padding-5 shadow1   margin-bottom-0 vertical-align   text-center relative   card-border light ">
+                                    <div class="vertical-align-middle">
+                                        <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                                            Violations
+                                        </div>
+                                        <div class="font-size-18 font-weight-200 margin-bottom-0">2</div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="col-lg-3">
+            <div class="panel panel-default  padding-0 round card shadow light " style="min-height: 200px;">
+                <div class="panel-heading font-weight-600 margin-bottom-0"></div>
+                <div class="panel-body padding-0">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Summary">
+                            <div class="panel panel-default margin-bottom-0 ">
+                                <div class="panel-body padding-15 ">
+                                    <div class="row">
+
+                                        <div class="col-lg-12">
+                                            <div class="panel-heading margin-bottom-0" [ngStyle]="theme"
+                                                style="font-size: 12px">
+                                                <h3 class="panel-title font-weight-600 " style="color: white;">
+                                                    Statistics
+                                                </h3>
+                                                <div class="panel-actions">
+                                                    <a class="panel-action "></a>
+                                                </div>
+                                            </div>
+                                            <div class="padding-15 bg-cyan-100 margin-bottom-0">
+                                                <div class="vscroll" style="height: 195px;">
+                                                    <table style="font-size: 12px"
+                                                        class="table  table-condensed  table-hovered    no-border  margin-bottom-0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-10 red-800">
+                                                                        <img src="assets/images/snowflake.png" alt="img"
+                                                                            height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="" style="vertical-align: middle;">
+                                                                    <div class="font-size-12  font-weight-600 ">
+                                                                        Vehicle state
+                                                                    </div>
+
+
+                                                                </td>
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <div class="margin-top-0 padding-5 label red-800"
+                                                                        style="font-size: 100% !important;"
+                                                                        [ngClass]="(truck?.signalRresponse && truck?.signalRresponse.spd > 0 && tooLongOrtooShortDistance) ? 'badge-success': 'badge-danger'">
+                                                                        {{truck?.signalRresponse ?
+                                                                        (((truck?.signalRresponse.spd) > 0 &&
+                                                                        tooLongOrtooShortDistance) ? 'Moving' : 'Idle')
+                                                                        : '-'}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-10 red-800">
+                                                                        <img src="assets/images/supply STATE.png"
+                                                                            alt="img" height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="" style="vertical-align: middle;">
+                                                                    <div class="font-size-12  font-weight-600 ">
+                                                                        Supply State
+                                                                    </div>
+
+
+                                                                </td>
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <div
+                                                                    class="margin-top-0 padding-5 font-size-12 red-800">
+                                                                    {{truck?.signalRresponse.mss ?
+                                                                    (truck?.signalRresponse.mss == 0 ? 'On Battery' :
+                                                                    'Main Supply') : '-'}}
+                                                                </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-10 red-800">
+                                                                        <img src="assets/images/GPS-Fix.png"
+                                                                            alt="img" height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="" style="vertical-align: middle;">
+                                                                    <div class="font-size-12  font-weight-600 ">
+                                                                        GPS Fix
+                                                                    </div>
+
+
+                                                                </td>
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <div
+                                                                        class="margin-top-0 padding-5 font-size-12 red-800">
+                                                                        {{truck? truck.gps_fix : '-'}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-10 red-800">
+                                                                        <img src="assets/images/FIRMWARE.png"
+                                                                            alt="img" height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="">
+                                                                    <div class="font-size-12  font-weight-600 ">
+                                                                       Firmware Version
+                                                                    </div>
+
+
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <div
+                                                                        class="margin-top-0 padding-5 font-size-12 red-800">
+                                                                        {{truck? truck.firmware_version : '-'}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+
+        <div class="col-lg-3  card-group-row__col">
+            <div class="panel panel-default round font-size-12 ">
+                <div class="panel-heading margin-bottom-0">
+                    <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Fuel &amp; Fillups </h3>
+                    <div class="panel-actions">
+                        <a class=""></a>
+                    </div>
+                </div>
+                <div class="panel-body padding-15">
+
+                    <div class="row card-group-row  ">
+
+                        <div class="col-lg-12 card-group-row__col">
+                            <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                                <div class="vertical-align-middle">
+                                    <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                                        Last Fill up Date
+                                    </div>
+                                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                                        {{(truck?.fill_up_date * 1000 | date:
+                                            'mediumDate') || '-'}}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 card-group-row__col">
+                            <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                                <div class="vertical-align-middle">
+                                    <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                                        Fill up Quantity
+                                    </div>
+                                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                                        {{truck?.fuel_filled || 0}} Ltr
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 card-group-row__col">
+                            <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                                <div class="vertical-align-middle">
+                                    <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                                        Fill up Amount
+                                    </div>
+                                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                                        {{truck?.fuel_amount_paid || 0}} QAR
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 card-group-row__col">
+                            <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                                <div class="vertical-align-middle">
+                                    <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                                        Fuel Supervisor
+                                    </div>
+                                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                                        {{truck?.fuel_supervisor_name || 'N/A'}}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 card-group-row__col">
+                            <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                                <div class="vertical-align-middle">
+                                    <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+
+                                        Fill Up Location
+                                    </div>
+                                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                                        {{truck?.fuel_location || 'N/A'}}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 card-group-row__col">
+                            <div class="card  padding-5 shadow1   margin-bottom-0 vertical-align   text-center relative bg-grey-100  card-border light ">
+                                <div class="vertical-align-middle">
+                                    <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                                        Payment Method
+                                    </div>
+                                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                                        {{truck?.fuel_payment_type || 'N/A'}}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="col-lg-3">
+            <div class="panel panel-default  padding-0 round card shadow light " style="min-height: 200px;">
+                <div class="panel-heading font-weight-600 margin-bottom-0"></div>
+                <div class="panel-body padding-0">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Summary">
+                            <div class="panel panel-default margin-bottom-0 ">
+                                <div class="panel-body padding-15 ">
+                                    <div class="row">
+
+                                        <div class="col-lg-12">
+                                            <div class="panel-heading margin-bottom-0" [ngStyle]="theme"
+                                                style="font-size: 10px">
+                                                <h3 class="panel-title font-weight-600 " style="color: white;">
+                                                    Fuel &amp; Fill-ups
+                                                </h3>
+                                                <div class="panel-actions">
+                                                    <a class="panel-action "></a>
+                                                </div>
+                                            </div>
+                                            <div class="padding-15 bg-cyan-100 margin-bottom-0">
+                                                <div class="vscroll" style="height: 195px;">
+                                                    <table style="font-size: 12px"
+                                                        class="table table-condensed table-hovered no-border margin-bottom-0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-10 red-800">
+                                                                        <img src="assets/images/gasoline.png" alt="img"
+                                                                            height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="">
+                                                                    <div class="font-size-12  font-weight-600 red-800">
+                                                                        Last Fill Up Date
+                                                                    </div>
+                                                                    <div class="font-size-16 font-weight-600 ">
+                                                                        {{(truck?.fill_up_date * 1000 | date:
+                                                                        'mediumDate') || '-'}}
+                                                                    </div>
+                                                                </td>
+                                                                <td width="">
+                                                                    <div class="font-size-12  font-weight-600 red-800">
+                                                                        Fuel Supervisor
+                                                                    </div>
+                                                                    <div class="font-size-16 font-weight-600 ">
+                                                                        {{truck?.fuel_supervisor_name || 'N/A'}}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-10 red-800">
+                                                                        <img src="assets/images/gasoline.png" alt="img"
+                                                                            height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="">
+                                                                    <div class="font-size-12  font-weight-600 red-800">
+                                                                        Fill up Quantity
+                                                                    </div>
+                                                                    <div class="font-size-16 font-weight-600 ">
+                                                                        {{truck?.fuel_filled || 0}} Ltr
+                                                                    </div>
+                                                                </td>
+                                                                <td width="">
+                                                                    <div class="font-size-12  font-weight-600 red-800">
+                                                                        Fill Up Location
+                                                                    </div>
+                                                                    <div class="font-size-16 font-weight-600 ">
+                                                                        {{truck?.fuel_location || 'N/A'}}
+                                                                    </div>
+
+
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center" width="80">
+                                                                    <div
+                                                                        class="margin-right-20 bg-green-100 padding-0 font-size-10 red-800">
+                                                                        <img src="assets/images/gasoline.png" alt="img"
+                                                                            height="50" class="inline">
+                                                                    </div>
+                                                                </td>
+                                                                <td width="">
+                                                                    <div class="font-size-12  font-weight-600 red-800">
+                                                                        Fill up amount
+                                                                    </div>
+                                                                    <div class="font-size-16 font-weight-600 ">
+                                                                        {{truck?.fuel_amount_paid || 0}} QAR
+                                                                    </div>
+
+
+                                                                </td>
+                                                                <td width="">
+                                                                    <div class="font-size-12  font-weight-600 red-800">
+                                                                        Payment Method
+                                                                    </div>
+                                                                    <div class="font-size-16 font-weight-600 ">
+                                                                        {{truck?.fuel_payment_type || 'N/A'}}
+                                                                    </div>
+
+
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="col-lg-3  card-group-row__col">
+            <div class="panel panel-default round font-size-12 " style="height: 482px;">
+                <div class="panel-heading margin-bottom-0">
+                    <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Sensors </h3>
+                    <div class="panel-actions">
+                        <a class=""></a>
+                    </div>
+                </div>
+                <div class="panel-body padding-20 ">
+                    <div class="text-wrap">
+                        <div class="">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="">
+                                        <img src="assets/images/icon-sensor.png" class="img-bordered1" style="height: 30px">
+                                    </figure>
+                                </div>
+                                <div class="media-body" style="color: gray;">
+                                    <div class="font-size-18 grey-600 "> Humidity</div>
+                                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                                    <span class=" label label-danger label-outline   "> Disabled </span>
+                                </div>
+                                <div class="media-right" style="color: gray;">
+                                    <div class="font-size-24">0</div>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="">
+                                        <img src="assets/images/icon-sensor (2).png" class="img-bordered1" style="height: 30px">
+                                    </figure>
+                                </div>
+                                <div class="media-body">
+                                    <div class="font-size-18 "> Location</div>
+                                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                                     <span class="label label-success label-outline "> Enable </span>
+                                </div>
+                                <div class="media-right">
+                                    <div class="font-size-24" >N/A </div>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="">
+                                        <img src="assets/images/icon-sensor (3).png" class="img-bordered1" style="height: 30px">
+                                    </figure>
+                                </div>
+                                <div class="media-body">
+                                    <div class="font-size-18 "> Speed</div>
+                                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div>  -->
+                                    <span class="label label-success label-outline  "> Enable </span>
+                                </div>
+                                <div class="media-right">
+                                    <div class="font-size-24">
+                                        {{((((truck?.signalRresponse.spd > 5 &&
+                                            tooLongOrtooShortDistance) ?
+                                            truck?.signalRresponse.spd : (signalRstarted <
+                                                1) ? truck?.last_speed : '0' ) | number
+                                                : '1.0-0' )) || truck?.last_speed}} km/h
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="">
+                                        <img src="assets/images/icon-sensor (4).png" class="img-bordered1" style="height: 30px">
+                                    </figure>
+                                </div>
+                                <div class="media-body">
+                                    <div class="font-size-18 "> Temperature</div>
+                                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                                     <span class="label label-success label-outline  "> Enable </span>
+                                </div>
+                                <div class="media-right">
+                                    <div class="font-size-24">
+                                        {{truck?.signalRresponse ? truck.signalRresponse.evTemp : '-'}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="">
+                                        <img src="assets/images/icon-sensor (5).png" class="img-bordered1" style="height: 30px">
+                                    </figure>
+                                </div>
+                                <div class="media-body">
+                                    <div class="font-size-18 grey-600"> Dip Level</div>
+                                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                                     <span class="label label-danger label-outline1  "> Disabled </span>
+                                </div>
+                                <div class="media-right">
+                                    <div class="font-size-24 grey-600"> 00.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <!-- graph in detail page -->
+    <div class="row" style="border-radius: 20px;">
+      <div class="col-lg-4  card-group-row__col">
+        <div class="panel panel-default  round font-size-12 ">
+            <div class="panel-heading margin-bottom-0">
+                <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Top Maintenances Jobs </h3>
+                <div class="panel-actions">
+                    <a class=""></a>
+                </div>
+            </div>
+            <div class="panel-body padding-20 ">
+
+                <div class="form-group margin-bottom-20">
+                    <input type="date" class="form-control daterange" value="10/25/17">
+                </div>
+                <div class="row card-group-row  ">
+                    <div class="col-lg-6 card-group-row__col">
+                        <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light  ">
+                            <div class="vertical-align-middle">
+                                <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                                    General Maintenance
+                                </div>
+                                <div class="font-size-18 font-weight-200 margin-bottom-0"> 10</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 card-group-row__col">
+                        <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light  ">
+                            <div class="vertical-align-middle">
+                                <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                                    Overhaul
+                                </div>
+                                <div class="font-size-18 font-weight-200 margin-bottom-0"> 10</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 card-group-row__col">
+                        <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light  ">
+                            <div class="vertical-align-middle">
+                                <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                                    Major Repairs
+                                </div>
+                                <div class="font-size-18 font-weight-200 margin-bottom-0"> 10</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 card-group-row__col">
+                        <div class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light  ">
+                            <div class="vertical-align-middle">
+                                <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+
+                                    Total Replacements
+                                </div>
+                                <div class="font-size-18 font-weight-200 margin-bottom-0"> 10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- amchart -->
+    <div class="col-lg-8  card-group-row__col">
+      <div class="panel panel-default card round shadow font-size-12 ">
+          <div class="panel-heading margin-bottom-0">
+              <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Jobs by Status</h3>
+              <div class="panel-actions">
+                  <a class=""></a>
+              </div>
+          </div>
+          <div class="panel-body padding-15">
+
+              <div class="">
+                  <div class="">
+                      <div class="filters margin-bottom-10 padding-bottom-10" style="border-bottom: 1px solid #eee;">
+
+                          <div class="inline-block">
+                              <select class="form-control input-xs">
+                              <option>This Year</option>
+                          </select>
+                          </div>
+                      </div>
+                      <div class="chartbox">
+                          <div id="ssssss" style="height:300px;"><div style="width: 100%; height: 100%; position: relative; left: 0.3125px; top: -0.40625px;"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="group" style="width: 100%; height: 100%; overflow: visible;"><defs><clipPath id="id-46"><rect width="677" height="300"></rect></clipPath><linearGradient id="gradient-id-69" x1="1%" x2="99%" y1="59%" y2="41%"><stop stop-color="#474758" offset="0"></stop><stop stop-color="#474758" stop-opacity="1" offset="0.75"></stop><stop stop-color="#3cabff" stop-opacity="1" offset="0.755"></stop></linearGradient><filter id="filter-id-103" filterUnits="objectBoundingBox" width="200%" height="200%" x="-50%" y="-50%"></filter><filter id="filter-id-124" filterUnits="objectBoundingBox" width="200%" height="200%" x="-50%" y="-50%"></filter><clipPath id="id-144"><path d="M0,0 L597,0 L597,206 L0,206 L0,0"></path></clipPath><clipPath id="id-165"><path d="M0,0 L597,0 L597,206 L0,206 L0,0"></path></clipPath><clipPath id="id-342"><rect width="597" height="206"></rect></clipPath><filter id="filter-id-51" filterUnits="objectBoundingBox" width="200%" height="200%" x="-50%" y="-50%"><feGaussianBlur result="blurOut" in="SourceGraphic" stdDeviation="1.5"></feGaussianBlur><feOffset result="offsetBlur" dx="1" dy="1"></feOffset><feFlood flood-color="#000000" flood-opacity="0.5"></feFlood><feComposite in2="offsetBlur" operator="in"></feComposite><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><filter id="filter-id-149" filterUnits="objectBoundingBox" width="200%" height="200%" x="-50%" y="-50%"><feGaussianBlur result="blurOut" in="SourceGraphic" stdDeviation="1.5"></feGaussianBlur><feOffset result="offsetBlur" dx="1" dy="1"></feOffset><feFlood flood-color="#000000" flood-opacity="0.5"></feFlood><feComposite in2="offsetBlur" operator="in"></feComposite><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><filter id="filter-id-170" filterUnits="objectBoundingBox" width="200%" height="200%" x="-50%" y="-50%"><feGaussianBlur result="blurOut" in="SourceGraphic" stdDeviation="1.5"></feGaussianBlur><feOffset result="offsetBlur" dx="1" dy="1"></feOffset><feFlood flood-color="#000000" flood-opacity="0.5"></feFlood><feComposite in2="offsetBlur" operator="in"></feComposite><feMerge><feMergeNode></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter><filter id="filter-id-66" filterUnits="objectBoundingBox" width="120%" height="120%" x="-10%" y="-10%"><feColorMatrix type="saturate" values="0"></feColorMatrix></filter></defs><g><g fill="#ffffff" fill-opacity="0"><rect width="677" height="300"></rect></g><g><g role="region" clip-path="url(&quot;#id-46&quot;)" opacity="1" aria-label="Chart"><g transform="translate(15,15)"><g><g><g role="group" aria-label="Legend"><g><g focusable="true" tabindex="0" role="switch" aria-controls="id-139" aria-labelledby="id-139" aria-checked="true" transform="translate(221.5,0)" style="cursor: pointer;"><g fill="#ffffff" fill-opacity="0"><rect width="93" height="30"></rect></g><g transform="translate(0,8)"><g fill="#f3c300" style="pointer-events: none;" transform="translate(0,2)"><g fill="#ffffff" fill-opacity="0" stroke-opacity="0" stroke="#000000"><rect width="10" height="10"></rect></g><g><g fill="#f3c300" fill-opacity="1" stroke="#f3c300" stroke-opacity="1"><path d="M3,0 L7,0 a3,3 0 0 1 3,3 L10,7 a3,3 0 0 1 -3,3 L3,10 a3,3 0 0 1 -3,-3 L0,3 a3,3 0 0 1 3,-3 Z"></path></g></g></g><g fill="#000000" aria-label="Harsh Braking" style="pointer-events: none;" transform="translate(15,0)"><g style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>Harsh Braking</tspan></text></g></g><g fill="#000000" style="pointer-events: none;" display="none"><g display="none"></g></g></g></g><g focusable="true" tabindex="0" role="switch" aria-controls="id-160" aria-labelledby="id-160" aria-checked="true" transform="translate(334.5,0)" style="cursor: pointer;"><g fill="#ffffff" fill-opacity="0"><rect width="91" height="30"></rect></g><g transform="translate(0,8)"><g fill="#c2b280" style="pointer-events: none;" transform="translate(0,2)"><g fill="#ffffff" fill-opacity="0" stroke-opacity="0" stroke="#000000"><rect width="10" height="10"></rect></g><g><g fill="#c2b280" fill-opacity="1" stroke="#c2b280" stroke-opacity="1"><path d="M3,0 L7,0 a3,3 0 0 1 3,3 L10,7 a3,3 0 0 1 -3,3 L3,10 a3,3 0 0 1 -3,-3 L0,3 a3,3 0 0 1 3,-3 Z"></path></g></g></g><g fill="#000000" aria-label="Over Speeding" style="pointer-events: none;" transform="translate(15,0)"><g style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>Over Speeding</tspan></text></g></g><g fill="#000000" style="pointer-events: none;" display="none"><g display="none"></g></g></g></g></g></g><g transform="translate(0,30)"><g><g><g><g transform="translate(50,0)"><g fill="#ffffff" fill-opacity="0"><rect width="597" height="206"></rect></g><g><g><g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,288)" display="none"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,247)" display="none"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,206)"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,165)"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,124)"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,82)"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,41)"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(0,-41)" display="none"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g></g></g><g><g><g stroke="#000000" stroke-opacity="0.15" fill="none" opacity="1" transform="translate(597,0)"><path d=" M0,0  L0,206 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" opacity="1" transform="translate(478,0)"><path d=" M0,0  L0,206 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" opacity="1" transform="translate(358,0)"><path d=" M0,0  L0,206 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" opacity="1" transform="translate(239,0)"><path d=" M0,0  L0,206 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" opacity="1" transform="translate(119,0)"><path d=" M0,0  L0,206 " transform="translate(-0.5,-0.5)"></path></g><g stroke="#000000" stroke-opacity="0.15" fill="none" opacity="1"><path d=" M0,0  L0,206 " transform="translate(-0.5,-0.5)"></path></g></g></g><g><g><g role="group" stroke-opacity="0" fill-opacity="1" stroke="#f3c300" aria-label="Harsh Braking" id="id-139"><g><g clip-path="url(&quot;#id-144&quot;)"><g><g><g><g stroke-opacity="1" fill="#f3c300" fill-opacity="1" stroke="#f3c300" role="menuitem" focusable="true" tabindex="0" transform="translate(543.27,147.143)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,58.857 a0,0 0 0 1 -0,0 L0,58.857 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#f3c300" fill-opacity="1" stroke="#f3c300" role="menuitem" focusable="true" tabindex="0" transform="translate(423.87,128.75)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,77.25 a0,0 0 0 1 -0,0 L0,77.25 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#f3c300" fill-opacity="1" stroke="#f3c300" role="menuitem" focusable="true" tabindex="0" transform="translate(304.47,114.444)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,91.556 a0,0 0 0 1 -0,0 L0,91.556 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#f3c300" fill-opacity="1" stroke="#f3c300" role="menuitem" focusable="true" tabindex="0" transform="translate(185.07,128.75)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,77.25 a0,0 0 0 1 -0,0 L0,77.25 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#f3c300" fill-opacity="1" stroke="#f3c300" role="menuitem" focusable="true" tabindex="0" transform="translate(65.67,178.533)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,27.467 a0,0 0 0 1 -0,0 L0,27.467 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g></g></g></g></g><g></g></g></g><g role="group" stroke-opacity="0" fill-opacity="1" stroke="#c2b280" aria-label="Over Speeding" id="id-160"><g><g clip-path="url(&quot;#id-165&quot;)"><g><g><g><g stroke-opacity="1" fill="#c2b280" fill-opacity="1" stroke="#c2b280" role="menuitem" focusable="true" tabindex="0" transform="translate(483.57,58.639)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,147.361 a0,0 0 0 1 -0,0 L0,147.361 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#c2b280" fill-opacity="1" stroke="#c2b280" role="menuitem" focusable="true" tabindex="0" transform="translate(364.17,76.991)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,129.009 a0,0 0 0 1 -0,0 L0,129.009 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#c2b280" fill-opacity="1" stroke="#c2b280" role="menuitem" focusable="true" tabindex="0" transform="translate(244.77,91.282)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,114.718 a0,0 0 0 1 -0,0 L0,114.718 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#c2b280" fill-opacity="1" stroke="#c2b280" role="menuitem" focusable="true" tabindex="0" transform="translate(125.37,76.991)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,129.009 a0,0 0 0 1 -0,0 L0,129.009 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g><g stroke-opacity="1" fill="#c2b280" fill-opacity="1" stroke="#c2b280" role="menuitem" focusable="true" tabindex="0" transform="translate(5.97,27.337)"><g><g><path d="M0,0 L47.76,0 a0,0 0 0 1 0,0 L47.76,178.663 a0,0 0 0 1 -0,0 L0,178.663 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0 Z"></path></g></g></g></g></g></g></g><g></g></g></g></g></g><g clip-path="url(&quot;#id-342&quot;)"><g><g fill="#f3c300" stroke="#f3c300"><g><g focusable="true" tabindex="0" opacity="1" transform="translate(567.15,176.571)" style="pointer-events: none;"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>28.6%</tspan></text></g></g></g></g><g focusable="true" tabindex="0" opacity="1" transform="translate(447.75,167.375)" style="pointer-events: none;"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>37.5%</tspan></text></g></g></g></g><g focusable="true" tabindex="0" opacity="1" transform="translate(328.35,160.222)" style="pointer-events: none;"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>44.4%</tspan></text></g></g></g></g><g focusable="true" tabindex="0" opacity="1" transform="translate(208.95,167.375)" style="pointer-events: none;"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>37.5%</tspan></text></g></g></g></g><g focusable="true" tabindex="0" opacity="1" transform="translate(89.55,192.267)" style="pointer-events: none;"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>13.3%</tspan></text></g></g></g></g></g></g><g fill="#c2b280" stroke="#c2b280"><g><g opacity="1" transform="translate(507.45,132.32)" style="pointer-events: none;" focusable="true" tabindex="0"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>71.4%</tspan></text></g></g></g></g><g opacity="1" transform="translate(388.05,141.495)" style="pointer-events: none;" focusable="true" tabindex="0"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>62.5%</tspan></text></g></g></g></g><g opacity="1" transform="translate(268.65,148.641)" style="pointer-events: none;" focusable="true" tabindex="0"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>55.6%</tspan></text></g></g></g></g><g opacity="1" transform="translate(149.25,141.495)" style="pointer-events: none;" focusable="true" tabindex="0"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>62.5%</tspan></text></g></g></g></g><g opacity="1" transform="translate(29.85,116.668)" style="pointer-events: none;" focusable="true" tabindex="0"><g><g fill="#ffffff" stroke-opacity="0"><g transform="translate(-16,-7)" style="user-select: none;"><text x="0" y="14.015625" overflow="hidden" dy="-3.784"><tspan>86.7%</tspan></text></g></g></g></g></g></g></g></g><g><g><g><g></g></g><g><g></g></g></g></g><g><g></g></g><g><g></g></g><g role="button" focusable="true" tabindex="0" opacity="0" visibility="hidden" aria-hidden="true" transform="translate(557,-3)" aria-labelledby="id-37-title"><g fill="#6794dc" stroke="#ffffff" fill-opacity="1" stroke-opacity="0" transform="translate(0,8)"><path d="M17,0 L18,0 a17,17 0 0 1 17,17 L35,17 a17,17 0 0 1 -17,17 L17,34 a17,17 0 0 1 -17,-17 L0,17 a17,17 0 0 1 17,-17 Z"></path></g><g transform="translate(9,9)"><g stroke="#ffffff" style="pointer-events: none;" transform="translate(0,8)"><path d=" M0,0  L11,0 " transform="translate(2.5,7.5)"></path></g><g fill="#000000" style="pointer-events: none;" transform="translate(17,8)"><g display="none"></g></g></g><title id="id-37-title">Zoom Out</title></g></g></g><g><g><g aria-hidden="true"><g><g fill="#000000" transform="translate(0,103) rotate(-90)"><g display="none"></g></g><g stroke="#000000" stroke-opacity="0.15" fill="none" transform="translate(50,206)" opacity="1"><path transform="translate(-0.5,-0.5)" d=" M0,0  L597,0 "></path></g><g><g><g fill="#000000" aria-label="L" fill-opacity="0" opacity="0" stroke-opacity="0" style="pointer-events: none;" transform="translate(50,103)"><g transform="translate(-31,-7)" style="user-select: none;"><text x="0" y="14.015625" dy="-3.784"><tspan>100</tspan></text></g></g><g fill="#000000" transform="translate(50,288.4)" display="none"><g transform="translate(-28,-7)" style="user-select: none;"><text x="0" y="14.015625" dy="-3.784"><tspan>-40</tspan></text></g></g><g fill="#000000" transform="translate(50,247.2)" display="none"><g transform="translate(-28,-7)" style="user-select: none;"><text x="0" y="14.015625" dy="-3.784"><tspan>-20</tspan></text></g></g><g fill="#000000" transform="translate(50,206)"><g transform="translate(-18,-7)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>0</tspan></text></g></g><g fill="#000000" transform="translate(50,164.8)"><g transform="translate(-25,-7)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>20</tspan></text></g></g><g fill="#000000" transform="translate(50,123.6)"><g transform="translate(-25,-7)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>40</tspan></text></g></g><g fill="#000000" transform="translate(50,82.4)"><g transform="translate(-25,-7)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>60</tspan></text></g></g><g fill="#000000" transform="translate(50,41.2)"><g transform="translate(-25,-7)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>80</tspan></text></g></g><g fill="#000000" transform="translate(50,0)"><g transform="translate(-31,-7)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>100</tspan></text></g></g><g fill="#000000" transform="translate(50,-41.2)" display="none"><g transform="translate(-31,-7)" style="user-select: none;"><text x="0" y="14.015625" dy="-3.784"><tspan>120</tspan></text></g></g></g></g><g stroke="#000000" stroke-opacity="0" fill="none" style="pointer-events: none;" transform="translate(50,0)"><path d=" M0,0  L0,206 " transform="translate(-0.5,-0.5)"></path></g></g></g></g></g><g transform="translate(647,0)"><g></g></g></g></g><g><g transform="translate(50,0)"></g></g><g transform="translate(0,206)"><g transform="translate(50,0)"><g aria-hidden="true"><g><g stroke="#000000" stroke-opacity="0" fill="none" style="pointer-events: none;"><path d=" M0,0  L597,0 " transform="translate(-0.5,-0.5)"></path></g><g><g><g fill="#000000" aria-label="L" fill-opacity="0" opacity="0" stroke-opacity="0" style="pointer-events: none;" transform="translate(298.5,0)"><g transform="translate(-4,10)" style="user-select: none;"><text x="0" y="14.015625" dy="-3.784"><tspan>L</tspan></text></g></g><g fill="#000000" transform="translate(537.3,0)"><g transform="translate(-17,10)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>Jan 20</tspan></text></g></g><g fill="#000000" transform="translate(417.9,0)"><g transform="translate(-17,10)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>Feb 20</tspan></text></g></g><g fill="#000000" transform="translate(298.5,0)"><g transform="translate(-17,10)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>Mar 20</tspan></text></g></g><g fill="#000000" transform="translate(179.1,0)"><g transform="translate(-18,10)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>May 20</tspan></text></g></g><g fill="#000000" transform="translate(59.7,0)"><g transform="translate(-17,10)" style="user-select: none;"><text x="0" y="14" dy="-3.78"><tspan>Jun 20</tspan></text></g></g><g fill="#000000" display="none" transform="translate(-59.7,0)"><g transform="translate(0,10)" display="none"></g></g></g></g><g stroke="#000000" stroke-opacity="0.15" fill="none" display="none" transform="translate(0,-206)"><path transform="translate(-0.5,-0.5)" d=" M0,0  L0,206 "></path></g><g fill="#000000" transform="translate(298.5,34)"><g display="none"></g></g></g></g></g></g></g></g></g></g></g></g><g><g><g role="tooltip" visibility="hidden" opacity="0"><g fill="#ffffff" fill-opacity="0.9" stroke-width="1" stroke-opacity="1" stroke="#ffffff" filter="url(&quot;#filter-id-51&quot;)" style="pointer-events: none;" transform="translate(0,6)"><path d="M3,0 L3,0 L0,-6 L13,0 L21,0 a3,3 0 0 1 3,3 L24,8 a3,3 0 0 1 -3,3 L3,11 a3,3 0 0 1 -3,-3 L0,3 a3,3 0 0 1 3,-3"></path></g><g><g fill="#ffffff" style="pointer-events: none;" transform="translate(12,6)"><g transform="translate(0,7)" display="none"></g></g></g></g><g visibility="hidden" display="none" style="pointer-events: none;"><g fill="#ffffff" opacity="1"><rect width="677" height="300"></rect></g><g><g transform="translate(325.5,150)"><g><g stroke-opacity="1" fill="#f3f3f3" fill-opacity="0.8"><g><g><path d=" M53,0  a53,53,0,0,1,-106,0 a53,53,0,0,1,106,0 M42,0  a42,42,0,0,0,-84,0 a42,42,0,0,0,84,0 L42,0 "></path></g></g></g><g stroke-opacity="1" fill="#000000" fill-opacity="0.2"><g><g><path d=" M50,0  a50,50,0,0,1,-100,0 a50,50,0,0,1,100,0 M45,0  a45,45,0,0,0,-90,0 a45,45,0,0,0,90,0 L45,0 "></path></g></g></g><g fill="#000000" fill-opacity="0.4"><g transform="translate(-15,-7)" style="user-select: none;"><text x="15px" y="14" dy="-3.78" text-anchor="middle"><tspan>100%</tspan></text></g></g></g></g></g></g><g opacity="0.4" aria-labelledby="id-66-title" style="cursor: pointer;" transform="translate(0,279)" filter="url(&quot;#filter-id-66&quot;)"><g fill="#ffffff" opacity="0"><rect width="66" height="21"></rect></g><g><g shape-rendering="auto" fill="none" stroke-opacity="1" stroke-width="1.7999999999999998" stroke="#3cabff"><path d=" M15,15  C17.4001,15 22.7998,15.0001 27,15 C31.2002,14.9999 33.2999,6 36,6 C38.7001,6 38.6999,10.5 40.5,10.5 C42.3001,10.5 42.2999,6 45,6 C47.7001,6 50.9999,14.9999 54,15 C57.0002,15.0001 58.7999,15 60,15"></path></g><g shape-rendering="auto" fill="none" stroke-opacity="1" stroke-width="1.7999999999999998" stroke="url(&quot;#gradient-id-69&quot;)"><path d=" M6,15  C8.2501,15 9.7498,15.0001 15,15 C20.2502,14.9999 20.7748,3.6 27,3.6 C33.2252,3.6 33.8998,14.9999 39.9,15 C45.9002,15.0001 45.9748,15 51,15 C56.0252,15 57.7499,15 60,15"></path></g></g><title id="id-66-title">Chart created using amCharts library</title></g><g role="tooltip" visibility="hidden" opacity="0"><g fill="#000000" fill-opacity="1" stroke-width="1" stroke-opacity="1" stroke="#000000" style="pointer-events: none;" transform="translate(65,251)"><path d="M0,0 L20,0 a0,0 0 0 1 0,0 L20,10 a0,0 0 0 1 -0,0 L0,10 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0"></path></g><g><g fill="#ffffff" style="pointer-events: none;" transform="translate(75,251)"><g transform="translate(0,5)" display="none"></g></g></g></g><g role="tooltip" visibility="hidden" opacity="0"><g fill="#000000" fill-opacity="1" stroke-width="1" stroke-opacity="1" stroke="#000000" style="pointer-events: none;" transform="translate(-25,45)"><path d="M0,0 L20,0 a0,0 0 0 1 0,0 L20,0 L20,0 L25,0 L20,10 L20,10 a0,0 0 0 1 -0,0 L0,10 a0,0 0 0 1 -0,-0 L0,0 a0,0 0 0 1 0,-0"></path></g><g><g fill="#ffffff" style="pointer-events: none;" transform="translate(-15,45)"><g transform="translate(0,5)" display="none"></g></g></g></g><g role="tooltip" visibility="hidden" opacity="0"><g fill="#ffffff" fill-opacity="0.9" stroke-width="1" stroke-opacity="1" stroke="#ffffff" filter="url(&quot;#filter-id-149&quot;)" style="pointer-events: none;" transform="translate(0,6)"><path d="M3,0 L3,0 L0,-6 L13,0 L21,0 a3,3 0 0 1 3,3 L24,8 a3,3 0 0 1 -3,3 L3,11 a3,3 0 0 1 -3,-3 L0,3 a3,3 0 0 1 3,-3"></path></g><g><g fill="#ffffff" style="pointer-events: none;" transform="translate(12,6)"><g transform="translate(0,7)" display="none"></g></g></g></g><g role="tooltip" visibility="hidden" opacity="0"><g fill="#ffffff" fill-opacity="0.9" stroke-width="1" stroke-opacity="1" stroke="#ffffff" filter="url(&quot;#filter-id-170&quot;)" style="pointer-events: none;" transform="translate(0,6)"><path d="M3,0 L3,0 L0,-6 L13,0 L21,0 a3,3 0 0 1 3,3 L24,8 a3,3 0 0 1 -3,3 L3,11 a3,3 0 0 1 -3,-3 L0,3 a3,3 0 0 1 3,-3"></path></g><g><g fill="#ffffff" style="pointer-events: none;" transform="translate(12,6)"><g transform="translate(0,7)" display="none"></g></g></g></g></g></g></g></g></svg></div></div>
+
+                          <script>
+                              am4core.ready(function() {
+
+                                  // Themes begin
+                                  am4core.useTheme(am4themes_animated);
+                                  // Themes end
+
+                                  var chart = am4core.create("ssssss", am4charts.XYChart);
+                                  chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                                  chart.data = [{
+                                      category: "Jan 20",
+                                      value1: 2,
+                                      value2: 5,
+
+
+                                  }, {
+                                      category: "Feb 20",
+                                      value1: 3,
+                                      value2: 5,
+
+                                  }, {
+                                      category: "Mar 20",
+                                      value1: 4,
+                                      value2: 5,
+
+                                  }, {
+                                      category: "May 20",
+                                      value1: 3,
+                                      value2: 5,
+
+                                  }, {
+                                      category: "Jun 20",
+                                      value1: 2,
+                                      value2: 13,
+
+                                  }];
+
+                                  chart.colors.step = 5;
+
+                                  // Add legend
+                                  chart.legend = new am4charts.Legend();
+                                  chart.legend.useDefaultMarker = false;
+                                  let markerTemplate = chart.legend.markers.template;
+                                  markerTemplate.width = 10;
+                                  markerTemplate.height = 10;
+                                  chart.legend.position = "top";
+                                  chart.legend.valueLabels.template.disabled = false;
+
+                                  var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                                  categoryAxis.dataFields.category = "category";
+
+
+                                  categoryAxis.renderer.inversed = true;
+                                  categoryAxis.renderer.grid.template.disabled = false;
+                                  categoryAxis.renderer.grid.template.opacity = 1;
+                                  categoryAxis.renderer.grid.template.location = 0;
+                                  categoryAxis.renderer.minGridDistance = 0;
+
+
+
+                                  var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                                  valueAxis.min = 0;
+                                  valueAxis.max = 100;
+                                  valueAxis.strictMinMax = true;
+                                  valueAxis.calculateTotals = true;
+                                  valueAxis.renderer.minWidth = 50;
+
+
+
+
+                                  var series1 = chart.series.push(new am4charts.ColumnSeries());
+                                  series1.columns.template.width = am4core.percent(80);
+                                  series1.columns.template.tooltipText =
+                                      "{name}: {valueY.totalPercent.formatNumber('#.0')}%";
+                                  series1.name = "Harsh Braking";
+                                  series1.dataFields.categoryX = "category";
+                                  series1.dataFields.valueY = "value1";
+                                  series1.dataFields.valueYShow = "totalPercent";
+                                  series1.dataItems.template.locations.categoryX = 0.5;
+                                  series1.stacked = false;
+                                  series1.tooltip.pointerOrientation = "vertical";
+
+                                  var bullet1 = series1.bullets.push(new am4charts.LabelBullet());
+                                  bullet1.interactionsEnabled = false;
+                                  bullet1.label.text = "{valueY.totalPercent.formatNumber('#.0')}%";
+                                  bullet1.label.fill = am4core.color("#ffffff");
+                                  bullet1.locationY = 0.5;
+
+                                  var series2 = chart.series.push(new am4charts.ColumnSeries());
+                                  series2.columns.template.width = am4core.percent(80);
+                                  series2.columns.template.tooltipText =
+                                      "{name}: {valueY.totalPercent.formatNumber('#.0')}%";
+                                  series2.name = "Over Speeding";
+                                  series2.dataFields.categoryX = "category";
+                                  series2.dataFields.valueY = "value2";
+                                  series2.dataFields.valueYShow = "totalPercent";
+                                  series2.dataItems.template.locations.categoryX = 0.5;
+                                  series2.stacked = false;
+                                  series2.tooltip.pointerOrientation = "vertical";
+
+                                  var bullet2 = series2.bullets.push(new am4charts.LabelBullet());
+                                  bullet2.interactionsEnabled = false;
+                                  bullet2.label.text = "{valueY.totalPercent.formatNumber('#.0')}%";
+                                  bullet2.locationY = 0.5;
+                                  bullet2.label.fill = am4core.color("#ffffff");
+
+
+
+                                  var bullet3 = series3.bullets.push(new am4charts.LabelBullet());
+                                  bullet3.interactionsEnabled = false;
+                                  bullet3.label.text = "{valueY.totalPercent.formatNumber('#.0')}%";
+                                  bullet3.locationY = 0.5;
+                                  bullet3.label.fill = am4core.color("#ffffff");
+
+
+
+                                  chart.scrollbarX = new am4core.Scrollbar();
+
+                              }); // end am4core.ready()
+                          </script>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+
+      </div>
+
+</div>

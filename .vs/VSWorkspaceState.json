@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\core",
+    "\\src\\app\\core\\services",
+    "\\src\\app\\platform",
+    "\\src\\app\\platform\\services\\common",
+    "\\src\\app\\platform\\shared\\dashboard-widget",
+    "\\src\\app\\platform\\violations",
+    "\\src\\app\\platform\\violations\\violations"
+  ],
+  "SelectedNode": "\\src\\app\\platform\\violations\\violations\\violations.component.ts",
+  "PreviewInSolutionExplorer": false
+}

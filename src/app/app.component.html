@@ -1,0 +1,17 @@
+<div class="login-bg" [hidden]="!loading">
+    <div>
+      <div style=" height:100%; " class="pic"></div>
+      <div class="spinner text-center">
+        <img src="assets/images/red-loader.gif" height="100px">
+      </div>
+      <h4 style="color:#000;text-align: center !important;">Loading..</h4>
+    </div>
+</div>
+
+<div [hidden]="loading">
+
+  <ngx-loading-bar color="#fff" [includeSpinner]="false" [includeBar]="true">
+  </ngx-loading-bar>
+
+      <router-outlet></router-outlet>
+</div>

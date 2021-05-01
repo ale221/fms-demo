@@ -1,0 +1,84 @@
+<app-reporting-buttons [selected]="'month'" [calendarDimension]="'col-sm-6'" [type]="'violation'" [timeRange]="true"
+  [hideBtn]="'today yesterday week month'" (btnClicked)="setupReport($event)"></app-reporting-buttons>
+
+<!-- <app-export-csv [fileName]="'Violations Report '" [dateGenerated]="false" [rows]="violations" [cols]="csvViolationCols"
+  *ngIf="violations?.length"></app-export-csv> -->
+
+<div style="display:flex">
+  <div class="col-md-6">
+    <div class="form-group">
+      <p-dropdown [options]="violationTypesDropDown" name="violation_type" [(ngModel)]="violation_type_id"
+        (onChange)="violationTypeChanged($event)" styleClass="prime-dropdown" placeholder="Select Violation Type">
+        <!-- [(ngModel)]="violation_type" -->
+      </p-dropdown>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-group">
+      <p-dropdown [options]="trucks_list" (onChange)="driverChanged($event)" styleClass="prime-dropdown" filter="true"
+        filterPlaceholder="Search" placeholder="Select Driver">
+      </p-dropdown>
+    </div>
+  </div>
+</div>
+
+<div class="col-lg-8 padding-0">
+  <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate"></p-progressBar>
+  <div class="table-responsive" style="border: 1px solid #ebebeb;">
+    <table matSort (matSortChange)="sortData($event)"
+      class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+      [dataSource]="violations" mat-elevation-z8>
+      <ng-container matColumnDef="device_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Reg #</th>
+        <td mat-cell *matCellDef="let row">{{ row.device_name || 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="violation_type_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+        <td mat-cell *matCellDef="let row">{{ row.violation_type_name || 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="speed">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed</th>
+        <td mat-cell *matCellDef="let row" [pTooltip]="row.speed > 0 ? '': 'The Vehicle is currently available in a low GPS coverage area hence the speed was not fetched.'">{{row.speed > 0 ? row.speed + " km/h" : "N/A" }}  </td>
+      </ng-container>
+      <!-- {{(row.speed | number: '1.0-0') || '0'}} km/h -->
+      <ng-container matColumnDef="threshold">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Speed Threshold</th>
+        <td mat-cell *matCellDef="let row">{{(row.threshold | number: '1.0-0') || '0'}} km/h</td>
+      </ng-container>
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+        <td mat-cell *matCellDef="let row">{{ row.location || 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="driver_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.driver_name || 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="zone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Geozone</th>
+        <td mat-cell *matCellDef="let row">{{ row.vehicle_out_territory ? 'Out of Zone' : row.vehicle_in_territory ? 'In
+          Zone' : 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="job_type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Job Type</th>
+        <td mat-cell *matCellDef="let row">{{(row.driver_name) ? 'On Job' : 'Off Job'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="created_time">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+        <td mat-cell *matCellDef="let row">{{ (row.created_at_unix * 1000 | date: 'mediumTime') || 'N/A' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="created_date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let row">{{ (row.created_at_unix * 1000 | date: 'mediumDate') || 'N/A' }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true" showFirstLastButtons
+      (page)="onPaginateChange($event)" [pageSize]="10"></mat-paginator>
+  </div>
+</div>
+
+
+  <div class="col-lg-4">
+    <app-google-map #violationMap [height]="'475px'"></app-google-map>
+  </div>

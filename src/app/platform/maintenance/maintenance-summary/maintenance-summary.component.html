@@ -1,0 +1,638 @@
+<app-breadcrumbs [items]="items" [home]="home" #scrollToTop></app-breadcrumbs>
+
+<div class="page-content   container-fluid  full-open-sidebar"   >
+
+    <!-- <div class="row">
+        <div [ngClass]="{'col-md-2': cardsArray.length === 3, 'col-md-3': cardsArray.length === 2, 'col-md-6': cardsArray.length === 1}"
+            *ngFor="let card of cardsArray; let i = index" [attr.data-index]="i">
+            <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+                [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+                [footerStyle]="card.footer_color">
+            </app-stats-icon-card>
+        </div>
+
+        <div class="col-lg-6 col-sm-12 col-xs-12 col-md-12">
+            <div
+                class="flex-card flex-action-widget padding-15 bg-blue-800 text-center relative shadow white margin-bottom-30">
+                <app-dashboard-widget [widgetData]="widgetData" (selectedWidget)="getSelectedWidgetOption($event)">
+                </app-dashboard-widget>
+            </div>
+        </div>
+    </div> -->
+
+
+    <!-- <div class="row" *ngIf="graphsArray && graphsArray?.length > 0">
+        <div *ngFor="let graph of graphsArray; let i = index" [className]="graphColumns[i]">
+            <div style="height: 340px;" class="panel panel-default card light shadow margin-bottom-30">
+                <div class="panel-heading">
+                    <h3 class="panel-title font-weight-600" [ngStyle]="theme">
+                        {{graph.is_selected ? graph.name : 'Select Graph Here'}}</h3>
+                </div>
+                <div class="panel-body small-ui-dropdown">
+                    <div class="chartbox" *ngIf="graph.type === 1 && graph.is_selected">
+                        <app-stacked-bar-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                            [horizontal]="true" [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                            [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id"
+                            (selectedFilters)="getSelectedGraphData($event)"></app-stacked-bar-chart>
+                    </div>
+                    <div class="chartbox" *ngIf="graph.type === 14 && graph.is_selected">
+                        <app-radial-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                            [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id" [graphType]="graph.type"
+                            [graphUseCaseId]="graph.use_case_id" (selectedFilters)="getSelectedGraphData($event)">
+                        </app-radial-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="padding-0 round card light " style="min-height: 200px;">
+                <div class="panel-heading font-weight-600 margin-bottom-0">
+
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Summary">
+                            <div class=" margin-bottom-0 ">
+                                <div class="panel-body padding-15 ">
+                                    <div class="row">
+
+                                        <div class="col-lg-4 card-group-row__col ">
+                                            <div class="panel panel-default round  ">
+                                                <!-- <app-filters activePage="maintenance" [resetFilters]="resetFilters"></app-filters> -->
+
+                                                <div class="panel-heading margin-bottom-0">
+                                                    <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Choose
+                                                        Parameters</h3>
+                                                    <div class="panel-actions">
+                                                        <a></a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-10"
+                                                    style="padding:0px; margin-top: 10px; margin-bottom: 15px;margin-left: 25px;;">
+                                                    <!-- <button type="button" *ngIf="add_btn == 0" class="btn btn-lg btn-primary btn-block btncolor" (click)="clearForm()"
+                                                      data-target="#editpop1" data-toggle="modal" style="font-size: 14px;border-radius: 20px;">
+                                                      <i class="ri-add-circle-fill"></i> New Driver
+
+                                                    </button> -->
+                                                    <!-- <button type="button"
+                                                        class="btn btn-lg btn-primary btn-block btncolor"
+                                                        (click)="clearForm()" data-target="#editpop1"
+                                                        data-toggle="modal"
+                                                        style="font-size: 14px;border-radius: 20px;">
+                                                        <i class="ri-add-circle-fill"></i> New Driver Group
+
+                                                    </button> -->
+                                                </div>
+
+                                                <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+                                                    <form [formGroup]="searchForm"
+                                                        (ngSubmit)="onSearch(searchForm.value)">
+
+                                                        <!-- <div class="form-group">
+                                                        <h5 class=" font-weight-600 ">Search</h5>
+                                                        <div class="panel-actions">
+                                                          <a class="panel-action "></a>
+                                                        </div>
+                                                        <input type="text" class="form-control input-sm" formControlName="search"
+                                                          (keyup)='keyUp.next($event)' placeholder="Search by Name" style="height: 36px;">
+                                                      </div> -->
+                                                        <div class="form-group margin-bottom-10">
+                                                            <fieldset class="form-fieldset">
+                                                                <legend>Filter</legend>
+
+                                                                <div class="form-group margin-bottom-10">
+                                                                    <p-dropdown [options]="vehicleListingGroup"
+                                                                        formControlName="vehicleGroup"
+                                                                        name="vehicleGroup"
+                                                                        (onChange)="selectGroupDropDownChange($event)"
+                                                                        styleClass="prime-dropdown"
+                                                                        placeholder="Select Vehicle Group">
+                                                                    </p-dropdown>
+                                                                </div>
+                                                                <!-- <div class="form-group margin-bottom-10">
+                                                                    <p-dropdown [options]="vehicleListing"
+                                                                        formControlName="selectedVehicle"
+                                                                        name="selectedVehicle"
+                                                                        (onChange)="selectVehicleDropDownChange($event)"
+                                                                        styleClass="prime-dropdown"
+                                                                        placeholder="Select Vehicle">
+                                                                    </p-dropdown>
+                                                                </div> -->
+                                                                <!-- <div class="form-group margin-bottom-10">
+                                                                    <p-dropdown [options]="serviceTypeList"
+                                                                        formControlName="serviceType" name="serviceType"
+                                                                        (onChange)="selectServiceTypeDropDownChange($event)"
+                                                                        styleClass="prime-dropdown"
+                                                                        placeholder="Select Service Type">
+                                                                    </p-dropdown>
+                                                                </div> -->
+
+                                                            </fieldset>
+                                                        </div>
+                                                        <!-- 2nd -->
+                                                        <div class="form-group margin-bottom-10">
+                                                            <fieldset class="form-fieldset">
+                                                                <legend>Time Interval</legend>
+                                                                <div class="form-group margin-bottom-10">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="radio-custom checkbox-inline1 radio-warning">
+                                                                                <input type="radio" id="444"
+                                                                                    name="radio">
+                                                                                <label for="444">Current Day</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="radio-custom checkbox-inline1 radio-warning">
+                                                                                <input type="radio" id="555"
+                                                                                    name="radio">
+                                                                                <label for="555">Previous Week </label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="radio-custom checkbox-inline1 radio-warning">
+                                                                                <input type="radio" id="666"
+                                                                                    name="radio">
+                                                                                <label for="666">Previous Month </label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-12">
+                                                                            <div
+                                                                                class="radio-custom checkbox-inline1 radio-warning">
+                                                                                <input type="radio" id="666r"
+                                                                                    name="radio" checked="">
+                                                                                <label for="666r">Select a Period
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+
+                                                                <div class="form-group margin-bottom-0">
+                                                                    <p-calendar id="jobsummarycalendar"
+                                                                        name="dateOfBirth" placeholder="MM/DD/YYYY"
+                                                                        styleClass="prime-datetime"
+                                                                        formControlName="date">
+                                                                    </p-calendar>
+                                                                </div>
+                                                            </fieldset>
+
+                                                        </div>
+
+
+                                                        <!-- <div class="form-group">
+                                                        <p-dropdown [options]="statusLists" formControlName="searchStatus" name="selectedGroup"
+                                                          (onChange)="searchStatusDropDownChange($event)" styleClass="prime-dropdown"
+                                                          placeholder="Select status">
+                                                        </p-dropdown>
+                                                      </div> -->
+                                                        <hr>
+                                                        <!-- Download Buttons start-->
+                                                        <div class="form-group margin-bottom-0">
+                                                            <label class="font-size-14 font-weight-600 ">Export:</label>
+                                                            <div class="btn-group btn-group-justified">
+                                                                <div class="btn-group" role="group">
+                                                                    <a [href]="downloadableLink">
+                                                                        <button type="button"
+                                                                            class="btn btn-outline btn-default"> <img
+                                                                                src="../../../assets/images/icon-xls.png"
+                                                                                height="50">
+                                                                            <div class="font-size-12">
+                                                                                <a [href]="downloadableLink"
+                                                                                    class="enabled">
+                                                                                    Download XLS </a>
+                                                                            </div>
+                                                                        </button>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="btn-group" role="group">
+                                                                    <a [href]="downloadableLink1">
+                                                                        <button type="button"
+                                                                            class="btn btn-outline btn-default"> <img
+                                                                                src="../../../assets/images/icon-pdf.png"
+                                                                                height="50">
+                                                                            <div class="font-size-12">Download PDF</div>
+                                                                        </button>
+                                                                    </a>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- Download Buttons ends-->
+
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-8">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="page-main">
+                                                        <div class="">
+                                                            <!-- <div class="row margin-bottom-20">
+                                                                <app-reporting-buttons [calendarDimension]="'col-sm-9'" [selected]="'month'" [type]="'trail'" [timeRange]="true"
+                                                                    [hideBtn]="'today yesterday week month'" (btnClicked)="setupReport($event)"></app-reporting-buttons>
+                                                            </div> -->
+
+                                                            <div class="row">
+
+                                                                <div class="col-lg-12">
+                                                                    <div class="panel panel-default  padding-0  card  light"
+                                                                        style="min-height: 200px; color: aliceblue;">
+
+                                                                        <div class="panel-heading margin-bottom-0">
+                                                                            <h3
+                                                                                class="panel-title font-weight-600 bg-theme1 white1 ">
+                                                                                Maintenace
+                                                                                <a data-toggle="popover"
+                                                                                    class="  font-weight-200 margin-left-10 grey-400"
+                                                                                    data-original-title=""
+                                                                                    data-trigger="hover"
+                                                                                    data-container="body"
+                                                                                    data-placement="top"
+                                                                                    data-html="true" href="#"
+                                                                                    id="help1">
+                                                                                    <!-- <i class="ri-information-line"></i> -->
+                                                                                </a>
+                                                                            </h3>
+                                                                            <div id="popover-content-help1"
+                                                                                class="hide">
+                                                                                Some help information goes here
+                                                                            </div>
+
+
+
+                                                                            <div class="panel-actions">
+                                                                                <a></a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- <div class="filters  margin-top-10 padding-bottom-10 margin-left-20"
+                                                                            style="border-bottom: 1px solid #eee;">
+                                                                            <div class="inline-block  ">
+                                                                                <select class="form-control input-xs">
+                                                                                    <option>Today</option>
+                                                                                    <option>Week</option>
+                                                                                    <option>Month</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div> -->
+
+                                                                        <div class="input-search"
+                                                                            style="max-width: 30%;margin-bottom: 15px; margin-top: 13px;margin-left: 20px;">
+                                                                            <i
+                                                                                class="input-search-icon ri-search-line"></i>
+                                                                            <input type="text" class="form-control"
+                                                                                name="" placeholder="Search..."
+                                                                                (keyup)='keyUp.next($event)'>
+                                                                            <button type="button"
+                                                                                class="input-search-close icon "
+                                                                                data-toggle="popover"
+                                                                                data-original-title=""
+                                                                                data-trigger="hover"
+                                                                                data-container="body"
+                                                                                data-placement="top" data-html="true"
+                                                                                id="help2">
+                                                                                <!-- <i class="ri-information-line"></i> -->
+                                                                            </button>
+                                                                            <div id="popover-content-help2"
+                                                                                class="hide">
+                                                                                Some help information goes here
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <p-progressBar
+                                                                            *ngIf="showIndeterminateProgress"
+                                                                            [style]="{'height': '3px'}"
+                                                                            mode="indeterminate"></p-progressBar>
+                                                                        <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                                                                            <table matSort
+                                                                                (matSortChange)="sortData($event)"
+                                                                                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                                                mat-table [dataSource]="dataSource"
+                                                                                mat-elevation-z8>
+                                                                                <ng-container
+                                                                                    matColumnDef="device_name">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>ID</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        <div
+                                                                                            style="width: 120px; float: left">
+                                                                                            <div class="media-body pointer"
+                                                                                                [routerLink]="gotoService.gotoTruck(row.device)"
+                                                                                                [queryParams]="{usecase: useCaseId}">
+                                                                                                <a
+                                                                                                    class="font-weight-600">{{
+                                                                                                    row.device_name ||
+                                                                                                    'N/A' }}</a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="status_label">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>VEHICLE</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        <span class="label"
+                                                                                            [ngClass]="(row.status_label) ? 'badge-success': 'badge-danger'">{{
+                                                                                            row.status_label || 'N/A'
+                                                                                            }}</span>
+                                                                                    </td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="asset_entity_type">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>DRIVER</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ row.asset_entity_type ||
+                                                                                        'N/A' }}</td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="driver_name">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>TECHNICIAN</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ (row.driver_name) || 'N/A' }}
+                                                                                    </td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="technician_name">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>Technician</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ row.technician_name || 'N/A'
+                                                                                        }}</td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="client_name">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>Client</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ row.client_name || 'N/A' }}
+                                                                                    </td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="contract_name">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>Contract</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ row.contract_name || 'N/A' }}
+                                                                                    </td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="start_datetime">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>Start Date</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ (row.start_datetime * 1000 |
+                                                                                        date: 'M/d/yy, h:mm:ss a') ||
+                                                                                        'N/A' }}</td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="end_datetime">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>End Date</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ (row.end_datetime * 1000 |
+                                                                                        date: 'M/d/yy, h:mm:ss a') ||
+                                                                                        'N/A' }}</td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="issued_datetime">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>Issued Date</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ (row.issued_datetime * 1000 |
+                                                                                        date: 'M/d/yy, h:mm:ss a') ||
+                                                                                        'N/A' }}</td>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    matColumnDef="maintenance_type_name">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>Maintenance Type
+                                                                                    </th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        {{ row.maintenance_type_name ||
+                                                                                        'N/A' }}</td>
+                                                                                </ng-container>
+                                                                                <ng-container matColumnDef="action">
+                                                                                    <th mat-header-cell
+                                                                                        *matHeaderCellDef
+                                                                                        mat-sort-header>Actions</th>
+                                                                                    <td mat-cell *matCellDef="let row">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-icon btn-outline btn-round btn-default btn-xs"
+                                                                                            [hidden]="disableButton(row)"
+                                                                                            data-target="#editpop2"
+                                                                                            data-toggle="modal"
+                                                                                            pTooltip="Edit"
+                                                                                            (click)="editMaintenance(row)">
+                                                                                            <i
+                                                                                                class="icon ion-edit"></i>
+                                                                                        </button>
+                                                                                        <button type="button"
+                                                                                            class="btn btn-icon btn-outline btn-round btn-default btn-xs"
+                                                                                            pTooltip="View Detail"
+                                                                                            [routerLink]="gotoService.gotoMaintenaces(row.id)">
+                                                                                            <i
+                                                                                                class="icon ion-ios-eye"></i>
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </ng-container>
+                                                                                <tr mat-header-row
+                                                                                    *matHeaderRowDef="displayedColumns">
+                                                                                </tr>
+                                                                                <tr mat-row
+                                                                                    *matRowDef="let row; columns: displayedColumns;">
+                                                                                </tr>
+                                                                            </table>
+                                                                            <mat-paginator translate="no" #paginator
+                                                                                [length]="totalLength"
+                                                                                [hidePageSize]="true"
+                                                                                showFirstLastButtons [pageSize]="10"
+                                                                                (page)="onPaginateChange($event)">
+                                                                            </mat-paginator>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- popup ist start-->
+    <div #formModal class="modal fade  modal-success text-left" id="editpop1" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg1">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title">Add New Maintenace </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <form novalidate [formGroup]="maintainForm" id="maintainFormID"
+                            (ngSubmit)="onSubmitMaintainance(maintainForm.value)">
+                            <div class="col-lg-12">
+                                <div class="form-group margin-bottom-10">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" value="" placeholder="Name">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group margin-bottom-10">
+                                    <label>Service Type </label>
+                                    <div class="form-group margin-bottom-10">
+                                        <p-dropdown [options]="serviceTypeList" formControlName="serviceTypeControl"
+                                            name="serviceType" (onChange)="selectServiceTypeDropDownChange($event)"
+                                            styleClass="prime-dropdown" placeholder="Select Service Type">
+                                        </p-dropdown>
+                                    </div>
+                                    <!-- <div class="btn-group bootstrap-select form-control"><button type="button" class="btn dropdown-toggle bs-placeholder btn-select" data-toggle="dropdown" role="button" title="Select Type"><span class="filter-option pull-left">Select Type </span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu open" role="combobox"><ul class="dropdown-menu inner" role="listbox"><li data-original-index="1"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Type</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="2"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Type</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li></ul></div><select class="form-control selectpicker" title="Select Type " data-size="5" data-style="btn-select" tabindex="-98"><option class="bs-title-option" value="">Select Type </option>
+                                <option>Type</option>
+                                <option>Type</option>
+                            </select></div> -->
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group margin-bottom-10"> <label>Vehicle
+                                        Group</label>
+                                    <div class="form-group margin-bottom-10">
+                                        <!-- <p-dropdown [options]="driverGroup" formControlName="selectGroup" name="selectedGroup"
+                                    (onChange)="selectGroupDropDownChange($event)" styleClass="prime-dropdown"
+                                    placeholder="Select group">
+                                  </p-dropdown> -->
+                                        <p-dropdown [options]="vehicleListingGroup"
+                                            formControlName="vehicleGroupControl" name="vehicleGroup"
+                                            (onChange)="selectGroupDropDownChange($event)" styleClass="prime-dropdown"
+                                            placeholder="Select Vehicle Group">
+                                        </p-dropdown>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group margin-bottom-10"> <label>Vehicle</label>
+                                    <div class="form-group margin-bottom-10">
+                                        <p-dropdown [options]="vehicleListing" formControlName="selectedVehicleControl"
+                                            name="selectedVehicle" (onChange)="selectVehicleDropDownChange($event)"
+                                            styleClass="prime-dropdown" placeholder="Select Vehicle">
+                                        </p-dropdown>
+                                    </div>
+                                    <!-- <div class="btn-group bootstrap-select show-tick form-control"><button type="button" class="btn dropdown-toggle bs-placeholder btn-select" data-toggle="dropdown" role="button" title="Select Vehicle"><span class="filter-option pull-left">Select Vehicle</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu open" role="combobox"><div class="bs-searchbox"><input type="text" class="form-control" autocomplete="off" role="textbox" aria-label="Search"></div><ul class="dropdown-menu inner" role="listbox"><li data-original-index="0"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Vehicle1</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="1"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Vehicle2</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="2"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Vehicle3</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="3"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Vehicle4</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="4"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Vehicle5</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="5"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Vehicle6</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="6"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Vehicle7</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li></ul></div><select class="form-control selectpicker" title="Select Vehicle" data-size="5" data-style="btn-select" multiple="" data-live-search="true" tabindex="-98">
+                                <option>Vehicle1</option>
+                                <option>Vehicle2</option>
+                                <option>Vehicle3</option>
+                                <option>Vehicle4</option>
+                                <option>Vehicle5</option>
+                                <option>Vehicle6</option>
+                                <option>Vehicle7</option>
+                            </select></div> -->
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group margin-bottom-10">
+                                    <label>Technician </label>
+                                    <div class="form-group margin-bottom-10">
+                                        <p-dropdown [options]="technicianLisitng"
+                                            formControlName="technicianLisitngControl" name="technicianLisitngControl"
+                                            (onChange)="selectTechnicianDownChange($event)" styleClass="prime-dropdown"
+                                            placeholder="Select group">
+                                        </p-dropdown>
+                                    </div>
+                                    <!-- <div class="btn-group bootstrap-select form-control"><button type="button" class="btn dropdown-toggle bs-placeholder btn-select" data-toggle="dropdown" role="button" title="Select Technician"><span class="filter-option pull-left">Select Technician </span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button><div class="dropdown-menu open" role="combobox"><ul class="dropdown-menu inner" role="listbox"><li data-original-index="1"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Technician</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li><li data-original-index="2"><a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="false"><span class="text">Technician</span><span class="glyphicon glyphicon-ok check-mark"></span></a></li></ul></div><select class="form-control selectpicker" title="Select Technician " data-size="5" data-style="btn-select" tabindex="-98"><option class="bs-title-option" value="">Select Technician </option>
+                                <option>Technician</option>
+                                <option>Technician</option>
+                            </select></div> -->
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="col-lg-12">
+                                <div class="form-group margin-bottom-10">
+                                    <label>Description</label>
+                                    <textarea class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group margin-bottom-10">
+                                    <label>Next Maintenace Date</label>
+                                    <input type="date" class="form-control" value="" placeholder="Name">
+                                </div>
+
+
+
+
+                            </div>
+
+                            <div class="col-lg-6" style="margin-top: 30px;">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        Auto Reminder
+                                    </div>
+                                    <div class="col-sm-6" style="opacity: 30%;">
+                                        <div class="   ">
+                                            <div class="onoffswitch ">
+                                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                                                    id="myonoffswitch1" checked="">
+                                                <label class="onoffswitch-label" for="myonoffswitch1">
+                                                    <span class="onoffswitch-inner"></span>
+                                                    <span class="onoffswitch-switch"></span>
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+
+
+                    <hr>
+                    <div class="form-group margin-bottom-10 text-center">
+                        <a href="" class="btn btn-success btn-round "> <i class="ri-check-fill"></i> Save</a>
+                        <a href=" " class="btn btn-default btn-round "> <i class="ri-refresh-line "></i> Clear
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- popup ends -->

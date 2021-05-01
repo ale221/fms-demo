@@ -1,0 +1,145 @@
+<div class="margin-bottom-10  row">
+  <app-reporting-buttons [selected]="'month'"
+                         [type]="'shifts'"
+                         (btnClicked)="setupReport($event)"
+                         [showGenerateReport]="false"
+                         (generate)="generatePDFReport('shifts')">
+  </app-reporting-buttons>
+  <app-export-csv
+    [fileName]="entity.name + ' Shifts Report ' + shiftsDateRange[0] + ' to ' + shiftsDateRange[1] "
+    [rows]="shifts"
+    [cols]="csvShiftsCols"
+    *ngIf="shifts.length"></app-export-csv>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class=" padding-right-10" style="min-height:250px">
+      <p-progressBar *ngIf="shiftLoader.visibility" [style]="{'height': '5px'}"
+                     mode="indeterminate"></p-progressBar>
+
+      <ngx-datatable
+        #shiftTable
+        class="material"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="10"
+        [rows]='shifts'>
+
+        <!-- Row Detail Template -->
+        <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <div class="bg-cyan-100 padding-10  ">
+              <div class="">
+                <div class="">
+                  <div class="">
+                    <table class="table  table-condensed margin-bottom-0 bg-white">
+                      <thead>
+                      <tr>
+                        <th *ngFor="let col of (row.collections | getKeys)"
+                            class="text-center">{{col}}</th>
+                        <th class="text-center">Waste Collected (kg)</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td class="text-center" *ngFor="let col of (row.collections | getKeys)">
+                          {{row.collections[col] || '-'}}
+                        </td>
+                        <td class="text-center">
+                          {{row.waste_collected | getNullOrUndefined}}
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-row-detail>
+
+        <!-- ID required for  patch call-->
+        <ngx-datatable-column *ngIf="isEntityTruck" name="Staff" prop="driver"></ngx-datatable-column>
+        <ngx-datatable-column *ngIf="isEntityTruck" name="Role" prop="driver_type"></ngx-datatable-column>
+        <ngx-datatable-column  *ngIf="!isEntityTruck" name="Truck" prop="truck"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Shift Start" prop="shift_start_time">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value | date: 'medium'}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Shift End" prop="shift_end_time">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value | date: 'medium'}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Shift Duration">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div>
+              {{row.shift_duration || '-'}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="distance_travelled">
+          <ng-template let-column="column" ngx-datatable-header-template>
+            <span>Distance Travelled <br/> (km) </span>
+          </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value | getNullOrUndefined}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Volume Consumed (gal)" prop="volume_consumed">
+          <ng-template let-column="column" ngx-datatable-header-template>
+            <span>Volume Consumed <br/> (gal) </span>
+          </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{(value | number: '1.0-2') | getNullOrUndefined}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Fuel Avg (km/gal)" prop="fuel_avg">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{(value | number: '1.0-2') | getNullOrUndefined}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column prop="trips_completed">
+          <ng-template let-column="column" ngx-datatable-header-template>
+            <span>Trips <br/> Completed </span>
+          </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value | getNullOrUndefined}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <!-- <ngx-datatable-column
+          [width]="50"
+          [resizeable]="false"
+          [sortable]="false"
+          [draggable]="false"
+          [canAutoResize]="false">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+            <button type="button" (click)="toggleExpandRow(row)"
+                    class="btn btn-icon btn-outline btn-round btn-default btn-xs margin-bottom-0"
+                    pTooltip="View Details"><i class="icon ion-information"></i>
+            </button>
+          </ng-template>
+        </ngx-datatable-column> -->
+
+      </ngx-datatable>
+    </div>
+  </div>
+
+
+</div>

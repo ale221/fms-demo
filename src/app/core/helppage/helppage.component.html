@@ -1,0 +1,52 @@
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "  >
+
+    <div class="helppage-mainDiv-child">
+        <div class="helppage-leftSection">
+            <h4>Service Center</h4>
+            <p class="paragraphWidth">
+                Customer service is the direct one-on-one interaction between a consumer making a purchase and a representative of the company that is selling it. Most retailers see this direct interaction as a critical factor in ensuring buyer satisfaction and encouraging repeat business. Customer service is the direct one-on-one interaction between a consumer making a purchase and a representative of the company that is selling it. Most retailers see this direct interaction as a critical factor in ensuring buyer satisfaction and encouraging repeat business.
+            </p>
+            <br>
+            <p class="paragraphWidth">
+                Customer service is the direct one-on-one interaction between a consumer making a purchase and a representative of the company that is selling it. Most retailers see this direct interaction as a critical factor in ensuring buyer satisfaction and encouraging repeat business. Customer service is the direct one-on-one interaction between a consumer making a purchase and a representative of the company that is selling it. Most retailers see this direct interaction as a critical factor in ensuring buyer satisfaction and encouraging repeat business.
+            </p>
+
+            <div class="border-btm"></div>
+
+            <div class="helppage-leftSection_footer">
+                <div class="col-lg-3" style="padding-left:0px;">
+                    <div class="form-group margin-bottom-10">
+                        <a class="btn btn-success btn-round footer-btn-override"> Sample Button </a>
+                    </div>
+                </div>
+                <div class="col-lg-3" style="padding-left:0px;">
+                    <div class="form-group margin-bottom-10">
+                        <a class="btn btn-success btn-round footer-btn-override"> Sample Button </a>
+                    </div>
+                </div>
+                <div class="col-lg-3" style="padding-left:0px;">
+                    <div class="form-group margin-bottom-10">
+                        <a class="btn btn-success btn-round footer-btn-override"> Sample Button </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="helppage-rightSection">
+            <div class="panel panel-default round  helppage-rightSection_fchild">
+                <div class="panel-body padding-15">
+
+                  <div class="map-wrapper" style="position:relative">
+                    <div #gmap style="width:100%;" [ngStyle]="{'height':'590px'}"></div>
+                    <app-spin-loading [appLoader]="mapLoader"></app-spin-loading>
+                  </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

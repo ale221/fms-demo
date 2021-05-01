@@ -1,0 +1,288 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div #scrollToTop></div>
+<app-default-loader [defaultLoader]="defaultLoader"></app-default-loader>
+<div [hidden]="!isAuthorized">
+
+  <div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' ">
+    <ol class="breadcrumb breadcrumb-arrow ">
+      <li><a class="icon ion-ios-home" href="javascript:void(0)"> Dashboard </a> </li>
+    </ol>
+  </div>
+
+  <div
+    [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' ">
+    <div class="row margin-bottom-30" *ngIf="!multiRows && cardsArray.length === 5">
+      <div *ngFor="let card of cardsArray; let i = index" [attr.data-index]="i"
+        [ngClass]="{'col-md-4': i === 0, 'col-md-2': i > 0}">
+        <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+          [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+          [footerStyle]="card.footer_color">
+        </app-stats-icon-card>
+      </div>
+    </div>
+    <div class="row margin-bottom-30" *ngIf="!multiRows && cardsArray.length !== 5">
+      <div *ngFor="let card of cardsArray" [className]="colWidth">
+        <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+          [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+          [footerStyle]="card.footer_color">
+        </app-stats-icon-card>
+      </div>
+    </div>
+    <div *ngIf="multiRows">
+      <div class="row margin-bottom-30" *ngFor="let card of multiCardsArray; let i = index" [attr.data-index]="i">
+        <div *ngFor="let singleCard of card" [className]="colWidth[i]">
+          <app-stats-icon-card [icon]="singleCard.icon" [bgStyle]="singleCard.color"
+            [totalCount]="singleCard.data.total_count" [iconHeight]="35" [label]="singleCard.name"
+            [footerArr]="singleCard.data.footer" [data]="card" [footerStyle]="singleCard.footer_color">
+          </app-stats-icon-card>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row" *ngIf="graphsArray && graphsArray?.length > 0">
+      <div *ngFor="let graph of graphsArray; let i = index" [className]="graphColumns[i]">
+        <div style="height: 400px;" class="panel panel-default card light shadow margin-bottom-30"
+          *ngIf="graph?.type !== 9">
+          <div class="panel-heading">
+            <h3 class="panel-title font-weight-600" [ngStyle]="theme">
+              <span *ngIf="graph.name === 'Average Statistics'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Overall last 5 results)</small>
+              </span>
+
+              <span *ngIf="graph.name === 'Fuel Efficient Vehicles'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Last 30 days)</small>
+              </span>
+
+              <span *ngIf="graph.name === 'Vehicle Statistics'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Overall last 5 results)</small>
+              </span>
+
+              <span *ngIf="graph.name === 'Aggressively Driven Fleets'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"></small>
+              </span>
+
+              <span *ngIf="graph.name === 'Probability of Vehicle Maintenance'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Overall)</small>
+              </span>
+
+              <span *ngIf="graph.name === 'Driver Allocations'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Overall last 5 results)</small>
+              </span>
+
+              <span *ngIf="graph.name === 'Maintenance status '">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Overall)</small>
+              </span>
+
+              <span *ngIf="graph.name === 'Driver Tasks Status'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Overall)</small>
+              </span>
+
+              <span *ngIf="graph.name === 'Driver Safety Scorecard'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> </small>
+              </span>
+
+              <span *ngIf="graph.name === 'Driver Violations'">
+                {{graph.is_selected ? graph.name : 'Select Graph Here'}}
+                <small *ngIf="graph.is_selected"> (Overall last 5 results)</small>
+              </span>
+
+
+            </h3>
+          </div>
+          <div class="panel-body small-ui-dropdown">
+
+            <!-- Driver Allocation to vehicle -->
+            <div class="chartbox"
+              *ngIf="graph?.type === 1 && graph?.is_selected && graph?.name === 'Driver Allocations' && this.user?.package[0]?.package_id == this.packageType?.standard">
+              <div class="graph-loader"
+                *ngIf="graph.type === 1 && loading && graph.id === selectedGraph && graph?.name === 'Driver Allocations'">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-custom-graph [chartOptions]="graph.fleets" [graphHeight]="graphHeight" [horizontal]="true"
+                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id" [graphType]="graph.type"
+                [graphUseCaseId]="graph.use_case_id" (selectedFilters)="getSelectedGraphData($event)">
+              </app-custom-graph>
+            </div>
+            <!---------------------------------->
+
+            <!-- Probability of Vehicle Maintenance -->
+            <div class="chartbox"
+              *ngIf="graph?.type === 1 && graph?.is_selected && graph?.name ==='Probability of Vehicle Maintenance' && this.user?.package[0]?.package_id == this.packageType?.standard">
+              <div class="graph-loader"
+                *ngIf="graph.type === 1 && loading && graph.id === selectedGraph && graph?.name ==='Probability of Vehicle Maintenance'">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+
+              <app-clustered-graph [chartOptions]="graph.data" [graphHeight]="graphHeight" [horizontal]="true"
+                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id" [graphType]="graph.type"
+                [graphUseCaseId]="graph.use_case_id">
+              </app-clustered-graph>
+
+
+              <!-- <app-mantinanceprobabilitychart
+              [chartOptions]="graph.data"
+              [graphHeight]="graphHeight"
+              [horizontal]="true"
+              [chartFilter]="graph?.ui_filter?.data"
+              [graphId]="graph.id"
+              [graphType]="graph.type"
+              [graphUseCaseId]="graph.use_case_id"
+              (selectedFilters)="getSelectedGraphData($event)"></app-mantinanceprobabilitychart> -->
+            </div>
+            <!---------------------------------------->
+
+            <!-- Average statistics -->
+            <div class="chartbox"
+              *ngIf="graph?.type === 12 && graph?.is_selected && graph?.name ==='Average Statistics'">
+              <div class="graph-loader" *ngIf="graph.type === 10 && loading && graph.id === selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-statisticschart [chartOptions]="graph?.data" [graphHeight]="graphHeight" [horizontal]="true"
+                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph?.id" [graphType]="graph?.type"
+                [graphUseCaseId]="graph?.use_case_id" (selectedFilters)="getSelectedGraphData($event)">
+              </app-statisticschart>
+            </div>
+            <!------------------------>
+
+
+            <!-- Driver Safety Scorecard -->
+            <div class="chartbox pie-chart-legends"
+              *ngIf="graph?.type === 4 && graph?.is_selected && this.user?.package[0]?.package_id == this.packageType?.standard">
+              <div class="graph-loader" *ngIf="graph?.type == 4 && loading && graph?.id == selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-pie-chart [chartOptions]="graph?.data" [graphHeight]="graphHeight"
+                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id" [graphType]="graph.type"
+                [graphUseCaseId]="graph.use_case_id" (selectedFilters)="getSelectedGraphData($event)"></app-pie-chart>
+            </div>
+            <!----------------------------->
+
+            <!---- Aggressively Driven Fleets  ---->
+            <div class="chartbox" *ngIf="graph?.type === 10 && graph?.is_selected">
+              <div class="graph-loader" *ngIf="graph.type === 10 && loading && graph.id === selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-area-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id" [graphType]="graph.type"
+                [graphUseCaseId]="graph.use_case_id" (selectedFilters)="getSelectedGraphData($event)"></app-area-chart>
+            </div>
+            <!------------------------------------->
+
+
+            <!---- Fuel Efficient Vehicles ---->
+            <div class="chartbox" *ngIf="graph?.type === 11 && graph?.is_selected">
+              <div class="graph-loader" *ngIf="graph.type === 10 && loading && graph.id === selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-bar-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id" [graphType]="graph.type"
+                [graphUseCaseId]="graph.use_case_id" (selectedFilters)="getSelectedGraphData($event)"></app-bar-chart>
+            </div>
+            <!--------------------------------->
+
+
+            <!-- Driver Tasks Status -->
+            <div class="chartbox"
+              *ngIf="graph?.type === 15 && graph?.is_selected && graph?.name ==='Driver Tasks Status' && graph.id === 60  && this.user?.package[0]?.package_id == this.packageType?.standard">
+              <div class="graph-loader" *ngIf="graph.type === 15 && loading && graph.id === selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-chart [chartOptions]="graph.data" [graphHeight]="graphHeight" [chartFilter]="graph?.ui_filter?.data"
+                [graphId]="graph.id" [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id"
+                (selectedFilters)="getSelectedGraphData($event)"></app-chart>
+            </div>
+            <!------------------------->
+
+
+
+            <!-- Vehicle Statistic chart -->
+            <div class="chartbox"
+              *ngIf="graph?.type === 88 && graph?.is_selected && graph?.name === 'Vehicle Statistics'">
+              <div class="graph-loader"
+                *ngIf="graph.type === 88 && graph?.name === 'Vehicle Statistics' && loading && graph.id === selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-multi-bar-chart [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id" [graphType]="graph.type"
+                [graphUseCaseId]="graph.use_case_id" (selectedFilters)="getSelectedGraphData($event)">
+              </app-multi-bar-chart>
+            </div>
+            <!----------------------------->
+
+
+            <!-- Maintenance Status -->
+            <div class="chartbox"
+              *ngIf="graph?.type === 14 && graph?.is_selected && this.user?.package[0]?.package_id == this.packageType?.standard">
+              <div class="graph-loader" *ngIf="graph.type === 10 && loading && graph.id === selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <app-radial-chart style="overflow: scroll !important;" [chartOptions]="graph.data"
+                [graphHeight]="graphHeight" [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
+                [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id"
+                (selectedFilters)="getSelectedGraphData($event)"></app-radial-chart>
+            </div>
+            <!----------------------->
+
+            <div *ngIf="!graph.is_selected"
+              style="display: flex;align-items: center;height: 33vh;justify-content: center;">
+              <div style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                <img style="opacity:0.3;margin-bottom:8px" src="assets/images/no-graph.png" alt="" width="80px"><br>
+                <a style="vertical-align: center;font-size:13px; cursor: pointer;"
+                  (click)="redirect('/admin/graph-setting')">ADD NEW GRAPH</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8"
+        *ngIf="largeGraph?.type === 9 && largeGraph?.is_selected && this.user?.package[0]?.package_id == this.packageType?.standard">
+        <div style="height: 400px;" class="panel panel-default card light shadow margin-bottom-30">
+          <div class="panel-heading">
+            <h3 class="panel-title font-weight-600" [ngStyle]="theme">
+              {{largeGraph.is_selected ? largeGraph?.name : 'Select Graph Here'}}
+
+              <span><small *ngIf="largeGraph.is_selected">(Overall last 5 results)</small></span>
+            </h3>
+          </div>
+
+          <div class="panel-body small-ui-dropdown">
+            <!-- Driver Violations -->
+            <div class="chartbox">
+              <div class="graph-loader" *ngIf="largeGraph.type === 9 && loading && largeGraph.id === selectedGraph">
+                <img src="assets/images/block-laoder.gif">
+              </div>
+              <!-- <app-tree-chart
+              [chartOptions]="largeGraph?.data"
+            [graphHeight]="graphHeight"
+            [chartFilter]="largeGraph?.ui_filter?.data"
+            [graphId]="largeGraph?.id"
+            [graphType]="largeGraph?.type"
+            [graphUseCaseId]="largeGraph?.use_case_id"
+            (selectedFilters)="getSelectedGraphData($event)">
+            </app-tree-chart> -->
+
+              <app-clustered-bar-chart [chartOptions]="largeGraph?.data" [graphHeight]="graphHeight"
+                [chartFilter]="largeGraph?.ui_filter?.data" [graphId]="largeGraph?.id" [graphType]="largeGraph?.type"
+                [graphUseCaseId]="largeGraph?.use_case_id" (selectedFilters)="getSelectedGraphData($event)">
+              </app-clustered-bar-chart>
+
+            </div>
+            <!---------------------->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>

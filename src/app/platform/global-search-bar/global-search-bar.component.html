@@ -1,0 +1,19 @@
+<div class="navbar-form">
+  <p-autoComplete [(ngModel)]="country" styleClass="input-search" inputStyleClass="form-control primeng-font-style "
+    (ngModelChange)="onOptionSelected($event)" [suggestions]="countries" [emptyMessage]="'No Data Found'"
+    (completeMethod)="filterCountrySingle($event)" field="title" class="bootstrap" [size]="35" dropdown="true"
+    dropdownMode="current" placeholder="Search" [minLength]="1">
+    <ng-template let-option pTemplate="item">
+      <div class="media ui-helper-clearfix">
+        <div class="media-left">
+          <img src="assets/images/search/{{option.entity_type}}.png"  onerror="this.onerror=null;this.src='assets/images/search/No-Icon.png'"  class="media-object"
+          style="width:27px;display:inline-block;">
+
+        </div>
+        <div class="media-body">
+          <div>{{option.title}}</div>
+        </div>
+      </div>
+    </ng-template>
+  </p-autoComplete>
+</div>

@@ -1,0 +1,231 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <!-- <li><a> Fleets</a></li> -->
+    <li><a routerLink="/iol/admin/route">Routes</a></li>
+  </ol>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "   style="padding-bottom:200px" [hidden]="!isAuthorized">
+  <div class="row card-group-row  ">
+
+    <div class="col-lg-4  card-group-row__col ">
+      <div class="panel panel-default round shadow ">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Choose Parameters</h3>
+          <div class="panel-actions">
+            <a></a>
+          </div>
+        </div>
+
+        <div class="col-lg-12" style="margin-top: 10px; margin-bottom: 15px;">
+          <button #editpop *ngIf="loggedInUser.read_only != true" type="button" class="btn btn-lg  btn-block btncolor"
+            (click)="addNew()" data-target="#editpop1" data-toggle="modal"
+            style="font-size: 14px; border-radius: 20px; color: white">
+            <i class="ri-add-circle-fill"></i> New
+          </button>
+        </div>
+
+        <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)">
+
+            <div class="form-group margin-bottom-10">
+              <fieldset class="form-fieldset">
+                <legend>Search</legend>
+
+                <div class="form-group margin-bottom-10">
+                  <div class="input-search">
+
+                    <input type="text" class="form-control" formControlName="search" name="" placeholder="Search...">
+                    <button type="button" class="input-search-close icon " data-toggle="popover" data-original-title=""
+                      data-trigger="hover" data-container="body" data-placement="top" data-html="true" id="help2">
+                      <i class="ri-question-line" pTooltip="Search by Name"></i>
+                    </button>
+                    <div id="popover-content-help2" class="hide">
+                      Some help information goes here
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group margin-bottom-0 text-center">
+                  <button href="" type="submit" class="btn btn-success btn-round btn-block1">
+                    <i class="ri-search-line"></i> Search</button>
+                  <button (click)="onClearSearch()" href=" " class="btn btn-default btn-round ">
+                    <i class="ri-refresh-line"></i>
+                    Clear
+                  </button>
+                </div>
+              </fieldset>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-8  card-group-row__col ">
+      <div class="width-full">
+        <div class="panel panel-default round shadow  ">
+          <div class="panel-heading margin-bottom-0">
+            <h3 class="panel-title font-weight-600 bg-theme1 white1"> List </h3>
+            <div class="panel-actions">
+              <a></a>
+            </div>
+          </div>
+          <div class="panel-body padding-15">
+            <div class="table-responsive margin-top-20" style="border: 1px solid #ebebeb;">
+              <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+              </p-progressBar>
+
+              <table matSort (matSortChange)="sortRouteList($event)"
+                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                [dataSource]="routeList" mat-elevation-z8>
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>NAME</th>
+                  <td mat-cell *matCellDef="let row">
+                    {{(row.name == null) ? 'N/A': row.name}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="assigned_vehicles_count">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>VEHICLES</th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ (row.assigned_vehicles_count | number:'1.0-2') || 'N/A'}}</td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</th>
+                  <td mat-cell *matCellDef="let row">
+                    <span class="label"
+                      [ngClass]="(row.status === EntityStatusEnum.Active)? 'label-success': 'label-danger'">{{(row.status
+                      === EntityStatusEnum.Active)? 'Active' : 'Inactive'}}</span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="is_poi">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>P.O.I</th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ (row.is_poi) ? 'Yes': 'No' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                  <td mat-cell *matCellDef="let row">
+                    <button *ngIf="loggedInUser.read_only != true" type="button" class="btn btn-icon  btn-info btn-xs"
+                      data-target="#editpop1" (click)="openEditModal(row)" data-toggle="modal" pTooltip="Edit">
+                      <i class="icon ion-edit"></i>
+                    </button>
+                    <button *ngIf="loggedInUser.read_only != true" type="button" pTooltip="Delete " class="btn btn-icon  btn-danger btn-xs"
+                      (click)="showSwal(row)" data-original-title="Delete"> <i class="icon ion-android-delete"></i>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedRouteList"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedRouteList;"></tr>
+              </table>
+              <div *ngIf="routeList?.length==0">
+                <p>No records found</p>
+              </div>
+              <mat-paginator translate="no" #routePaginator [length]="totalRouteListLength" [hidePageSize]="true" showFirstLastButtons
+                (page)="onRouteListPagination($event)" [pageSize]="10">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade  modal-success text-left" id="editpop1" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-center  modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span>x</span>
+          </button>
+          <h4 class="modal-title">{{inactiveRecord? 'Create Route' : formTitle}}</h4>
+        </div>
+
+        <form novalidate [formGroup]="routesForm" id="routeFormID" (ngSubmit)="onSubmit(routesForm.value)">
+          <div class="modal-body">
+            <div class="">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="control-label">Name<span class="text-danger2">*</span></label>
+                        <div class="input-icon">
+                          <input type="text" class="form-control" formControlName="name" maxLength="25" />
+
+                          <span class="error-message" *ngIf="routesForm.get('name').getError('required') && submitted">
+                            Please provide name
+                          </span>
+
+                          <span class="error-message"
+                            *ngIf="routesForm.get('name').getError('isAlphabetsAndNumbers') && submitted">Enter
+                            alphabets/numbers only</span>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group margin-top-35">
+                        <label class="control-label"><input formControlName="is_poi" type="checkbox" value=""><span
+                            class="margin-left-5">P.O.I</span></label>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3" *ngIf="btnText === 'Update'">
+                      <div class="form-group margin-top-35">
+                        <label class="control-label"><input formControlName="status" type="checkbox" value=""><span
+                            style="margin-left: 5px;">Status</span></label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="control-label">Vehicles<span class="text-danger2">*</span></label>
+                        <p-multiSelect [options]="itemListTrucks" name="selectedTruckType" formControlName="vehicles"
+                          [(ngModel)]="selectedTruck" optionLabel="name" styleClass="prime-dropdown" filter="true"
+                          filterPlaceHolder="Search" defaultLabel="Select Vehicles">
+
+                        </p-multiSelect>
+                        <span class="error-message"
+                          *ngIf="routesForm.get('vehicles').getError('required') && submitted">
+                          Please provide vehicle
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="clearfix">
+                    <app-google-map #binMap mapType="false" [markerLimit]="2" [height]="'250px'"
+                      (click)="mapClicked($event)" [showSearchBar]="true"></app-google-map>
+                    <fieldset [disabled]="inactiveRecord">
+                      <button type="button" class="btn btn-warning btn-block" [disabled]="!source_latlong"
+                        (click)="resetMap()">Remove Marker
+                      </button>
+                      <span *ngIf="inactiveRecord || !source_latlong"><i
+                          class="fa fa-info-circle margin-right-5"></i>Click on the map to drop marker.</span>
+                    </fieldset>
+                    <button *ngIf="territoryPath" type="button" class="btn btn-warning btn-block"
+                      (click)="resetMap()">Remove Territory</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" #closeForm class="btn btn-default btn-round btn-block1"
+              data-dismiss="modal">Close</button>
+            <button type="submit" [disabled]="btnLoading" class="btn btn-success btn-round btn-block1"
+              form="routeFormID">{{btnText}}</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,66 @@
+<div class="margin-bottom-10 row">
+
+  <app-reporting-buttons [selected]="'month'"
+                         [type]="'fillup'"
+                         (btnClicked)="setupReport($event)" [showGenerateReport]="false"
+                         (generate)="generatePDFReport('fillup')"></app-reporting-buttons>
+  <app-export-csv
+    [fileName]="' Fillup Report ' + fillupDateRange[0] + ' to ' + fillupDateRange[1] "
+    [dateGenerated]="false"
+    [rows]="fillups"
+    [cols]="csvFillupCols"
+    *ngIf="fillups.length"></app-export-csv>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="vscroll padding-right-10">
+      <p-progressBar *ngIf="fillupLoader.visibility"  [style]="{'height': '5px'}" mode="indeterminate"></p-progressBar>
+
+      <ngx-datatable
+        #table
+        class="material"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="10"
+        [rows]='fillups'>
+
+        <!-- [selected]="selected"
+        [selectionType]="'single'"
+        (select)='onSelect($event, "fillup")' -->
+
+        
+        <!-- ID required for  patch call-->
+<!--        <ngx-datatable-column name="Time" prop="timestamp">-->
+<!--          <ng-template let-value="value" ngx-datatable-cell-template>-->
+<!--            <div >-->
+<!--              {{value | date: 'shortTime'}}-->
+<!--            </div>-->
+<!--          </ng-template>-->
+<!--        </ngx-datatable-column>-->
+        <ngx-datatable-column name="Fillup Date" prop="fill_up_date">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div >
+              {{value | date: 'medium'}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Fillup Quantity (Liters)" prop="fuel_filled" [cellClass]="'text-center'" [headerClass]="'text-center'"></ngx-datatable-column>
+        <ngx-datatable-column name="Fillup Amount (QAR)" prop="amount_paid" [cellClass]="'text-center'" [headerClass]="'text-center'"></ngx-datatable-column>
+        <ngx-datatable-column name="Payment Method" prop="payment_method_name" [cellClass]="'text-center'" [headerClass]="'text-center'"></ngx-datatable-column>
+        <ngx-datatable-column name="Fillup Location" prop="location" [cellClass]="'text-center'" [headerClass]="'text-center'"></ngx-datatable-column>
+        <ngx-datatable-column name="Fuel Supervisor" prop="fuel_supervisor_name" [cellClass]="'text-center'" [headerClass]="'text-center'"></ngx-datatable-column>
+
+      </ngx-datatable>
+    </div>
+  </div>
+  <!-- <div class="col-lg-4">
+    <div class="mapbox   margin-bottom-0 ">
+      <app-google-map #fillupMap [height]="'300px'"></app-google-map>
+      <app-map-overlay  [msg]="getMessageForOverlay(fillupDateRange, fillups.length)"
+                        [visibility]="!(fillupDateRange &&  fillups.length)">
+      </app-map-overlay>
+    </div>
+  </div> -->
+</div>

@@ -1,0 +1,303 @@
+body {
+    overflow: hidden;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    animation-delay: 1s;
+}
+.item-1 {
+    width: 20px;
+    height: 20px;
+    background: #f583a1;
+    border-radius: 50%;
+    background-color: #eed968;
+    margin: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes scale {
+    0% {
+        transform: scale(1);
+   }
+    50%, 75% {
+        transform: scale(2.5);
+   }
+    78%, 100% {
+        opacity: 0;
+   }
+}
+.item-1:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #eed968;
+    opacity: 0.7;
+    animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+    animation-delay: 200ms;
+    transition: 0.5s all ease;
+    transform: scale(1);
+}
+.item-2 {
+    width: 20px;
+    height: 20px;
+    background: #f583a1;
+    border-radius: 50%;
+    background-color: #eece68;
+    margin: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes scale {
+    0% {
+        transform: scale(1);
+   }
+    50%, 75% {
+        transform: scale(2.5);
+   }
+    78%, 100% {
+        opacity: 0;
+   }
+}
+.item-2:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #eece68;
+    opacity: 0.7;
+    animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+    animation-delay: 400ms;
+    transition: 0.5s all ease;
+    transform: scale(1);
+}
+.item-3 {
+    width: 20px;
+    height: 20px;
+    background: #f583a1;
+    border-radius: 50%;
+    background-color: #eec368;
+    margin: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes scale {
+    0% {
+        transform: scale(1);
+   }
+    50%, 75% {
+        transform: scale(2.5);
+   }
+    78%, 100% {
+        opacity: 0;
+   }
+}
+.item-3:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #eec368;
+    opacity: 0.7;
+    animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+    animation-delay: 600ms;
+    transition: 0.5s all ease;
+    transform: scale(1);
+}
+.item-4 {
+    width: 20px;
+    height: 20px;
+    background: #f583a1;
+    border-radius: 50%;
+    background-color: #eead68;
+    margin: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes scale {
+    0% {
+        transform: scale(1);
+   }
+    50%, 75% {
+        transform: scale(2.5);
+   }
+    78%, 100% {
+        opacity: 0;
+   }
+}
+.item-4:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #eead68;
+    opacity: 0.7;
+    animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+    animation-delay: 800ms;
+    transition: 0.5s all ease;
+    transform: scale(1);
+}
+.item-5 {
+    width: 20px;
+    height: 20px;
+    background: #f583a1;
+    border-radius: 50%;
+    background-color: #ee8c68;
+    margin: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes scale {
+    0% {
+        transform: scale(1);
+   }
+    50%, 75% {
+        transform: scale(2.5);
+   }
+    78%, 100% {
+        opacity: 0;
+   }
+}
+.item-5:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ee8c68;
+    opacity: 0.7;
+    animation: scale 2s infinite cubic-bezier(0, 0, 0.49, 1.02);
+    animation-delay: 1000ms;
+    transition: 0.5s all ease;
+    transform: scale(1);
+}
+
+
+.form-group {
+    margin-bottom: 15px !important;
+}
+
+/* .pad-top{
+    padding-top: 0px !important;
+} */
+
+.text-danger {
+    color:red;
+    }
+    .errorMessageFont {
+    font-size: 12px;
+    }
+    /* .pad-top{
+    padding-top: 0px !important;
+    } */
+    .addPadding {
+    padding-top:1px;
+    padding-bottom:20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    
+    }
+    .forgetbtn:hover {
+    color:#62a8ea !important;
+    }
+    .btn:hover, .btn:focus, .btn.focus {
+        color: #62a8ea !important;
+    }
+
+
+    .glyphicon.spinning {
+        animation: spin 1s infinite linear;
+        -webkit-animation: spin2 1s infinite linear;
+    }
+    
+    @keyframes spin {
+        from { transform: scale(1) rotate(0deg); }
+        to { transform: scale(1) rotate(360deg); }
+    }
+    
+    @-webkit-keyframes spin2 {
+        from { -webkit-transform: rotate(0deg); }
+        to { -webkit-transform: rotate(360deg); }
+    }
+
+    button#forgotButton:hover{
+            color: #fff !important;
+    background-color: #62A8E8 !important;
+    }
+
+    .theme-color-back{
+        color: white;
+        background: #279566 !important;
+    }
+    .theme-color-recieve{
+        color: red;
+    }
+
+
+    .default-loader {
+        position: fixed;
+        padding: inherit;
+        z-index: 99999;
+        /* background: rgba(223, 206, 206, 0.5); */
+        width: 100%;
+        height: 100%;
+        left: 6%;
+      }
+    
+      .default-loader .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media (max-width: 600px) {
+    .fix_position {
+        transform: translate(38%, -25%) !important;
+    }
+}
+  
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media (min-width: 600px) {
+    .fix_position {
+        transform: translate(38%, -25%) !important;
+    }
+}
+  
+/* Medium devices (landscape tablets, 768px and up) */
+@media (min-width: 768px) {
+    .fix_position {
+        transform: translate(45%, -99%) !important;
+    }
+} 
+  
+/* Large devices (laptops/desktops, 992px and up) */
+@media (min-width: 992px) {
+    .fix_position {
+        transform: translate(43%, -105%) !important;
+    }
+} 
+  
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .fix_position {
+        transform: translate(42%, 35%) !important;
+    }
+}
+
+
+.toaster-success {
+    display: none !important;
+}

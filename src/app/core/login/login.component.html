@@ -1,0 +1,338 @@
+<style>
+  .theme-color {
+    background-color: #e60000 !important;
+  }
+</style>
+
+<!-- loader start-->
+<div class="default-loader" *ngIf="defaultLoader.visibility">
+  <div class="loading">
+    <div style=" height:100%; " class="pic"></div>
+    <div class="spinner text-center">
+      <img src="assets/images/red-loader.gif" height="100px">
+    </div>
+    <!-- <h4 style="color:#000;text-align: center !important;">Loading..</h4> -->
+  </div>
+</div>
+<!-- loader ends -->
+
+<!--Forgot Password Section-->
+<div #formModal class="modal fade modal-success text-left closee" id="forgotPassword" role="dialog" tabindex="-1"
+  (click)="ClickedOut($event)">
+  <div class="modal-dialog modal-center  modal-xs">
+    <div class="modal-content">
+      <div class="modal-header" style="    background-color: rgb(230, 0, 0);
+      border-color: rgb(230, 0, 0);">
+        <span>Forgot Password</span>
+        <button type="button" class="close" data-dismiss="modal" (click)="onCloseMember()">
+          <span>x</span>
+        </button>
+        <!-- <h4 class="modal-title">{{formTitle}}</h4> -->
+      </div>
+      <div class="modal-body">
+        <form id="forgotPasswordID" [formGroup]="forgotPasswordForm" (ngSubmit)="onSubmitForgotPassword()">
+          <div class="form-group">
+            <label class="control-label grey-800">Enter your email</label>
+            <input type="email" formControlName="currentEmail" class="form-control" />
+            <!-- <span class="text-left text-danger errorMessageFont" *ngIf="invalidEmail">User don't exist</span> -->
+          </div>
+
+          <div class="alert alert-danger" *ngFor="let e of errorMessages">{{e}}</div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" #closeForgotPasswordForm class="btn btn-default" data-dismiss="modal"
+          (click)="onCloseMember()">Close</button>
+        <button type="submit" id="forgotButton" form="forgotPasswordID" class="btn btn-primary"
+          [disabled]="forgotPasswordForm.invalid || submitted">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Forgot Password Section-->
+
+
+<div class="login-bg">
+  <div style="background-image: url(../../../assets/images/bg-login.jpg);  background-size:cover; height:100%; "
+    class="pic">
+  </div>
+
+  <div class="fix_position1"> <img class="brand-img" src="../../../assets/images/VF_Business_Logo_Horiz_RGB_WHITE.png"
+      alt="..." height="50">
+  </div>
+
+  <div class="loginbox card loginbox-custom">
+    <div class="front shadow round" style="background-color: #f8f8f8;">
+      <div *ngIf="!forgetPassword && !createpassword && !firstTimeUser" class="login addPadding text-center">
+        <div class="font-size-40" style="font-size: 40px">
+          <i class="ion-ios-locked"></i>
+        </div>
+        <h4 class="font-weight-600 text-uppercase green-800 margin-top-10 margin-bottom-30">Login</h4>
+
+        <form novalidate [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+          <div class="form-group">
+            <label class="sr-only">Email</label>
+            <input type="text" formControlName="email" placeholder="Email" class="form-control"
+              [ngClass]="{ 'is-invalid':  f.email.errors }" />
+            <div *ngIf="f.email.errors">
+              <!-- <div class="text-left" *ngIf="f.email.errors.required">Email is required</div> -->
+              <!-- <div class="text-left text-danger errorMessageFont" *ngIf="f.email.errors.email">Email must be a valid email address</div> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="sr-only">Password</label>
+            <div class="input-group">
+              <input *ngIf="show_password; else hidePassword" type="text" class="form-control"
+                formControlName="password" placeholder="Password" maxlength="15"
+                [ngClass]="{ 'is-invalid':  f.password.errors }">
+              <span *ngIf="show_password" class="input-group-addon" id="basic-addon2"><i class="ion-eye"
+                  (click)="togglePassword1()"></i></span>
+
+              <ng-template #hidePassword>
+                <input type="password" autocomplete="new-password" class="form-control" formControlName="password"
+                  placeholder="Password" maxlength="15" [ngClass]="{ 'is-invalid':  f.password.errors }">
+                <span class="input-group-addon" id="basic-addon2"><i class="ion-eye-disabled"
+                    (click)="togglePassword(loginForm.value)"></i></span>
+              </ng-template>
+            </div>
+
+            <div *ngIf="f.password.errors">
+              <!-- <div class="text-left" *ngIf="f.password.errors.required">Password is required</div> -->
+              <!-- <div class="text-left text-danger errorMessageFont" *ngIf="f.password.errors.pattern">Atleast one lowercase letter, one Upercase letter, one numeric degit and length greater then 8</div> -->
+            </div>
+          </div>
+
+          <div class="form-group clearfix ">
+            <div class="checkbox-custom checkbox-inline pull-left">
+              <input type="checkbox" id="inputCheckbox" formControlName="remember" (change)="onFilterChange($event)">
+              <label for="inputCheckbox">Remember me</label>
+            </div>
+
+            <button type="button" style="padding-top: 0px;" class="btn btn-link pull-right pad-top forgetbtn"
+              data-target="#forgotPassword" data-toggle="modal">
+              Forgot Password
+            </button>
+          </div>
+
+          <button type="submit" ng-click="login()" [disabled]="loginForm.invalid || submitted"
+            class="btn btn-primary btn-round1 btn-block theme-color">
+            Sign in
+          </button>
+
+          <p class="error">
+            <span *ngIf="errorMessage" class="text-danger">{{errorMessage}}</span>
+          </p>
+        </form>
+
+      </div>
+
+      <!-- forget password screen start-->
+      <div *ngIf="forgetPassword" class="login padding-20 text-center" style="margin-top: 45px;">
+        <div class="font-size-40" style="font-size: 40px">
+        </div>
+        <h4 class="font-weight-600 text-uppercase green-800 margin-top-10 margin-bottom-30">OTP</h4>
+
+        <form [formGroup]="verifyForm" (ngSubmit)="onSubmitCode()">
+          <div class="form-group">
+            <label class="sr-only">Verifivation code</label>
+            <input type="text" formControlName="otp" placeholder="OTP" class="form-control" maxlength="6" />
+            <!-- <div *ngIf="f.otp.errors">
+                <div *ngIf="f.otp.errors.required">Email is required</div>
+                <div *ngIf="f.otp.errors.email">Email must be a valid email address</div>
+            </div> -->
+          </div>
+
+          <div class="form-group clearfix ">
+          </div>
+          <button type="submit" class="btn btn-primary btn-round1 btn-block theme-color"
+            [disabled]="verifyForm.invalid || submitted">Verify
+            <span *ngIf="waitForPasswordCreation" class="glyphicon glyphicon-refresh spinning"></span>
+          </button>
+          <div class="form-group clearfix ">
+          </div>
+          <button type="submit" class="btn btn-round1 btn-block theme-color-back" (click)="backToLogin()">Back to
+            login
+          </button>
+          <div class="form-group clearfix ">
+          </div>
+          <a class="theme-color-recieve" (click)="sendEmailAgain()">Didn't receive code?</a>
+        </form>
+      </div>
+      <!-- forget password end -->
+
+
+      <!-- creatpassword start -->
+      <div *ngIf="createpassword" class="login padding-20 text-center">
+        <div class="font-size-40" style="font-size: 40px">
+          <!-- <i class="ion-ios-locked"></i> -->
+        </div>
+        <h4 class="font-weight-600 text-uppercase green-800 margin-top-10 margin-bottom-30">Enter New Password</h4>
+
+        <form [formGroup]="createPasswordForm" (ngSubmit)="onSubmitCreatePassword()">
+
+          <div class="form-group">
+
+            <label class="sr-only">New Password {{newPasswordType}}</label>
+            <div class="input-group">
+            <input type="{{newPasswordType}}" class="form-control ng-pristine ng-valid ng-touched" formControlName="newpassword" placeholder="New password" class="form-control"
+              maxlength="15" [ngClass]="{ 'is-invalid':  formForNewPassword.newpassword.errors }" />
+            <span class="input-group-addon" (click)="toggleNewPasswordType()" > <i [class]="newPasswordEye? 'fa fa-eye': 'fa fa-eye-slash'"></i></span>
+          </div>
+            <div *ngIf="formForNewPassword.newpassword.errors">
+
+              <!-- <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.newpassword.errors.required">Password is required</div> -->
+              <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.newpassword.errors.pattern">
+                At least one lowercase letter, one uppercase letter, one numeric digit and length greater than 8
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <label class="sr-only">Confirm Password</label>
+            <div class="input-group">
+            <input type="{{confirmPasswordType}}" class="form-control ng-pristine ng-valid ng-touched" formControlName="confirmpassword" placeholder="Confirm password" class="form-control"
+              maxlength="15" [ngClass]="{ 'is-invalid':  formForNewPassword.confirmpassword.errors }" />
+
+            <span class="input-group-addon" (click)="toggleConfirmPasswordType()" > <i [class]="confirmPasswordEye? 'fa fa-eye': 'fa fa-eye-slash'"></i></span>
+            </div>
+            <div *ngIf="formForNewPassword.confirmpassword.errors">
+              <!-- <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.confirmpassword.errors.required">Password is required</div> -->
+              <div class="text-left text-danger errorMessageFont"
+                *ngIf="formForNewPassword.confirmpassword.errors.confirmedValidator">Password does not match</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-round1 btn-block theme-color"
+            [disabled]="createPasswordForm.invalid || submitted">Reset Password
+          </button>
+
+        </form>
+      </div>
+      <!-- createpassword ends here -->
+
+
+
+      <!-- reset password start -->
+      <div *ngIf="firstTimeUser" class="login padding-20 text-center">
+        <div class="font-size-40" style="font-size: 40px">
+          <!-- <i class="ion-ios-locked"></i> -->
+        </div>
+        <h4 class="font-weight-600 text-uppercase green-800 margin-top-10 margin-bottom-30">Reset password</h4>
+
+        <form [formGroup]="resetPasswordForm" (ngSubmit)="onSubmitResetPassword(resetPasswordForm.value)">
+          <div class="form-group">
+            <label class="sr-only">Current Password</label>
+            <div class="input-group">
+              <input [type]="showCurrentPassword?'text' : 'password'" formControlName="oldPasswordReset"
+                placeholder="Current password" class="form-control" maxlength="15"
+                [ngClass]="{ 'is-invalid':  resetPasswordControls.oldPasswordReset.errors }" />
+
+              <span class="input-group-btn">
+                <button (click)="showCurrentPassword = !showCurrentPassword" class="btn btn-secondary" type="button">
+                  <i [class]="showCurrentPassword? 'fa fa-eye': 'fa fa-eye-slash'"></i>
+                </button>
+              </span>
+            </div>
+
+            <!-- <div *ngIf="formForNewPassword.newpassword.errors">
+                <div class="text-left text-danger errorMessageFont"
+                  *ngIf="formForNewPassword.newpassword.errors.pattern">
+                  At least one lowercase letter, one uppercase letter, one numeric digit and length greater than 8
+                </div>
+              </div> -->
+          </div>
+
+          <div class="form-group">
+            <label class="sr-only">New Password</label>
+            <div class="input-group">
+              <input [type]="showPassword? 'text':'password'" formControlName="newpasswordReset"
+                placeholder="New password" class="form-control" maxlength="15"
+                [ngClass]="{ 'is-invalid':  resetPasswordControls.newpasswordReset.errors }" />
+
+              <span class="input-group-btn">
+                <button (click)="showPassword = !showPassword" class="btn btn-secondary" type="button">
+                  <i [class]="showPassword? 'fa fa-eye': 'fa fa-eye-slash'"></i>
+                </button>
+              </span>
+            </div>
+            <div *ngIf="resetPasswordControls.newpasswordReset.errors">
+              <div class="text-left text-danger errorMessageFont"
+                *ngIf="resetPasswordControls.newpasswordReset.errors.pattern">
+                At least one lowercase letter, one uppercase letter, one numeric digit and length greater than 8
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="sr-only">Confirm Password</label>
+            <div class="input-group">
+              <input [type]="showConfirmPassword? 'text':'password'" formControlName="confirmpasswordReset"
+                placeholder="Confirm password" class="form-control" maxlength="15"
+                [ngClass]="{ 'is-invalid':  resetPasswordControls.confirmpasswordReset.errors }" />
+
+              <span class="input-group-btn">
+                <button (click)="showConfirmPassword = !showConfirmPassword" class="btn btn-secondary" type="button">
+                  <i [class]="showConfirmPassword? 'fa fa-eye': 'fa fa-eye-slash'"></i>
+                </button>
+              </span>
+            </div>
+
+            <div *ngIf="resetPasswordControls.confirmpasswordReset.errors">
+              <div class="text-left text-danger errorMessageFont"
+                *ngIf="resetPasswordControls.confirmpasswordReset.errors.confirmedValidator">Password does not match
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-round1 theme-color" [disabled]="resetPasswordForm.invalid ">
+            <!--|| submitted-->
+            Reset Password
+          </button>
+
+          <button type="button" class="btn btn-primary btn-round1 theme-color" (click)="skipForNow()">
+            Skip for now
+          </button>
+
+        </form>
+      </div>
+      <!-- reset Password ends here -->
+
+    </div>
+  </div>
+
+</div>
+<!--
+<form [formGroup]="createPasswordForm" (ngSubmit)="onSubmitCreatePassword()">
+
+  <div class="form-group">
+    <label class="sr-only">New Password {{newPasswordType}}</label>
+    <input type="{{newPasswordType}}" formControlName="newpassword" placeholder="New password" class="form-control"
+      maxlength="15" [ngClass]="{ 'is-invalid':  formForNewPassword.newpassword.errors }" />
+    <span (click)="toggleNewPasswordType()"> <i [class]="newPasswordEye? 'fa fa-eye': 'fa fa-eye-slash'"></i></span>
+    <div *ngIf="formForNewPassword.newpassword.errors">
+       <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.newpassword.errors.required">Password is required</div>
+      <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.newpassword.errors.pattern">
+        At least one lowercase letter, one uppercase letter, one numeric digit and length greater than 8
+      </div>
+    </div>
+
+  </div>
+  <div class="form-group">
+    <label class="sr-only">Confirm Password</label>
+    <input type="{{confirmPasswordType}}" formControlName="confirmpassword" placeholder="Confirm password" class="form-control"
+      maxlength="15" [ngClass]="{ 'is-invalid':  formForNewPassword.confirmpassword.errors }" />
+
+    <span (click)="toggleConfirmPasswordType()" > <i [class]="confirmPasswordEye? 'fa fa-eye': 'fa fa-eye-slash'"></i></span>
+    <div *ngIf="formForNewPassword.confirmpassword.errors">
+     <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.confirmpassword.errors.required">Password is required</div>
+      <div class="text-left text-danger errorMessageFont"
+        *ngIf="formForNewPassword.confirmpassword.errors.confirmedValidator">Password does not match</div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary btn-round1 btn-block theme-color"
+    [disabled]="createPasswordForm.invalid || submitted">Reset Password
+  </button>
+
+</form> -->

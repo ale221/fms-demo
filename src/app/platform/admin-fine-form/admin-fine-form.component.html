@@ -1,0 +1,109 @@
+<div class="modal-header" [ngStyle]="theme">
+  <button type="button" class="close" data-dismiss="modal">
+    <span>x</span>
+  </button>
+  <h4 class="modal-title">{{formTitle}}</h4>
+</div>
+<div class="modal-body">
+  <div class="">
+    <div class="row">
+      <div class="col-lg-12">
+        <form novalidate [formGroup]="fineForm" id="fineFormID">
+          <div class="row">
+            <!--<div class="col-sm-6">-->
+            <!--<div class="form-group">-->
+            <!--<label class="control-label">Issued Datetime {{issuedDatetime}}</label>-->
+            <!--<p-calendar-->
+            <!--[readonlyInput]="true"-->
+            <!--[monthNavigator]="true"-->
+            <!--[yearNavigator]="true"-->
+            <!--[yearRange]="'1950:'+(currentDate.getFullYear())"-->
+            <!--[(ngModel)]="issuedDatetime"-->
+            <!--placeholder="MM/DD/YYYY"-->
+            <!--styleClass="prime-datetime">-->
+            <!--</p-calendar>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label class="control-label">Vehicles</label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [formControlName]="'truck'"
+                    [disabled]="rowToEdit"
+                    [(ngModel)]="selectedTruck"
+                    [options]="itemListTrucks"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Vehicle">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label class="control-label">Drivers</label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [disabled]="rowToEdit"
+                    [formControlName]="'driver'"
+                    [(ngModel)]="selectedDriver"
+                    [options]="itemListDrivers"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Driver">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+              <div class="form-group">
+                <label class="control-label form-label">Cost</label>
+                <input class="form-control" type="number" min="1" formControlName="cost" />
+              </div>
+            </div>
+
+            <div class="col-lg-9">
+              <div class="form-group   ">
+                <label class="control-label form-label">Notes</label>
+                <input class="form-control" formControlName="notes" />
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="form-group">
+                <label class="control-label form-label">Timestamp</label>
+                <div class="form-group">
+                  <p-calendar
+                    [readonlyInput]="true"
+                    [(ngModel)]="timestamp"
+                    name="timestamp"
+                    [showTime]="true"
+                    formControlName="timestamp"
+                    styleClass="prime-datetime"
+                    [maxDate]="maxValue"
+                    [stepMinute]="5">
+                  </p-calendar>
+
+                </div>
+              </div>
+            </div>
+            <!--<div class="col-sm-12">-->
+            <!--<div class="form-group">-->
+            <!--<label class="control-label">Description</label>-->
+            <!--<div class="input-icon">-->
+            <!--<textarea rows="2" class="form-control"></textarea>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+          </div>
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" #closeForm data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!fineForm.valid" form="fineFormID" (click)="onSubmit(fineForm.value)">Save</button>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+.no-records {
+    color: black;
+}
+.btncolor{
+    background-color: #e60000 !important;
+}
+.ri-add-circle-fill:before {
+    content: "\ea0e";
+}
+.form-fieldset {
+    border: 2px solid #eee !important;
+    margin: 0;
+    padding: 15px;
+    position: relative;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.form-fieldset legend {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: -5px;
+    border: 0px solid #ddd;
+    padding: 5px 5px;
+    background-color: #fff;
+    display: inline-block;
+    width: auto;
+    color: #777;
+    margin-left: -10px;
+}
+.input-search .form-control {
+    border-radius: 0px;
+}
+.btn-round {
+    border-radius: 1000px;
+
+}
+.btn-block1{
+    margin-right: 6px;
+}
+.no-records{
+    color: black !important;
+}
+
+.input-search .form-control {
+    border-radius: 0px !important;
+}
+select.input-xs {
+    height: 22px;
+    line-height: 22px;
+    padding: 0 5px;
+    font-size: 12px;
+}
+.form-control{
+    border: 0.1px solid #c2bdc7 !important;
+}
+.modal-success .modal-header * {
+    color: black;
+}
+.modal-success .modal-header {
+    background-color: white;
+    border-radius: 4px 4px 0 0;
+}

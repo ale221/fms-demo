@@ -1,0 +1,519 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <!-- <li><a (click)="pageReload()"> User & Admin</a></li> -->
+    <li><a (click)="pageReload()">Users</a></li>
+  </ol>
+</div>
+
+<!-- <div  [className]="sidebarCheck ? 'half-open-sidebar' : 'full-open-sidebar' "> -->
+
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "   style="padding-bottom:200px" [hidden]="!isAuthorized" >
+  <div class="panel-heading font-weight-600 margin-bottom-0">
+  </div>
+
+  <div class="panel-body padding-0">
+    <div class="tab-content">
+      <div class="tab-pane active" id="Summary">
+        <div class=" margin-bottom-0 ">
+          <div class="panel-body padding-15 ">
+            <div class="row">
+
+              <div class="col-lg-4 card-group-row__col">
+                <div class="panel panel-default round  ">
+                  <div class="col-lg-10" *ngIf="loggedInUser.read_only != true"
+                    style="padding:0px; margin-top: 10px; margin-bottom: 15px;margin-left: 25px;">
+                    <button #addEditUser type="button" class="btn btn-lg btn-primary btn-block btncolor"
+                      (click)="clearForm()" data-target="#addEditUser" data-toggle="modal"
+                      style="font-size: 14px;border-radius: 20px;">
+                      <i class="ri-add-circle-fill"></i> New
+                    </button>
+
+                    <button type="button" class="btn btn-lg btn-primary btn-block btncolor" (click)="clear()"
+                      data-target="#bulkUploadModal" data-toggle="modal" style="font-size: 14px;border-radius: 20px;">
+                      <i class="ri-file-upload-fill"></i> Bulk Upload
+                    </button>
+                  </div>
+
+                  <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+                    <form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)">
+                      <div class="form-group margin-bottom-10">
+                        <fieldset class="form-fieldset">
+                          <legend>Search</legend>
+                          <div class="form-group margin-bottom-10">
+                            <div class="input-search">
+                              <i class="input-search-icon ri-search-line"></i>
+                              <input type="text" class="form-control" formControlName="search" name=""
+                                placeholder="Search...">
+                              <button type="button" class="input-search-close icon " data-toggle="popover"
+                                data-original-title="" data-trigger="hover" data-container="body" data-placement="top"
+                                data-html="true" id="help2" pTooltip='Search by name & email' tooltipPosition="top">
+                                <i class="ri-question-line"></i>
+                              </button>
+                              <div id="popover-content-help2" class="hide">
+                                Some help information goes here
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group margin-bottom-0 text-center">
+                            <button href="" type="submit" class="btn btn-success btn-round btn-block1"> <i
+                                class=" ri-search-line "></i> Search</button>
+                            <button type="button" (click)="onClearSearch()" class="btn btn-default btn-round">
+                              <i class="ri-refresh-line"></i>
+                              Clear
+                            </button>
+                          </div>
+                        </fieldset>
+                      </div>
+
+                      <hr>
+
+                      <!-- Download Buttons start-->
+                      <div class="form-group margin-bottom-0">
+                        <label class="font-size-14 font-weight-600 ">Export:</label>
+                        <div class="btn-group btn-group-justified">
+                          <div class="btn-group" role="group">
+                            <a [href]="downloadableLink">
+                              <button type="button" class="btn btn-outline btn-default"> <img
+                                  src="../../../assets/images/icon-xls.png" height="50">
+                                <div class="font-size-12">
+                                  <a [href]="downloadableLink" class="enabled">
+                                    Download XLS </a>
+                                </div>
+                              </button>
+                            </a>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <a [href]="downloadableLink1">
+                              <button type="button" class="btn btn-outline btn-default"> <img
+                                  src="../../../assets/images/icon-pdf.png" height="50">
+                                <div class="font-size-12">Download PDF</div>
+                              </button>
+                            </a>
+                          </div>
+
+                        </div>
+                      </div>
+                      <!-- Download Buttons ends-->
+
+                    </form>
+                  </div>
+
+                  <!-- comment out for now as  -->
+                  <!-- <div class="col-lg-12">
+                  <div class="panel-heading " style="background:#E60000;margin-bottom: 0px;">
+                    <h3 class="panel-title font-weight-600 " style="color: white;">
+                      Export: Fuel
+                    </h3>
+                    <div class="panel-actions">
+                      <a class="panel-action ">.</a>
+                    </div>
+                  </div>
+
+                  <br>
+
+                  <div class="row">
+                    <div class="col-sm-6" style="text-align: center;">
+                      <div style="margin-left: 80px;">
+                        <span class=""> <img src="/assets/images/pdf.png" alt="img" style="max-height: 60px;"> </span>
+                      </div>
+                    </div>
+                    <div class="col-sm-6" style="text-align: center;">
+                      <div style="margin-right: 80px;">
+                        <span class=""> <img src="/assets/images/xls.png" alt="img" style="max-height: 60px;"> </span>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                </div> -->
+                </div>
+              </div>
+
+              <div class="col-lg-8">
+                <div class="row">
+
+                  <div class="col-lg-12">
+                    <div class="panel panel-default  padding-0  card  light"
+                      style="min-height: 200px; color: aliceblue;">
+
+                      <div class="panel-heading margin-bottom-0">
+                        <h3 class="panel-title font-weight-600 bg-theme1 white1 "> List
+                          <span>
+                            <button *ngIf="selection.selected.length > 0 && loggedInUser.read_only != true"
+                              type="button" pTooltip="Delete Selected"
+                              class="btn btn-icon btn-danger btn-xs margin-left-5" (click)="showSwalBulk()"
+                              data-original-title="Delete"><i style="margin-right: 0px;"
+                                class="icon ion-android-delete"></i>
+                            </button>
+                          </span>
+                        </h3>
+                        <div id="popover-content-help1" class="hide">
+                          Some help information goes here
+                        </div>
+                      </div>
+
+                      <div class="row" style=" margin-top: 10px;   margin-right: -3px;
+                      margin-left: -3px;">
+                        <div class="col-md-12">
+                          <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}"
+                            mode="indeterminate"></p-progressBar>
+                          <div class="table-responsive" style="border: 1px solid #ebebeb;">
+
+                            <table matSort (matSortChange)="sortUserList($event)"
+                              class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                              mat-table [dataSource]="users" mat-elevation-z8>
+
+                              <!-- Checkbox Column -->
+                              <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                  <span *ngIf="loggedInUser.read_only != true">
+                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                      [checked]="selection.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                    </mat-checkbox>
+                                  </span>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                  <span *ngIf="loggedInUser.read_only != true">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? selection.toggle(row) : null"
+                                      [checked]="selection.isSelected(row)">
+                                    </mat-checkbox>
+                                  </span>
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                                <td mat-cell *matCellDef="let row">
+                                  {{(row.id == null) ? 'N/A': row.id}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="first_name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>FIRST NAME</th>
+                                <td mat-cell *matCellDef="let row">
+                                  {{(row.first_name == null) ? 'N/A': row.first_name}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="last_name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>LAST NAME</th>
+                                <td mat-cell *matCellDef="let row">
+                                  {{(row.last_name == null) ? 'N/A': row.last_name}}
+                                </td>
+                              </ng-container>
+
+                              <ng-container matColumnDef="date_joined">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>JOIN DATE</th>
+                                <td mat-cell *matCellDef="let row">
+                                  {{(row.date_joined == null) ? 'N/A': row.date_joined | date: 'MM/dd/yyyy hh:mm:ss a'}}
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="email">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+                                <td mat-cell *matCellDef="let row">
+                                  {{ (row.email == null) ? 'N/A': row.email }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="group">
+                                <th mat-header-cell *matHeaderCellDef>Group</th>
+                                <td mat-cell *matCellDef="let row">
+                                  {{ (row.group == null) ? (row.type === 35 ? 'Super Admin' : 'N/A') : row.group }}</td>
+                              </ng-container>
+                              <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</th>
+                                <td mat-cell *matCellDef="let row">
+                                  <span class="label"
+                                    [ngClass]="(row.status === EntityStatusEnum.Active)? 'label-success': 'label-danger'">
+                                    {{(row.status === EntityStatusEnum.Active)? 'Active' : 'Inactive'}}
+                                  </span>
+                                </td>
+                              </ng-container>
+                              <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                                <td mat-cell *matCellDef="let row">
+                                  <button
+                                    *ngIf="loggedInUser.read_only != true  && row.id !== this.loggedInUser?.id && row.type !== 35"
+                                    type="button" class="btn btn-icon btn-info btn-xs" (click)="openEditModal(row)"
+                                    data-target="#addEditUser" data-toggle="modal" pTooltip="Edit">
+                                    <i class="icon ion-edit"></i>
+                                  </button>
+                                  <button
+                                    *ngIf="loggedInUser.read_only != true && row.id !== this.loggedInUser?.id && row.type !== 35"
+                                    type="button" pTooltip="Delete " class="btn btn-icon  btn-danger btn-xs"
+                                    (click)="showSwal(row)" data-original-title="Delete"><i
+                                      class="icon ion-android-delete"></i>
+                                  </button>
+                                </td>
+                              </ng-container>
+
+                              <tr mat-header-row *matHeaderRowDef="displayedUserList"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedUserList;"></tr>
+                            </table>
+                            <div *ngIf="users?.length === 0" class="no-records">No records found</div>
+                            <mat-paginator translate="no" #userPaginator [length]="totalUserLength" [hidePageSize]="true"
+                              showFirstLastButtons (page)="onUserPagination($event)" [pageSize]="10">
+                            </mat-paginator>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- </div> -->
+
+
+<div #formModal class="modal fade  modal-success text-left" id="addEditUser" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-center">
+    <!--modal-lg-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span>x</span>
+        </button>
+        <h4 class="modal-title">{{formTitle}}</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <!--User Profile Form-->
+            <form novalidate [formGroup]="userForm" id="userFormID" (ngSubmit)="onSubmit(userForm.value)">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label class="control-label">First Name<span class="text-danger2">*</span></label>
+                    <!-- (keyup)="alphaOnly($event)" -->
+                    <input type="text" formControlName="first_name" maxlength="25" class="form-control" />
+
+                    <span class="error-message" *ngIf="userForm.get('first_name').getError('required') && submitted">
+                      Please provide first name
+                    </span>
+
+                    <span class="error-message"
+                      *ngIf="userForm.get('first_name').getError('isAlphabetsAndSpace') && submitted">Enter
+                      alphabets only
+                    </span>
+                    <span class="error-message" *ngIf="userForm.get('first_name').getError('pattern') && submitted">
+                      Avoid white spaces
+                    </span>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label class="control-label">Last Name<span class="text-danger2">*</span></label>
+                    <input type="text" formControlName="last_name" maxlength="25" class="form-control" />
+
+                    <span class="error-message" *ngIf="userForm.get('last_name').getError('required') && submitted">
+                      Please provide last name
+                    </span>
+
+                    <span class="error-message"
+                      *ngIf="userForm.get('last_name').getError('isAlphabetsAndSpace') && submitted">Enter
+                      alphabets only
+                    </span>
+                    <span class="error-message" *ngIf="userForm.get('last_name').getError('pattern') && submitted">
+                      Avoid white spaces
+                    </span>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label class="control-label">Email<span class="text-danger2">*</span></label>
+                    <input type="text" formControlName="email" class="form-control" placeholder="name@example.com" />
+
+                    <span class="error-message" style="position: relative !important">
+                      <span *ngIf="userForm.get('email').getError('required') && submitted">
+                        Please provide email
+                      </span>
+                      <span
+                        *ngIf="userForm.get('email').dirty && userForm.get('email').getError('email') || userForm.get('email')?.errors?.pattern">
+                        Please enter valid email
+                      </span>
+                    </span>
+
+                  </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="!selectedUserId">
+                  <div class="form-group">
+                    <label class="control-label">Password<span class="text-danger2">*</span></label>
+                    <input type="password" maxlength="15" autocomplete="new-password" formControlName="password"
+                      class="form-control" [ngClass]="{ 'is-invalid':  f.password.errors }" />
+                    <div *ngIf="f.password.errors">
+                      <span id="txt" class="error-message" *ngIf="f.password.errors.pattern">At least one lowercase
+                        letter, one Uppercase letter, one numeric digit and length greater than 8</span>
+                    </div>
+                    <span class="error-message" *ngIf="userForm.get('password').getError('required') && submitted">
+                      Please provide password
+                    </span>
+                  </div>
+                </div>
+                <div class="col-sm-6" *ngIf="selectedUserId">
+                  <div class="form-group">
+                    <label class="control-label">Status<span class="text-danger">*</span></label>
+
+                    <p-dropdown [(ngModel)]="selectedStatus" [options]="statusList" formControlName="status"
+                      name="status" (onChange)="statusDropDownChange($event)" styleClass="prime-dropdown"
+                      placeholder="Select Status">
+                    </p-dropdown>
+
+                    <span class="error-message" *ngIf="userForm.get('status').getError('required') && submitted">Please
+                      provide status</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6" *ngIf="!selectedUserId">
+                  <div class="form-group">
+                    <label class="control-label">Confirm Password<span class="text-danger2">*</span></label>
+                    <input type="password" maxlength="15" formControlName="confirm_password" class="form-control" />
+
+                    <span class="error-message"
+                      *ngIf="((userForm.get('confirm_password').getError('required') && submitted))"> Please provide
+                      confirm password</span>
+                    <span class="error-message"
+                      *ngIf="( ( (userForm.get('confirm_password').value && userForm.get('confirm_password').value) &&  (userForm.get('confirm_password').value !== userForm.get('password').value)))">
+                      Password does not match </span>
+                  </div>
+                </div>
+
+                <div class="col-sm-6" *ngIf="selectedUserId">
+                  <div class="form-group">
+                    <label class="control-label">Group </label>
+                    <p-dropdown [(ngModel)]="selectedGroupDrop" [options]="groupList" formControlName="group"
+                      name="group" (onChange)="groupDropDownChange($event)" styleClass="prime-dropdown"
+                      placeholder="Select Group">
+                    </p-dropdown>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 margin-top-30">
+                  <!-- <label class="control-label">Read only</label> -->
+                  <div class="form-group">
+                    <!-- <div class="onoffswitch"> -->
+                    <!-- <input type="checkbox" formControlName="read_only" class="margin-left-5"
+                        id="myonoffswitch1" [checked]="false">
+                      <label class="onoffswitch-label" for="myonoffswitch1">
+                        <span class="onoffswitch-inner"></span>
+                      </label> -->
+                    <label class="control-label"><input formControlName="read_only" type="checkbox" value=""><span
+                        class="margin-left-5">Read only</span></label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+              </div>
+            </form>
+            <!-- User Profile Form-->
+            <app-spin-loading [appLoader]="true"></app-spin-loading>
+          </div>
+        </div>
+      </div>
+      <!--<ul>-->
+      <!--<li *ngFor="let error of errorMessages" class="text-danger">{{error}}</li>-->
+      <!--</ul>-->
+      <div class="modal-footer">
+        <button type="button" #closeForm (click)="submitted = false" class="btn btn-default btn-round btn-block1"
+          data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success btn-round btn-block1" form="userFormID"
+          [disabled]="!addUser">{{btnText}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #formModal2 class="modal fade  modal-success text-left" id="bulkUploadModal" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-center">
+    <div class="modal-content">
+      <div class="modal-header" [ngStyle]="theme">
+        <button type="button" class="close" (click)="submitted = false" data-dismiss="modal">
+          <span>x</span>
+        </button>
+        <h4 class="modal-title">Bulk Upload</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <form novalidate [formGroup]="bulkUploadForm" id="bulkUploadFormID"
+              (ngSubmit)="bulkUploadSubmit(bulkUploadForm.value)">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="padding-20 padding-bottom-0 padding-top-0">
+                    <div class="form-group">
+                      <button class="file-upload-btn" type="button"
+                        onclick="$('.file-upload-input').trigger( 'click' )">
+                        Browse
+                      </button>
+
+                      <span class="fileName-padding" *ngIf="selectedFileName != '' && !notCSVExcel">
+                        {{selectedFileName}}
+                      </span>
+
+                      <span class="alert alert-danger fileName-padding" *ngIf="notCSVExcel">
+                        Please choose excel file only - file format: .xls
+                      </span>
+
+                      <div class="image-upload-wrap">
+                        <input class="file-upload-input" type='file' (change)="fileChange($event)"
+                          accept=".ms-excel, .xls" formControlName="csvFiles" />
+                        <!--.ms-excel, .xlsx-->
+
+                        <div class="drag-text">
+                          <h4>Drag and drop your excel file here</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="col-md-12">
+          <div class="col-md-6 text-left">
+            Download <a href="../assets/doc/UserBulkUpload.xls">Sample</a>
+            file here
+            <small class="text-danger" style="display: inline-block;">*Password must be at least one lowercase letter, one Uppercase letter, one numeric digit and length
+              greater than 8</small>
+
+            <p *ngIf="rejectedUsersList.length>0">Download <a (click)="downloadRejectedUser()">Rejected Users</a> List
+            </p>
+
+            <p *ngIf="rejectedUsersList.length>0"> Rejected Count: <b>{{bulkUploadApiResponse.rejected_count}}</b> |
+              Created Count: <b>{{bulkUploadApiResponse.created_counts}}</b>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <button type="button" #closeFormBulk (click)="submitted = false"
+              class="btn btn-default btn-round btn-block1" data-dismiss="modal">Close
+            </button>
+            <button type="submit" class="btn btn-primary btn-round btn-block1" form="bulkUploadFormID"
+              [disabled]="disableButton">Upload
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

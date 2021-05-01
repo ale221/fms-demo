@@ -1,0 +1,47 @@
+<div  style="top: 50px;
+          left: 200px;
+          height: 40px;
+          padding: 6px;" class="mapfilters">
+  <button class="btn btn-xs btn-info">
+    play
+  </button>
+
+  <ng-template #restart>
+    <button class="btn btn-xs btn-info">
+      Restart
+    </button>
+  </ng-template>
+
+
+  <button class="btn btn-xs btn-info" (click)="pauseAnimation()">
+    Pause
+  </button>
+
+
+  <button class="btn btn-xs btn-info" (click)="restartAnimation()">
+    Resume
+  </button>
+
+  <button class="btn btn-xs btn-info" (click)="stopAnimation()">
+    Stop
+  </button>
+
+  <button class="btn btn-xs" (click)="speedMarkerMoment(2000)">
+    1x
+  </button>
+  <button class="btn btn-xs" (click)="speedMarkerMoment(1000)">
+    2x
+  </button>
+  <button class="btn btn-xs" (click)="speedMarkerMoment(500)" >
+    3x
+  </button>
+  <button class="btn btn-xs" (click)="speedMarkerMoment(250)">
+    4x
+  </button>
+  <button class="btn btn-xs" (click)="speedMarkerMoment(125)">
+    5x
+  </button>
+
+
+</div>
+<div #map style="height:590px;width: 100%"></div>

@@ -1,0 +1,17 @@
+<div id="chart">
+    <div class="filter-position">
+      <app-chart-filters *ngIf="chartFilter && chartFilter?.length > 0" (selectedFilters)="getSelectedGraphData($event)"
+        [filterData]="chartFilter" [selectedGraph]="selectedGraphFilter"></app-chart-filters>
+    </div>
+
+    <div [hidden]="chartOptions?.length == 0">
+        <div id="vvvv" style="height: 290px; overflow-y: scroll !important;"></div>
+    </div>
+</div>
+
+<div *ngIf="chartOptions?.length == 0"
+    style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
+    <img style="opacity:0.3; margin-top: 55px!important; margin-bottom:8px" src="assets/images/no-graph.png" alt=""
+        width="80px"><br>
+    <span>No record found!</span>
+</div>

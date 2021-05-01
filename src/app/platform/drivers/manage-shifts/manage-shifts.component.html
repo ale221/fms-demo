@@ -1,0 +1,336 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+  #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <li><a routerLink="/iol/drivers/shifts">Manage Shifts</a></li>
+  </ol>
+</div>
+
+<div
+  [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+  style="padding-bottom:200px" [hidden]="!isAuthorized">
+  <div class="row" style="margin-left: 0px;margin-right: 0px;">
+    <div class="col-lg-4 card-group-row__col">
+      <div class="panel panel-default round  ">
+        <div class="col-lg-10" *ngIf="loggedInUser.read_only != true"
+          style="padding:0px; margin-top: 10px; margin-bottom: 15px;margin-left: 25px;;">
+          <button #editpop type="button" *ngIf="add_btn == 0" class="btn btn-lg btn-primary btn-block btncolor"
+            (click)="clearForm()" data-target="#editpop1" data-toggle="modal"
+            style="font-size: 14px;border-radius: 20px;">
+            <i class="ri-add-circle-fill"></i> New
+          </button>
+        </div>
+
+        <div class="col-lg-12" style="margin-top: 5px; margin-bottom: 5px;">
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)">
+            <!-- 2nd -->
+            <div class="form-group margin-bottom-10">
+              <fieldset class="form-fieldset">
+                <legend>Search</legend>
+
+                <div class="form-group margin-bottom-10">
+                  <div class="input-search">
+                    <i class="input-search-icon ri-search-line"></i>
+                    <input type="text" class="form-control" formControlName="search" name="" placeholder="Search...">
+                    <button type="button" class="input-search-close icon " data-toggle="popover" data-original-title=""
+                      data-trigger="hover" data-container="body" data-placement="top" data-html="true" id="help2">
+                      <i class="ri-question-line" pTooltip="Shift Name"></i>
+                    </button>
+                    <div id="popover-content-help2" class="hide">
+                      Some help information goes here
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group margin-bottom-0 text-center">
+                  <button href="" type="submit" class="btn btn-success btn-round btn-block1"> <i
+                      class=" ri-search-line "></i> Search</button>
+                  <button (click)="onClearSearch()" href=" " class="btn btn-default btn-round "> <i
+                      class="ri-refresh-line "></i>
+                    Clear
+                  </button>
+                </div>
+              </fieldset>
+            </div>
+            <hr>
+            <!-- Download Buttons start-->
+            <div class="form-group margin-bottom-0">
+              <label class="font-size-14 font-weight-600 ">Export:</label>
+              <div class="btn-group btn-group-justified">
+                <div class="btn-group" role="group">
+                  <!-- downloadableLink  -->
+                  <a [href]="downloadableLink">
+                    <button type="button" class="btn btn-outline btn-default"> <img
+                        src="../../../assets/images/icon-xls.png" height="50">
+                      <div class="font-size-12">
+                        <a [href]="downloadableLink" class="enabled">
+                          Download XLS </a>
+                      </div>
+                    </button>
+                  </a>
+                </div>
+                <div class="btn-group" role="group">
+                  <!-- downloadableLink1 -->
+                  <a [href]="downloadableLink1">
+                    <button type="button" class="btn btn-outline btn-default"> <img
+                        src="../../../assets/images/icon-pdf.png" height="50">
+                      <div class="font-size-12">Download PDF</div>
+                    </button>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+            <!-- Download Buttons ends-->
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="panel panel-default  padding-0  card shadow light" style="min-height: 200px;">
+        <div class="panel-body padding-0">
+          <div class="tab-content">
+            <div class="tab-pane active" id="Parking">
+              <div class="panel panel-default margin-bottom-0 ">
+                <div class="panel-heading margin-bottom-0">
+                  <h3 class="panel-title font-weight-600 bg-theme1 white1 "> List
+                  </h3>
+                  <div id="popover-content-help1" class="hide">
+                    Some help information goes here
+                  </div>
+                </div>
+                <div class="panel-body padding-15">
+                  <p-progressBar *ngIf="loadingFilter" [style]="{'height': '3px'}" mode="indeterminate">
+                  </p-progressBar>
+                  <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                    <table matSort (matSortChange)="sortData($event)"
+                      class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                      [dataSource]="dataSource" mat-elevation-z8>
+
+                      <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Shift Name</th>
+                        <td mat-cell *matCellDef="let row">
+                          {{(row.name == null) ? '-': row.name}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="start_date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+                        <td mat-cell *matCellDef="let row">
+                          {{(row.start_date == null) ? '-': (row.start_date | date: 'M/d/yy')}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="end_date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+                        <td mat-cell *matCellDef="let row">
+                          {{(row.end_date == null) ? '-': (row.end_date | date: 'M/d/yy')}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="status_id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                        <td mat-cell *matCellDef="let row"><span class="label"
+                            [ngClass]="(row.status_id === EntityStatusEnum.Active)? 'label-success': 'label-danger'">{{(row.status_id
+                            === EntityStatusEnum.Active)? 'Active' : 'Inactive'}}</span>
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="driver_count">
+                        <th mat-header-cell *matHeaderCellDef>Drivers</th>
+                        <td mat-cell *matCellDef="let row">
+                          {{(row.driver_count == null) ? '-': row.driver_count}}
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="created_datetime">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date</th>
+                        <td mat-cell *matCellDef="let row">{{ (row.created_datetime | date: 'M/d/yy, h:mm:ss a') ||
+                          'N/A' }}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                        <td mat-cell *matCellDef="let row">
+                          <button *ngIf="loggedInUser.read_only != true" type="button"
+                            class="btn btn-icon  btn-info btn-xs " (click)="openEditModal(row)" data-target="#editpop1"
+                            data-toggle="modal" pTooltip="Edit">
+                            <i class="icon ion-edit"></i>
+                          </button>
+
+                          <button *ngIf="loggedInUser.read_only != true" type="button" pTooltip="Delete "
+                            class="btn btn-icon  btn-danger btn-xs" (click)="showSwal(row)"
+                            data-original-title="Delete"> <i class="icon ion-android-delete"></i>
+                          </button>
+                        </td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <!-- code for expend row start-->
+                    <div *ngIf="dataSource == ''" class="no-records">No records found</div>
+                    <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true"
+                      showFirstLastButtons [pageSize]="10" (page)="onPaginateChange($event)"></mat-paginator>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- popup start-->
+<div #formModal class="modal fade  modal-success text-left" id="editpop1" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-center  modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" [ngStyle]="theme">
+        <button type="button" class="close" data-dismiss="modal">
+          <span>x</span>
+        </button>
+        <h4 class="modal-title">{{inactiveRecord ? 'View Driver' : formTitle}}</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="">
+          <div class="row">
+            <div class="">
+              <form novalidate [formGroup]="driverForm" id="driverFormID" (ngSubmit)="onSubmit(driverForm.value)">
+                <fieldset [disabled]="inactiveRecord">
+                  <div class="">
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group margin-bottom-10">
+                            <label>Name<span class="text-danger2">*</span></label>
+                            <input type="text" maxlength="25" class="form-control" formControlName="job_name" value=""
+                              placeholder="Name">
+                            <span class="error-message"
+                              *ngIf="driverForm.get('job_name').getError('required') && submitted"> Please
+                              provide name</span>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group margin-bottom-10">
+                            <label>Shifts<span class="text-danger2">*</span> </label>
+
+                            <p-dropdown [options]="shiftOption" formControlName="selectShift" name="selectedGroup"
+                              (onChange)="shiftDropdownChange($event)" styleClass="prime-dropdown"
+                              placeholder="Select Shift">
+                            </p-dropdown>
+                            <span class="error-message"
+                              *ngIf="driverForm.get('job_name').getError('required') && submitted"> Please
+                              Select Shifts</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row" style="margin-top: 10px;">
+                        <div class="col-lg-6">
+                          <div class="form-group margin-bottom-10">
+                            <label>Start Date<span class="text-danger2">*</span></label>
+                            <div class="input-icon">
+                              <!-- [(ngModel)]="contractStartDate" -->
+                              <p-calendar [readonlyInput]="true" [(ngModel)]="contractStartDate"
+                                [minDate]="shiftstartDay" name="startDate" (onSelect)="getStartDate($event)"
+                                placeholder="MM/DD/YYYY" styleClass="prime-datetime" formControlName="startDate">
+                              </p-calendar>
+                              <span class="error-message" style="    margin-left: -417px;
+                                  margin-top: 37px;"
+                                *ngIf="driverForm.get('startDate').getError('required') && submitted"> Please
+                                Select Start Date</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group margin-bottom-10">
+                            <label>End Date<span class="text-danger2">*</span></label>
+                            <div class="input-icon">
+                              <!-- [disabled]="!contractStartDate"[minDate]="contractStartDate" [(ngModel)]="contractEndDate" -->
+                              <p-calendar [readonlyInput]="true" [disabled]="!contractStartDate"
+                                [minDate]="contractStartDate" (onSelect)="getEndDate($event)" name="endDate"
+                                placeholder="MM/DD/YYYY" styleClass="prime-datetime" formControlName="endDate">
+                              </p-calendar>
+                              <span class="error-message" style="    margin-left: -417px;
+                                  margin-top: 37px;"
+                                *ngIf="driverForm.get('endDate').getError('required') && submitted"> Please
+                                Select End Date</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row" style="margin-top: 10px;">
+                        <div class="col-sm-6" *ngIf="selectedUserId==true">
+                          <div class="form-group">
+                            <label class="control-label"><b>Status<span class="text-danger">*</span></b></label>
+
+                            <p-dropdown [(ngModel)]="selectedStatus" [options]="statusList" formControlName="status"
+                              name="status" styleClass="prime-dropdown" placeholder="Select Status">
+                            </p-dropdown>
+
+                            <span class="error-message"
+                              *ngIf="driverForm.get('status').getError('required') && submitted">Please
+                              provide status</span>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="row" style="margin-top: 20px">
+                        <div class="col-lg-12">
+                          <div class="form-group">
+                            <div class="table-responsive" style="height:auto;border: 1px solid #ebebeb;">
+                              <table
+                                class="table nowrap table-bordered1 margin-bottom-0 table-condensed  bg-grey-1001   text-wrap">
+                                <tbody>
+                                  <tr *ngFor="let item of getDayName">
+                                    <td>
+                                      <!-- class="checkbox-custom checkbox-inline1 checkbox-warning" -->
+                                      <div>
+                                        <!-- <input type="checkbox" formControlName="{{item}}CB" id="Monday" form name="checkbox" > -->
+                                        <label for="Monday">{{item}}</label>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div class="form-group margin-bottom-0">
+                                        <div class="input-group">
+                                          <span class="input-group-addon">Start Time</span>
+                                          <input type="hidden" #itemHidden name="itemHidden" [value]="item">
+                                          <input type="time" #startTime name="StartTime" [value]="demoTimeStart"
+                                            class="form-control" placeholder="">
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div class="form-group margin-bottom-0">
+                                        <div class="input-group">
+                                          <span class="input-group-addon">End Time</span>
+                                          <input type="time" #endTime name="EndTime" [value]="demoTimeEnd"
+                                            class="form-control" placeholder="">
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-round btn-block1" (click)="closeFunction()" #closeForm
+          data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success btn-round btn-block1" form="driverFormID">{{btnText}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- popup ends -->

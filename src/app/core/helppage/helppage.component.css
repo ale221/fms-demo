@@ -1,0 +1,51 @@
+.helppage-mainDiv{
+    background-color: #f5f4f4;
+    display: flex;
+    /* height: 160vh; */
+}
+
+.helppage-mainDiv-child{
+    background-color: white;
+    padding: 31px;
+    width: 100%;
+    border-radius: 7px;
+
+    display: flex;
+    /* height: 566px; */
+}
+
+.border-btm{
+    border-bottom: 1px solid #eae4e4;
+    padding: 4px;
+    margin-right: 12px;
+    width: 96%;
+}
+
+.helppage-leftSection{
+    width: 45%;
+}
+
+.helppage-leftSection > h4{
+    font-weight: 600;
+}
+
+.paragraphWidth{
+    width: 90%;
+}
+
+.helppage-rightSection{
+    width: 55%;
+}
+
+.helppage-leftSection_footer{
+    margin-top: 20px;
+    display: flex;
+}
+
+.footer-btn-override{
+    border-radius: 15px !important;
+}
+
+.helppage-rightSection_fchild{
+    height: 500px;
+}

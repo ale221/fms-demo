@@ -1,0 +1,93 @@
+<div class="for-map-trail" style="display: flex; flex-direction: column" [ngClass]="calendarDimension"
+  *ngIf="!hideCalendar">
+
+  <div class="">
+
+    <div *ngIf="!timeRange; else timediv" class="input-group" [ngClass]="buttonGroupSize ? 'input-group-sm' : ''">
+
+      <div *ngIf="calendarType === 'basic' ; else rangeCalendar">
+        <p-calendar [(ngModel)]="date1" placeholder="Select Date" [inputStyleClass]="buttonGroupSize ? 'amnah' : ''"
+          [inputStyle]="{'height':'33px !important'}" [styleClass]="'prime-datetime'" [yearNavigator]="true"
+          [monthNavigator]="true" [yearRange]="'2000:'+(currentDate.getFullYear())" [maxDate]="maxDate"
+          (ngModelChange)="verifyDateRange([date1, date1], 'basic')">
+        </p-calendar>
+      </div>
+      <ng-template #rangeCalendar>
+        <p-calendar [inputStyleClass]="buttonGroupSize ? 'amnah' : ''" [inputStyle]="{'height':'33px !important'}"
+          placeholder="Select Date" [styleClass]="'prime-datetime'" [showButtonBar]="true" [(ngModel)]="dateRange"
+          [yearNavigator]="true" [monthNavigator]="true" [yearRange]="'2000:'+(currentDate.getFullYear())"
+          [selectionMode]="calendarType" (ngModelChange)="verifyDateRange(dateRange, type)" [maxDate]="maxDate"
+          [showTime]="timeRange">
+        </p-calendar>
+      </ng-template>
+    </div>
+  </div>
+  <div *ngIf="!timeRange; else second;">
+    <div [hidden]="checkEndDate()" class="error margin-left-5 margin-top-10 text-danger font-weight-600">{{message}}
+    </div>
+  </div>
+</div>
+
+<div class="margin-right-15" [class]="btnsPosition">
+  <div class="btn-group" data-toggle="buttons" [ngClass]="buttonGroupSize">
+    <label [class]="'btn  btn-outline ' + buttonGroupColor" [ngClass]="{'active': selected === btn1.name}"
+      *ngIf="hideBtn.indexOf('today')==-1" (click)="todayClicked(type)">
+      <input #btn1 type="radio" name="today"> Today
+    </label>
+    <label [class]="'btn  btn-outline ' + buttonGroupColor" [ngClass]="{'active': selected === btn2.name}"
+      *ngIf="hideBtn.indexOf('yesterday')==-1" (click)="yesterdayClicked(type);">
+      <input #btn2 type="radio" name="yesterday"> Yesterday
+    </label>
+    <label [class]="'btn  btn-outline ' + buttonGroupColor" [ngClass]="{'active': selected === btn3.name}"
+      *ngIf="hideBtn.indexOf('week')==-1 " (click)="weekClicked(type)">
+      <input #btn3 type="radio" name="week">This Week
+    </label>
+    <label [class]="'btn  btn-outline ' + buttonGroupColor" [ngClass]="{'active': selected === btn4.name}"
+      *ngIf="hideBtn.indexOf('month')==-1" (click)="monthClicked(type)">
+      <input #btn4 type="radio" name="month">This Month
+    </label>
+  </div>
+</div>
+<div class="col-sm-2" *ngIf="showGenerateReport"><button pTooltip="Generate PDF Report" class="btn btn-primary btn-sm"
+    (click)="generateReportClicked()">Download PDF</button></div>
+
+<div class="col-sm-3" *ngIf="search">
+  <div class="input-icon">
+    <input type='text' class="form-control input-sm" placeholder='Search' (keyup)='updateFilter($event)' />
+    <span class="icon fa fa-info-circle" pTooltip='Filter Truck & Driver'></span>
+  </div>
+</div>
+
+<ng-template #timediv>
+  <div class="row input-group" [ngClass]="buttonGroupSize ? 'input-group-sm' : ''">
+    <div class="col-sm-5 map-trail-startDate">
+      <p-calendar placeholder="Select Start Date" [styleClass]="'prime-datetime'" [showButtonBar]="true"
+        [(ngModel)]="dateRangeStart" [yearNavigator]="true" [monthNavigator]="true"
+        [yearRange]="'2000:'+(currentDate.getFullYear())" (ngModelChange)="verifyEndDate()" [maxDate]="maxDate"
+        [showTime]="true">
+      </p-calendar>
+    </div>
+    <div class="col-sm-5">
+      <p-calendar placeholder="Select End Date" [styleClass]="'prime-datetime'" [disabled]="!dateRangeStart"
+        [showButtonBar]="true" [(ngModel)]="dateRangeEnd" [yearNavigator]="true" [monthNavigator]="true"
+        [yearRange]="'2000:'+(currentDate.getFullYear())" (ngModelChange)="verifyEndDate()" [maxDate]="maxDate"
+        [showTime]="true" [stepMinute]="1">
+      </p-calendar>
+
+      <!-- <span class="error margin-top-5 margin-left-15 text-danger"
+        style="color: #f96868 !important; font-size: 12px;"> {{messageOnEndDate}}
+      </span>-->
+    </div>
+    <div class="input-group-btn1 pull-left">
+      <button [disabled]="!go" [ngStyle]="theme" (click)="goBtnAlteredClicked()" class="btn btn-success">
+        <i class="ion-arrow-right-c"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #second>
+  <div [hidden]="checkRangeEndDate()" class="error  text-danger"
+    style="color: #f96868 !important;font-size: 12px;">{{message}}</div>
+    <!-- margin-top-5 margin-left-15 -->
+</ng-template>

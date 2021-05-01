@@ -1,0 +1,115 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+    #scrollToTop [hidden]="!isAuthorized">
+    <ol class="breadcrumb breadcrumb-arrow ">
+        <li><a class="icon ion-ios-home" routerLink="/iol/admin/config"> Admin </a></li>
+        <li><a href="javascript:void(0)">Card-Settings</a></li>
+    </ol>
+</div>
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+    [hidden]="!isAuthorized">
+    <div class="tab-content ">
+        <div class="tab-pane active" id="addnew">
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">Select Usecase</label>
+                        <div class="input-icon">
+                            <p-dropdown [options]="usecases" [(ngModel)]="selectedUsecaseObj" name="selectedUsecase"
+                                (onChange)="usecaseChange($event)" optionLabel="name" styleClass="prime-dropdown"
+                                [readonly]="false" filter="true" [scrollHeight]="'120px'" filterPlaceholder="Search"
+                                placeholder="Select Usecase">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">Select Dashboard</label>
+                        <div class="input-icon">
+                            <p-dropdown [options]="dashboards" [(ngModel)]="selectedDashboardObj"
+                                name="selectedDashboard" (onChange)="dashboardChange($event)" optionLabel="name"
+                                styleClass="prime-dropdown" [readonly]="false" filter="true" [scrollHeight]="'120px'"
+                                filterPlaceholder="Search" placeholder="Select Dashboard">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+
+                </div>
+            </div>
+            <div class="panel panel-dark" style="min-height: 300px;">
+                <div class="panel-heading theme-color">
+                    <h3 class="panel-title font-weight-600 "> {{selectedUsecase}}
+                    </h3>
+                    <div class="panel-actions">
+
+                    </div>
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="margin-bottom-0 clearfix">
+                    </div>
+
+                    <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                        <table class="table  margin-bottom-0  table-condensed1 table-bordered1 text-wrap theme-table1">
+                            <thead style="max-width: 100px;">
+                                <tr class="">
+                                    <th class="col-md-2 text-left">Preview</th>
+                                    <th class="col-md-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="usecasesDashboard">
+                                <tr *ngFor="let item of usecasesDashboard; let i = index" [attr.data-index]="i">
+                                    <td class="text-left" style="width: 5%!important;">
+                                        <app-stats-icon-card [icon]="item.icon" [bgStyle]="item.color"
+                                            style="width: 250px; float: left;" [totalCount]="item.data.total_count"
+                                            [label]="item.name" [iconHeight]="35" [label]="item.name"
+                                            [footerArr]="item.data.footer" [data]="item"
+                                            [footerStyle]="item.footer_color">
+                                        </app-stats-icon-card>
+                                    </td>
+                                    <td class="col-md-2" style="vertical-align: inherit;">
+                                        <div class="  theme-color">
+                                            <div class="onoffswitch ">
+                                                <input type="checkbox" (change)="setCardId(item, $event)"
+                                                    name="onoffswitch{{i}}" class="onoffswitch-checkbox"
+                                                    id="onoffswitch{{i}}" [value]="item.is_selected"
+                                                    [checked]="item.is_selected">
+                                                <label class="onoffswitch-label" for="onoffswitch{{i}}">
+                                                    <span class="onoffswitch-inner"></span>
+                                                    <!-- <span class="onoffswitch-switch"></span> -->
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <hr />
+                    <div class="form-group1" *ngIf="loggedInUser.read_only != true">
+                        <button type="button" [disabled]="usecasesDashboard?.length === 0" (click)="saveCardSettings()"
+                            class="btn btn-dark pull-right btn-round">
+                            Update Cards
+                        </button>
+                        <!-- <button type="button" class="btn btn-default btn-round ">
+                            Clear
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+</div>

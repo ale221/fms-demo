@@ -1,0 +1,16 @@
+<div class="form-group1">
+  <label class="control-label" *ngIf="showLabel">Area
+    <app-label-loader [showLoader]="areaLoader.visibility"></app-label-loader>
+  </label>
+  <p-dropdown
+    [disabled]="disableRecord"
+    [(ngModel)]="selectedValue"
+    [showClear]="true"
+    [options]="area_list"
+    (onChange)="onAreaChange($event.value)"
+    styleClass="prime-dropdown"
+    filter="true"
+    [placeholder]="areaLoader.visibility ? 'Fetching Area' : 'Select Area'">
+  </p-dropdown>
+</div>
+

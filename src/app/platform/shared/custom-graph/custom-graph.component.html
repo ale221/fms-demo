@@ -1,0 +1,27 @@
+  <div id="chart">
+    <div class="filter-position">
+      <app-chart-filters *ngIf="chartFilter && chartFilter?.length > 0" (selectedFilters)="getSelectedGraphData($event)"
+        [filterData]="chartFilter" [selectedGraph]="selectedGraphFilter">
+      </app-chart-filters>
+    </div>
+  <div>
+    <div *ngIf="!noDataFound">
+      <div *ngFor="let fleet of fleets" class="graph-row">
+        <div class="fleet-name">{{fleet.name}}</div>
+        <div class="graph-sub-row" *ngIf="fleet?.data && fleet?.data.length > 0">
+          <div *ngFor="let item of fleet?.customArray; let i = index" [className]="graphClass[i]">
+            <span [pTooltip]="item?.vehicle">{{item?.driver}}</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="noDataFound">
+      <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <img style="opacity:0.3; margin-top: 55px!important;" src="assets/images/no-graph.png" alt="" width="80px"><br>
+        <span>No record found!</span>
+      </div>
+    </div>
+  </div>
+
+</div>

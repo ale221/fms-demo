@@ -1,0 +1,11 @@
+<!--<button type="button" pButton icon="fa fa-file-o" iconPos="left" label="Export" (click)="dt.exportCSV()" style="float:left"></button>-->
+<button type="button"  class="btn-info btn  font-size-12 pull-right" [ngClass]="btnSize" (click)="dt.exportCSV()" style="float:left"><i class="fa fa-file-o margin-right-5"></i>Export as CSV</button>
+<!--<button type="button"  class="btn-info btn  font-size-12 btn-sm margin-left-5" (click)="test()" style="float:left"><i class="fa fa-file-o margin-right-5"></i>test</button>-->
+
+<p-table [hidden]="true" #dt [columns]="cols" [value]="rows" [exportFilename]="fileName">
+  <!-- <p-column *ngFor="let col of cols" >
+    <ng-template let-row="rowData" pTemplate="body">
+      {{row.inspectionDate | date:'MM/dd/yyyy'}}
+    </ng-template>
+  </p-column> -->
+</p-table>

@@ -1,0 +1,7 @@
+<div class="input-icon">
+  <input [disabled]="disableTextBox" type='text' name='searchTruck' class="form-control input-sm" autocomplete="off"
+         [placeholder]="'Search'"
+         [(ngModel)]="inputValue" (keyup)='updateFilter()'/>
+  <span class="icon fa fa-info-circle"  [pTooltip]="'Search By ' + (tooltipArray)" tooltipPosition="left"></span>
+
+</div>

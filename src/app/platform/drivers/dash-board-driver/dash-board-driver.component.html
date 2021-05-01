@@ -1,0 +1,375 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' ">
+<app-breadcrumbs [items]="items" [home]="home" #scrollToTop [hidden]="!isAuthorized"></app-breadcrumbs>
+</div>
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "  [hidden]="!isAuthorized">
+    <div class="row">
+        <div [ngClass]="{'col-md-2': cardsArray.length === 4 || cardsArray.length === 3, 'col-md-6': cardsArray.length === 1}"
+            *ngFor="let card of cardsArray; let i = index" [attr.data-index]="i">
+            <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+                [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+                [footerStyle]="card.footer_color">
+            </app-stats-icon-card>
+        </div>
+
+        <div class="col-md-4" [ngClass]="{'col-lg-6': cardsArray?.length === 3}">
+            <div
+                class="flex-card flex-action-widget padding-15 bg-blue-800 text-center relative shadow white margin-bottom-30">
+                <app-dashboard-widget [widgetData]="widgetData" (selectedWidget)="getSelectedWidgetOption($event)"
+                (exportToCSV)="ExportDriverListAsCSV()">
+                </app-dashboard-widget>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default  padding-0 round card shadow light " style="min-height: 200px;">
+                <div class="panel-heading font-weight-600 margin-bottom-0">
+
+                </div>
+                <div class="panel-body padding-0">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Summary">
+                            <div class="panel panel-default margin-bottom-0 ">
+                                <div class="panel-body padding-15 ">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <!-- <app-filters activePage="drivers" [resetFilters]="resetFilters"></app-filters> -->
+
+
+                                            <div class="panel-heading margin-bottom-0">
+                                                <h3 class="panel-title font-weight-600 bg-teal-8001 white1"
+                                                    style="border-bottom: 1px solid rgba(0, 0, 0, .075)">Choose
+                                                    Parameters</h3>
+                                                <div class="panel-actions">
+                                                    <a></a>
+                                                </div>
+                                            </div>
+
+                                            <form novalidate [formGroup]="filtersForm" id="filtersForm"
+                                                style="padding: 15px">
+
+                                                <div class="input-search">
+                                                    <input type="text" style="border-radius: 3px"
+                                                        (keyup)='keyUp2.next($event)' formControlName="search_key_map"
+                                                        class="form-control" placeholder="Search by driver name">
+                                                    <button type="button" class="input-search-btn">
+                                                        <i class="icon ion-ios-search-strong"></i>
+                                                    </button>
+                                                </div>
+
+                                                <div style="margin-top: 5px; margin-bottom: 10px;">
+                                                    <div class="form-group margin-bottom-10">
+                                                        <p-dropdown [options]="driverGroup"
+                                                            formControlName="selectGroup" name="selectedGroup"
+                                                            (onChange)="selectGroupDropDownChange($event)"
+                                                            styleClass="prime-dropdown" placeholder="Select group">
+                                                        </p-dropdown>
+                                                    </div>
+
+                                                    <div class="form-group margin-bottom-10">
+                                                        <p-dropdown [options]="driverLists"
+                                                            formControlName="selectedDriver" name="selectedDriver"
+                                                            (onChange)="selectDriverDropDownChange($event)"
+                                                            styleClass="prime-dropdown" placeholder="Select driver">
+                                                        </p-dropdown>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row"
+                                                    style="border: 1px solid #c0c0c0; border-radius: 5px; margin-left: 1px; margin-right: 1px; margin-top: 20px; padding-bottom: 18px;">
+                                                    <div class="col-md-12">
+                                                        <p
+                                                            style="margin-top: -13px; background-color: white; max-width: 42%;">
+                                                            <b>Additional Options</b>
+                                                        </p>
+
+                                                        <div class="">
+                                                            <div class="input-icon">
+                                                                <p-dropdown [options]="poiOptions"
+                                                                    formControlName="poi_id" name="poiOptions"
+                                                                    (onChange)="poiOptionChange($event)"
+                                                                    optionLabel="name" styleClass="prime-dropdown"
+                                                                    [readonly]="false" filter="true"
+                                                                    [scrollHeight]="'120px'" filterPlaceholder="Search"
+                                                                    placeholder="Select POI">
+                                                                </p-dropdown>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="margin-top-10">
+                                                            <!-- *ngIf='showFilterDropdown' -->
+                                                            <div class="input-icon">
+                                                                <!-- <p-dropdown [options]="fleetsOptions"
+                                                                    formControlName="fleet_id"
+                                                                    [(ngModel)]="selectedFleetOption"
+                                                                    name="fleetsOption"
+                                                                    (onChange)="fleetOptionChange($event)"
+                                                                    optionLabel="name" styleClass="prime-dropdown"
+                                                                    [readonly]="false" filter="true"
+                                                                    [scrollHeight]="'120px'" filterPlaceholder="Search"
+                                                                    placeholder="Select Fleet">
+                                                                </p-dropdown> -->
+
+
+                                                                <p-dropdown [options]="zoneOptions"
+                                                                    formControlName="zone_id" name="zoneOption"
+                                                                    (onChange)="zoneOptionChange($event)"
+                                                                    optionLabel="name" styleClass="prime-dropdown"
+                                                                    [readonly]="false" filter="true"
+                                                                    [scrollHeight]="'120px'" filterPlaceholder="Search"
+                                                                    placeholder="Select value">
+                                                                </p-dropdown>
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <!-- Mat-Table -->
+                                            <div class="panel-body padding-15">
+                                              <p-progressBar *ngIf="loadingFilter" [style]="{'height': '3px'}"
+                                                  mode="indeterminate"></p-progressBar>
+                                                <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                                                    <table matSort (matSortChange)="sortDataForMap($event)"
+                                                        class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                        mat-table [dataSource]="dataSourceForMap" mat-elevation-z8>
+                                                        <ng-container matColumnDef="name">
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                                Drivers
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let row">
+                                                                <div style="float: left">
+                                                                  <span style="float: left;margin-left: -22px;margin-top: 3px;" id="content"
+                                                                  class=""></span>
+                                                                    <img [src]="row.photo || '../assets/images/default_user.png'"
+                                                                        class="img-bordered pull-left margin-right-10"
+                                                                        height="36px" />
+                                                                    <div class="media-body pointer"
+                                                                        [routerLink]="gotoService.gotoDriver(row.id)"
+                                                                        [queryParams]="{ usecase: useCaseId}">
+                                                                        <a class="font-weight-600">{{ row.name || 'N/A'
+                                                                            }}</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="truck_name" (click)=$event.stopPropagation()>
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                                Vehicle
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let row">
+                                                                <div style=" float: left">
+                                                                    <div class="media-body pointer"
+                                                                        [routerLink]="gotoService.gotoTruck(row.truck)"
+                                                                        [queryParams]="{ usecase: useCaseId}">
+                                                                        <a class="font-weight-600">{{ row.truck_name ||
+                                                                            'N/A'
+                                                                            }}</a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <tr mat-header-row *matHeaderRowDef="displayedColumnsLive"></tr>
+                                                        <tr mat-row *matRowDef="let row; columns: displayedColumnsLive;"
+                                                            matRipple class="element-row" [cdkDetailRow]="row"
+                                                            [cdkDetailRowTpl]="tpl">
+                                                        </tr>
+                                                    </table>
+                                                    <div *ngIf="dataSourceForMap?.length == 0">
+                                                        <p>No record found</p>
+                                                    </div>
+                                                    <mat-paginator translate="no" #paginatorForMap [length]="totalLengthForMap"
+                                                        [hidePageSize]="true" showFirstLastButtons [pageSize]="10"
+                                                        (page)="onPaginateChange($event)">
+                                                    </mat-paginator>
+                                                </div>
+                                                <ng-template #tpl let-row>
+                                                    <div class="mat-row detail-row" [@detailExpand]
+                                                        style="overflow: hidden">
+                                                        <div><b style="margin-left: 21px;">Employee Id:</b> {{
+                                                            row.employee_id || '-' }}</div>
+                                                        <div><b style="margin-left: 21px;">KM/Day:</b> {{
+                                                            row.distance_per_day || '-' }}</div>
+                                                        <div><b style="margin-left: 21px;">POI:</b> {{ row.poi_name ||
+                                                            '-' }}</div>
+                                                        <div><b style="margin-left: 21px;">POI Time:</b> {{ row.poi_time
+                                                            ? (row.poi_time * 1000 | date: 'M/d/yyyy, h:mm:ss a') : '-'
+                                                            || '-' }}</div>
+                                                    </div>
+                                                </ng-template>
+                                            </div>
+
+                                            <div class="form-group margin-bottom-0">
+                                                <label class="font-size-14 font-weight-600 ">Export:</label>
+                                                <div class="btn-group btn-group-justified">
+                                                    <div class="btn-group" role="group">
+                                                        <a [href]="downloadableLink">
+                                                            <button type="button" class="btn btn-outline btn-default">
+                                                                <img src="../../../assets/images/icon-xls.png"
+                                                                    height="50">
+                                                                <div class="font-size-12">
+                                                                    <a [href]="downloadableLink" class="enabled">
+                                                                        Download XLS </a>
+                                                                </div>
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group" role="group">
+                                                        <a [href]="downloadableLink1">
+                                                            <button type="button" class="btn btn-outline btn-default">
+                                                                <img src="../../../assets/images/icon-pdf.png"
+                                                                    height="50">
+                                                                <div class="font-size-12">Download PDF</div>
+                                                            </button>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-8">
+                                            <div class="panel-heading" [ngStyle]="theme" style="margin-bottom: 0px;">
+                                                <h3 class="panel-title font-weight-600 " style="color: white;">
+                                                    Map
+                                                </h3>
+                                                <div class="panel-actions"><a class="panel-action "></a></div>
+                                            </div>
+
+                                            <div class="map-wrapper" style="position:relative">
+                                                <div #gmap style="width:100%;" [ngStyle]="{'height':'590px'}"></div>
+                                                <app-spin-loading [appLoader]="mapLoader"></app-spin-loading>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-left: 0px;margin-right: 0px;">
+            <div class="col-lg-12">
+                <div class="panel panel-default  padding-0  card shadow light" style="min-height: 200px;">
+                    <div class="panel-body padding-0">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="Parking">
+                                <div class="panel panel-default margin-bottom-0 ">
+                                    <div class="panel-body padding-15 padding-top-0">
+                                        <div class="row margin-bottom-10">
+                                          <div class="panel-heading margin-bottom-0">
+                                            <h3 class="panel-title font-weight-600 bg-teal-8001 white1"
+                                                style="border-bottom: 1px solid rgba(0, 0, 0, .075)">Driver History</h3>
+                                            <div class="panel-actions" style="right: 15px">
+                                              <div class="pull-right">
+                                                  <div class="input-search" style="width: 200px">
+                                                      <input type="text" style="border-radius: 3px"
+                                                          (keyup)='keyUp.next($event)' class="form-control"
+                                                          placeholder="Search by driver name">
+                                                      <button type="button" class="input-search-btn">
+                                                          <i class="icon ion-ios-search-strong"></i>
+                                                      </button>
+                                                  </div>
+                                              </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <p-progressBar *ngIf="loadingFilter" [style]="{'height': '3px'}"
+                                            mode="indeterminate"></p-progressBar>
+                                        <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                                            <table matSort (matSortChange)="sortData($event)"
+                                                class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                                mat-table [dataSource]="dataSource" mat-elevation-z8>
+                                                <ng-container matColumnDef="name">
+                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Drivers</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div style="width: 160px; float: left">
+                                                            <img [src]="row.photo || '../assets/images/default_user.png'"
+                                                                class="img-bordered pull-left margin-right-10"
+                                                                height="36px" />
+                                                            <div class="media-body pointer"
+                                                                [routerLink]="gotoService.gotoDriver(row.id)"
+                                                                [queryParams]="{ usecase: useCaseId}">
+                                                                <a class="font-weight-600">{{ row.name || 'N/A' }}</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="employee_id">
+                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Id
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div style="width: 160px; float: left">
+                                                            <div class="media-body pointer"
+                                                                [routerLink]="gotoService.gotoDriver(row.id)"
+                                                                [queryParams]="{ usecase: useCaseId}">
+                                                                <a class="font-weight-600">{{ row.employee_id || 'N/A'
+                                                                    }}</a>
+                                                            </div>
+                                                        </div>
+                                                        <!--<div style="width: 160px; float: left">
+                                                        <div class="media-body pointer" [routerLink]="gotoService.gotoDriverJobDashboard(row.id)" [queryParams]="{ usecase: useCaseId}">
+                                                          <a class="font-weight-600">job:{{ row.employee_id || 'N/A' }}</a>
+                                                        </div>
+                                                      </div>-->
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="status">
+                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                                                    <td mat-cell *matCellDef="let row"><span class="label"
+                                                            [ngClass]="(row.status === EntityStatusEnum.Active)? 'label-success': 'label-danger'">{{(row.status
+                                                            === EntityStatusEnum.Active)? 'Active' : 'Inactive'}}</span>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="on_shift">
+                                                    <th mat-header-cell *matHeaderCellDef>Shift Status</th>
+                                                    <td mat-cell *matCellDef="let row"><span style="color: #333"
+                                                            [ngClass]="row.on_shift ? 'label label-info' : 'label label-default'">{{row.on_shift
+                                                            ? 'On Shift' : 'Off Shift'}}</span></td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="modified_by_name">
+                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Modified By
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">{{ row.modified_by_name || 'N/A'
+                                                        }}</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="modified_datetime">
+                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Modified Date
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">{{ (row.modified_datetime | date:
+                                                        'M/d/yy, h:mm:ss a') || 'N/A' }}</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="created_datetime">
+                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">{{ (row.created_datetime | date:
+                                                        'M/d/yy, h:mm:ss a') || 'N/A' }}</td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                            </table>
+                                            <div *ngIf="dataSource?.length == 0">
+                                                <p>No record found</p>
+                                            </div>
+                                            <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true"
+                                                showFirstLastButtons [pageSize]="10" (page)="onPaginateChange($event)">
+                                            </mat-paginator>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

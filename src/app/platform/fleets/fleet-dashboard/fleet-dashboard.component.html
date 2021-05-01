@@ -1,0 +1,372 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+<!-- <app-breadcrumbs [items]="items" [home]="home" #scrollToTop [hidden]="!isAuthorized"></app-breadcrumbs> -->
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+  #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <li><a> Fleets</a></li>
+    <!-- <li><a routerLink="/iol/fleets">Real Time Tracking</a></li> -->
+  </ol>
+</div>
+
+<div
+  [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+  style="padding-bottom:200px" [hidden]="!isAuthorized">
+  <div class="row">
+    <div
+      [ngClass]="{'col-md-2': (cardsArray?.length === 3 || cardsArray?.length === 4), 'col-md-3': cardsArray.length === 2, 'col-md-6': cardsArray.length === 1}"
+      *ngFor="let card of cardsArray; let i = index" [attr.data-index]="i">
+      <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+        [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+        [footerStyle]="card.footer_color">
+      </app-stats-icon-card>
+    </div>
+
+    <div [ngClass]="{'col-lg-4': cardsArray?.length === 4}" class="col-lg-6 col-sm-12 col-xs-12 col-md-12 pull-right">
+      <div
+        class="flex-card flex-action-widget padding-15 bg-blue-800 text-center relative shadow white margin-bottom-30">
+        <app-dashboard-widget [widgetData]="widgetData" (selectedWidget)="getSelectedWidgetOption($event)"
+          (exportToCSV)="ExportVehicleListAsCSV()">
+        </app-dashboard-widget>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="graphsArray && graphsArray?.length > 0">
+    <div *ngFor="let graph of graphsArray | slice:0:1; let i = index" class="col-md-12">
+      <div style="height: 340px;" class="panel panel-default card light shadow margin-bottom-30">
+        <div class="panel-heading">
+          <h3 class="panel-title font-weight-600">
+            {{graph.is_selected ? graph.name : 'Select Graph Here'}}</h3>
+        </div>
+        <div class="panel-body small-ui-dropdown">
+          <div class="chartbox" *ngIf="graph.type === 88 && graph.is_selected">
+            <app-fleetdashboardchart [chartOptions]="graph.data" [graphHeight]="graphHeight" [horizontal]="false"
+              [graphId]="graph.id" [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
+            </app-fleetdashboardchart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row card-group-row  ">
+    <div class="col-lg-4  card-group-row__col ">
+      <div class="panel panel-default round">
+        <app-filters activePage="fleets" [listedVehicles]="dataSource" [resetFilters]="resetFilters"
+          [poiField]="poiField" [vehicleFleet]="vehicleFleet">
+        </app-filters>
+
+        <div class="panel-body padding-15">
+          <p-progressBar *ngIf="loadingFilter" [style]="{'height': '3px'}" mode="indeterminate"></p-progressBar>
+
+          <div class="table-responsive" style="border: 1px solid #ebebeb;">
+            <table matSort (matSortChange)="sortData($event)"
+              class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+              [dataSource]="dataSource" mat-elevation-z8>
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle No</th>
+                <td mat-cell *matCellDef="let row">
+                  <div style="float: left">
+                    <span style="float: left;margin-left: -22px;margin-top: 8px;" id="content"></span>
+                    <img [src]="row?.photo" class="img-bordered pull-left margin-right-10" height="36px" />
+                    <div class="media-body pointer" routerLink="/iol/fleets/{{row.id}}"
+                      [queryParams]="{ usecase: useCaseId}">
+                      <a class="font-weight-600">{{ row?.name || 'N/A' }}</a>
+                      <!-- <span style="font-size: 12px; font-style: italic;">{{ row.vehicle_type || 'N/A' }}</span> -->
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="current_speed">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Current Speed</th>
+                <td mat-cell *matCellDef="let row">{{ (row?.signalRresponse?.spd ? row?.signalRresponse?.spd :
+                  row?.last_speed | number: '1.0-2') || 'N/A'}} Km/hr</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
+                [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl"></tr>
+            </table>
+            <div *ngIf="dataSource?.length === 0 " class="no-records">No records found</div>
+            <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true" showFirstLastButtons
+              [pageSize]="10" (page)="onPaginateChange($event)"></mat-paginator>
+          </div>
+          <ng-template #tpl let-row>
+            <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+              <div><b style="margin-left: 7px;">Driver:</b> {{ row?.assigned_driver || '-' }}</div>
+              <div><b style="margin-left: 7px;">KM/Day:</b> {{ row?.distance_per_day || '-' }}</div>
+              <div><b style="margin-left: 7px;">POI:</b> {{ row?.poi_name || '-' }}</div>
+              <div><b style="margin-left: 7px;">POI Time:</b> {{ (row?.poi_time == null ? '-' : row?.poi_time * 1000 |
+                date:'M/d/yyyy, h:mm:ss a')}}</div>
+              <!-- (row?.poi_time * 1000 | date: 'M/d/yyyy, h:mm:ss a') || '-' -->
+            </div>
+          </ng-template>
+
+          <hr>
+          <div class="form-group margin-bottom-0">
+            <label class="font-size-14 font-weight-600 ">Export:</label>
+            <div class="btn-group btn-group-justified">
+              <div class="btn-group" role="group">
+                <a [href]="downloadableLink" class="btn btn-outline btn-default"> <img
+                    src="../../../assets/images/icon-xls.png" height="50">
+                  <div class="font-size-12">
+                    Download XL
+                  </div>
+                </a>
+              </div>
+              <!-- [disabled]="exportsid==true" -->
+              <div class="btn-group" role="group">
+                <a [href]="downloadableLink1" class="btn btn-outline btn-default"> <img
+                    src="../../../assets/images/icon-pdf.png" height="50">
+                  <div class="font-size-12">
+                    Download PDF
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8  card-group-row__col ">
+      <div class="width-full">
+        <div class="panel panel-default round  ">
+          <div class="panel-heading margin-bottom-0">
+            <h3 class="panel-title font-weight-600 bg-teal-8001 white1 ">Live Map</h3>
+            <div class="panel-actions">
+              <a></a>
+            </div>
+          </div>
+          <div class="panel-body padding-15">
+
+            <div class="map-wrapper" style="position:relative">
+              <div #gmap style="width:100%;" [ngStyle]="{'height':'590px'}"></div>
+              <app-spin-loading [appLoader]="mapLoader"></app-spin-loading>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default round" #scrollToTabs>
+          <div class="panel-heading margin-bottom-0">
+            <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Travel History
+              <!-- <a data-toggle="popover" class="  font-weight-200 margin-left-10 grey-400" data-original-title=""
+                data-trigger="hover" data-container="body" data-placement="top" data-html="true" href="#" id="help1">
+                <i class="ri-question-line"></i>
+              </a> -->
+            </h3>
+            <div id="popover-content-help1" class="hide">
+              Some help information goes here
+            </div>
+            <div class="panel-actions">
+              <a></a>
+            </div>
+          </div>
+
+          <div class="row">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearch(searchForm.value)">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="panel-actions">
+                    <a class="panel-action "></a>
+                  </div>
+                  <input type="text" class="form-control input-sm" formControlName="search" (keyup)='keyUp.next($event)'
+                    placeholder="{{search_by}}" style="margin-left: 18px;margin-top: 10px;">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel-body padding-15">
+            <mat-tab-group (selectedTabChange)="activeTabFuction($event)">
+              <mat-tab label="Detailed Report">
+                <div class="table-responsive margin-top-20" style="border: 1px solid #ebebeb;">
+                  <table matSort (matSortChange)="sortDataDetailedReport($event)"
+                    class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                    [dataSource]="dataSourceDetailedReport" mat-elevation-z8>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle</th>
+                      <td mat-cell *matCellDef="let row">
+                        <div style="width: 130px; float: left">
+                          <img [src]="row?.photo" class="img-bordered pull-left margin-right-10" height="36px" />
+                          <div class="media-body pointer" [routerLink]="gotoService.gotoTruck(row.id)">
+                            <a class="font-weight-600">{{ row?.name || 'N/A' }}</a>
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="current_speed">
+                      <th mat-header-cell *matHeaderCellDef>LAST KNOWN SPEED</th>
+                      <td mat-cell *matCellDef="let row">{{ (row?.last_speed | number: '1.0-2') || 'N/A' }} Km/hr</td>
+                    </ng-container>
+                    <ng-container matColumnDef="assigned_driver">
+                      <th mat-header-cell *matHeaderCellDef>Driver</th>
+                      <td mat-cell *matCellDef="let row">
+                        <div style="width: 120px; float: left">
+                          <img [src]="row.assigned_driver_photo || '../assets/images/default_user.png' "
+                            class="img-bordered pull-left margin-right-10" height="36px" />
+                          <div class="media-body pointer" [routerLink]="gotoService.gotoDriver(row.assigned_driver_id)">
+                            <a class="font-weight-600">{{ row?.assigned_driver || 'N/A' }}</a>
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="last_updated">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>LAST UPDATED TIME</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ (row?.last_updated * 1000 | date: 'M/d/yy, h:mm:ss a') || 'N/A' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="location_address">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Known Location(1h)</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ (row?.location_address || 'N/A') }}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsDetailedReport"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsDetailedReport;"></tr>
+                  </table>
+                  <div *ngIf="dataSourceDetailedReport?.length === 0 " class="no-records">No records found</div>
+                  <mat-paginator translate="no" #paginatorDetailedReport [length]="totalLengthDetailedReport"
+                    [hidePageSize]="true" showFirstLastButtons (page)="onPaginateChangeDetailedReport($event)"
+                    [pageSize]="10">
+                  </mat-paginator>
+                </div>
+              </mat-tab>
+              <mat-tab label="Travel History">
+                <div class="table-responsive margin-top-20" style="border: 1px solid #ebebeb;">
+                  <table matSort (matSortChange)="sortDataTravelHistory($event)"
+                    class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                    [dataSource]="dataSourceTravelHistory" mat-elevation-z8>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Vehicle</th>
+                      <td mat-cell *matCellDef="let row">
+                        <div style="width: 120px; float: left">
+                          <img [src]="row?.photo" class="img-bordered pull-left margin-right-10" height="36px" />
+                          <div class="media-body pointer" [routerLink]="gotoService.gotoTruck(row.id)">
+                            <a class="font-weight-600">{{ row?.name || 'N/A' }}</a>
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="last_speed">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>LAST UPDATED SPEED</th>
+                      <td mat-cell *matCellDef="let row">{{ (row?.last_speed | number: '1.0-2') || 'N/A' }} Km/hr</td>
+                    </ng-container>
+                    <ng-container matColumnDef="driver_name">
+                      <th mat-header-cell *matHeaderCellDef>Driver</th>
+                      <td mat-cell *matCellDef="let row">
+                        <div style="width: 120px; float: left">
+                          <img [src]="row.assigned_driver_photo || '../assets/images/default_user.png'"
+                            class="img-bordered pull-left margin-right-10" height="36px" />
+                          <div class="media-body pointer" [routerLink]="gotoService.gotoDriver(row.driver_id)">
+                            <a class="font-weight-600">{{ row.driver_name || 'N/A' }}</a>
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="distance_travelled">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Distance Travelled</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ (row?.distance_travelled | number: '1.0-2') || 'N/A' }} Km</td>
+                    </ng-container>
+                    <ng-container matColumnDef="zone_name">
+                      <th mat-header-cell *matHeaderCellDef>Zone</th>
+                      <td mat-cell *matCellDef="let row">{{ row?.zone_name || 'N/A' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="created_datetime">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>CREATED DATE TIME</th>
+                      <td mat-cell *matCellDef="let row">
+                        <!-- {{ convertUnixToLocal(row.created_datetime) || 'N/A' }} -->
+                        {{ (row?.created_datetime * 1000 | date: 'M/d/yy, h:mm:ss a' ) || 'N/A' }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsTravelHistory"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsTravelHistory;"></tr>
+                  </table>
+                  <div *ngIf="dataSourceTravelHistory?.length === 0 " class="no-records">No records found</div>
+                  <mat-paginator translate="no" #paginatorTravelHistory [length]="totalLengthTravelHistory"
+                    [hidePageSize]="true" showFirstLastButtons (page)="onPaginateChangeTravelHistory($event)"
+                    [pageSize]="10">
+                  </mat-paginator>
+                </div>
+              </mat-tab>
+              <mat-tab label="Statistics">
+                <div class="row margin-top-10 margin-bottom-10"></div>
+                <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+                </p-progressBar>
+                <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                  <table matSort (matSortChange)="sortDataStatistics($event)"
+                    class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                    [dataSource]="dataSourceStatistics" mat-elevation-z8>
+                    <ng-container matColumnDef="employee_id">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver Id</th>
+                      <td mat-cell *matCellDef="let row">
+                        <div style="width: 120px; float: left">
+                          <div class="media-body pointer" [routerLink]="gotoService.gotoDriver(row.id)">
+                            <a class="font-weight-600">{{ row?.employee_id || 'N/A' }}</a>
+                            <!-- <span style="font-size: 12px; font-style: italic;">{{ row.vehicle_type || 'N/A' }}</span> -->
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver</th>
+                      <td mat-cell *matCellDef="let row">{{ row?.name || 'N/A' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="total_violations">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Number of Violations</th>
+                      <td mat-cell *matCellDef="let row">{{ (row?.total_violations | number: '1.0-2') || 'N/A' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="saftey_score_card">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver Saftey Score Card</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ (row?.saftey_score_card | number: '1.0-2') || 'N/A' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="total_jobs">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Jobs</th>
+                      <td mat-cell *matCellDef="let row">{{ (row?.total_jobs | number: '1.0-2') || 'N/A' }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsStatistics"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsStatistics;"></tr>
+                  </table>
+                  <div *ngIf="dataSourceStatistics?.length === 0 " class="no-records">No records found</div>
+                  <mat-paginator translate="no" #paginatorStatistics [length]="totalLengthStatistics"
+                    [hidePageSize]="true" showFirstLastButtons [pageSize]="10"
+                    (page)="onPaginateChangeStatistics($event)">
+                  </mat-paginator>
+                </div>
+              </mat-tab>
+              <mat-tab label="Stops">
+                <div class="row margin-top-10 margin-bottom-10">
+
+                </div>
+
+                <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
+                </p-progressBar>
+                <div class="table-responsive" style="border: 1px solid #ebebeb;">
+                  <table matSort (matSortChange)="sortDataStops($event)"
+                    class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1" mat-table
+                    [dataSource]="dataSourceStops" mat-elevation-z8>
+                    <ng-container matColumnDef="location">
+                      <th mat-header-cell *matHeaderCellDef>Stop Name</th>
+                      <td mat-cell *matCellDef="let row">{{ row?.location || 'N/A' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="zone_name">
+                      <th mat-header-cell *matHeaderCellDef>Zone</th>
+                      <td mat-cell *matCellDef="let row">{{ row?.zone_name || 'N/A' }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsStops"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsStops;"></tr>
+                  </table>
+                  <div *ngIf="dataSourceStops?.length === 0 " class="no-records">No records found</div>
+                  <mat-paginator translate="no" #paginatorStops [length]="totalLengthStops" [hidePageSize]="true"
+                    showFirstLastButtons [pageSize]="10" (page)="onPaginateChangeStops($event)">
+                  </mat-paginator>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    </div>

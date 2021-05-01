@@ -1,0 +1,55 @@
+<div class="modal-header" [ngStyle]="theme">
+  <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">
+    <span>x</span>
+  </button>
+  <h4 class="modal-title">Create Cost</h4>
+</div>
+<div class="modal-body">
+  <div class="">
+    <div class="row">
+      <div class="col-lg-12">
+        <form novalidate [formGroup]="maintenanceDataForm" id="maintenanceDataFormID">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Cost Type</label>
+                <div class="input-icon">
+                  <p-dropdown
+                    [formControlName]="'cost_type'"
+                    [filter]="true"
+                    [(ngModel)]="selectedCostType"
+                    [options]="itemListCostType"
+                    styleClass="prime-dropdown"
+                    placeholder="Select Cost Type">
+                  </p-dropdown>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label">Cost</label>
+                <div class="input-icon">
+                  <input type="number" class="form-control" min=1 max="9999" formControlName="cost"/>
+                  <span class="error-message" *ngIf="maintenanceDataForm.get('cost').getError('min')">Please enter minimum cost for 1</span>
+                  <span class="error-message" *ngIf="maintenanceDataForm.get('cost').getError('isNumbers')">Please enter numbers only</span>
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" #closeForm data-dismiss="modal" (click)="closeModal()">Close</button>
+    <button type="submit" class="btn btn-primary" form="maintenanceDataFormID"
+            [disabled]="!maintenanceDataForm.valid  || disableSaveButton || !maintenanceDataForm.dirty "
+            (click)=onSubmit(maintenanceDataForm.value)> {{disableSaveButton ? 'Loading' : 'Save'}}
+    </button>
+  </div>
+</div>

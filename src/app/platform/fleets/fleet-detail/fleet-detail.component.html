@@ -1,0 +1,1256 @@
+<app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
+
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+  <ol class="breadcrumb breadcrumb-arrow ">
+    <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
+    <li><a routerLink="/iol/{{breadcrumbInner[0]}}"> {{breadcrumbInner[1]}} </a></li>
+    <li><a>{{truck?.name}}</a></li>
+  </ol>
+</div>
+
+
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "    [hidden]="!isAuthorized">
+  <div class="row margin-bottom-30" *ngIf="cardsArray.length === 5">
+    <div *ngFor="let card of cardsArray; let i = index" [attr.data-index]="i"
+      [ngClass]="{'col-md-4': i === 0, 'col-md-2': i > 0}">
+      <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+        [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+        [footerStyle]="card.footer_color">
+      </app-stats-icon-card>
+    </div>
+  </div>
+  <div [className]="cardsArray.length !== 5 && cardsArray.length !== 4 ? 'row' : 'row margin-bottom-30'"  *ngIf="cardsArray.length !== 5">
+    <div *ngFor="let card of cardsArray" [className]="colWidth">
+      <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
+        [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
+        [footerStyle]="card.footer_color">
+      </app-stats-icon-card>
+    </div>
+
+  </div>
+
+  <div class="row" style="border-radius: 20px;">
+    <div class="col-lg-4">
+      <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+        <div class="panel-heading font-weight-600 margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important ">Fleet Details</h3>
+        </div>
+        <div class="panel-body padding-0">
+          <div class="tab-content">
+            <div class="tab-pane active" id="Summary">
+              <div class="panel panel-default margin-bottom-0 ">
+                <div class="panel-body padding-15 ">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="widget margin-bottom-0">
+                        <div class="padding-15 " style="height:auto">
+                          <div class="text-center ">
+                            <div class="">
+                              <div class="margin-bottom-10" style="padding: 10px;">
+                                <i> <img [src]="truck?.photo" alt="img" style="height:120px; width:120px;" class="">
+                                </i>
+                              </div>
+                              <div class="padding-0 bg-cyan-000 text-left  margin-bottom-0 ">
+                                <div class="font-size-20 text-center">{{truck?.name}}
+                                </div>
+                                <div class="font-size-20  margin-bottom-15 text-center">
+                                  <span style="height: 20px; padding-top: 6px;" class="badge"
+                                    [ngClass]="(truck?.online_status)? 'badge-success': 'badge-danger'">{{truck?.online_status?
+                                    'Online' : 'Offline'}}</span>
+
+                                  <span class="bg-red-700 badge font-size-14 badge-success" style="margin-left: 12px;">
+                                    <div class="signal-bars mt1 sizing-box" [ngClass]="getSignalsClasses(truck)">
+                                      <div class="first-bar bar"></div>
+                                      <div class="second-bar bar"></div>
+                                      <div class="third-bar bar"></div>
+                                      <div class="fourth-bar bar"></div>
+                                      <div class="fifth-bar bar"></div>
+                                    </div>
+                                  </span>
+                                </div>
+                                <!-- <div class="font-size-20  margin-bottom-15  text-center">
+                                                                    <div class="battery">
+                                                                        <div class="battery-level" [ngStyle] = "{'height.px': truck?.signal_strength}"></div>
+                                                                      </div>
+                                                                </div>  -->
+                                <div class="font-size-20  margin-bottom-15 text-center">
+
+                                </div>
+                                <div class="bg-green-100 padding-0">
+                                  <div class="padding-10  bg-white  margin-bottom-0 ">
+                                    <div class="table-responsive vscroll"
+                                      style="height:255px;border: 1px solid #ebebeb;">
+                                      <table style="font-size: 12px;"
+                                        class="table margin-bottom-0 table-bordered1     table-condensed   ">
+                                        <tbody>
+                                          <tr>
+                                            <th width=""> <b>Vehicle Name/ID</b>
+                                            </th>
+                                            <td class="text-left">
+                                              {{truck?.name}}</td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Record Status</b></th>
+                                            <td class="text-left text-break">
+                                              {{(truck?.status ==1) ? 'Active' : 'Inactive'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Device Id</b> </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.device_id ||
+                                              'N/A'}}
+                                            </td>
+
+                                          </tr>
+                                          <tr>
+                                            <th> <b> SIM No</b> </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.sim_no ||
+                                              'N/A'}}
+                                            </td>
+
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Type</b> </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.vehicle_type ||
+                                              'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Make </b> </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.make || 'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Year </b> </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.year || 'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Model </b>
+                                            </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.model || 'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Fuel Tank Capacity</b>
+                                            </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.volume_capacity || 'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Speed Threshold</b>
+                                            </th>
+                                            <td class="text-left text-break">
+                                              {{(truck?.threshold) ?
+                                              truck?.threshold + '
+                                              km/h' : 'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Engine Capacity </b>
+                                            </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.engine_capacity ||
+                                              'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Wheels</b></th>
+                                            <td class="text-left text-break">
+                                              {{truck?.wheels || 'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Chassis No.</b></th>
+                                            <td class="text-left text-break">
+                                              {{truck?.chassis_number ||
+                                              'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Engine No.</b></th>
+                                            <td class="text-left text-break">
+                                              {{truck?.engine_number ||
+                                              'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Purchase Type</b>
+                                            </th>
+                                            <td class="text-left text-break">
+                                              {{truck?.leased_owned_name ||
+                                              'N/A'}}
+                                            </td>
+                                          </tr>
+                                          <!-- <tr>
+                                                                                        <th> <b> Device Id</b> </th>
+                                                                                        <td
+                                                                                            class="text-left text-break">
+                                                                                            {{truck?.device_id ||
+                                                                                            'N/A'}}
+                                                                                        </td>
+                                                                                    </tr> -->
+
+                                        </tbody>
+                                      </table>
+                                    </div>
+
+                                  </div>
+
+                                </div>
+                                <hr>
+                                <div class="form-group margin-bottom-0">
+                                  <label class="font-size-14 font-weight-600 ">Export:</label>
+                                  <div class="btn-group btn-group-justified">
+                                    <div class="btn-group" role="group">
+                                      <a [href]="downloadableLink">
+                                        <button type="button" class="btn btn-outline btn-default"> <img
+                                            src="../../../assets/images/icon-xls.png" height="50">
+                                          <div class="font-size-12">
+                                            <a [href]="downloadableLink" class="enabled">
+                                              Download XLS </a>
+                                          </div>
+                                        </button>
+                                      </a>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                      <a [href]="downloadableLink1">
+                                        <button type="button" class="btn btn-outline btn-default"> <img
+                                            src="../../../assets/images/icon-pdf.png" height="50">
+                                          <div class="font-size-12">Download PDF</div>
+                                        </button>
+                                      </a>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+        <div class="panel-heading font-weight-600 margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-teal-8001 white1 !important "> Map</h3>
+
+        </div>
+        <div class="panel-body padding-0">
+          <div class="tab-content">
+            <div class="tab-pane active" id="Summary">
+              <div class="panel panel-default margin-bottom-0 ">
+                <div class="panel-body padding-15 ">
+                  <div class="row">
+
+
+                    <div class="col-lg-12">
+                      <!-- <div class="panel-heading margin-bottom-0" [ngStyle]="theme">
+                                                <h3 class="panel-title font-weight-600 " style="color: white;">
+                                                    Map
+                                                </h3>
+                                                <div class="panel-actions">
+                                                    <a class="panel-action"></a>
+                                                </div>
+                                            </div> -->
+                      <div #gmap style="width:100%;" [ngStyle]="{'height':'686px'}"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- DISTANCE & SPEED CARD -->
+    <div class="col-lg-3 card-group-row__col" [className]="classToApply">
+      <div class="panel panel-default  round     " style="height: 482px;">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-theme1 white1 ">Route & Speed</h3>
+          <div class="panel-actions">
+            <a class=""></a>
+          </div>
+        </div>
+        <div class="panel-body padding-15">
+          <div class="row card-group-row ">
+            <div class="panel-body padding-15">
+              <div class="margin-bottom-30 text-center">
+                <div class="font-size-14  margin-bottom-0">Vehicle State</div>
+                <div class="margin-top-0 padding-5 label" style="font-size: 100% !important;"
+                  [ngClass]="(truck?.signalRresponse && truck?.signalRresponse?.spd > 0 && tooLongOrtooShortDistance) ? 'badge-success': 'badge-danger'">
+                  {{truck?.signalRresponse ?
+                  (((truck?.signalRresponse?.spd) > 0 &&
+                  tooLongOrtooShortDistance) ? 'Moving' : 'Idle')
+                  : '-'}}
+                </div>
+              </div>
+              <div class="margin-bottom-15 text-center">
+                <div class="font-size-14  margin-bottom-10"> Vehicle Speed (km/h)</div>
+                <div class="">
+                  <div class="chartbox">
+                    <app-spdmeterchart
+                      [speed]="((((truck?.signalRresponse?.spd > 5 && tooLongOrtooShortDistance) ? truck?.signalRresponse?.spd : (signalRstarted < 1) ? truck?.last_speed : '0' ))) || truck?.last_speed">
+                    </app-spdmeterchart>
+                  </div>
+                </div>
+              </div>
+              <div class="margin-bottom-15 text-center">
+                <div class="font-size-14  margin-bottom-0"> Assigned Route</div>
+                <div class="font-size-24  margin-bottom-0 font-weight-100">
+                  {{truck?.route_name || '-'}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOB TRAIL CARD -->
+    <div class="col-lg-3  card-group-row__col" [className]="classToApply" *ngIf="selectedPkg === PackageType.standard">
+      <div class="panel panel-default  round   " style="height: 482px;">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Job Trail </h3>
+          <div class="panel-actions">
+            <a class=""></a>
+          </div>
+        </div>
+        <div class="panel-body padding-15">
+          <div class="">
+            <div *ngIf="source_address && destination_address" class="tracking-list margin-bottom-30 vscroll"
+              style="max-height: 200px;">
+              <div class="tracking-item">
+                <div class="tracking-icon status-intransit">
+                  <i class="fas fa-circle"></i>
+                </div>
+                <div class="tracking-date"> {{trail_start_date}}</div>
+                <div class="tracking-content">
+                  <div class="label label-info">Start Location</div>
+                  <span> {{source_address}} </span>
+                </div>
+              </div>
+
+              <div class="tracking-item" style="margin-top: 10px;">
+                <div class="tracking-icon status-intransit">
+                  <img src="../assets/images/icon-vehilcle.png" height="50">
+                </div>
+                <div class="tracking-date"> {{trail_current_date}}</div>
+                <div class="tracking-content">
+                  <div class="label label-warning">Current Location</div>
+                  <span> {{current_address}} </span>
+                </div>
+              </div>
+
+              <div class="tracking-item">
+                <div class="tracking-icon status-intransit">
+                  <i class="fas fa-circle"></i>
+                </div>
+                <div class="tracking-date">{{trail_end_date}}</div>
+                <div class="tracking-content">
+                  <div class="label label-success">End Location</div>
+                  <span> {{destination_address}} </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row card-group-row no-space1  ">
+              <div class="col-lg-6 card-group-row__col">
+                <div
+                  class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative   card-border light ">
+                  <div class="vertical-align-middle">
+                    <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                      Fuel Consumed
+                    </div>
+                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                      {{truck?.fuel_consumed || '-'}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 card-group-row__col">
+                <div
+                  class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative   card-border light ">
+                  <div class="vertical-align-middle">
+                    <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                      Distance Travelled
+                    </div>
+                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                      {{distance_travelled_job | number: '1.0-2' }} KM
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 card-group-row__col">
+                <div
+                  class="card  padding-5 shadow1   margin-bottom-0 vertical-align   text-center relative   card-border light ">
+                  <div class="vertical-align-middle">
+                    <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                      Jobs Completed
+                    </div>
+                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                      {{truck?.completed_job || '-'}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 card-group-row__col">
+                <div
+                  class="card  padding-5 shadow1   margin-bottom-0 vertical-align   text-center relative   card-border light ">
+                  <div class="vertical-align-middle">
+                    <div class="font-size-14  margin-top-0 margin-bottom-0 ">
+                      Violations
+                    </div>
+                    <div class="font-size-18 font-weight-200 margin-bottom-0">
+                      {{violation_count || '0'}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUEL & FILL UPS CARD -->
+    <div class="col-lg-3  card-group-row__col" [className]="classToApply">
+      <div class="panel panel-default round font-size-12 " style="height:482px; overflow-y:scroll !important;">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Fuel &amp; Fillups </h3>
+          <div class="panel-actions">
+            <a class=""></a>
+          </div>
+        </div>
+        <div class="panel-body padding-15">
+          <div class="row card-group-row  ">
+            <div class="col-lg-12 card-group-row__col">
+              <div
+                class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                <div class="vertical-align-middle">
+                  <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                    Last Fill up Date
+                  </div>
+                  <div class="font-size-18 font-weight-200 margin-bottom-0">
+                    {{truck?.fill_up_date ? (truck?.fill_up_date * 1000 | date: 'mediumDate') : '-' || '-'}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 card-group-row__col">
+              <div
+                class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                <div class="vertical-align-middle">
+                  <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                    Fill up Quantity
+                  </div>
+                  <div class="font-size-18 font-weight-200 margin-bottom-0">
+                    {{truck?.fuel_filled || 0}} Ltr
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 card-group-row__col">
+              <div
+                class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                <div class="vertical-align-middle">
+                  <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                    Fill up Amount
+                  </div>
+                  <div class="font-size-18 font-weight-200 margin-bottom-0">
+                    {{truck?.fuel_amount_paid || 0}} QAR
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 card-group-row__col">
+              <div
+                class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                <div class="vertical-align-middle">
+                  <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                    Fuel Supervisor
+                  </div>
+                  <div class="font-size-18 font-weight-200 margin-bottom-0">
+                    {{truck?.fuel_supervisor_name || 'N/A'}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 card-group-row__col">
+              <div
+                class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative bg-grey-100  card-border light ">
+                <div class="vertical-align-middle">
+                  <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+
+                    Fill Up Location
+                  </div>
+                  <div class="font-size-18 font-weight-200 margin-bottom-0">
+                    {{truck?.fuel_location || 'N/A'}}
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 card-group-row__col">
+              <div
+                class="card  padding-5 shadow1   margin-bottom-0 vertical-align   text-center relative bg-grey-100  card-border light ">
+                <div class="vertical-align-middle">
+                  <div class="font-size-12  margin-top-0 margin-bottom-0 ">
+                    Payment Method
+                  </div>
+                  <div class="font-size-18 font-weight-200 margin-bottom-0">
+                    {{truck?.fuel_payment_type || 'N/A'}}
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- SENSORS CARD -->
+    <div class="col-lg-3  card-group-row__col" [className]="classToApply">
+      <div class="panel panel-default round font-size-12 " style="height: 482px;">
+        <div class="panel-heading margin-bottom-0">
+          <h3 class="panel-title font-weight-600 bg-theme1 white1 "> Sensors </h3>
+          <div class="panel-actions">
+            <a class=""></a>
+          </div>
+        </div>
+        <div class="panel-body padding-20 ">
+          <div class="text-wrap">
+            <div class="">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="">
+                    <img src="assets/images/icon-sensor (4) .png" class="img-bordered1" style="height: 30px">
+                  </figure>
+                </div>
+                <div class="media-body">
+                  <div class="font-size-18 "> Last Updated </div>
+                  <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                  <!-- <span class="label label-success label-outline "> Enable </span> -->
+                </div>
+                <div class="media-right">
+                  <div class="font-size-15" style="padding-top: 6px;">{{(lastUpdatedCard | date: 'mediumDate') || '-'}} <br/> {{(lastUpdatedCard | date: 'mediumTime')}}</div>
+                </div>
+              </div>
+              <div class="media">
+                <div class="media-left">
+                  <figure class="">
+                    <img src="assets/images/icon-sensor (2).png" class="img-bordered1" style="height: 30px">
+                  </figure>
+                </div>
+                <div class="media-body">
+                  <div class="font-size-18 "> Location</div>
+                  <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                  <span class="label label-success label-outline "> Enable </span>
+                </div>
+                <div class="media-right">
+                  <div class="font-size-15" style="padding-top: 6px;">{{truck?.current_address || '-'}} </div>
+                </div>
+              </div>
+              <div class="media">
+                <div class="media-left">
+                  <figure class="">
+                    <img src="assets/images/icon-sensor (3).png" class="img-bordered1" style="height: 30px">
+                  </figure>
+                </div>
+                <div class="media-body">
+                  <div class="font-size-18 "> Speed</div>
+                  <!-- <div class="font-size-12 padding-top-0"> #DHT11</div>  -->
+                  <span class="label label-success label-outline  "> Enable </span>
+                </div>
+                <div class="media-right">
+                  <div class="font-size-15">
+                    {{((((truck?.signalRresponse?.spd > 5 &&
+                    tooLongOrtooShortDistance) ?
+                    truck?.signalRresponse?.spd : (signalRstarted < 1) ? truck?.last_speed : '0' ) | number : '1.0-0' ))
+                      || truck?.last_speed}} km/h </div>
+                  </div>
+                </div>
+                <div class="media" *ngIf="selectedPkg === PackageType.standard">
+                  <div class="media-left">
+                    <figure class="">
+                      <img src="assets/images/icon-sensor (4).png" class="img-bordered1" style="height: 30px">
+                    </figure>
+                  </div>
+                  <div class="media-body">
+                    <div class="font-size-18 "> Temperature</div>
+                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                    <span class="label label-danger label-outline" *ngIf="!truck?.temperature"> Disabled </span>
+                    <span class="label label-success label-outline" *ngIf="truck?.temperature"> Enable </span>
+                  </div>
+                  <div class="media-right">
+                    <div class="font-size-16">
+                      {{truck?.signalRresponse?.evTemp ? truck?.signalRresponse?.evTemp : ((truck?.on_board_temperature)
+                      ? truck?.on_board_temperature : '-')}}
+                    </div>
+                  </div>
+                </div>
+                <div class="media" *ngIf="selectedPkg === PackageType.standard && truck?.signalRresponse?.vol">
+                  <div class="media-left">
+                    <figure class="">
+                      <img src="assets/images/icon-sensor (5).png" class="img-bordered1" style="height: 30px">
+                    </figure>
+                  </div>
+                  <div class="media-body">
+                    <div class="font-size-18 grey-600"> Fuel Level</div>
+                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                    <span class="label label-danger label-outline" *ngIf="truck?.fuel_senors === 0"> Disabled </span>
+                    <span class="label label-success label-outline" *ngIf="truck?.fuel_senors === 1"> Enable </span>
+                  </div>
+                  <div class="media-right">
+                    <div class="font-size-16 grey-600"> {{ truck?.last_volume ? truck?.last_volume : truck?.signalRresponse?.vol}}% - {{(truck?.volume_capacity * truck?.signalRresponse?.vol) / 100}}l of {{truck?.volume_capacity}}l </div>
+                  </div>
+                </div>
+                <div class="media" *ngIf="selectedPkg === PackageType.standard">
+                  <div class="media-left">
+                    <figure class="">
+                      <img src="assets/images/icon-sensor.png" class="img-bordered1" style="height: 30px">
+                    </figure>
+                  </div>
+                  <div class="media-body" style="color: gray;">
+                    <div class="font-size-18 grey-600 "> Humidity</div>
+                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                    <span class=" label label-danger label-outline"> Disabled </span>
+                  </div>
+                  <div class="media-right" style="color: gray;">
+                    <div class="font-size-16">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="border-radius: 20px;" *ngIf="selectedPkg === PackageType.standard">
+      <div class="col-lg-12">
+        <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+
+          <div class="panel-body padding-0">
+            <div class="tab-content">
+              <div class="tab-pane active" id="Summary">
+                <div class="panel panel-default margin-bottom-0 ">
+                  <div class="panel-body padding-15 ">
+                    <div class="row margin-top-30">
+                      <div class="col-lg-12">
+
+                        <mat-tab-group>
+
+                          <mat-tab label="Last Job Summary">
+                            <div *ngIf="jobSummary;else noTask;">
+                              <div class="margin-top-20 margin-bottom-20 padding-20"
+                                style="border: 1px solid #eee; background-color: #f9f9f9;">
+                                <div class="row">
+                                  <div class="col-md-3">
+                                    <div class="media">
+                                      <div class="media-left">
+                                        <figure class="">
+                                          <img src="assets/images/icon-datetime.png" class="img-bordered"
+                                            style="height: 50px">
+                                        </figure>
+                                      </div>
+                                      <div class="media-body">
+                                        <div class="font-size-16" *ngIf="fleetJobSummary?.start_datetime">
+                                          {{start_dateViewJob}}
+                                        </div>
+                                        <div class="font-size-16" *ngIf="!fleetJobSummary?.start_datetime">
+                                          -
+                                        </div>
+                                        <div class="font-size-12">Start Date</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="media">
+                                      <div class="media-left">
+                                        <figure class="">
+                                          <img src="assets/images/icon-datetime.png" class="img-bordered"
+                                            style="height: 50px">
+                                        </figure>
+                                      </div>
+                                      <div class="media-body">
+                                        <div class="font-size-16" *ngIf="fleetJobSummary?.end_datetime">
+                                          {{end_dateViewjob}}
+                                        </div>
+                                        <div class="font-size-16" *ngIf="!fleetJobSummary?.end_datetime">
+                                          -
+                                        </div>
+                                        <div class="font-size-12"> End Date</div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-md-3">
+                                    <div class="media">
+                                      <div class="media-left">
+                                        <figure class="">
+                                          <img src="assets/images/iol/icon_fleet_management.png" class="img-bordered"
+                                            style="height: 50px">
+                                        </figure>
+                                      </div>
+                                      <div class="media-body">
+                                        <div class="font-size-16">
+                                          {{fleetJobSummary?.schedule_type_label}}
+                                        </div>
+                                        <div class="font-size-12"> Job Type</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <div class="media">
+                                      <div class="media-left">
+                                        <figure class="">
+                                          <img
+                                            [src]="jobSummary?.driver_image ? jobSummary?.driver_image : 'assets/images/iol/driver_placeholder.png'"
+                                            class="img-bordered" style="height: 50px">
+                                        </figure>
+                                      </div>
+                                      <div class="media-body">
+                                        <div class="font-size-16">
+                                          {{fleetJobSummary?.driver_name}}
+                                        </div>
+                                        <div class="font-size-12"> Driver
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col-lg-4 padding-0">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="panel panel-dark margin-bottom-0">
+                                      <div class="panel-heading margin-bottom-0">
+                                        <h3 class="panel-title">Details</h3>
+                                      </div>
+
+                                      <div class="vscroll" style="max-height: 135px;">
+                                        <table class="table table-hover table-striped margin-bottom-0">
+                                          <tbody>
+                                            <tr>
+                                              <th> <b> Job Name </b> </th>
+                                              <td class="text-left">
+                                                {{fleetJobSummary?.job_name || '-'}}
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th> <b> Travelled Distance</b>
+                                              </th>
+                                              <td class="text-left">
+                                                {{(fleetJobSummary?.distance_travelled | number: '1.0-0') || 0}} Km
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th> <b> Speed </b> </th>
+                                              <td class="text-left text-break">
+                                                <!-- <div> Min: {{min_speed | number : '1.0-0' || '-'}} km/h </div> -->
+                                                <div>
+                                                  Max: {{fleetJobSummary?.max_speed || 0 }}
+                                                  km/h </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <th> <b> Violations</b>
+                                              </th>
+                                              <td class="text-left text-break">
+                                                {{fleetJobSummary?.violation_count || 0}}
+                                              </td>
+                                            </tr>
+                                            <!-- <tr>
+                                              <th> <b> Maintenances </b>
+                                              </th>
+                                              <td class="text-left text-break">
+                                                {{fleetJobSummary?.maintainance_count || 0}}
+                                              </td>
+                                            </tr> -->
+                                            <tr>
+                                              <th> <b> Fillups </b> </th>
+                                              <td class="text-left text-break">
+                                                {{fleetJobSummary?.fillup_count || 0}}
+                                              </td>
+                                            </tr>
+                                            <!-- <tr>
+                                              <th> <b> Aborted Reason </b> </th>
+                                              <td class="text-left text-break aborted_reason">
+                                                {{fleetJobSummary?.aborted_reason || '-' }}
+                                              </td>
+                                            </tr> -->
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-lg-12 padding-top-20">
+                                    <div class="panel panel-dark margin-bottom-0">
+                                      <div class="panel-heading margin-bottom-0 ">
+                                        <h3 class="panel-title">Job Trail</h3>
+                                        <div class="margin-bottom-0 ">
+                                          <app-google-map #jobTrailMap mapType="false" style="width:100%; height:295px"
+                                            [height]="'295px'" [showSearchBar]="false">
+                                          </app-google-map>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+
+                              <div class="col-lg-8 ">
+                                <div class="row">
+                                  <div class="col-sm-4">
+                                    <div class="text-center  margin-bottom-10 font-size-16 ">
+                                      Completed Tasks
+                                    </div>
+
+                                    <div class="c100 small1 red"
+                                      [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.COMPLETED)">
+                                      <span class="pointer">
+                                        <!-- {{getProgress1(jobSummaryTasks, TaskStatus.COMPLETED )}} -->
+                                        {{fleetJobSummary?.completed_task}}
+                                      </span>
+                                      <div class="slice">
+                                        <div class="bar"></div>
+                                        <div class="fill"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-sm-4 ">
+                                    <div class="text-center margin-bottom-10 font-size-16 ">
+                                      Pending Tasks</div>
+                                    <div class="c100 small1 red"
+                                      [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.PENDING)">
+                                      <span class="pointer">
+                                        {{getProgress1(fleetJobSummary?.job_tasks, TaskStatus.PENDING)}}
+                                      </span>
+                                      <div class="slice">
+                                        <div class="bar"></div>
+                                        <div class="fill"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="col-sm-4 ">
+                                    <div class="text-center  margin-bottom-10 font-size-16 ">
+                                      Aborted Tasks</div>
+
+                                    <div class="c100 small1 red"
+                                      [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.ABORTED)">
+                                      <span class="pointer">
+                                        <!-- {{getProgress1(jobSummaryTasks, TaskStatus.ABORTED )}} -->
+                                        {{fleetJobSummary?.aborted_task}}
+                                      </span>
+                                      <div class="slice">
+                                        <div class="bar"></div>
+                                        <div class="fill"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-lg-12 padding-top-40">
+
+                                    <div class="panel panel-dark margin-bottom-0">
+                                      <div class="panel-heading margin-bottom-0 ">
+                                        <h3 class="panel-title">Listing</h3>
+                                      </div>
+                                      <div class="panel-body padding-15 padding-left-0 padding--0">
+                                        <div class="table-responsive   vscroll" style="height: auto;">
+                                          <div id="ppp_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer"
+                                            style="width: 100%;">
+
+                                            <div class="row">
+                                              <div class="col-sm-12">
+                                                <div class="dataTables_scroll">
+                                                  <div class="dataTables_scrollBody"
+                                                    style="position: relative; overflow: auto; max-height: 250px; height: 250px; width: 100%;">
+                                                    <table
+                                                      class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap dataTable no-footer dtr-inline collapsed"
+                                                      id="ppp" role="grid" aria-describedby="ppp_info"
+                                                      style="width: 100%;">
+                                                      <thead>
+                                                        <tr role="row" style="height: 0px;">
+                                                          <th class="sorting_asc" tabindex="0" aria-controls="ppp"
+                                                            rowspan="1" colspan="1" style="width: 53px;"
+                                                            aria-sort="ascending"
+                                                            aria-label=" Job Name: activate to sort column descending">
+                                                            Task Priority</th>
+                                                          <th class="sorting" tabindex="0" aria-controls="ppp"
+                                                            rowspan="1" colspan="1" style="width: 79px;"
+                                                            aria-label=" Start Date : activate to sort column ascending">
+                                                            Status </th>
+
+
+                                                          <th class="sorting" tabindex="0" aria-controls="ppp"
+                                                            rowspan="1" colspan="1" style="width: 112px;"
+                                                            aria-label="Description: activate to sort column ascending">
+                                                            Aborted Reason</th>
+
+                                                        </tr>
+                                                      </thead>
+
+                                                      <tbody>
+
+                                                        <tr role="row" class="odd"
+                                                          *ngFor="let job of fleetJobSummary?.job_tasks; ">
+                                                          <td> {{job.priority || 'N/A'}}
+                                                          </td>
+                                                          <td>{{getTaskProgress(job?.job_status) || 'N/A'}}</td>
+
+                                                          <td style="white-space: break-spaces;">{{job.aborted_status || '-'}} : {{job.aborted_reason || '-'}}</td>
+
+                                                          <td style="display: none;">
+                                                            <button type="button"
+                                                              class="btn btn-icon  btn-info btn-xs "> <i
+                                                                class="ri-pencil-fill"></i> </button>
+                                                            <button type="button"
+                                                              class="btn btn-icon  btn-danger btn-xs "> <i
+                                                                class="ri-delete-bin-6-line"></i> </button>
+                                                          </td>
+                                                        </tr>
+
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                          </div>
+                                        </div>
+
+
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                              </div>
+
+
+
+                            </div>
+
+                            <ng-template #noTask>
+                              <div
+                                style="display: flex;justify-content: center;align-items: center;height:100%;font-size: 18px;">
+                                <span>No completed job found.</span>
+                              </div>
+                            </ng-template>
+                          </mat-tab>
+
+                          <mat-tab label="Map Trail">
+                            <div class="row margin-top-10">
+                              <app-reporting-buttons [calendarDimension]="'col-sm-6'" [type]="'trail'"
+                                [timeRange]="true" [hideBtn]="'today yesterday week month'"
+                                (btnClicked)="setupReport($event)">
+                              </app-reporting-buttons>
+                              <div class="col-lg-3">
+                                <div class="inline-block">
+                                  <div class="checkbox-custom checkbox-primary ">
+                                    <input type="checkbox" id="checkbox1" [(ngModel)]="showMarkersForTrail"
+                                      (change)="showMarkerValueChanges()" />
+                                    <label for="checkbox1">Show Idling Locations<i
+                                        [pTooltip]="'This will regenerate the map.'"
+                                        class="padding-left-3 fa fa-info-circle"></i></label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row margin-top-20">
+                              <div class="col-lg-12">
+                                <div class="row text-center margin-bottom-20   clearfix  ">
+                                  <div class="col-sm-4">
+                                    <div class="vertical-align height-70  border-double">
+                                      <div class="vertical-align-middle">
+                                        <div class="font-size-10">Fuel Consumed
+                                        </div>
+                                        <b class="font-size-12">{{fuel_consumed ?
+                                          fuel_consumed : 0 | number: '1.0-2'}}
+                                          (L) </b>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <div class="vertical-align height-70  border-double">
+                                      <div class="vertical-align-middle">
+                                        <div class="font-size-10">Distance Travelled
+                                        </div>
+                                        <b class="font-size-12">{{distance_travelled}}
+                                          (km)</b>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <div class="vertical-align height-70  border-double">
+                                      <div class="vertical-align-middle">
+                                        <div class="font-size-10">Jobs
+                                          Completed</div>
+                                        <b class="font-size-12">{{activities_completed}}
+                                        </b>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div *ngIf="showMarkersForTrail && trailWithStopsInfo.length" class="col-lg-3">
+                                  <div class="bg-cyan-100 padding-0 ">
+                                    <div class="table-responsive vscroll" style="height:550px;">
+
+                                      <table class="table  table-condensed margin-bottom-0 bg-white">
+                                        <thead>
+                                          <tr>
+                                            <th class="text-center">Start Time
+                                            </th>
+                                            <th class="text-center">End Time
+                                            </th>
+                                            <th class="text-center">Duration
+                                            </th>
+                                            <!-- <th class="text-center">Stop Type
+                                            </th> -->
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr class="pointer" *ngFor="let row of trailWithStopsInfo; "
+                                            [class.active]="row === selected[0]"
+                                            (click)="onSelect({selected: row}, 'trail')">
+                                            <td class="text-center">
+                                              {{(row.start_time * 1000) |
+                                              date: 'short'}}
+                                            </td>
+                                            <td class="text-center">
+                                              {{(row.end_time * 1000) |
+                                              date:'short'}}
+                                            </td>
+                                            <td class="text-center">
+                                              {{row.duration}}</td>
+                                            <!-- <td class="text-center">
+                                              {{row.stop_type || 'N/A'}}</td> -->
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="margin-bottom-0"
+                                  [ngClass]="showMarkersForTrail && trailWithStopsInfo.length? 'col-lg-9' : '' ">
+                                  <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
+                                    [infowindow]="violationInfoWindows">
+                                  </app-google-map>
+                                </div>
+
+                              </div>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Fillups">
+                            <div class="row margin-top-10">
+                              <app-fillup-reporting [entity]="entityId">
+                              </app-fillup-reporting>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Maintenances">
+                            <div class="row margin-top-10">
+                              <app-maintenance-reporting [entity]="entityId" [serviceObj]="maintenanceService"
+                                [isEntityTruck]="true" (pdfReportObj)="generatePDFReport('maintenances', $event)">
+                              </app-maintenance-reporting>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Violations">
+                            <div class="row margin-top-10">
+                              <app-violation-reporting [entity]="entityId" [displayFilter]="true">
+                              </app-violation-reporting>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Snapshot">
+                            <div class="margin-bottom-10 row margin-top-10">
+                              <form novalidate [formGroup]="snapForm">
+                                <div class="col-sm-4">
+                                  <div class="input-group">
+                                    <p-calendar formControlName="snapshotDate" [styleClass]="'prime-datetime'"
+                                      [showTime]="true" placeholder="Select Date" [(ngModel)]="snapshotDate">
+                                    </p-calendar>
+
+                                    <span class="input-group-btn">
+                                      <button [disabled]="!snapshotDate" (click)="onSubmit(snapForm.value)"
+                                        class="btn btn-success" [ngStyle]="theme">
+                                        <i class="ion-arrow-right-c"></i>
+                                      </button>
+                                    </span>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-8">
+                                <div class="row text-center   margin-bottom-20   clearfix  ">
+                                  <div class="col-sm-4">
+                                    <div class="vertical-align height-70  border-double">
+                                      <div class="vertical-align-middle">
+                                        <div class="font-size-10">Vehicle State
+                                        </div>
+                                        <b class="font-size-12">
+                                          {{snapshotData.vehicle_state ? (snapshotData.vehicle_state == 'Idle' ? 'Idle'
+                                          : 'Moving') : '-'}}
+
+                                        </b>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <div class="vertical-align height-70  border-double">
+                                      <div class="vertical-align-middle">
+                                        <div class="font-size-10">Speed</div>
+                                        <b class="font-size-12">{{(snapshotData.speed
+                                          | number: '1.0-0') || '-' }} km/h</b>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                    <div class="vertical-align height-70  border-double">
+                                      <div class="vertical-align-middle">
+                                        <div class="font-size-10">Timestamp</div>
+                                        <b class="font-size-12">{{(snapshotData.timestamp
+                                          | date: 'medium') || '-' }} </b>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="">
+                                  <div class="border-double1">
+                                    <table class="table  table-condensed  no-border1  margin-bottom-0">
+                                      <tbody>
+                                        <tr>
+                                          <th width="120"><b>Assigned Driver</b>
+                                          </th>
+                                          <td class="text-left">
+                                            <div class="media">
+                                              <div class="media-left padding-right-10">
+                                                <div class="">
+                                                  <img src="assets/images/iol/driver_placeholder.png" alt="..."
+                                                    width="30" class="img-rounded img-bordered img-bordered-warning">
+                                                </div>
+                                              </div>
+                                              <div class="media-body" style="vertical-align:middle;">
+                                                {{snapshotData.assigned_driver
+                                                === null ? '-' :
+                                                snapshotData.assigned_driver}}
+                                                <!-- <a
+                                                  [routerLink]="snapshotData['assigned_driver']? ('/iol/staff/' + snapshotData.assigned_driver.id) : null">{{snapshotData.assigned_driver
+                                                  === null ? '-' :
+                                                  snapshotData.assigned_driver}}</a> -->
+                                              </div>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <!-- <tr>
+                                          <th width="120"><b>Activity Status</b>
+                                          </th>
+                                          <td class="text-left">
+                                            <div>
+                                              {{(snapshotData.details_of_job)
+                                              ? 'On Activity' : '-'}}
+                                            </div>
+                                          </td>
+                                        </tr> -->
+
+                                        <tr>
+                                          <th width="120"><b> Assigned Route </b>
+                                          </th>
+                                          <td class="text-left text-break">
+                                            <span *ngIf="snapshotData['details_of_job']">
+                                              <a class=""
+                                                [routerLink]="gotoService.gotoRouteDetail(snapshotData['details_of_job']['id'])">
+                                                {{snapshotData['details_of_job']['route_name']
+                                                }}
+                                              </a>
+                                            </span>
+                                            <span *else>
+                                              -
+                                            </span>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <th width="150"><b>Assigned Geozone
+                                            </b></th>
+                                          <td class="text-left">
+                                            <span *ngFor="let t of snapshotData['territory']; let i = index">
+                                              <a [routerLink]="gotoService.gotoTerritories()">{{t.territory_name}}
+                                                <span *ngIf="i >= 1">,</span></a>
+                                            </span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-lg-4">
+                                <app-google-map #snapshotMap [height]="'300px'">
+                                </app-google-map>
+                              </div>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Ignition" [hidden]="">
+                            <div class="row margin-top-10">
+                              <app-ignition-reporting [entity]="entityId">
+                              </app-ignition-reporting>
+                            </div>
+                          </mat-tab>
+
+                          <!-- <mat-tab label="Drill Down">
+                                <div class="row margin-top-10">
+                                    <app-grouped-vertical-bar-chart *ngIf="variableDropdown" [entityId]="entityId"
+                                        [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle"
+                                        [colorScheme]="colorScheme" [variableDropdown]="variableDropdown" [isDropDownHidden]="false">
+                                    </app-grouped-vertical-bar-chart>
+                                </div>
+                            </mat-tab> -->
+                        </mat-tab-group>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>

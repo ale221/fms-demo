@@ -1,0 +1,96 @@
+<div class="login-bg router-load-indicator translate-loader" *ngIf="isShowingRouteLoadIndicator">
+  <div class="loader-wrapper">
+    <div style=" height:100%; " class="pic"></div>
+    <div class="spinner text-center">
+      <img src="assets/images/red-loader.gif" height="100px">
+    </div>
+    <h4 style="color:#000;text-align: center !important;">Translating..</h4>
+  </div>
+</div>
+<mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+  <mat-sidenav #snav [opened]="true"
+  [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+    <mat-nav-list>
+      <span *ngFor="let nav of menu; index as i">
+        <a [ngClass]="isCollapsed === true? 'icon-hover':''" *ngIf="(nav.parent != 'Maintenances' && user.package[0].package_id == packageType.png) || user.package[0].package_id == packageType.standard"
+          mat-list-item [routerLink]="nav?.url" id="{{nav?.id}}" (click)="onItemSelected(nav, i)">
+          <i class="site-menu-icon icon"><i [ngStyle]="sidebarIconsBranding" className="{{nav.icon}}"></i></i>
+          <span  [ngClass]="isCollapsed === true? 'site-menu-title text-show':'site-menu-title'">{{nav?.parent}}</span>
+          <mat-icon style="margin-left: auto;font-size: 12px;margin-top:13px" *ngIf="!nav.expended">add</mat-icon>
+          <mat-icon style="margin-left: auto;font-size: 12px;margin-top:13px" *ngIf="nav.expended">remove</mat-icon>
+        </a>
+        <div class="rtl-view" *ngIf="nav.expended && !isCollapsed && nav.child"  style="display: flex;flex-direction: column;">
+          <span *ngFor="let navChild of nav.child">
+            <span *ngIf="navChild?.is_display && user.package[0].package_id == packageType.png">
+              <a mat-list-item [routerLink]="[navChild.route]" (click)="translateLoader();navItemClicked(navChild)" *ngIf="navChild.plug_and_go" style="float: left;">
+                <span class="site-menu-title" style="padding-left: 30px;">{{navChild.name}}</span>
+              </a>
+            </span>
+
+            <span *ngIf="navChild?.is_display && user.package[0].package_id == packageType.standard">
+              <a mat-list-item [routerLink]="[navChild.route]" (click)="translateLoader();navItemClicked(navChild)" style="float: left;">
+                <span class="site-menu-title" style="padding-left: 30px;">{{navChild.name}}</span>
+              </a>
+            </span>
+          </span>
+        </div>
+      </span>
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>
+<div class="collapse-view site-menu-sub" *ngIf="isCollapsed">
+  <div class="nav-container" *ngIf="popNav">
+    <span *ngFor="let navChild of selectedNav?.child" class="sub-nav" (click)="subNavItemRemove()">
+      <span *ngIf="navChild?.is_display && user.package[0].package_id == packageType.png">
+        <a mat-list-item [routerLink]="[navChild.route]" (click)="translateLoader();navItemClicked(navChild)" *ngIf="navChild.plug_and_go" style="float: left;padding:6px 0">
+          <span class="site-menu-title">{{navChild.name}}</span>
+        </a>
+      </span>
+
+      <span *ngIf="navChild?.is_display && user.package[0].package_id == packageType.standard">
+        <a mat-list-item [routerLink]="[navChild.route]" (click)="translateLoader();navItemClicked(navChild)" style="float: left;padding:6px 0">
+          <span class="site-menu-title">{{navChild.name}}</span>
+        </a>
+      </span>
+    </span>
+  </div>
+</div>
+
+<!-- <div class="site-menubar">
+  <div class="site-menubar-body" id="topdiv">
+    <ul class="site-menu" id="my-list">
+      <li *ngFor="let nav of menu" routerLinkActive #rla3="routerLinkActive" class="site-menu-item has-sub "
+        (click)="assetsClick = !assetsClick">
+        <a
+          *ngIf="(nav.parent != 'Maintenances' && user.package[0].package_id == packageType.png) || user.package[0].package_id == packageType.standard">
+          <i class="site-menu-icon icon ">
+            <i [ngStyle]="sidebarIconsBranding" className="{{nav.icon}}"> </i>
+          </i>
+          <span placement="right" class="site-menu-title">{{nav.parent}}</span>
+          <span class="site-menu-arrow"></span>
+        </a>
+
+
+        <ul class="site-menu-sub" *ngIf="nav.child">
+          <span *ngFor="let navChild of nav.child">
+            <li *ngIf="navChild?.is_display && user.package[0].package_id == packageType.png" routerLinkActive="active"
+              (click)="translateLoader()" class="site-menu-item has-sub" style="padding-left:15px;">
+
+              <a [routerLink]="[navChild.route]" *ngIf="navChild.plug_and_go">
+                <span class="site-menu-title">{{navChild.name}}</span>
+              </a>
+            </li>
+
+            <li *ngIf="navChild?.is_display && user.package[0].package_id == packageType.standard"
+              routerLinkActive="active" (click)="translateLoader()" class="site-menu-item has-sub "
+              style="padding-left:15px;">
+              <a [routerLink]="[navChild.route]">
+                <span class="site-menu-title">{{navChild.name}}</span>
+              </a>
+            </li>
+          </span>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div> -->

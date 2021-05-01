@@ -1,0 +1,46 @@
+<div class="row" style="font-size:20px;">
+  <ul style="list-style: none;display: contents;">
+    <li class="col-sm-3" *ngFor="let widget of widgetData">
+      <div class="dropdown">
+        <a *ngIf="widget.queryParam && widget.name!='Export'"  (click)="manageTest()" [routerLink]="widget.route"
+          [queryParams]="{ usecase: useCaseId}" class="btn widget-dropbtn dropbtn btn-link white"
+          style="padding: 0px 0px;">
+          <i [className]="widget.icon"  style="margin-right: 2px;padding-left: 5px;"></i>{{widget.name}}
+        </a>
+
+        <a *ngIf="widget.export" class="btn widget-dropbtn dropbtn btn-link white"
+          style="padding: 0px 0px;">
+          <i [className]="widget.icon" style="margin-right: 2px;padding-left: 5px;"></i>
+          {{widget.name}}
+        </a>
+
+        <a *ngIf="!widget.target && !widget.reload && !widget.scrollToDiv && widget.name!='Export'"
+        (click)="manageTest2()" [routerLink]="widget.route" [queryParams]="{ usecase: useCaseId}"
+          class="btn widget-dropbtn dropbtn btn-link white" style="padding: 0px 0px;">
+          <i [className]="widget.icon" style="margin-right: 2px;padding-left: 5px;"></i>{{widget.name}}
+        </a>
+
+        <a *ngIf="widget.reload || widget.scrollToDiv" class="btn widget-dropbtn dropbtn btn-link white"
+          (click)="refreshOrScroll(widget.reload, widget.scrollToDiv)" style="padding: 0px 0px;"><i
+            [className]="widget.icon" style="margin-right: 2px;padding-left: 5px;"></i>{{widget.name}}</a>
+
+        <div *ngIf="widget.subNav && widget.name != 'Share'" id="myDropdown" class="wrapper-widget dropdown-content">
+          <div href="#" *ngFor="let item of widget.subNav">
+            <a [href]="item.url" target="_blank" *ngIf="item.target">{{item.name}}</a>
+            <a [routerLink]="item.route" *ngIf="!item.target">{{item.name}}</a>
+          </div>
+        </div>
+
+        <div *ngIf="widget.subNav && widget.name == 'Share'" id="myDropdown" class="wrapper-widget dropdown-content">
+          <div href="#" *ngFor="let item of widget.subNav">
+            <a (click)="whatsAppLink(item.page)" *ngIf="item.name == 'Whatsapp'">{{item.name}}</a>
+            <a (click)="emailLink(item.page,item.url)" *ngIf="item.name == 'Email'">{{item.name}}</a>
+          </div>
+        </div>
+
+       
+
+      </div>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,17 @@
+.iconsize{
+    font-size: 20px;
+}
+.pl-15{
+    padding-left: 15px !important;
+}
+
+
+.icong{float: left;
+  /* margin-top: -22px; */
+  position: relative;
+  z-index: -1;
+}
+
+.sidenav-container {
+  flex: 1;
+}

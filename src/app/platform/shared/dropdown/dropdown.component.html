@@ -1,0 +1,26 @@
+<!--<div class="form-inline text-right">-->
+  <!--<div class="input-icon">-->
+    <!--<select class="form-control selectpicker show-tick show-menu-arrow " data-width="100%"  data-size="5"  title="Majeed" data-style="btn-select" data-live-search="true" style="max-width:100px; min-width:inherit;">-->
+      <!--<option *ngFor="let opt of optionsList" [value]="opt.key">{{opt.value}}</option>-->
+    <!--</select>-->
+    <!--<span class="icon ion-information-circled select" data-toggle="tooltip" title="help!!!"></span>-->
+  <!--</div>-->
+<!--</div>-->
+
+
+
+
+<select [(ngModel)]="selectedVal" *ngIf="multiSelect" class="form-control selectpicker show-tick show-menu-arrow " data-size="5" data-width="100%"
+        title="{{placeHolder}}" data-style="btn-select" [attr.data-live-search]="liveSearch" multiple
+        data-selected-text-format="count > 2">
+  <option *ngFor="let opt of optionsList"  [value]="opt.id">{{opt.label}}</option>
+  <!--<option *ngFor="let opt of optionsList" [value]="opt.id" [attr.data-subtext]="'[ HR-'+ opt.id + ']'">{{opt.label}}</option>-->
+</select>
+
+<select (change)="onSelectSingle($event.target.value)" *ngIf="!multiSelect" class="form-control selectpicker show-tick show-menu-arrow" data-size="5" data-width="100%"
+        title="{{placeHolder}}" data-style="btn-select">
+  <option *ngFor="let opt of optionsList" [value]="opt.id">{{opt.label}}</option>
+  <!--<option *ngFor="let opt of optionsList" [attr.data-subtext]="opt.id" [value]="opt.id">{{opt.label}}</option>-->
+</select>
+
+<span *ngIf="toolTip !== undefined" class="icon ion-information-circled select" data-toggle="tooltip" title="{{toolTip}}"></span>
