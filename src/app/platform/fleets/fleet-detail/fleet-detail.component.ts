@@ -1122,8 +1122,7 @@ export class FleetDetailComponent implements OnInit {
           if (selectedPackage.package_id === this.packageType.png) {
             this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
           } else {
-            this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
-            // this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+            this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
           }
         } else {
           this.swalService.getWarningSwal("No data found against this vehicle");

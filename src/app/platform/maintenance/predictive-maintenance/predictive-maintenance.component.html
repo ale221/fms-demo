@@ -1,6 +1,7 @@
 <app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
 
-<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+  #scrollToTop [hidden]="!isAuthorized">
   <!-- [hidden]="!isAuthorized"-->
   <ol class="breadcrumb breadcrumb-arrow ">
     <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
@@ -9,7 +10,9 @@
   </ol>
 </div>
 
-<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "  style="padding-bottom: 170px;" [hidden]="!isAuthorized">
+<div
+  [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+  style="padding-bottom: 170px;" [hidden]="!isAuthorized">
   <!-- [hidden]="!isAuthorized"-->
   <div class="row card-group-row">
     <div class="col-md-12 card-group-row__col padding-0">
@@ -149,7 +152,7 @@
       <div style="height: 520px;" class="panel panel-default card light shadow margin-bottom-30">
         <div class="panel-heading">
           <h3 class="panel-title font-weight-600">
-            Vehicle Operational Efficiency (Last 30 days)
+            Vehicle Operational Efficiency <small>(LAST 30 DAYS)</small>
           </h3>
         </div>
 
@@ -244,8 +247,8 @@
 
             <div *ngIf="efficiencyTableData?.length === 0" class="no-records">No records found</div>
 
-            <mat-paginator translate="no" #paginator [length]="totalLengthEfficency" [hidePageSize]="true" showFirstLastButtons
-              [pageSize]="10" (page)="onPaginateChangeEfficiency($event)">
+            <mat-paginator translate="no" #paginator [length]="totalLengthEfficency" [hidePageSize]="true"
+              showFirstLastButtons [pageSize]="10" (page)="onPaginateChangeEfficiency($event)">
             </mat-paginator>
           </div>
 
@@ -360,8 +363,8 @@
 
             <div *ngIf="dataSource?.length === 0" class="no-records">No records found</div>
 
-            <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true" showFirstLastButtons [pageSize]="10"
-              (page)="onPaginateChange($event)">
+            <mat-paginator translate="no" #paginator [length]="totalLength" [hidePageSize]="true" showFirstLastButtons
+              [pageSize]="10" (page)="onPaginateChange($event)">
             </mat-paginator>
           </div>
 

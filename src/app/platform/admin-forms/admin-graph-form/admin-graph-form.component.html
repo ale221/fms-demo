@@ -8,7 +8,8 @@
     </ol>
 </div>
 
-<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' " [hidden]="!isAuthorized">
+<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+    [hidden]="!isAuthorized">
     <div class="tab-content">
         <div class="tab-pane active" id="addnew">
             <div class="row">
@@ -137,7 +138,7 @@
                                         <!-----------Maintenance status------------>
 
 
-                                        <!-----------#Sixth Graph------------>
+                                        <!-----------#Driver Violations------------>
                                         <div class="chartbox"
                                             style="height: 330px !important; width: 310px !important; "
                                             *ngIf="graph.type === 9 && graph.name === 'Driver Violations'">
@@ -154,16 +155,14 @@
                                                 [graphHeight]="graphHeight" [chartFilter]="graph?.ui_filter?.data"
                                                 [graphId]="graph?.id" [graphType]="graph?.type"
                                                 [graphUseCaseId]="graph?.use_case_id">
-
                                             </app-clustered-bar-chart>
 
-
-
-
                                         </div>
-                                        <!-----------#sixth Graph------------>
+                                        <!-----------#Driver Violations------------>
 
-                                        <!-----------#Seventh Graph------------>
+
+
+                                        <!-----------#Fuel Efficient Vehicles------------>
                                         <div class="chartbox"
                                             *ngIf="graph.type === 11 && graph.name === 'Fuel Efficient Vehicles'">
                                             <span>
@@ -174,25 +173,40 @@
                                                 [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
                                             </app-bar-chart>
                                         </div>
-                                        <!-----------#seventh Graph------------>
+                                        <!-----------#Fuel Efficient Vehicles------------>
 
 
-                                        <!-----------#Eigth Graph------------>
+
+                                        <!-----------#Probability of Vehicle Maintenance------------>
                                         <div class="chartbox"
                                             *ngIf="graph.type === 1 && graph.name ==='Probability of Vehicle Maintenance'">
                                             <span>
                                                 <p><b>{{graph.name}}:</b></p>
                                             </span>
-                                            <app-mantinanceprobabilitychart [chartOptions]="graph.data"
+
+                                            <!-- <app-mantinanceprobabilitychart [chartOptions]="graph.data"
                                                 [graphHeight]="graphHeight" [horizontal]="true"
                                                 [chartFilter]="graph?.ui_filter?.data" [graphId]="graph.id"
                                                 [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
-                                            </app-mantinanceprobabilitychart>
+                                            </app-mantinanceprobabilitychart> -->
+
+
+                                            <app-clustered-graph [chartOptions]="graph.data" [graphHeight]="graphHeight"
+                                                [horizontal]="true" [chartFilter]="graph?.ui_filter?.data"
+                                                [graphId]="graph.id" [graphType]="graph.type"
+                                                [graphUseCaseId]="graph.use_case_id">
+                                            </app-clustered-graph>
+
+
+
+
                                         </div>
-                                        <!-----------#eigth Graph------------>
+                                        <!-----------#Probability of Vehicle Maintenance------------>
 
 
-                                        <!-----------#Ninth Graph------------>
+
+
+                                        <!-----------#Driver Allocations------------>
                                         <div class="chartbox" style="width: 300px"
                                             *ngIf="graph.type === 1 && graph.name === 'Driver Allocations'">
                                             <span>
@@ -204,7 +218,9 @@
                                                 [graphType]="graph.type" [graphUseCaseId]="graph.use_case_id">
                                             </app-custom-graph>
                                         </div>
-                                        <!-----------#Ninth Graph------------>
+                                        <!-----------#Driver Allocations------------>
+
+
 
 
                                         <!-----------#Last Graph------------>
@@ -218,6 +234,8 @@
                                             </app-area-chart>
                                         </div>
                                         <!-----------#Last Graph------------>
+
+
 
 
                                         <!-----------#Last Graph-1------------>

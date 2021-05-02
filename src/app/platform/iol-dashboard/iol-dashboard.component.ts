@@ -38,7 +38,27 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
   selectedGraph;
   isAuthorized = false;
   useCaseId = 0;
-  graphColumns = ['col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4'];
+  showDiv = true;
+  // ToDO: uncomment this when fuel sensor added
+  // graphColumns = ['col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4'];
+  // comment this when uncomment above
+  graphColumns = [
+    'col-md-4 panel panel-default card light shadow margin-bottom-30',
+     'col-md-4 panel panel-default card light shadow margin-bottom-30',
+      'col-md-4 panel panel-default card light shadow margin-bottom-30',
+       'col-md-4 panel panel-default card light shadow margin-bottom-30',
+        'col-md-4 panel panel-default card light shadow margin-bottom-30',
+         'col-md-4 panel panel-default card light shadow margin-bottom-30',
+          'col-md-4 panel panel-default card light shadow margin-bottom-30',
+           'col-md-4 panel panel-default card light shadow margin-bottom-30',
+            'col-md-4 panel panel-default card light shadow margin-bottom-30',
+             'col-md-4 panel panel-default card light shadow margin-bottom-30',
+              'col-md-4 panel panel-default card light shadow margin-bottom-30',
+               'col-md-4 panel panel-default card light shadow margin-bottom-30',
+                'col-md-4 panel panel-default card light shadow margin-bottom-30',
+                 'col-md-4 panel panel-default card light shadow margin-bottom-30',
+                  'col-md-4 panel panel-default card light shadow margin-bottom-30',
+                   'col-md-4 panel panel-default card light shadow margin-bottom-30'];
   packageType: any;
   //set graph height for dashboard
   graphHeight = 240;
@@ -68,6 +88,12 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
     //     'page_path': event.urlAfterRedirects
     //   });
     // });
+  }
+
+  removeDiv(divNumber) {
+    if (divNumber === 9) {
+      this.showDiv = false; 
+    }
   }
 
   isAuthorizedUser(value) {
