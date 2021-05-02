@@ -34,7 +34,7 @@ jobs:
         run: |
           export NODE_OPTIONS="--max-old-space-size=8192"
           npm i
-          npm run build:prod
+          npm run att
       - name: Push Build to Releases
         uses: azure/webapps-deploy@v2
         with:
