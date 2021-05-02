@@ -11,30 +11,32 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
 
     steps:
-    # checkout the repo
-    - name: 'Checkout Github Action'
-      uses: actions/checkout@master
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@master
 
-
-    - name: Set up Node.js version
-      uses: actions/setup-node@v1
-      with:
-        node-version: '10.x'
-
-    - name: npm install, build, and test
-      run: |
-        export NODE_OPTIONS="--max-old-space-size=8192"
-        npm install
-        npm run build --if-present
-    - name: Run Azure webapp deploy action using publish profile credentials
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'app-prod-fms-vfq'
-        slot-name: Production
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8d32ac58fa7f4ef4bc581c104e7f9522 }}
-        package: .
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: main
-        FOLDER: dist/hypernet-platform
+      - name: Cache node modules
+        uses: actions/setup-node@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install and npm run build
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=8192"
+          npm i
+          npm run build:prod
+      - name: Push Build to Releases
+        uses: azure/webapps-deploy@v2
+        with:
+          artifacts: "dist/hypernym-platform/*"
+          token: ${{ secrets.TOKEN }}
