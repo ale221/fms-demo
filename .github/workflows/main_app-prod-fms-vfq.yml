@@ -35,8 +35,12 @@ jobs:
           export NODE_OPTIONS="--max-old-space-size=8192"
           npm i
           npm run att
-      - name: Push Build to Releases
+      - name: Run Azure webapp deploy action using publish profile credentials
         uses: azure/webapps-deploy@v2
         with:
           artifacts: "dist/hypernet-platform/*"
           token: ${{ secrets.TOKEN }}
+          app-name: 'app-prod-fms-vfq'
+          slot-name: Production
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_8d32ac58fa7f4ef4bc581c104e7f9522 }}
+          package: .
