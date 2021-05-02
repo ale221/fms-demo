@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://go.microsoft.com/fwlink/?linkid=2134798
 # More GitHub Actions for Azure: https://go.microsoft.com/fwlink/?linkid=2135048
 
-name: Azure App Service - vfqtest(Production), Build and deploy NodeJS app
+name: Build and deploy Node.js app to Azure Web App - app-prod-fms-vfq
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
     - name: Run Azure webapp deploy action using publish profile credentials
       uses: azure/webapps-deploy@v2
       with:
-        app-name: vfqtest
+        app-name: 'app-prod-fms-vfq'
         slot-name: Production
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5A2644DCA9AC4F77A501E05D3E149822 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8d32ac58fa7f4ef4bc581c104e7f9522 }}
         package: .
