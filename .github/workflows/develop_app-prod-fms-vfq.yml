@@ -54,3 +54,6 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_057ba6171bd645639b34fa958422f558 }}
         package: .
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: main
+        FOLDER: dist/hypernet-platform
