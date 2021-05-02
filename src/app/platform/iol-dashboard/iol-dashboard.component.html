@@ -46,9 +46,9 @@
       <!-- <div *ngFor="let graph of graphsArray; let i = index" [className]="graphColumns[i]">
         <div style="height: 400px;" class="panel panel-default card light shadow margin-bottom-30" -->
       <ng-container *ngFor="let graph of graphsArray; let i = index">
-        <div style="height: 400px;" [className]="graphColumns[i]"
-          *ngIf="graph?.type !== 9">
-          {{removeDiv(graph?.type)}}
+        <div [className]="graphColumns[i]" *ngIf="graph?.type !== 9">
+        <div style="height: 400px;" class="panel panel-default card light shadow margin-bottom-30">
+
           <div class="panel-heading">
             <h3 class="panel-title font-weight-600" [ngStyle]="theme">
               <span *ngIf="graph.name === 'Average Statistics'">
@@ -247,6 +247,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </ng-container>
 

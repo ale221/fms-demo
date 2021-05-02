@@ -39,26 +39,8 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
   isAuthorized = false;
   useCaseId = 0;
   showDiv = true;
-  // ToDO: uncomment this when fuel sensor added
-  // graphColumns = ['col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4'];
-  // comment this when uncomment above
-  graphColumns = [
-    'col-md-4 panel panel-default card light shadow margin-bottom-30',
-     'col-md-4 panel panel-default card light shadow margin-bottom-30',
-      'col-md-4 panel panel-default card light shadow margin-bottom-30',
-       'col-md-4 panel panel-default card light shadow margin-bottom-30',
-        'col-md-4 panel panel-default card light shadow margin-bottom-30',
-         'col-md-4 panel panel-default card light shadow margin-bottom-30',
-          'col-md-4 panel panel-default card light shadow margin-bottom-30',
-           'col-md-4 panel panel-default card light shadow margin-bottom-30',
-            'col-md-4 panel panel-default card light shadow margin-bottom-30',
-             'col-md-4 panel panel-default card light shadow margin-bottom-30',
-              'col-md-4 panel panel-default card light shadow margin-bottom-30',
-               'col-md-4 panel panel-default card light shadow margin-bottom-30',
-                'col-md-4 panel panel-default card light shadow margin-bottom-30',
-                 'col-md-4 panel panel-default card light shadow margin-bottom-30',
-                  'col-md-4 panel panel-default card light shadow margin-bottom-30',
-                   'col-md-4 panel panel-default card light shadow margin-bottom-30'];
+  graphColumns = ['col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4'];
+  
   packageType: any;
   //set graph height for dashboard
   graphHeight = 240;
