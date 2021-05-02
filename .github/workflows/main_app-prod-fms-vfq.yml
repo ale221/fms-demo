@@ -38,5 +38,5 @@ jobs:
       - name: Push Build to Releases
         uses: azure/webapps-deploy@v2
         with:
-          artifacts: "dist/hypernym-platform/*"
+          artifacts: "dist/hypernet-platform/*"
           token: ${{ secrets.TOKEN }}
