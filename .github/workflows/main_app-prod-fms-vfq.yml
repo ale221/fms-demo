@@ -38,7 +38,6 @@ jobs:
       - name: Run Azure webapp deploy action using publish profile credentials
         uses: azure/webapps-deploy@v2
         with:
-          artifacts: "dist/hypernet-platform/*"
           token: ${{ secrets.TOKEN }}
           app-name: 'app-prod-fms-vfq'
           slot-name: Production
