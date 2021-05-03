@@ -42,7 +42,7 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
   graphColumns = ['col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4'];
   
   packageType: any;
-  //set graph height for dashboard
+
   graphHeight = 240;
   largeGraph;
 
