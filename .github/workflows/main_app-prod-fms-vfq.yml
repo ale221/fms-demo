@@ -41,4 +41,4 @@ jobs:
           app-name: 'app-prod-fms-vfq'
           slot-name: Production
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_8d32ac58fa7f4ef4bc581c104e7f9522 }}
-          package: .
+          package: ./dist/hypernet-platform
