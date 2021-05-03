@@ -38,6 +38,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { PackageType } from 'src/app/core/enum/packages-enum';
 import { User } from 'src/app/core/model/user';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { SignalRService } from 'src/app/Services/signal-r.service';
 declare var $: any;
 declare var google: any;
 
@@ -201,7 +202,8 @@ export class FleetDashboardComponent implements OnInit {
     private swalService: SwalService,
     public formBuilder: FormBuilder,
     private authService: AuthService,
-    private drawerService:DrawerService
+    private drawerService:DrawerService,
+    private signalRService: SignalRService
   ) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
@@ -216,6 +218,7 @@ export class FleetDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.signalRService.init();
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
       console.log("ressssssssssssss1",res);
@@ -880,6 +883,108 @@ export class FleetDashboardComponent implements OnInit {
   }
 
   setupSignalR() {
+    if (this.signalRService && this.signalRService.mxChipData) {
+      this.signalRService.mxChipData.subscribe(response => {
+
+        const signalRresponse = JSON.parse(response) as SignalRresponse;
+
+        console.log('signalResponse', signalRresponse);
+        if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
+          return;
+        }
+
+        for (let i = 0; i < this.trucks.length; i++) {
+          if (this.trucks[i].device_id === signalRresponse.id) {
+            this.trucks[i].online_status = true;
+            if (this.cardsArray && this.cardsArray.length > 0) {
+              this.cardsArray.forEach(element => {
+                if (element.name === 'Online Vehicles') {
+                  element.data.total_count = this.mapData.filter(truck => truck.online_status === true).length;
+                }
+                if (element.name === 'Offline Vehicles') {
+                  element.data.total_count = this.mapData.filter(truck => truck.online_status === false).length;
+                }
+              });
+            }
+            if (this.verifySignalRData(signalRresponse, i)) {
+              const oldLatLng = new google.maps.LatLng(this.trucks[i].signalRresponse.lat, this.trucks[i].signalRresponse.lon);
+
+              this.signalRstarted[i] += 1;
+              this.trucks[i].signalRresponse = new SignalRresponse(
+                signalRresponse.comp,
+                signalRresponse.customer,
+                signalRresponse.dens,
+                signalRresponse.temp,
+                signalRresponse.vol,
+                signalRresponse.id,
+                signalRresponse.lat,
+                signalRresponse.lon,
+                signalRresponse.module,
+                signalRresponse.spd,
+                signalRresponse.rtp,
+                ((!this.trucks[i].online_status) ? DateUtils.getLocalMMDDYYYYhhmmss(this.trucks[i]['last_update_unix']) : ((signalRresponse.t != 0) ? DateUtils.getLocalYYYYMMDDHHmmss(signalRresponse.t) : '0')),
+                signalRresponse.type,
+                signalRresponse.nw,
+                signalRresponse.gw
+              );
+
+              // let geocoder = new google.maps.Geocoder();
+              // this.copySignalR = this.trucks[i].signalRresponse;
+              // var latlng = { lat: parseFloat(signalRresponse.lat.toString()), lng: parseFloat(signalRresponse.lon.toString()) };
+              // this.findAddressFromLatLang(latlng, geocoder).then((result) => {
+              //   if (result) {
+              //     this.trucks[i]['location_address'] = result[0];
+              //     this.updateLocation(i, signalRresponse, oldLatLng, this.trucks, false);
+              //   }
+              // });
+
+              this.trucks[i].signalRresponse.vol = ConvertToGallon.convert_to_gallon(((this.trucks[i].signalRresponse.vol / 100) * this.trucks[i].volume_capacity));
+              this.trucks[i].signalRresponse['ignition_status'] = (this.trucks[i].signalRresponse.spd > 5) || (this.trucks[i].signalRresponse.nw !== 1);
+
+              if (signalRresponse.t == 0) {
+                this.trucks[i].last_updated = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
+                this.trucks[i].signalRresponse['t'] = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
+              }
+
+              const newLatLng = new google.maps.LatLng(signalRresponse.lat, signalRresponse.lon);
+              const differenceInDistance = (google.maps.geometry.spherical.computeDistanceBetween(newLatLng, oldLatLng));
+
+              const tooLongOrtooShortDistance = 50 < differenceInDistance && differenceInDistance < 200000;
+              if (!tooLongOrtooShortDistance && signalRresponse.lat && signalRresponse.lon) {
+                this.trucks[i].signalRresponse['spd'] = 0;
+                this.trucks[i].signalRresponse['ignition_status'] = false;
+              }
+
+              if (this.filters['vehicle_id'] && this.trackVehicle) {
+                if (this.trucks[i].id === this.filters['vehicle_id'].id) {
+                  const latlng = new google.maps.LatLng(this.trucks[i].signalRresponse.lat, this.trucks[i].signalRresponse.lng);
+                  this.map.setCenter(latlng);
+                }
+              }
+
+              this.updateLocation(i, signalRresponse, oldLatLng, this.trucks);
+              this.trucks = [...this.trucks];
+            } else if (!signalRresponse.lat && !signalRresponse.lon) {
+              this.trucks[i].signalRresponse.t = DateUtils.getLocalYYYYMMDDHHmmss(signalRresponse.t);
+              const oldLatLng = new google.maps.LatLng(this.trucks[i].signalRresponse.lat, this.trucks[i].signalRresponse.lon);
+              this.updateLocation(i, signalRresponse, oldLatLng, this.trucks);
+            } else {
+              // this.trucks[i].signalRresponse['ignition_status'] = (this.trucks[i].signalRresponse.spd > 5) || (this.trucks[i].signalRresponse.nw !== 1);
+              // if (signalRresponse.t == 0) {
+              //   this.trucks[i].last_updated = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
+              //   this.trucks[i].signalRresponse['t'] = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
+              // }
+              // this.updateInvalidSignalData(i, this.trucks);
+            }
+
+          }
+        }
+      });
+    }
+  }
+
+  /*
+  setupSignalR() {
     this.connection.start()
       .then((c) => {
         this.trucks.forEach((item, i) => {
@@ -985,7 +1090,7 @@ export class FleetDashboardComponent implements OnInit {
           }
         });
       });
-  }
+  }*/
 
   verifySignalRData(signalRresponse, i) {
     return (signalRresponse.lat !== 0 && signalRresponse.lon !== 0) &&
