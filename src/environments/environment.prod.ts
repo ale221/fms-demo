@@ -6,5 +6,6 @@ export const environment = {
   baseUrl:'https://dev.iot.vodafone.com.qa/backend',
   // sanpToRoadUrl: 'https://roads.googleapis.com/'
   sanpToRoadUrl:'https://dev.iot.vodafone.com.qa:5000/match/v1/driving/',
-  translateUrl: '/assets/i18n/'
+  translateUrl: '/assets/i18n/',
+  signalR: 'https://func-prod-fms.azurewebsites.net/api/'
 };
