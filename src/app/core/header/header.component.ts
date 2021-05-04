@@ -230,11 +230,14 @@ export class HeaderComponent implements OnInit {
       visibility: true
     }
     new google.translate.TranslateElement({ pageLanguage: lang, includedLanguages: 'en,ar', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    
+    
     setTimeout(() => {
       this.defaultLoader = {
         visibility: false
       }
       $('.sidenav-container.mat-drawer-container.mat-sidenav-container').css('position', 'fixed');
+      console.log('hello')
     }, 5000);
   }
 

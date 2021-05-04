@@ -40,15 +40,16 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
   useCaseId = 0;
   showDiv = true;
   graphColumns = ['col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4'];
-  
+
   packageType: any;
-  //set graph height for dashboard
+
   graphHeight = 240;
   largeGraph;
 
   @ViewChild("scrollToTop")
   scrollToTop: ElementRef;
   sidebarCheck: any;
+  language: any;
 
   constructor(private authService: AuthService,
     private entityService: EntityService,
@@ -58,11 +59,11 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
     private getUsecase: GetUsecaseService,
     private dashboardService: DashboardService,
     private brandingService: BrandingService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService) {    
     this.useCaseId = this.getUsecase.getUsecaseId();
     this.user = this.authService.getUser();
     this.theme = this.brandingService.styleObject();
-
+    
     // code for google analytics
     // const navEndsEvents = router.events.pipe(filter(event => event instanceof NavigationEnd));
     // navEndsEvents.subscribe((event: NavigationEnd) => {
@@ -74,7 +75,7 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
 
   removeDiv(divNumber) {
     if (divNumber === 9) {
-      this.showDiv = false; 
+      this.showDiv = false;
     }
   }
 

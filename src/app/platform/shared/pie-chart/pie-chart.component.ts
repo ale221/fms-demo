@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, Inject, NgZone, PLATFORM_ID } from '@angular/core';
+import { GraphJsonData } from 'src/app/model/GraphJsonDataModel';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
@@ -31,9 +32,13 @@ export class PieChartComponent implements OnInit {
   arry4 = [];
   arry5 = [];
   @Output() selectedFilters = new EventEmitter<string>();
+  graphJson: GraphJsonData;
+  language: any;
 
   private chart: am4charts.XYChart;
-  constructor(@Inject(PLATFORM_ID) private platformId, private zone: NgZone) { }
+  constructor(@Inject(PLATFORM_ID) private platformId, private zone: NgZone) {
+    this.graphJson = new GraphJsonData();
+  }
 
   ngOnInit() {
     this.selectedGraphFilter = {
@@ -130,6 +135,9 @@ export class PieChartComponent implements OnInit {
   }
 
   generateChart(chartData) {
+    this.language = this.getCookie('googtrans');
+    this.language = this.language === '/en/ar' ? 'ar' : 'en';
+
     this.browserOnly(() => {
       am4core.useTheme(am4themes_animated);
       var chart = am4core.create("ddddddd", am4charts.XYChart);
@@ -199,19 +207,52 @@ export class PieChartComponent implements OnInit {
       }
 
       if (this.arry1.length > 0) {
-        createSeries("Speed", "Speeding");
+
+        if (this.language == 'ar') {
+          createSeries("Speed", this.graphJson.localization['ar'].speed);
+        } else {
+          createSeries("Speed", this.graphJson.localization['en'].speed);
+        }
+
       }
       if (this.arry2.length > 0) {
-        createSeries("HarshBraking", "Harsh Braking");
+
+        if (this.language == 'ar') {
+          createSeries("HarshBraking", this.graphJson.localization['ar'].harshBraking);
+        } else {
+          createSeries("HarshBraking", this.graphJson.localization['en'].harshBraking);
+        }
+
       }
       if (this.arry3.length > 0) {
-        createSeries("HarshAcceleration", "Harsh Accelaration");
+
+        if (this.language == 'ar') {
+          createSeries("HarshAcceleration", this.graphJson.localization['ar'].harshAcceleration);
+        } else {
+          createSeries("HarshAcceleration", this.graphJson.localization['en'].harshAcceleration);
+        }
+
       }
       if (this.arry4.length > 0) {
-        createSeries("ShapTurn", "Sharp Turn");
+        // createSeries("ShapTurn", "Sharp Turn");
+
+        if (this.language == 'ar') {
+          createSeries("ShapTurn", this.graphJson.localization['ar'].sharpTurn);
+        } else {
+          createSeries("ShapTurn", this.graphJson.localization['en'].sharpTurn);
+        }
+
+
       }
       if (this.arry5.length > 0) {
-        createSeries("total Point", "Total Points");
+        // createSeries("total Point", "Total Points");
+
+        if (this.language == 'ar') {
+          createSeries("total Point", this.graphJson.localization['ar'].totalPoints);
+        } else {
+          createSeries("total Point", this.graphJson.localization['en'].totalPoints);
+        }
+
       }
 
       chart.cursor = new am4charts.XYCursor();
@@ -238,5 +279,11 @@ export class PieChartComponent implements OnInit {
         this.chart.dispose();
       }
     });
+  }
+
+  getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
   }
 }
