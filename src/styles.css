@@ -656,3 +656,6 @@ body ::-webkit-scrollbar-thumb {
   margin-right: 220px !important;
 }
 
+.translated-rtl .graph-ltr .panel-body.small-ui-dropdown {
+  direction: ltr !important;
+}
