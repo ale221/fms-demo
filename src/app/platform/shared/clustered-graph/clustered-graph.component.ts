@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { GraphJsonData } from 'src/app/model/GraphJsonDataModel';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
@@ -31,11 +32,14 @@ export class ClusteredGraphComponent implements OnInit {
   selectedIndex;
   finalObj = [];
   chart = am4core.create("chartdiv", am4charts.XYChart);
+  language;
+  graphJson: GraphJsonData;
 
-  constructor() { }
+  constructor() {
+    this.graphJson = new GraphJsonData();
+  }
 
   ngOnInit(): void {
-    // console.log("clustered-graph chartOptions= ", this.chartOptions)
     this.series = this.chartOptions?.series;
     this.categories = this.chartOptions?.categories;
 
@@ -71,8 +75,10 @@ export class ClusteredGraphComponent implements OnInit {
   }
 
   generateChart(data) {
-    let chart = am4core.create("chartdiv", am4charts.XYChart);
+    this.language = this.getCookie('googtrans');
+    this.language = this.language === '/en/ar' ? 'ar' : 'en';
 
+    let chart = am4core.create("chartdiv", am4charts.XYChart);
     chart.data = data;
 
     // Create x-axes
@@ -113,12 +119,25 @@ export class ClusteredGraphComponent implements OnInit {
       return series;
     }
 
-    createSeries("noMaintenanceProbability", "No Maintenance Probability");
-    createSeries("replaceProbability", "Replace Probability");
-    createSeries("maintenanceProbability", "Maintenance Probability");
+    if (this.language == 'ar') {
+      createSeries("noMaintenanceProbability", this.graphJson.localization['ar'].noMaintenanceProbability);
+      createSeries("replaceProbability", this.graphJson.localization['ar'].replaceProbability);
+      createSeries("maintenanceProbability", this.graphJson.localization['ar'].maintenanceProbability);
+    } else {
+      createSeries("noMaintenanceProbability",this.graphJson.localization['en'].noMaintenanceProbability);
+      createSeries("replaceProbability", this.graphJson.localization['en'].replaceProbability);
+      createSeries("maintenanceProbability", this.graphJson.localization['en'].maintenanceProbability);
+    }
+
 
     // Legend
     chart.legend = new am4charts.Legend();
+  }
+
+  getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
   }
 
 }

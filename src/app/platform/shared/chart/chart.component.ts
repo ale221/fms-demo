@@ -113,10 +113,6 @@ export class ChartComponent implements OnInit {
     }
     graphData.xaxis.categories = this.chartOptions.categories
     this.chartOptions1 = graphData;
-    // this.serial=graphData.series;
-    // this.categories=graphData.xaxis.categories;
-    // console.log(this.serial,"i am serial");
-    // console.log(this.categories);
   }
   getSelectedGraphData(data) {
     this.selectedFilters.emit(data);
@@ -124,12 +120,9 @@ export class ChartComponent implements OnInit {
   generateChart(chartData) {
     this.browserOnly(() => {
       am4core.useTheme(am4themes_animated);
-      // create chart
-      // console.log(am4core.create);
       let chart = am4core.create("xcv", sunburst.Sunburst);
       chart.padding(0, 0, 0, 0);
       chart.radius = am4core.percent(98);
-
       chart.data = chartData;
 
       chart.colors.step = 2;
@@ -153,7 +146,6 @@ export class ChartComponent implements OnInit {
       level0SeriesTemplate.labels.template.adapter.add("rotation", function (rotation, target) {
         target.maxWidth = target.dataItem.slice.radius - target.dataItem.slice.innerRadius - 10;
         target.maxHeight = Math.abs(target.dataItem.slice.arc * (target.dataItem.slice.innerRadius + target.dataItem.slice.radius) / 2 * am4core.math.RADIANS);
-
         return rotation;
       })
 
