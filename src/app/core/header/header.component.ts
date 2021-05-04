@@ -237,7 +237,6 @@ export class HeaderComponent implements OnInit {
         visibility: false
       }
       $('.sidenav-container.mat-drawer-container.mat-sidenav-container').css('position', 'fixed');
-      console.log('hello')
     }, 5000);
   }
 

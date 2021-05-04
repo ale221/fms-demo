@@ -106,6 +106,8 @@ export class FleetDashboardComponent implements OnInit {
   public _markers = [];
   territories: any[] = [];
 
+  signalRSubscription = new Subscription;
+
   mapZoom;
   markers = {};
   infoWindows = {};
@@ -884,7 +886,7 @@ export class FleetDashboardComponent implements OnInit {
 
   setupSignalR() {
     if (this.signalRService && this.signalRService.mxChipData) {
-      this.signalRService.mxChipData.subscribe(response => {
+      this.signalRSubscription = this.signalRService.mxChipData.subscribe(response => {
 
         const signalRresponse = JSON.parse(response) as SignalRresponse;
 
@@ -1347,6 +1349,10 @@ export class FleetDashboardComponent implements OnInit {
     }
     if (this.connection) {
       this.connection.stop();
+    }
+    if (this.signalRSubscription) {
+      this.signalRService.close();
+      this.signalRSubscription.unsubscribe();
     }
   }
 }

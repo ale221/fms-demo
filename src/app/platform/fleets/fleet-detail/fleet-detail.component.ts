@@ -154,7 +154,7 @@ export class FleetDetailComponent implements OnInit {
   trail_end_date;
   trail_current_date;
   isAuthorized = false;
-
+  signalRSubscription = new Subscription;
 
   @ViewChild('fillupMap') fMap: GoogleMapComponent;
   @ViewChild('trailMap') tMap: GoogleMapComponent;
@@ -240,7 +240,6 @@ export class FleetDetailComponent implements OnInit {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log(this.breadcrumbInner);
       }
     })
 
@@ -476,11 +475,16 @@ export class FleetDetailComponent implements OnInit {
 
   private setupSignalR() {
     if (this.signalRService && this.signalRService.mxChipData) {
-      this.signalRService.mxChipData.subscribe(response => {
+      this.signalRSubscription = this.signalRService.mxChipData.subscribe(response => {
         const signalRresponse = JSON.parse(response) as SignalRresponse;
-        // console.log('signalResponse', signalRresponse);
         if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
           return;
+        }
+        
+        if (signalRresponse.id !== this.truck.device_id) {
+          return false;
+        } else {
+          console.log('signalResponse', signalRresponse);
         }
 
         this.truck.online_status = true;
@@ -1496,6 +1500,11 @@ export class FleetDetailComponent implements OnInit {
     }
   }
 
-
+  ngOnDestroy(): void {
+    if (this.signalRSubscription) {
+      this.signalRService.close();
+      this.signalRSubscription.unsubscribe();
+    }
+  }
 
 }

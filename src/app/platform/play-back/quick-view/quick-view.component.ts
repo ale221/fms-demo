@@ -82,6 +82,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   loadingFilter = true;
   firstTime = true;
 
+  signalRSubscription = new Subscription;
+
   @ViewChild("scrollToTop") scrollToTop: ElementRef;
   @ViewChild('trailMap') map: GoogleMapComponent;
   @ViewChild(MatSort) sortDetailedReport: MatSort;
@@ -379,6 +381,11 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
+    }
+
+    if (this.signalRSubscription) {
+      this.signalRService.close();
+      this.signalRSubscription.unsubscribe();
     }
   }
 
@@ -740,7 +747,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setupSignalR(){
     if (this.signalRService && this.signalRService.mxChipData) {
-      this.signalRService.mxChipData.subscribe(response => {
+      this.signalRSubscription = this.signalRService.mxChipData.subscribe(response => {
         // console.log(response);
         const signalRresponse = JSON.parse(response) as SignalRresponse;
         // console.log('signalResponse', signalRresponse);
