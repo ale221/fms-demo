@@ -25,8 +25,7 @@ jobs:
       run: |
         export NODE_OPTIONS="--max-old-space-size=8192"
         npm install
-        npm run build --if-present
-        npm run test --if-present
+        npm run att --if-present
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
