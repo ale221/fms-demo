@@ -23,7 +23,6 @@ jobs:
 
     - name: npm install, build, and test
       run: |
-        export NODE_OPTIONS="--max-old-space-size=8192"
         npm install
         npm run att --if-present
 
