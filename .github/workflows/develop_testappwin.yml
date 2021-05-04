@@ -23,6 +23,7 @@ jobs:
 
     - name: npm install, build, and test
       run: |
+        export NODE_OPTIONS="--max-old-space-size=8192"
         npm install
         npm run build --if-present
         npm run test --if-present
@@ -53,4 +54,4 @@ jobs:
         app-name: 'testappwin'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_22d26fb0b9b84833bc6b060fa63b6e3a }}
-        package: .
+        package: ./dist/hypernet-platform
