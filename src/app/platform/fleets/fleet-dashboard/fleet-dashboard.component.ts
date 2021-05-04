@@ -907,7 +907,7 @@ export class FleetDashboardComponent implements OnInit {
               });
             }
             if (this.verifySignalRData(signalRresponse, i)) {
-              const oldLatLng = new google.maps.LatLng(this.trucks[i].signalRresponse.lat, this.trucks[i].signalRresponse.lon);
+              const oldLatLng = new google.maps.LatLng(this.trucks[i].signalRresponse?.lat, this.trucks[i].signalRresponse?.lon);
 
               this.signalRstarted[i] += 1;
               this.trucks[i].signalRresponse = new SignalRresponse(
