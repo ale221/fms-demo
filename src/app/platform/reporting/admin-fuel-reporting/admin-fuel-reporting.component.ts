@@ -5,7 +5,6 @@ import {LoginApiResponse} from '../../../core/model/api.response';
 import {FillupResponse} from '../../data/response/reports-response';
 import {AppLoader} from '../../data/model/app-loader';
 import {isNullOrUndefined} from 'util';
-import {DateUtils} from '../../../core/date.utils';
 import {HttpStatusCodeEnum} from '../../../core/HttpStatusCodeEnum';
 import {Item} from '../../data/model/item';
 import {TruckService} from '../../services/truck.service';
@@ -14,6 +13,7 @@ import {ReportResponse} from '../../model/reportResponse';
 import {EntityType} from '../../../core/enum/entity-type.enum';
 import { DropDownItem } from '../../data/model/dropdown-item';
 import { SwalService } from 'src/app/core/services/swal.service';
+import { DateUtils } from 'src/app/Utils/DateUtils';
 
 @Component({
   selector: 'app-admin-fuel-reporting',

@@ -1,6 +1,5 @@
 import {AfterContentInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AppLoader} from '../../data/model/app-loader';
-import {DateUtils} from '../../../core/date.utils';
 import {endOfMonth, getMonth, getYear, startOfMonth} from 'date-fns';
 import {HttpController} from '../../../core/services/loading-controller';
 import {LoginApiResponse} from '../../../core/model/api.response';
@@ -12,6 +11,7 @@ import {isNullOrUndefined} from 'util';
 import {ConvertToGallon} from '../../data/model/covert_to_gallon';
 import {CBMEnum} from '../../../core/enum/entity-type.enum';
 import {GotoPageService} from '../../services/goto-page.service';
+import { DateUtils } from 'src/app/Utils/DateUtils';
 
 @Component({
   selector: 'app-truck-monthly-reporting',

@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {AppLoader} from '../../data/model/app-loader';
-import {DateUtils} from '../../../core/date.utils';
 import {HttpController} from '../../../core/services/loading-controller';
 import {LoginApiResponse} from '../../../core/model/api.response';
 import {HttpStatusCodeEnum} from '../../../core/HttpStatusCodeEnum';
@@ -9,6 +8,7 @@ import {GetNullOrUndefinedPipe} from '../../../core/pipes/get-null-or-undefined.
 import {isNullOrUndefined} from 'util';
 import {ReportResponse} from '../../model/reportResponse';
 import {SwalService} from '../../../core/services/swal.service';
+import { DateUtils } from 'src/app/Utils/DateUtils';
 
 @Component({
   selector: 'app-shift-reporting',

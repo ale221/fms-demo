@@ -33,6 +33,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { PackageType } from 'src/app/core/enum/packages-enum';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { SignalRService } from 'src/app/Services/signal-r.service';
 
 declare var $: any;
 
@@ -192,7 +193,8 @@ export class FleetDetailComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService:DrawerService
+    private drawerService:DrawerService,
+    private signalRService: SignalRService
   ) {
     this.theme = this.brandingService.styleObject();
     this.connection = this.route.snapshot.data['connection'];
@@ -214,6 +216,8 @@ export class FleetDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.signalRService.init();
 
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
@@ -471,6 +475,104 @@ export class FleetDetailComponent implements OnInit {
   }
 
   private setupSignalR() {
+    if (this.signalRService && this.signalRService.mxChipData) {
+      this.signalRService.mxChipData.subscribe(response => {
+        const signalRresponse = JSON.parse(response) as SignalRresponse;
+        // console.log('signalResponse', signalRresponse);
+        if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
+          return;
+        }
+
+        this.truck.online_status = true;
+
+        if (signalRresponse.d && this.signalRstarted < 1) {
+          this.verifyFirmware(signalRresponse.d); //gate version check
+        }
+        if (this.verifySignalRData(signalRresponse)) { //validate the lang, long
+          const oldLatLng = new google.maps.LatLng(this.truck.signalRresponse.lat, this.truck.signalRresponse.lon);
+          this.signalRstarted += 1;
+          this.truck.signalRresponse = new SignalRresponse(  //revamp the data to show on frontend
+            signalRresponse.comp,
+            signalRresponse.customer,
+            signalRresponse.dens,
+            signalRresponse.temp,
+            signalRresponse.vol,
+            signalRresponse.id,
+            signalRresponse.lat,
+            signalRresponse.lon,
+            signalRresponse.module,
+            signalRresponse.spd,
+            signalRresponse.rtp,
+            DateUtils.getLocalYYYYMMDDHHmmss(signalRresponse.t),
+            signalRresponse.type,
+            signalRresponse.nw,
+            signalRresponse.gw,
+            signalRresponse.d,
+            signalRresponse.mss
+          );
+
+
+          // let geocoder = new google.maps.Geocoder(); //return location in text
+
+          this.copySignalR = this.truck.signalRresponse;
+
+          var latlng = { lat: parseFloat(signalRresponse.lat.toString()), lng: parseFloat(signalRresponse.lon.toString()) };
+
+          // this.findAddressFromLatLang(latlng, geocoder).then((result) => {   //promise
+          //   if (result) {
+          //     this.truck['location_address'] = result[0];
+          //     this.updateLocation(this.truck, this.tooLongOrtooShortDistance);
+          //   }
+          // });
+
+          // console.log(this.truck);
+
+          // if(this.showSignals){
+          //   this.mss = this.truck.signalRresponse.mss;
+          // }
+          if (!isNullOrUndefined(this.truck.volume_capacity)) {
+            this.truck['vol'] = ConvertToGallon.convert_to_gallon(((this.truck.signalRresponse.vol || 0) / 100) * this.truck.volume_capacity);
+          }
+          this._newLatLng = [signalRresponse.lat, signalRresponse.lon];
+          const newLatLng = new google.maps.LatLng(signalRresponse.lat, signalRresponse.lon);
+          const differenceInDistance = (google.maps.geometry.spherical.computeDistanceBetween(newLatLng, oldLatLng));
+          this.tooLongOrtooShortDistance = 20 < differenceInDistance && differenceInDistance < 200000;
+
+          this.updateLocation(this.truck, this.tooLongOrtooShortDistance);
+
+          if (isNullOrUndefined(this.marker)) {
+            this.createMarker(this._newLatLng[0], this._newLatLng[1]);
+          }
+
+          if (this.tooLongOrtooShortDistance) {
+            this.transition(this._newLatLng, signalRresponse.spd);
+          }
+
+          if (signalRresponse.t == 0) {
+            this.currentDateString = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString())
+            this.truck.signalRresponse['t'] = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
+            this.updateInvalidSignalData(this.truck);
+          }
+          // if (AppConfig.DEBUG) {
+          //   console.info(this.truck.signalRresponse);
+          // }
+        } else if (!signalRresponse.lat && !signalRresponse.lon) {
+          this.truck.signalRresponse.t = DateUtils.getLocalYYYYMMDDHHmmss(signalRresponse.t);
+          this.tooLongOrtooShortDistance = true;
+          this.updateLocation(this.truck, this.tooLongOrtooShortDistance, signalRresponse.t);
+        } else {
+          if (signalRresponse.t == 0) {
+            this.currentDateString = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString())
+            this.truck.signalRresponse['t'] = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
+          }
+          this.updateInvalidSignalData(this.truck);
+        }
+      });        
+    }
+  }
+
+  /*
+  private setupSignalR() {
     console.log("coming in setupsignalr");
     // console.log('setupSignalR fired');
     if (!isNullOrUndefined(this.connection)) {
@@ -485,7 +587,7 @@ export class FleetDetailComponent implements OnInit {
         // subscribe to event
         this.subscription = newMessage.subscribe((response: string) => {
           const signalRresponse = JSON.parse(response) as SignalRresponse;
-          console.log('signalResponse', signalRresponse);
+          // console.log('signalResponse', signalRresponse);
           if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
             return;
           }
@@ -578,6 +680,7 @@ export class FleetDetailComponent implements OnInit {
       });
     }
   }
+  */
 
   private verifyFirmware(d?) {
     // console.log('verifyFirmware fired');
@@ -1122,8 +1225,7 @@ export class FleetDetailComponent implements OnInit {
           if (selectedPackage.package_id === this.packageType.png) {
             this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
           } else {
-            this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
-            // this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+            this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
           }
         } else {
           this.swalService.getWarningSwal("No data found against this vehicle");
