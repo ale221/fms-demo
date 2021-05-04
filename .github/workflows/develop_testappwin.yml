@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - app-prod-fms-vfq
+name: Build and deploy Node.js app to Azure Web App - testappwin
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -23,9 +23,8 @@ jobs:
 
     - name: npm install, build, and test
       run: |
-        export NODE_OPTIONS="--max-old-space-size=8192"
         npm install
-        npm run build --if-present
+        npm run att --if-present
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
@@ -34,7 +33,7 @@ jobs:
         path: .
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     environment:
       name: 'production'
@@ -50,10 +49,7 @@ jobs:
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'app-prod-fms-vfq'
+        app-name: 'testappwin'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_057ba6171bd645639b34fa958422f558 }}
-        package: .
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: main
-        FOLDER: dist/hypernet-platform
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_22d26fb0b9b84833bc6b060fa63b6e3a }}
+        package: ./dist/hypernet-platform

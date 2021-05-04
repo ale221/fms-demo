@@ -38,9 +38,11 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
   selectedGraph;
   isAuthorized = false;
   useCaseId = 0;
+  showDiv = true;
   graphColumns = ['col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4', 'col-md-4'];
+  
   packageType: any;
-  //set graph height for dashboard
+
   graphHeight = 240;
   largeGraph;
 
@@ -68,6 +70,12 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
     //     'page_path': event.urlAfterRedirects
     //   });
     // });
+  }
+
+  removeDiv(divNumber) {
+    if (divNumber === 9) {
+      this.showDiv = false; 
+    }
   }
 
   isAuthorizedUser(value) {

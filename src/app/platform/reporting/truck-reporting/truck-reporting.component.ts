@@ -4,7 +4,6 @@ import {LoginApiResponse} from '../../../core/model/api.response';
 import {DropDownItem} from '../../data/model/dropdown-item';
 import {HttpStatusCodeEnum} from '../../../core/HttpStatusCodeEnum';
 import {TruckService} from '../../services/truck.service';
-import {DateUtils} from '../../../core/date.utils';
 import {MonthEnum} from '../../../core/enum/month-enum';
 import {isNullOrUndefined} from 'util';
 import {ConvertToGallon} from '../../data/model/covert_to_gallon';
@@ -12,6 +11,7 @@ import {CBMEnum} from '../../../core/enum/entity-type.enum';
 import {AppLoader} from '../../data/model/app-loader';
 import {GotoPageService} from '../../services/goto-page.service';
 import {DatatableService} from '../../services/datatable.service';
+import { DateUtils } from 'src/app/Utils/DateUtils';
 
 @Component({
   selector: 'app-truck-reporting',
