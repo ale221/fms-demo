@@ -230,6 +230,8 @@ export class HeaderComponent implements OnInit {
       visibility: true
     }
     new google.translate.TranslateElement({ pageLanguage: lang, includedLanguages: 'en,ar', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    
+    
     setTimeout(() => {
       this.defaultLoader = {
         visibility: false

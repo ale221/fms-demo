@@ -1,6 +1,7 @@
 <app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
 
-<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+  #scrollToTop [hidden]="!isAuthorized">
   <ol class="breadcrumb breadcrumb-arrow ">
     <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
     <!-- <li><a> User & Admin</a></li>
@@ -10,7 +11,9 @@
   </ol>
 </div>
 
-<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "  style="padding-bottom:200px" [hidden]="!isAuthorized">
+<div
+  [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+  style="padding-bottom:200px" [hidden]="!isAuthorized">
   <button type="button" #showP class="btn btn-icon btn-outline btn-round btn-default btn-xs hidden"
     data-target="#showProgressFiles" data-toggle="modal">
     <i class="icon ion-edit"></i>

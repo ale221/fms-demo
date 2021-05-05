@@ -39,6 +39,7 @@ import { TruckService } from '../../services/truck.service';
 import { ResizeDatatableService } from '../../shared/resize-datatable.service';
 import { BrandingService } from '../../shared/services/branding.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { SignalRService } from 'src/app/Services/signal-r.service';
 
 export enum TruckPrimaryFiltersEnum {
   By_Gateway_Status = 'online_status',
@@ -80,6 +81,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   totalLengthStops = 0;
   loadingFilter = true;
   firstTime = true;
+
+  signalRSubscription = new Subscription;
 
   @ViewChild("scrollToTop") scrollToTop: ElementRef;
   @ViewChild('trailMap') map: GoogleMapComponent;
@@ -238,7 +241,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private brandingService: BrandingService,
     private entityService: EntityService,
     private filtersService: FiltersService,
-    private drawerService:DrawerService
+    private drawerService:DrawerService,
+    private signalRService: SignalRService
   ) {
     this.user = this.authService.getUser();
     this.is_customer_client = this.user.user_role_id === UserRoleEnum.CustomerClient;
@@ -292,6 +296,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    // this.signalRService.init();
+
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
       console.log("ressssssssssssss1",res);
@@ -376,6 +382,11 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
+    }
+
+    if (this.signalRSubscription) {
+      this.signalRService.close();
+      this.signalRSubscription.unsubscribe();
     }
   }
 
@@ -734,6 +745,67 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.rows = this.trucks;
   }
 
+
+  //SignalR with Azure Functions
+  /*
+  setupSignalR(){
+    if (this.signalRService && this.signalRService.mxChipData) {
+      this.signalRSubscription = this.signalRService.mxChipData.subscribe(response => {
+        // console.log(response);
+        const signalRresponse = JSON.parse(response) as SignalRresponse;
+        // console.log('signalResponse', signalRresponse);
+        if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
+          return;
+        }
+        for (let i = 0; i < this.trucks.length; i++) {
+          if (this.trucks[i].device_id === signalRresponse.id) {
+            this.trucks[i].online_status = true;
+            this.trucksSummaryResponse.total_online = this.trucks.filter(truck => truck.online_status === true).length;
+            if (this.verifySignalRData(signalRresponse, i)) {
+              const oldLatLng = new google.maps.LatLng(this.trucks[i].signalRresponse.lat, this.trucks[i].signalRresponse.lon);
+
+              this.signalRstarted[i] += 1;
+
+              this.trucks[i].signalRresponse = new SignalRresponse(
+                signalRresponse.comp,
+                signalRresponse.customer,
+                signalRresponse.dens,
+                signalRresponse.temp,
+                signalRresponse.vol,
+                signalRresponse.id,
+                signalRresponse.lat,
+                signalRresponse.lon,
+                signalRresponse.module,
+                signalRresponse.spd,
+                signalRresponse.rtp,
+                DateUtils.getLocalYYYYMMDDHHmmss(signalRresponse.t),
+                signalRresponse.type,
+                signalRresponse.nw,
+                signalRresponse.gw
+              );
+
+
+              this.trucks[i].signalRresponse.vol = ConvertToGallon.convert_to_gallon(((this.trucks[i].signalRresponse.vol / 100) * this.trucks[i].volume_capacity));
+
+              this.trucks[i].signalRresponse['ignition_status'] = (this.trucks[i].signalRresponse.spd > 5) || (this.trucks[i].signalRresponse.nw !== 1);
+              this.trucks = [...this.trucks];
+
+              this.map.updateLocation(i, signalRresponse, oldLatLng, this.trucks, true, this.signalRstarted);
+              if (!isNullOrUndefined(this.inputValue) && this.inputValue.length > 0 || (!isNullOrUndefined(this.selectedSecondaryFilter))) {
+                this.updateFilter({ target: { value: this.inputValue } });
+              } else {
+                this.rows = [...this.trucks];
+              }
+              if (AppConfig.DEBUG) {
+                console.log(this.trucks[i].signalRresponse);
+              }
+            }
+
+          }
+        }        
+      });
+    }
+  } */
 
   setupSignalR() {
     this.connection.stop();
