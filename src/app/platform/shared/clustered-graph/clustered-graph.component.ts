@@ -3,6 +3,7 @@ import { GraphJsonData } from 'src/app/model/GraphJsonDataModel';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import { TranslateDetector } from 'src/app/core/services/translate-detector.service';
 
 // Themes begin
 am4core.useTheme(am4themes_animated);
@@ -35,7 +36,7 @@ export class ClusteredGraphComponent implements OnInit {
   language;
   graphJson: GraphJsonData;
 
-  constructor() {
+  constructor(public translateDetector: TranslateDetector) {
     this.graphJson = new GraphJsonData();
   }
 
@@ -72,6 +73,13 @@ export class ClusteredGraphComponent implements OnInit {
     }
 
     this.generateChart(this.finalObj);
+
+
+    if (this.translateDetector && this.translateDetector.menuData) {
+      this.translateDetector.menuData.subscribe(response => {
+        this.generateChart(this.finalObj);
+      });
+    }
   }
 
   generateChart(data) {

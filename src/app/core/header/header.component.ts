@@ -30,6 +30,7 @@ import { StorageService } from 'src/app/Services/local-storage.service';
 import { Subscription } from 'rxjs';
 import { DrawerService } from '../services/drawer.service';
 import { trim } from '@amcharts/amcharts4/.internal/core/utils/Utils';
+import { TranslateDetector } from '../services/translate-detector.service';
 
 declare var google: any;
 declare var $: any;
@@ -135,7 +136,8 @@ export class HeaderComponent implements OnInit {
     private renderer: Renderer2, private brandingService: BrandingService,
     @Inject(DOCUMENT) private document: Document,
     private idle: Idle, private keepalive: Keepalive,
-    public drawerService: DrawerService) {
+    public drawerService: DrawerService,
+    public translateDetector: TranslateDetector) {
 
     this.user = this.authService.getUser();
 
@@ -217,6 +219,20 @@ export class HeaderComponent implements OnInit {
     setTimeout(() => {
       this.googleTranslateElementInit('en');
     }, 500);
+
+    setTimeout(() => {
+      // select the target node
+      var target = document.querySelector('html')
+      // create an observer instance
+      var observer = new MutationObserver((mutations) => {
+        this.translateDetector.init();
+      });
+      // configuration of the observer:
+      var config = { attributes: true, childList: true, characterData: true };
+      // pass in the target node, as well as the observer options
+      observer.observe(target, config);
+    }, 1000);
+
   }
 
   getCookie(name) {
@@ -269,7 +285,7 @@ export class HeaderComponent implements OnInit {
     }
 
 
-  }
+  } 
 
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
@@ -310,6 +326,7 @@ export class HeaderComponent implements OnInit {
   disablePreferences = true;
 
   ngOnInit() {
+
     this.setUserInfo();
 
     this.getUserService.getValue()
