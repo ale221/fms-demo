@@ -220,7 +220,8 @@ export class FleetDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.signalRService.init();
+    // this.signalRService.init();
+    
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
       console.log("ressssssssssssss1",res);
@@ -884,6 +885,8 @@ export class FleetDashboardComponent implements OnInit {
     })
   }
 
+  // SignalR with Azure Function
+  /*
   setupSignalR() {
     if (this.signalRService && this.signalRService.mxChipData) {
       this.signalRSubscription = this.signalRService.mxChipData.subscribe(response => {
@@ -983,9 +986,9 @@ export class FleetDashboardComponent implements OnInit {
         }
       });
     }
-  }
+  }*/
 
-  /*
+  
   setupSignalR() {
     this.connection.start()
       .then((c) => {
@@ -1092,7 +1095,7 @@ export class FleetDashboardComponent implements OnInit {
           }
         });
       });
-  }*/
+  }
 
   verifySignalRData(signalRresponse, i) {
     return (signalRresponse.lat !== 0 && signalRresponse.lon !== 0) &&

@@ -296,7 +296,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.signalRService.init();
+    // this.signalRService.init();
+
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
       console.log("ressssssssssssss1",res);
@@ -745,6 +746,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
+  //SignalR with Azure Functions
+  /*
   setupSignalR(){
     if (this.signalRService && this.signalRService.mxChipData) {
       this.signalRSubscription = this.signalRService.mxChipData.subscribe(response => {
@@ -802,9 +805,9 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
         }        
       });
     }
-  }
+  } */
 
-  /*setupSignalR() {
+  setupSignalR() {
     this.connection.stop();
     this.connection.start()
       .then((c) => {
@@ -874,7 +877,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
       });
-  }*/
+  }
 
   getDurationForListing(value) {
     return DateUtils.getDuration(Number(value));
