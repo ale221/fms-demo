@@ -1,0 +1,63 @@
+{
+  "_args": [
+    [
+      "signalr@2.4.0",
+      "/Users/mushahid/work/metis/vodafone-iol/hypernet-frontend"
+    ]
+  ],
+  "_from": "signalr@2.4.0",
+  "_id": "signalr@2.4.0",
+  "_inBundle": false,
+  "_integrity": "sha1-kq8AjmtSetSzbpT7s0DhNQh6YNI=",
+  "_location": "/signalr",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "signalr@2.4.0",
+    "name": "signalr",
+    "escapedName": "signalr",
+    "rawSpec": "2.4.0",
+    "saveSpec": null,
+    "fetchSpec": "2.4.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/signalr/-/signalr-2.4.0.tgz",
+  "_spec": "2.4.0",
+  "_where": "/Users/mushahid/work/metis/vodafone-iol/hypernet-frontend",
+  "author": {
+    "name": "Microsoft"
+  },
+  "bugs": {
+    "url": "https://github.com/SignalR/SignalR/issues"
+  },
+  "dependencies": {
+    "jquery": ">=1.6.4"
+  },
+  "description": "Microsoft ASP.NET SignalR JavaScript Client",
+  "files": [
+    "jquery.signalR.js",
+    "jquery.signalR.min.js",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "homepage": "https://github.com/SignalR/SignalR",
+  "keywords": [
+    "signalr",
+    "microsoft",
+    "asp.net",
+    "javascript",
+    "jquery",
+    "realtime"
+  ],
+  "license": "Apache-2.0",
+  "main": "jquery.signalR.js",
+  "name": "signalr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/signalr/bower-signalr.git"
+  },
+  "version": "2.4.0"
+}
