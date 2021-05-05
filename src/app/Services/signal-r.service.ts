@@ -48,6 +48,6 @@ export class SignalRService {
     });
   }
   close() {
-    this.hubConnection.stop();
+    // this.hubConnection.stop();
   }
 }
