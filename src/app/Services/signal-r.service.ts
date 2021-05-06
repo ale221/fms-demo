@@ -42,9 +42,12 @@ export class SignalRService {
       this.hubConnection.keepAliveIntervalInMilliseconds = 300000;
 
       this.hubConnection.onclose((error) => {
-        this.hubConnection.start();
+        // this.hubConnection.start();
         console.error(`Something went wrong: ${error}`);
       });
     });
+  }
+  close() {
+    // this.hubConnection.stop();
   }
 }

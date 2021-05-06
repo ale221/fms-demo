@@ -10,7 +10,7 @@ import { SignalRModule, SignalRConfiguration } from 'src/app/core/wfw-ngx-signal
 
 export function createConfig(): SignalRConfiguration {
   const c = new SignalRConfiguration();
-  c.url =  'https://staging.broadcaster.iot.vodafone.com.qa'; //'http://reliance-signalr-hypernet.southeastasia.cloudapp.azure.com:8080/signalr';
+  c.url =  environment.signalR; //'http://reliance-signalr-hypernet.southeastasia.cloudapp.azure.com:8080/signalr';
   c.hubName = 'EventHubMessages';
   c.logging = false;
   c.withCredentials = true;
@@ -28,6 +28,7 @@ import { MaintenanceReportingComponent } from '../reporting/maintenance-reportin
 import { ViolationReportingComponent } from '../reporting/violation-reporting/violation-reporting.component';
 import { CdkDetailRowDirective } from './fleet-dashboard/cdk-detail-row.directive';
 import { FleetPoiComponent } from './fleet-poi/fleet-poi.component';
+import { environment } from 'src/environments/environment';
 // import { SpdmeterchartComponent } from '../shared/spdmeterchart/spdmeterchart.component';
 
 @NgModule({
