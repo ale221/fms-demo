@@ -5,6 +5,7 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { isPlatformBrowser } from '@angular/common';
+import { TranslateDetector } from 'src/app/core/services/translate-detector.service';
 
 // theme
 am4core.useTheme(am4themes_kelly);
@@ -36,7 +37,9 @@ export class PieChartComponent implements OnInit {
   language: any;
 
   private chart: am4charts.XYChart;
-  constructor(@Inject(PLATFORM_ID) private platformId, private zone: NgZone) {
+  constructor(@Inject(PLATFORM_ID) private platformId,
+    private zone: NgZone,
+    public translateDetector: TranslateDetector) {
     this.graphJson = new GraphJsonData();
   }
 
@@ -85,15 +88,6 @@ export class PieChartComponent implements OnInit {
 
       }
 
-      // console.log("this.arry1= ", this.arry1)
-      // console.log("this.arry2= ", this.arry2)
-      // console.log("this.arry3= ", this.arry3)
-      // console.log("this.arry4= ", this.arry4)
-      // console.log("this.arry5= ", this.arry5)
-
-      // console.log("violationArray= ", violationArray);
-
-
       if (this.arry2.length == 0) {
         // console.log("this.arry2 (HarshBraking) is EMPTY")
         for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
@@ -130,6 +124,13 @@ export class PieChartComponent implements OnInit {
 
       // console.log("ngOnChanges_this.finalObj-- ", this.finalObj);
       this.generateChart(this.finalObj);
+
+      if (this.translateDetector && this.translateDetector.menuData) {
+        this.translateDetector.menuData.subscribe(response => {
+          this.generateChart(this.finalObj);
+        });
+      }
+
     }
 
   }
