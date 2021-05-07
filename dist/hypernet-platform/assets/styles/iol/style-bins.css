@@ -1,0 +1,213 @@
+
+
+
+/*html, body { height: 100%; }*/
+
+/*body { padding: 8px; background-color: #F6F6F6; box-sizing: border-box; }*/
+
+/*.split { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; overflow-y: auto; overflow-x: hidden; }*/
+
+/*.content { border: 1px solid #eee; box-shadow: inset 0 1px 2px #fff; background-color: #fff; }*/
+
+/*.gutter { background-color: transparent; background-repeat: no-repeat; background-position: 50%; }*/
+
+/*.gutter.gutter-horizontal { cursor: col-resize; }*/
+
+/*.gutter.gutter-vertical { cursor: row-resize; }*/
+
+/*#chartdiv { width: 100%; height: 300px; }*/
+
+/*.split.split-horizontal, .gutter.gutter-horizontal { height: 100%; float: left; background: #ccc; }*/
+/*.bg-bins-800 { background-color: #526069 !important; }*/
+/*.bg-bins-700 { background-color: #40a058 !important; }*/
+/*.bg-bins-600 { background-color: #55ab6b !important; }*/
+/*.bg-bins-500 { background-color: #6ab57d !important; }*/
+/*.bg-bins-400 { background-color: #80c090 !important; }*/
+/*.bg-bins-300 { background-color: #95caa2 !important; }*/
+/*.bg-bins-200 { background-color: #aad5b5 !important; }*/
+/*.bg-bins-100 { background-color: #bfdfc7 !important; }*/
+
+
+/*.bins-100 { color: #2b9646 !important; }*/
+/*.bins-200 { color: #2b9646 !important; }*/
+/*.bins-300 { color: #2b9646 !important; }*/
+/*.bins-400 { color: #2b9646 !important; }*/
+/*.bins-500 { color: #2b9646 !important; }*/
+/*.bins-600 { color: #2b9646 !important; }*/
+/*.bins-700 { color: #2b9646 !important; }*/
+/*.bins-800 { color: #2b9646 !important; }*/
+
+
+/*!*.site-dashboard-menu > .site-dashboard-menu-item.active > a:before { border-color: #2b9646; }*!*/
+/*!*.site-dashboard-menu > .site-dashboard-menu-item.active > a:after { border-right-color: #2b9646; }*!*/
+
+
+
+/*.bg { background-image: url(../../../assets/images/ioa/main-bg.jpg); background-size: cover; background-position: bottom center; }*/
+
+/*.mapbox {position:relative;}*/
+/*.mapbox .icon { box-shadow: 0 0 20px #555; }*/
+/*.mapbox .icon .value {display:none;background: #fff;position: absolute;top: 0;left: 0;right: 0;width: 30px;padding: 0;height: 30px;line-height: 30px;box-sizing: initial;text-align: center;border-radius: 50%;background: chartreuse;color: #000;border: 2px solid #fff;left: -15px;top: -15px;}*/
+/*.mapbox .icon:hover .value {display:inline-block; }*/
+
+
+
+
+/*.mapbox .buttons{position: absolute;*/
+  /*z-index: 2;*/
+  /*right: 10px;*/
+  /*top: 60px;}*/
+
+
+
+
+/*.battery {position: relative;display: inline-block;margin: 0;float: left;margin-left: 0;border: 2px solid #888;width: 30px;border-radius: 2px;text-align: left;height: 15px;margin-right: 10px;z-index: 5;}*/
+/*.battery span{display:inline-block;background: coral;height: 100%;position: absolute;bottom: 0;top: 0px;z-index: 0;}*/
+
+/*.battery:before {!* content: ""; *!display: block;background: transparent;border: 3px solid #888;margin: 0;width: 40px;height: 20px;position: absolute;border-radius: 2px;}*/
+/*.battery:after {content: "";display: block;background: transparent;border: 3px solid #888;width: 0px;height: 12px;position: absolute;border-radius: 2px;right: -5px;top: -1px;}*/
+/*.battery.empty { width: 30px; }*/
+
+
+/*.modal-open .modal {*/
+  /*overflow-x: hidden;*/
+  /*overflow-y: auto;*/
+  /*z-index: 9999 !important;*/
+/*}*/
+
+/*.amcharts-chart-div a {display:none !important;}*/
+/*.rowActive {*/
+  /*background-color: #eee;*/
+/*}*/
+/*!* Absolute Center Spinner *!*/
+/*.loading {*/
+  /*position: absolute;*/
+  /*z-index: 999;*/
+  /*height: 2em;*/
+  /*width: 2em;*/
+  /*overflow: show;*/
+  /*margin: auto;*/
+  /*top: 0;*/
+  /*left: 0;*/
+  /*bottom: 0;*/
+  /*right: 0;*/
+/*}*/
+
+/*!* Transparent Overlay *!*/
+/*.loading:before {*/
+  /*content: '';*/
+  /*display: block;*/
+  /*position: absolute;*/
+  /*top: 0;*/
+  /*left: 0;*/
+  /*width: 100%;*/
+  /*height: 100%;*/
+  /*background-color: rgba(0,0,0,0.3);*/
+/*}*/
+
+/*!* :not(:required) hides these rules from IE9 and below *!*/
+/*.loading:not(:required) {*/
+  /*!* hide "loading..." text *!*/
+  /*font: 0/0 a;*/
+  /*color: transparent;*/
+  /*text-shadow: none;*/
+  /*background-color: transparent;*/
+  /*border: 0;*/
+/*}*/
+
+/*.loading:not(:required):after {*/
+  /*content: '';*/
+  /*display: block;*/
+  /*font-size: 10px;*/
+  /*width: 1em;*/
+  /*height: 1em;*/
+  /*margin-top: -0.5em;*/
+  /*-webkit-animation: spinner 1500ms infinite linear;*/
+  /*-moz-animation: spinner 1500ms infinite linear;*/
+  /*-ms-animation: spinner 1500ms infinite linear;*/
+  /*-o-animation: spinner 1500ms infinite linear;*/
+  /*animation: spinner 1500ms infinite linear;*/
+  /*border-radius: 0.5em;*/
+  /*-webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;*/
+  /*box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;*/
+/*}*/
+
+/*!* Animation *!*/
+
+/*@-webkit-keyframes spinner {*/
+  /*0% {*/
+    /*-webkit-transform: rotate(0deg);*/
+    /*-moz-transform: rotate(0deg);*/
+    /*-ms-transform: rotate(0deg);*/
+    /*-o-transform: rotate(0deg);*/
+    /*transform: rotate(0deg);*/
+  /*}*/
+  /*100% {*/
+    /*-webkit-transform: rotate(360deg);*/
+    /*-moz-transform: rotate(360deg);*/
+    /*-ms-transform: rotate(360deg);*/
+    /*-o-transform: rotate(360deg);*/
+    /*transform: rotate(360deg);*/
+  /*}*/
+/*}*/
+/*@-moz-keyframes spinner {*/
+  /*0% {*/
+    /*-webkit-transform: rotate(0deg);*/
+    /*-moz-transform: rotate(0deg);*/
+    /*-ms-transform: rotate(0deg);*/
+    /*-o-transform: rotate(0deg);*/
+    /*transform: rotate(0deg);*/
+  /*}*/
+  /*100% {*/
+    /*-webkit-transform: rotate(360deg);*/
+    /*-moz-transform: rotate(360deg);*/
+    /*-ms-transform: rotate(360deg);*/
+    /*-o-transform: rotate(360deg);*/
+    /*transform: rotate(360deg);*/
+  /*}*/
+/*}*/
+/*@-o-keyframes spinner {*/
+  /*0% {*/
+    /*-webkit-transform: rotate(0deg);*/
+    /*-moz-transform: rotate(0deg);*/
+    /*-ms-transform: rotate(0deg);*/
+    /*-o-transform: rotate(0deg);*/
+    /*transform: rotate(0deg);*/
+  /*}*/
+  /*100% {*/
+    /*-webkit-transform: rotate(360deg);*/
+    /*-moz-transform: rotate(360deg);*/
+    /*-ms-transform: rotate(360deg);*/
+    /*-o-transform: rotate(360deg);*/
+    /*transform: rotate(360deg);*/
+  /*}*/
+/*}*/
+/*@keyframes spinner {*/
+  /*0% {*/
+    /*-webkit-transform: rotate(0deg);*/
+    /*-moz-transform: rotate(0deg);*/
+    /*-ms-transform: rotate(0deg);*/
+    /*-o-transform: rotate(0deg);*/
+    /*transform: rotate(0deg);*/
+  /*}*/
+  /*100% {*/
+    /*-webkit-transform: rotate(360deg);*/
+    /*-moz-transform: rotate(360deg);*/
+    /*-ms-transform: rotate(360deg);*/
+    /*-o-transform: rotate(360deg);*/
+    /*transform: rotate(360deg);*/
+  /*}*/
+/*}*/
+
+/*.font-size-11 {*/
+  /*font-size: 11px !important;*/
+/*}*/
+
+
+/*.ng-my-select .selected-list[_ngcontent-c7] .c-btn[_ngcontent-c7] {*/
+  /*padding: 5px 5px 5px 5px !important;*/
+  /*box-shadow: none !important;*/
+  /*font-size:12px !important;*/
+/*}*/
+
+
