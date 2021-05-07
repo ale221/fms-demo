@@ -154,5 +154,17 @@ export class TruckService extends EntityService {
     const url = `/iof/fleet-job-summary/${params}`;
     return this.http.get(url);
   }
+  getMilageData(year,device_id) {
+    const url = `/iof/fuel_consumption/?device_id=${device_id}&year_number=${year}`;
+    return this.http.get(url);
+  
+   
+  }
+  getmonthData(year,device_id,month) {
+    const url = `/iof/fuel_consumption/?device_id=${device_id}&year_number=${year}&month=${month}`;
+    return this.http.get(url);
+  
+   
+  }
 
 }
