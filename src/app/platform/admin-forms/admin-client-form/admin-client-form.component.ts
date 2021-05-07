@@ -34,7 +34,7 @@ import { DrawerService } from 'src/app/core/services/drawer.service';
   styleUrls: ['./admin-client-form.component.css']
 })
 export class AdminClientFormComponent implements OnInit {
-  addUser:boolean=true;
+  addUser: boolean = true;
   bulkUploadForm: FormGroup;
   csvFiles: AbstractControl;
   // Global Variables
@@ -85,7 +85,7 @@ export class AdminClientFormComponent implements OnInit {
   // filterUser = { limit: 10, offset: 0, order_by: '', order: '', fleet_id: '' };
   @ViewChild('userPaginator') userPaginator: MatPaginator;
   totalUserLength = 0;
-  displayedUserList = ["name","status","party_code","modified_by","modified_datetime", "created_datetime", "actions"]
+  displayedUserList = ["name", "status", "party_code", "modified_by", "modified_datetime", "created_datetime", "actions"]
   EntityType = EntityType;
   EntityStatusEnum = EntityStatusEnum;
   showIndeterminateProgress: boolean;
@@ -100,15 +100,15 @@ export class AdminClientFormComponent implements OnInit {
   selectedGroupDrop;
   selectedStatus;
   selectedStatusDrop;
-  breadcrumbInner=[];
+  breadcrumbInner = [];
   sidebarCheck;
   // statusList = [{ value: 1, name: "Active" }, { value: 2, name: "InActive" }];
-  statusList = [{id:'',name: "All"},{ id: 1, name: "Active" }, { id: 2, name: "Inactive" }];
+  statusList = [{ id: '', name: "All" }, { id: 1, name: "Active" }, { id: 2, name: "Inactive" }];
 
   keyUp = new Subject<KeyboardEvent>();
   searchText;
   downloadableLink: string;
-  downloadableLink1:string;
+  downloadableLink1: string;
   customerID;
   constructor(private clientService: ClientService,
     private authService: AuthService,
@@ -118,7 +118,7 @@ export class AdminClientFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private brandingService: BrandingService,
     private datatableService: DatatableService,
-    private breadcrumbService:BreadcrumbsService,
+    private breadcrumbService: BreadcrumbsService,
     private drawerService: DrawerService) {
 
     this.selectedFile = new Object();
@@ -139,7 +139,7 @@ export class AdminClientFormComponent implements OnInit {
       // confirm_password: [null, [Validators.required]],
       status: [1],
       name: [null, [Validators.required, CustomValidators.isAlphabetsAndSpace]],
-      party_code: [null, [Validators.required,Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
+      party_code: [null, [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]],
       contact_number: [null, [Validators.required]],
       ntn_number: [null, [Validators.required, CustomValidators.isNumbers]],
       address: [null, [Validators.required]],
@@ -158,26 +158,24 @@ export class AdminClientFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.drawerService.getValue().subscribe(res=>{
-      this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
-  })
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
+    })
     this.breadcrumbService.getValue().subscribe(res => {
       if (res && res.length) {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner",this.breadcrumbInner);
+        console.log("this.breadcrumbInner", this.breadcrumbInner);
       }
     })
 
-    console.log("this.breadcrumbInner",this.breadcrumbInner);
-  if(this.breadcrumbInner[0]=='admin/config'){
-    setTimeout(() => {
-      this.editpop.nativeElement.click();
-    }, 1000);
-  }
+    console.log("this.breadcrumbInner", this.breadcrumbInner);
+    if (this.breadcrumbInner[0] == 'admin/config') {
+      setTimeout(() => {
+        this.editpop.nativeElement.click();
+      }, 1000);
+    }
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
 
@@ -205,13 +203,11 @@ export class AdminClientFormComponent implements OnInit {
         this.getUsers(this.filtersUser);
       }
     });
-    this.downloadableLink = environment.baseUrl+'/hypernet/entity/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl+'/hypernet/entity/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone+ '&customer_id=' + this.customerID;
-    console.log("this.users= ", this.users);;
+    this.downloadableLink = environment.baseUrl + '/hypernet/entity/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
   }
 
   searchStatusDropDownChange(event) {
-    console.log("event:: ", event.value);
     this.filtersUser.status = event.value;
     this.getUsers(this.filtersUser);
   }
@@ -251,26 +247,20 @@ export class AdminClientFormComponent implements OnInit {
   // }
 
   groupDropDownChange(event) {
-    console.log("event= ", event);
-
     this.selectedGroupDrop = event.value;
     this.clientForm.get('group').setValue(this.selectedGroupDrop);
   }
 
   statusDropDownChange(event) {
-    console.log("this.ecevt= ", event);
-
     this.selectedStatusDrop = event.value;
     this.clientForm.get('status').setValue(this.selectedStatusDrop)
   }
 
   async showSwal(user) {
     this.selectedUser = user;
-    console.log('user', user);
 
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
     const shouldDelete = await this.swalService.getDeleteSwal(user, 'What do you want to do with ' + user.name + ' ?');
-    console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteUser(user.id, shouldDelete, 'Record has been' + message +
@@ -288,28 +278,22 @@ export class AdminClientFormComponent implements OnInit {
     const params = {};
     params['user_id'] = (userId);
     params['status'] = actionType;
-
-    console.log('params', params);
-    this.clientService.deleteClient(params)
-      .subscribe((data: any) => {
-
-        if (data.status === HttpStatusCodeEnum.Success) {
-          this.swalService.getSuccessSwal(message);
-          this.getUsers(this.filtersUser);
-        } else {
-          console.log(data.message);
-          this.swalService.getErrorSwal(data.message)
-        }
-      })
+    this.clientService.deleteClient(params).subscribe((data: any) => {
+      if (data.status === HttpStatusCodeEnum.Success) {
+        this.swalService.getSuccessSwal(message);
+        this.getUsers(this.filtersUser);
+      } else {
+        console.log(data.message);
+        this.swalService.getErrorSwal(data.message)
+      }
+    })
   }
 
   openEditModal(user) {
-    console.log("user=", user);
     this.selectedUserId = user.id;
     this.formTitle = 'Update Customer';
     this.btnText = 'Update';
     this.clientForm.get('status').setValue(user.status === 1 ? true : false);
-    console.log("user.group.id=== ", user.id)
     // console.log("this.mapArrayGroups== ", this.mapArrayGroups);
 
     // let setGroup = {};
@@ -335,12 +319,9 @@ export class AdminClientFormComponent implements OnInit {
     //   }
     // }
 
-    console.log("selectedGroup=== ", this.selectedGroup);
-    console.log("selectedStatus=== ", this.selectedStatus);
-      if(user.description === 'null' || user.description === null)
-      {
-        user.description='';
-      }
+    if (user.description === 'null' || user.description === null) {
+      user.description = '';
+    }
     this.clientForm.patchValue({
       name: user.name,
       party_code: user.party_code,
@@ -358,7 +339,7 @@ export class AdminClientFormComponent implements OnInit {
 
     // this.clientForm.controls.password.setValidators(null);
     // this.clientForm.controls.password.updateValueAndValidity();
-    console.log("this.clientForm.value= ", this.clientForm.value);
+
   }
 
   converToFormdata(data) {
@@ -379,12 +360,11 @@ export class AdminClientFormComponent implements OnInit {
   }
 
   onSubmit(value) {
-    console.log("coming value", value);
-    this.addUser=false;
+    this.addUser = false;
 
     this.submitted = true;
-    if(this.clientForm.invalid) {
-      this.addUser=true;
+    if (this.clientForm.invalid) {
+      this.addUser = true;
       return;
     }
     delete value.password;
@@ -398,7 +378,6 @@ export class AdminClientFormComponent implements OnInit {
     }
 
     if (this.validate()) {
-      console.log("Form is valid");
       this.disableSubmitButton();
       let http;
       if (this.selectedUserId > 0) {
@@ -408,22 +387,17 @@ export class AdminClientFormComponent implements OnInit {
         delete value.first_name;
         delete value.last_name;
         value['id'] = this.selectedUserId;
-        // data.status = data.status === true ? 1 : 2;
-        value['status']= value.status === true ? 1 : 2;
-        console.log("formValue (before convertToFormData)--", value);
+        value['status'] = value.status === true ? 1 : 2;
         http = this.clientService.patchClient(this.converToFormdata(value));
       } else {
         value['type_id'] = 36;
         value['status'] = 1;
-        console.log("formValue (before convertToFormData)=", value);
         http = this.clientService.postClient(this.converToFormdata(value));
       }
 
       http.subscribe((data: any) => {
-        console.log("on-", data);
-
         if (data.status === HttpStatusCodeEnum.Success) {
-          this.addUser=true;
+          this.addUser = true;
           this.closeForm.nativeElement.click();
           this.swalService.getSuccessSwal(data.message);
           this.getUsers(this.filtersUser);
@@ -431,14 +405,14 @@ export class AdminClientFormComponent implements OnInit {
           this.clientForm.reset();
         } else {
           console.log(data.message);
-          this.addUser=true;
-         this.enableSubmitButton();
+          this.addUser = true;
+          this.enableSubmitButton();
           this.swalService.getErrorSwal(data.message);
         }
       });
 
     } else {
-      this.addUser=true;
+      this.addUser = true;
       console.log("Form is invalid[in else condition]", this.errorMessages);
     }
   }
@@ -467,7 +441,7 @@ export class AdminClientFormComponent implements OnInit {
     if (this.clientForm.get('email').hasError('email')) {
       this.errorMessages.push('email ' + ErrorMessage.REQUIRED);
       isValid = false;
-      }
+    }
     if (this.clientForm.get('contact_number').hasError('required')) {
       this.errorMessages.push('contact_number ' + ErrorMessage.IS_ALPHABETS_AND_NUMBERS);
       isValid = false;
@@ -542,35 +516,23 @@ export class AdminClientFormComponent implements OnInit {
 
   getUsers(filters) {
     this.showIndeterminateProgress = true;
-
-    // let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}`;
     let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}&status=${filters.status}`;
-    console.log("params for getUserList()= ", params);
-    // if(filters.search != null || filters.search != undefined || filters.search != '')
-    // {
-    //   this.userPaginator.firstPage();
-    // }
 
     this.clientService.getClient(params).subscribe((data: any) => {
-
       this.showIndeterminateProgress = false;
 
       if (data.status === HttpStatusCodeEnum.Success) {
-
-
         this.users = data['data'].data;
-        console.log("getUsers()- ", data['data'],data['data'].count);
         this.totalUserLength = data['data'].count;
         this.users.pagination = this.totalUserLength;
-        if(this.totalUserLength < 10)
-        {
+        if (this.totalUserLength < 10) {
           this.userPaginator.firstPage();
         }
-        console.log(this.users);
+
       } else {
         console.log(data.message);
       }
-      console.log("this.users= ", this.users);
+
     });
   }
 
@@ -613,13 +575,11 @@ export class AdminClientFormComponent implements OnInit {
         console.log("inside ELSE condition")
         this.notCSVExcel = true;
       }
-
       this.selectedFileName = this.selectedFile.name;
     }
   }
 
   bulkUploadSubmit(formValue: Object) {
-    console.log("inside submit function(formValue)= ", formValue);
     const params: FormData = new FormData();
 
     if (!isNullOrUndefined(formValue['csvFiles'])) {
@@ -664,38 +624,23 @@ export class AdminClientFormComponent implements OnInit {
   }
 
   onSearch($event) {
-    // this.keyUp.pipe(
-    //   map(event => event.target['value']),
-    //   debounceTime(500),
-    //   distinctUntilChanged(),
-    //   mergeMap(search => of(search).pipe(
-    //     delay(500),
-    //   )),
-    // ).subscribe(newValue => {
-
-      this.searchText = $event.search;
-      if (this.searchText.length > 0 || this.searchText.length === 0) {
-        this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
-        this.filtersUser.search = this.searchForm.get('search').value;
-        this.getUsers(this.filtersUser);
-
-      }
-      this.downloadableLink = environment.baseUrl+'/hypernet/entity/xle/?search='+this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-      this.downloadableLink1 = environment.baseUrl+'/hypernet/entity/pdf/?search='+this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    console.log("this.users= ", this.users);;
-
+    this.searchText = $event.search;
+    if (this.searchText.length > 0 || this.searchText.length === 0) {
+      this.searchForm.get("search").setValue(this.searchText);
+      console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+      this.filtersUser.search = this.searchForm.get('search').value;
+      this.getUsers(this.filtersUser);
+    }
+    this.downloadableLink = environment.baseUrl + '/hypernet/entity/xle/?search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
   }
   onClearSearch() {
     this.searchForm.reset();
-    // this.searchForm.get("search").setValue(this.searchText);
-    //     console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
-        this.filtersUser.search = "";
-        this.getUsers(this.filtersUser);
-        this.downloadableLink = environment.baseUrl+'/hypernet/entity/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-        this.downloadableLink1 = environment.baseUrl+'/hypernet/entity/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.filtersUser.search = "";
+    this.getUsers(this.filtersUser);
+    this.downloadableLink = environment.baseUrl + '/hypernet/entity/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
   }
-
 
   sortUserList(event) {
     console.log(event);
@@ -707,8 +652,7 @@ export class AdminClientFormComponent implements OnInit {
     this.filtersUser.offset = (event.pageIndex * event.pageSize);
     this.getUsers(this.filtersUser);
   }
-  pageReload(){
-    console.log("coming");
+  pageReload() {
     window.location.reload()
   }
 }
