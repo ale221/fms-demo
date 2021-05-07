@@ -1325,11 +1325,12 @@ export class DriversDashboardComponent implements OnInit {
 
   openEditModal(driver) {
 
-    if (driver.contact_number.includes(this.countryCode[0].code)) {
-      this.dynamicMask = "9999999999";
-    } else if (driver.contact_number.includes(this.countryCode[1].code)) {
-      this.dynamicMask = "99999999";
-    }
+    // if (driver.contact_number.includes(this.countryCode[0]?.code)) {
+    //   this.dynamicMask = "9999999999";
+    // } else if (driver.contact_number.includes(this.countryCode[1]?.code)) {
+    //   this.dynamicMask = "99999999";
+    // }
+    this.dynamicMask = "99999999";
 
     for (let i = 0; i < this.statusList.length; i++) {
       if (driver.status == this.statusList[i].id) {
@@ -1387,15 +1388,17 @@ export class DriversDashboardComponent implements OnInit {
     // }
     this.avatar_url = isNullOrUndefined(driver.photo) ? null : driver.photo;
 
-    if (driver.contact_number.includes(this.countryCode[0].code)) {
-      this.dynamicMask = "9999999999";
-      this.selectedCountry = this.countryCode[0].code;
+    // if (driver.contact_number.includes(this.countryCode[0]?.code)) {
+    //   this.dynamicMask = "9999999999";
+    //   this.selectedCountry = this.countryCode[0]?.code;
+    //   driver.contact_number = driver.contact_number.replace(this.selectedCountry, '');
+    // } else if (driver.contact_number.includes(this.countryCode[1]?.code)) {
+    //   this.dynamicMask = "99999999";
+    //   this.selectedCountry = this.countryCode[1]?.code;
+    //   driver.contact_number = driver.contact_number.replace(this.selectedCountry, '');
+    // }
+      this.selectedCountry = this.countryCode[0]?.code;
       driver.contact_number = driver.contact_number.replace(this.selectedCountry, '');
-    } else if (driver.contact_number.includes(this.countryCode[1].code)) {
-      this.dynamicMask = "99999999";
-      this.selectedCountry = this.countryCode[1].code;
-      driver.contact_number = driver.contact_number.replace(this.selectedCountry, '');
-    }
 
     this.driverForm.patchValue({
       id: driver.id,
