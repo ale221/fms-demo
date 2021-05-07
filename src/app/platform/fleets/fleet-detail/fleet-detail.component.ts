@@ -313,10 +313,12 @@ export class FleetDetailComponent implements OnInit {
       this.getFleetJobSummary(this.entityId);
     }, 200)
 
+    // this.initOSRM()
+
     // this.getMaintanceTypeCategory(this.entityId);
   }
 
-  InitOSRM() {
+  initOSRM() {
     
     var mousePositionControl = new ol.control.MousePosition({
       coordinateFormat: ol.coordinate.createStringXY(4),
@@ -374,13 +376,17 @@ export class FleetDetailComponent implements OnInit {
       this.milageData=data.data;
       console.log("milageData ", this.milageData)
       for(let i=0;i<this.milageData.length;i++){
-        console.log("index",this.milageData[i].fuel_filled);
         this.yearfuelFilledTotal = this.milageData[i]?.fuel_filled + this.yearfuelFilledTotal;
         this.yeardistance = this.milageData[i]?.distance + this.yeardistance;
         this.yearMileage=this.yeardistance/this.yearfuelFilledTotal;
       }
-      console.log("yearMileage ", this.yearMileage)
-      
+      let lastRow = {
+        month: 'Total',
+        fuel_filled: this.yearfuelFilledTotal,
+        distance: this.yeardistance,
+        mileage: this.yearMileage
+      }
+      this.milageData.push(lastRow);
     })
 
     }
