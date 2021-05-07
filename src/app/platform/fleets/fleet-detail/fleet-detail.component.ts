@@ -389,19 +389,19 @@ export class FleetDetailComponent implements OnInit {
     
         //get the route
         var point1 = last_point.join();
-        var point2 = coord_street.join();
+        // var point2 = coord_street.join();
         
-        fetch(this.url_osrm_route + point1 + ';' + point2).then(function(r) { 
-          return r.json();
-        }).then(function(json) {
+        // fetch(this.url_osrm_route + point1 + ';' + point2).then(function(r) { 
+        //   return r.json();
+        // }).then(function(json) {
           // if(json.code !== 'Ok') {
           //   msg_el.innerHTML = 'No route found.';
           //   return;
           // }
           // msg_el.innerHTML = 'Route added';
           //points.length = 0;
-          this.createRoute(json.routes[0].geometry);
-        });
+        //   this.createRoute(json.routes[0].geometry);
+        // });
       });
     });
 
