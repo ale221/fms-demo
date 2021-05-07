@@ -192,6 +192,7 @@ export class FleetDetailComponent implements OnInit {
   end_dateViewjob;
   breadcrumbInner = ['fleets', 'Fleets'];
   milageData;
+  monthData;
   selectedYear;
   selectedMonth;
   FilterTypeTable;
@@ -199,6 +200,9 @@ export class FleetDetailComponent implements OnInit {
   yearfuelFilledTotal=0;
   yeardistance=0;
   yearMileage=0;
+  monthfuelfilledTotal=0;
+  monthdistance=0;
+  monthmileage=0;
 
 
 
@@ -225,7 +229,7 @@ export class FleetDetailComponent implements OnInit {
     this.isAuthorized = value;
     this.selectedPkg = this.authService.getUser();
     this.selectedPkg = this.selectedPkg['package'][0].package_id;
-    // console.log("loggedIn user package id= ", this.selectedPkg)
+    console.log("loggedIn user package id= ", this.selectedPkg)
 
     if (this.selectedPkg != PackageType.standard) {
       // console.log("user's package id is not standard")
@@ -365,7 +369,10 @@ export class FleetDetailComponent implements OnInit {
     if(event==''){
       this.onYearMonthChange(this.currentyear)
     }else{
-
+     this.milageData=[];
+     this.yearfuelFilledTotal=0;
+     this.yeardistance=0;
+     this.yearMileage=0;
       console.log("event",event);
     this.FilterTypeTable=1;
     this.selectedYear=event;
@@ -378,7 +385,12 @@ export class FleetDetailComponent implements OnInit {
       for(let i=0;i<this.milageData.length;i++){
         this.yearfuelFilledTotal = this.milageData[i]?.fuel_filled + this.yearfuelFilledTotal;
         this.yeardistance = this.milageData[i]?.distance + this.yeardistance;
-        this.yearMileage=this.yeardistance/this.yearfuelFilledTotal;
+        if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
+          this.yearMileage=0;
+        }else{
+          this.yearMileage=this.yeardistance/this.yearfuelFilledTotal;
+        }
+       
       }
       let lastRow = {
         month: 'Total',
@@ -395,14 +407,33 @@ export class FleetDetailComponent implements OnInit {
 
   }
   onMonthChange(event) {
+    this.monthData=[];
+     this.monthfuelfilledTotal=0;
+     this.monthdistance=0;
+     this.monthmileage=0;
 
     this.FilterTypeTable=2;
     this.selectedMonth=event;
     this.truckService.getmonthData(this.selectedYear,this.entityId,event).subscribe((data: any) => {
       console.log("getmonthData ", data)
-      this.milageData=data.data;
+      this.monthData=data.data;
       
-      console.log("getmonthData ", this.milageData)
+      for(let i=0;i<this.monthData.length;i++){
+        this.monthfuelfilledTotal = this.monthData[i]?.fuel_filled + this.monthfuelfilledTotal;
+        this.monthdistance = this.monthData[i]?.distance + this.monthdistance;
+        if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
+          this.monthmileage=0;
+        }else{
+          this.monthmileage=this.monthdistance/this.monthfuelfilledTotal;
+        }
+      }
+      let lastRow = {
+        week: 'Total',
+        fuel_filled: this.monthfuelfilledTotal,
+        distance: this.monthdistance,
+        mileage: this.monthmileage
+      }
+      this.monthData.push(lastRow);
       
     })
     

@@ -1096,7 +1096,7 @@
                             </div>
                           </mat-tab>
 
-                          <mat-tab label="Mileage">
+                          <mat-tab label="Mileage" *ngIf="selectedPkg==6">
                             <div class="row margin-top-10" style="overflow: visible;">
                               
                               <div class="form-group" >
@@ -1186,7 +1186,7 @@
 
                                   <div *ngIf="FilterTypeTable == 2 ">
                                     <table matSort  class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
-                                        mat-table [dataSource]="milageData" mat-elevation-z8>
+                                        mat-table [dataSource]="monthData" mat-elevation-z8>
           
                                         <ng-container matColumnDef="id">
                                           <th mat-header-cell *matHeaderCellDef >{{selectedMonth}}</th>
