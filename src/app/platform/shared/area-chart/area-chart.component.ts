@@ -119,7 +119,7 @@ export class AreaChartComponent implements OnInit {
       element.series = element.series1;
       myArray.push(element);
     }
-    console.log("myARRAY= ", myArray)
+    // console.log("myARRAY= ", myArray)
     this.finalObj = myArray;
     // console.log("MUSHAHID BHAI DATA= ", this.finalObj)
 
@@ -179,10 +179,10 @@ export class AreaChartComponent implements OnInit {
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 20;
     categoryAxis.startLocation = 0.5;
-    categoryAxis.endLocation = 0.5;
+    categoryAxis.endLocation = 0.6;
 
     let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.title.text = "Percent";
+    valueAxis.title.text = "";
     valueAxis.calculateTotals = true;
     valueAxis.min = 0;
     valueAxis.max = 100;

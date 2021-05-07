@@ -12,10 +12,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PlaybackGoogleMapComponent } from './playback-google-map/playback-google-map.component';
+import { environment } from 'src/environments/environment';
 
 export function createConfig(): SignalRConfiguration {
   const c = new SignalRConfiguration();
-  c.url = 'https://staging.broadcaster.iot.vodafone.com.qa'; //'http://reliance-signalr-hypernet.southeastasia.cloudapp.azure.com:8080/signalr';
+  c.url = environment.signalR; //'http://reliance-signalr-hypernet.southeastasia.cloudapp.azure.com:8080/signalr';
   c.hubName = 'EventHubMessages';
   c.logging = false;
   c.withCredentials = true;

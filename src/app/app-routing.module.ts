@@ -8,7 +8,9 @@ import { AnonymousGuardService } from './core/services/anonymous-guard.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, canActivate: [AnonymousGuardService] },
-  { path: 'iol', loadChildren: () => import('./platform/platform.module').then(m => m.PlatformModule) , canActivate: [AuthGuard] }
+  { path: 'iol', loadChildren: () => import('./platform/platform.module').then(m => m.PlatformModule) , canActivate: [AuthGuard] },
+  { path        : '**', pathMatch   : 'full', component: LoginComponent
+  }
 ];
 
 @NgModule({
