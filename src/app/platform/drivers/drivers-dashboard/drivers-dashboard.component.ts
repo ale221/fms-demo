@@ -195,14 +195,18 @@ export class DriversDashboardComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);//(true, []);
   selectedIDToDelete = [];
   dynamicMask = "9999999999";
-  countryCode = [{
-    code: '+92',
-    name: 'Pakistan'
-  }, {
+  // countryCode = [{
+  //   code: '+92',
+  //   name: 'Pakistan'
+  // }, {
+  //   code: '+974',
+  //   name: 'Qatar'
+  // }]
+  countryCode = [ {
     code: '+974',
     name: 'Qatar'
   }]
-  selectedCountry = '+92';
+  selectedCountry = '+974';
   sidebarCheck;
 
   constructor(private driverService: DriverDetailsService, private userService: UserService, private formService: FormService, private swalService: SwalService, private entityService: EntityService, private formBuilder: FormBuilder,

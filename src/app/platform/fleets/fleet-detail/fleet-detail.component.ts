@@ -34,8 +34,10 @@ import { PackageType } from 'src/app/core/enum/packages-enum';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
 import { SignalRService } from 'src/app/Services/signal-r.service';
-
+import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
+import { PrimengDropdownItem } from '../../data/model/primng-dropdown-item';
 declare var $: any;
+declare var ol: any;
 
 enum TaskStatus {
   RUNNING = 52,
@@ -78,6 +80,7 @@ export class FleetDetailComponent implements OnInit {
   sidebarCheck;
 
   snapForm: FormGroup;
+  MileageForm:FormGroup;
 
   selectedPkg;
 
@@ -129,6 +132,9 @@ export class FleetDetailComponent implements OnInit {
 
   lastUpdatedCard;
 
+  displayedUserList = [ "id", "first_name", "last_name", "date_joined"]
+  displayedUserList2 = [ "id", "first_name", "last_name", "date_joined"]
+
   // Statistics
   trailDateRange: any[];
   collectionsDateRange: any[];
@@ -177,12 +183,31 @@ export class FleetDetailComponent implements OnInit {
 
   packageType;
 
+  osrm;
+
   packageRoutes;
   classToApply = "col-md-3";
   fleetJobSummary: any
   start_dateViewJob;
   end_dateViewjob;
   breadcrumbInner = ['fleets', 'Fleets'];
+  milageData;
+  monthData;
+  selectedYear;
+  selectedMonth;
+  FilterTypeTable;
+  currentyear;
+  yearfuelFilledTotal=0;
+  yeardistance=0;
+  yearMileage=0;
+  monthfuelfilledTotal=0;
+  monthdistance=0;
+  monthmileage=0;
+
+
+
+  mileageFilter = [{ value: '', label: '' }];
+  monthName = [{ id: 'January', name: "January" }, { id: 'February', name: "February" }, { id: 'March', name: "March" }, { id: 'April', name: "April" }, { id: 'May', name: "May" }, { id: 'June', name: "June" }, { id: 'July', name: "July" }, { id: 'August', name: "August" }, { id: 'September', name: "September" }, { id: 'October', name: "October" }, { id: 'November', name: "November" }, { id: 'December', name: "December" }];
 
   constructor(private truckService: TruckService,
     private brandingService: BrandingService,
@@ -193,7 +218,7 @@ export class FleetDetailComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService:DrawerService,
+    private drawerService: DrawerService,
     private signalRService: SignalRService
   ) {
     this.theme = this.brandingService.styleObject();
@@ -204,7 +229,7 @@ export class FleetDetailComponent implements OnInit {
     this.isAuthorized = value;
     this.selectedPkg = this.authService.getUser();
     this.selectedPkg = this.selectedPkg['package'][0].package_id;
-    // console.log("loggedIn user package id= ", this.selectedPkg)
+    console.log("loggedIn user package id= ", this.selectedPkg)
 
     if (this.selectedPkg != PackageType.standard) {
       // console.log("user's package id is not standard")
@@ -216,14 +241,48 @@ export class FleetDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    var year = new Date().getFullYear();
+    this.currentyear=new Date().getFullYear();
+    var range = [];
+    range.push(year);
+    for (var i = 1; i < 30; i++) {
+      range.push(year - i);
+      // this.mileageFilter.push(new PrimengDropdownItem(year - i, 'year - i'),)
+    }
+    // this.mileageFilter = range;
+    console.log("range== ", range);
+
+    for (let i = 0; i < range.length; i++) {
+      this.mileageFilter.push({ value: range[i], label: range[i] });
+    }
+    console.log("this.mileageFilter== ", this.mileageFilter);
+    this.mileageFilter.forEach((element: any) => {
+      element.label = element.label;
+      element.value = element.value;
+    });
+    this.monthName.forEach((element: any) => {
+      element.label = element.name;
+      element.value = element.id;
+    });
+
+    // violationTypesDropDown = [
+    //   new PrimengDropdownItem('', 'All'),
+    //   new PrimengDropdownItem(63, 'Harsh Braking'),
+    //   new PrimengDropdownItem(64, 'Harsh Acceleration'),
+    //   new PrimengDropdownItem(59, 'Speed'),
+    //   new PrimengDropdownItem(124, 'Geozone')
+    // ];
+
+
+
 
     // this.signalRService.init();
 
-    this.drawerService.getValue().subscribe(res=>{
-      this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
-  })
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
+      console.log("ressssssssssssss1", res);
+      console.log("ressssssssssssss2", this.sidebarCheck);
+    })
     console.log("jobTrailMap=== ", this.gmap);
     this.packageType = PackageType;
     this.route.params.subscribe(params => {
@@ -233,6 +292,10 @@ export class FleetDetailComponent implements OnInit {
     });
     this.snapForm = this.formBuilder.group({
       snapshotDate: null
+    });
+    this.MileageForm = this.formBuilder.group({
+      month: '',
+      year:''
     });
 
     this.breadcrumbService.getValue().subscribe(res => {
@@ -244,7 +307,7 @@ export class FleetDetailComponent implements OnInit {
     })
 
     // console.log("this.entityId== ", this.entityId)
-
+    this.onYearMonthChange(this.currentyear);
     this.getFleetDetail(this.entityId);
     this.getJobSummary();
     this.getDetailCards(hypernymModules[6], DashboardEnum.FleetDetail, this.entityId);
@@ -254,14 +317,135 @@ export class FleetDetailComponent implements OnInit {
       this.getFleetJobSummary(this.entityId);
     }, 200)
 
+    // this.initOSRM()
+
     // this.getMaintanceTypeCategory(this.entityId);
   }
+
+  initOSRM() {
+    
+    var mousePositionControl = new ol.control.MousePosition({
+      coordinateFormat: ol.coordinate.createStringXY(4),
+      projection: 'EPSG:4326',
+      // comment the following two lines to have the mouse position
+      // be placed within the map.
+      className: 'custom-mouse-position',
+      target: document.getElementById('mouse-position'),
+      undefinedHTML: '&nbsp;'
+    });
+
+
+    this.osrm = new ol.Map({
+      target: 'map',
+      controls: ol.control.defaults({
+        attributionOptions: {
+          collapsible: false
+        }
+      }).extend([mousePositionControl]),
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([73.8567, 18.5204]),
+        zoom: 8
+      })
+    });
+
+    this.osrm.on('click', function (args) {
+      console.log(args.coordinate);
+      var lonlat = ol.proj.transform(args.coordinate, 'EPSG:3857', 'EPSG:4326');
+      console.log(lonlat);
+      
+      var lon = lonlat[0];
+      var lat = lonlat[1];
+      alert(`lat: ${lat} long: ${lon}`);
+    });
+  }
+
+
+  onYearMonthChange(event) {
+    if(event==''){
+      this.onYearMonthChange(this.currentyear)
+    }else{
+     this.milageData=[];
+     this.yearfuelFilledTotal=0;
+     this.yeardistance=0;
+     this.yearMileage=0;
+      console.log("event",event);
+    this.FilterTypeTable=1;
+    this.selectedYear=event;
+    this.selectedMonth='';
+    this.MileageForm.controls.month.setValue('');
+    this.truckService.getMilageData(event,this.entityId).subscribe((data: any) => {
+      // console.log("getMilageData ", data)
+      this.milageData=data.data;
+      console.log("milageData ", this.milageData)
+      for(let i=0;i<this.milageData.length;i++){
+        this.yearfuelFilledTotal = this.milageData[i]?.fuel_filled + this.yearfuelFilledTotal;
+        this.yeardistance = this.milageData[i]?.distance + this.yeardistance;
+        if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
+          this.yearMileage=0;
+        }else{
+          this.yearMileage=this.yeardistance/this.yearfuelFilledTotal;
+        }
+       
+      }
+      let lastRow = {
+        month: 'Total',
+        fuel_filled: this.yearfuelFilledTotal,
+        distance: this.yeardistance,
+        mileage: this.yearMileage
+      }
+      this.milageData.push(lastRow);
+    })
+
+    }
+
+    
+
+  }
+  onMonthChange(event) {
+    this.monthData=[];
+     this.monthfuelfilledTotal=0;
+     this.monthdistance=0;
+     this.monthmileage=0;
+
+    this.FilterTypeTable=2;
+    this.selectedMonth=event;
+    this.truckService.getmonthData(this.selectedYear,this.entityId,event).subscribe((data: any) => {
+      console.log("getmonthData ", data)
+      this.monthData=data.data;
+      
+      for(let i=0;i<this.monthData.length;i++){
+        this.monthfuelfilledTotal = this.monthData[i]?.fuel_filled + this.monthfuelfilledTotal;
+        this.monthdistance = this.monthData[i]?.distance + this.monthdistance;
+        if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
+          this.monthmileage=0;
+        }else{
+          this.monthmileage=this.monthdistance/this.monthfuelfilledTotal;
+        }
+      }
+      let lastRow = {
+        week: 'Total',
+        fuel_filled: this.monthfuelfilledTotal,
+        distance: this.monthdistance,
+        mileage: this.monthmileage
+      }
+      this.monthData.push(lastRow);
+      
+    })
+    
+
+  }
+
 
 
   getTaskProgress(status) {
     var value = '';
-    if (status != null){
-      Object.keys(TaskStatus).forEach(function(key){
+    if (status != null) {
+      Object.keys(TaskStatus).forEach(function (key) {
         value = TaskStatus[status];
       });
       return value;
@@ -456,7 +640,7 @@ export class FleetDetailComponent implements OnInit {
 
     marker['rotation'] = heading;
     $('img[src="assets/images/iol/sedan.svg#markerOne"]').css({
-      'transform': 'rotate('+heading+'deg)'
+      'transform': 'rotate(' + heading + 'deg)'
     });
 
     this.infoWindow = infowindow;
@@ -574,7 +758,7 @@ export class FleetDetailComponent implements OnInit {
           }
           this.updateInvalidSignalData(this.truck);
         }
-      });        
+      });
     }
   }*/
 
@@ -735,7 +919,7 @@ export class FleetDetailComponent implements OnInit {
     const latlng = new google.maps.LatLng(_newLatLng[0], _newLatLng[1]);
     let point1 = new google.maps.LatLng(this._oldLatLng[0], this._oldLatLng[1]);
 
-    let heading = google.maps.geometry.spherical.computeHeading(point1,latlng);
+    let heading = google.maps.geometry.spherical.computeHeading(point1, latlng);
 
     this.moveMarker(spd, heading);
     this.updateInfoWindow();
@@ -790,9 +974,9 @@ export class FleetDetailComponent implements OnInit {
         this.currentDateString = DateUtils.getLocalMMDDYYYYhhmmss((this.truck.last_updated))
 
         if (data['data'].job_task && data['data'].job_task && data['data'].job_task.job_tasks.length > 0) {
-          this.violation_count=data['data'].job_task.violation_count;
-          this.distance_travelled_job=data['data'].job_task.distance_travelled;
-          console.log("distance_travelled_job",this.distance_travelled_job);
+          this.violation_count = data['data'].job_task.violation_count;
+          this.distance_travelled_job = data['data'].job_task.distance_travelled;
+          console.log("distance_travelled_job", this.distance_travelled_job);
           this.source_address = data['data'].job_task.job_tasks[0].source_address;
 
           this.destination_address = data['data'].job_task.job_tasks[data['data'].job_task.job_tasks.length - 1].destination_address;
@@ -865,39 +1049,39 @@ export class FleetDetailComponent implements OnInit {
 
   private getJobSummary() {
     this.truckService.getFleetDetailById(this.entityId).subscribe(apiResponse => {
-    // this.truckService.getShiftFuelAndDistance({ parent_id: this.entityId }).subscribe(apiResponse => {
-        this.jobSummary = apiResponse['data']?.job_task;
-        this.jobSummaryTasks = apiResponse['data']?.job_task?.job_tasks;
-        if (this.jobSummaryTasks && this.jobSummaryTasks.length > 0) {
-          const directionsService = new google.maps.DirectionsService;
-          const directionsDisplay = new google.maps.DirectionsRenderer({
-            suppressMarkers: true
-          });
+      // this.truckService.getShiftFuelAndDistance({ parent_id: this.entityId }).subscribe(apiResponse => {
+      this.jobSummary = apiResponse['data']?.job_task;
+      this.jobSummaryTasks = apiResponse['data']?.job_task?.job_tasks;
+      if (this.jobSummaryTasks && this.jobSummaryTasks.length > 0) {
+        const directionsService = new google.maps.DirectionsService;
+        const directionsDisplay = new google.maps.DirectionsRenderer({
+          suppressMarkers: true
+        });
 
-          let start_pos = '';
-          let end_pos = '';
+        let start_pos = '';
+        let end_pos = '';
 
-          let tasksArr = [];
-          let waypts = [];
-          let icons_u = [];
-          let infowindow = [];
+        let tasksArr = [];
+        let waypts = [];
+        let icons_u = [];
+        let infowindow = [];
 
-          // if (this.jobSummaryTasks.length > 1) {
-          //   this.jobSummaryTasks.reverse();
-          // }
+        // if (this.jobSummaryTasks.length > 1) {
+        //   this.jobSummaryTasks.reverse();
+        // }
 
-          this.jobSummaryTasks.forEach((element, i) => {
-            let newLatLngStart = element.source_latlng;
-            if (i === 0) {
-              start_pos = newLatLngStart.lat + "," + newLatLngStart.lng;
-            }
+        this.jobSummaryTasks.forEach((element, i) => {
+          let newLatLngStart = element.source_latlng;
+          if (i === 0) {
+            start_pos = newLatLngStart.lat + "," + newLatLngStart.lng;
+          }
 
-            let newLatLngEnd = element.destination_latlng;
-            if ((i + 1) === this.jobSummaryTasks.length) {
-              end_pos = newLatLngEnd.lat + "," + newLatLngEnd.lng;
-            }
+          let newLatLngEnd = element.destination_latlng;
+          if ((i + 1) === this.jobSummaryTasks.length) {
+            end_pos = newLatLngEnd.lat + "," + newLatLngEnd.lng;
+          }
 
-            let contentDrop = `<div id="iw-container">
+          let contentDrop = `<div id="iw-container">
                 <div class="iw-content">
                   <div class="padding-5">
                     <span class="iw-subTitle" style="color:black">Task: </span> <span style="color:black">${Number(i + 1)} Pickup</span>
@@ -905,48 +1089,48 @@ export class FleetDetailComponent implements OnInit {
                   </div>
                   </div>`;
 
-                  // <div class="padding-5">
-                  //   <span class="iw-subTitle" style="color:black">Pickup Date: </span> <span style="color:black">${(this.jobSummaryTasks[i].started_at_unix) ? DateUtils.getLocalMMDDYYYYhhmmss((this.jobSummaryTasks[i].started_at_unix)) : '-'}</span>
-                  // </div>
-            let contentPickup = `<div id="iw-container">
+          // <div class="padding-5">
+          //   <span class="iw-subTitle" style="color:black">Pickup Date: </span> <span style="color:black">${(this.jobSummaryTasks[i].started_at_unix) ? DateUtils.getLocalMMDDYYYYhhmmss((this.jobSummaryTasks[i].started_at_unix)) : '-'}</span>
+          // </div>
+          let contentPickup = `<div id="iw-container">
                 <div class="iw-content">
                   <div class="padding-5">
                     <span class="iw-subTitle" style="color:black">Task: </span> <span style="color:black">${Number(i + 1)} Dropoff</span>
                   </div>
                   </div>
                   </div>`;
-                  // <div class="padding-5">
-                  //   <span class="iw-subTitle" style="color:black">Dropoff Date: </span> <span style="color:black">${(this.jobSummaryTasks[i].ended_at_unix) ? DateUtils.getLocalMMDDYYYYhhmmss(this.jobSummaryTasks[i].ended_at_unix) : '-'}</span>
-                  // </div>
+          // <div class="padding-5">
+          //   <span class="iw-subTitle" style="color:black">Dropoff Date: </span> <span style="color:black">${(this.jobSummaryTasks[i].ended_at_unix) ? DateUtils.getLocalMMDDYYYYhhmmss(this.jobSummaryTasks[i].ended_at_unix) : '-'}</span>
+          // </div>
 
-            infowindow.push((contentDrop));
-            infowindow.push((contentPickup));
-            icons_u.push('assets/images/iol/ic_pickup_parcel.png');
-            icons_u.push('assets/images/iol/ic_dest_parcel.png');
+          infowindow.push((contentDrop));
+          infowindow.push((contentPickup));
+          icons_u.push('assets/images/iol/ic_pickup_parcel.png');
+          icons_u.push('assets/images/iol/ic_dest_parcel.png');
 
-            tasksArr.push(new google.maps.LatLng(newLatLngStart.lat, newLatLngStart.lng))
-            tasksArr.push(new google.maps.LatLng(newLatLngEnd.lat, newLatLngEnd.lng))
+          tasksArr.push(new google.maps.LatLng(newLatLngStart.lat, newLatLngStart.lng))
+          tasksArr.push(new google.maps.LatLng(newLatLngEnd.lat, newLatLngEnd.lng))
+        });
+
+        var checkboxArray = tasksArr;
+        for (var i = 0; i < checkboxArray.length; i++) {
+          waypts.push({
+            location: checkboxArray[i],
+            stopover: true
           });
-
-          var checkboxArray = tasksArr;
-          for (var i = 0; i < checkboxArray.length; i++) {
-            waypts.push({
-              location: checkboxArray[i],
-              stopover: true
-            });
-          }
-
-          setTimeout(() => {
-            this.gmap.createMarkers(tasksArr, icons_u, infowindow, 'mouseover', 40, 30, 12);
-            this.gmap.createRouteWithMultipleWaypoints(directionsService, directionsDisplay, start_pos, end_pos, this, waypts);
-          }, 500);
         }
 
-        if (apiResponse.status === HttpStatusCodeEnum.Error) {
-        } else if (apiResponse.status === HttpStatusCodeEnum.Error) {
-          this.swalService.getErrorSwal(apiResponse.message);
-        }
-      })
+        setTimeout(() => {
+          this.gmap.createMarkers(tasksArr, icons_u, infowindow, 'mouseover', 40, 30, 12);
+          this.gmap.createRouteWithMultipleWaypoints(directionsService, directionsDisplay, start_pos, end_pos, this, waypts);
+        }, 500);
+      }
+
+      if (apiResponse.status === HttpStatusCodeEnum.Error) {
+      } else if (apiResponse.status === HttpStatusCodeEnum.Error) {
+        this.swalService.getErrorSwal(apiResponse.message);
+      }
+    })
   }
 
   getProgress1(value, type) {

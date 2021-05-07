@@ -69,3 +69,7 @@ tr {
     width:100px;
  }  
 
+ .map {
+    height: 70%;
+    width: 100%;
+  }
