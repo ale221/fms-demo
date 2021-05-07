@@ -28,6 +28,8 @@ export class AdminCardFormComponent implements OnInit {
   loggedInUser;
   packageType: any;
   sidebarCheck: any;
+  lastUpdatedobject: any;
+  idOfChangedDropDown: any;
 
   constructor(private formService: FormService,
     private swalService: SwalService,
@@ -68,6 +70,7 @@ export class AdminCardFormComponent implements OnInit {
               this.dashboards = element.dashboard;
               this.selectedDashboardObj = element.dashboard[0];
               let event = { value: { id: element.id } }
+              this.idOfChangedDropDown = event.value.id;
               this.dashboardChange(event)
             }
           });
@@ -86,6 +89,7 @@ export class AdminCardFormComponent implements OnInit {
   }
 
   dashboardChange(event) {
+    this.idOfChangedDropDown = event.value.id;
     this.formService.getUsecasesDashboards(event.value.id).subscribe(apiResponse => {
       this.usecasesDashboard = [];
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
@@ -100,17 +104,19 @@ export class AdminCardFormComponent implements OnInit {
     });
   }
 
-  setCardId(card, event) {
+  setCardId(card, event, index) {
     if (event.target.checked) {
       this.setCardObj.forEach(element => {
         if (card.id === element.card_id) {
           element.is_selected = true;
+          this.lastUpdatedobject = { card_id: card.id, is_selected: element.is_selected };
         }
       });
     } else {
       this.setCardObj.forEach(element => {
         if (card.id === element.card_id) {
           element.is_selected = false;
+          this.lastUpdatedobject = { card_id: card.id, is_selected: element.is_selected };
         }
       });
     }
@@ -128,6 +134,7 @@ export class AdminCardFormComponent implements OnInit {
       if (count > 2) {
         if (count > 8) {
           this.swalService.getErrorSwal('You can select maximum eight cards!');
+          this.resetTheGraphs(this.idOfChangedDropDown)
           return;
         }
       } else {
@@ -135,12 +142,27 @@ export class AdminCardFormComponent implements OnInit {
         return;
       }
 
-
     }
 
     this.formService.saveCards(this.setCardObj).subscribe(apiResponse => {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
         this.swalService.getSuccessSwal(apiResponse['message']);
+      } else {
+        this.swalService.getErrorSwal(apiResponse['message']);
+      }
+    });
+  }
+
+
+  resetTheGraphs(id) {
+    this.formService.getUsecasesDashboards(id).subscribe(apiResponse => {
+      this.usecasesDashboard = [];
+      if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
+        this.usecasesDashboard = apiResponse['data'];
+        this.setCardObj = [];
+        this.usecasesDashboard.forEach(element => {
+          this.setCardObj.push({ card_id: element.id, is_selected: element.is_selected });
+        });
       } else {
         this.swalService.getErrorSwal(apiResponse['message']);
       }
