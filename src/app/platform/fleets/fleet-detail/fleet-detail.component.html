@@ -1064,9 +1064,11 @@
                                 </div>
                                 <div class="margin-bottom-0"
                                   [ngClass]="showMarkersForTrail && trailWithStopsInfo.length? 'col-lg-9' : '' ">
-                                  <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
+                                  <!-- <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
                                     [infowindow]="violationInfoWindows">
-                                  </app-google-map>
+                                  </app-google-map> -->
+                                  <div id="map" class="map"></div>
+                                  <div id="mouse-position"></div>
                                 </div>
 
                               </div>

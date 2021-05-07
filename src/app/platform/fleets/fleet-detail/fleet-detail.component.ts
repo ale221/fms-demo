@@ -36,6 +36,7 @@ import { DrawerService } from 'src/app/core/services/drawer.service';
 import { SignalRService } from 'src/app/Services/signal-r.service';
 
 declare var $: any;
+declare var ol: any;
 
 enum TaskStatus {
   RUNNING = 52,
@@ -177,6 +178,8 @@ export class FleetDetailComponent implements OnInit {
 
   packageType;
 
+  osrm;
+
   packageRoutes;
   classToApply = "col-md-3";
   fleetJobSummary: any
@@ -255,6 +258,48 @@ export class FleetDetailComponent implements OnInit {
     }, 200)
 
     // this.getMaintanceTypeCategory(this.entityId);
+  }
+
+  InitOSRM() {
+    
+    var mousePositionControl = new ol.control.MousePosition({
+      coordinateFormat: ol.coordinate.createStringXY(4),
+      projection: 'EPSG:4326',
+      // comment the following two lines to have the mouse position
+      // be placed within the map.
+      className: 'custom-mouse-position',
+      target: document.getElementById('mouse-position'),
+      undefinedHTML: '&nbsp;'
+    });
+
+
+    this.osrm = new ol.Map({
+      target: 'map',
+      controls: ol.control.defaults({
+        attributionOptions: {
+          collapsible: false
+        }
+      }).extend([mousePositionControl]),
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([73.8567, 18.5204]),
+        zoom: 8
+      })
+    });
+
+    this.osrm.on('click', function (args) {
+      console.log(args.coordinate);
+      var lonlat = ol.proj.transform(args.coordinate, 'EPSG:3857', 'EPSG:4326');
+      console.log(lonlat);
+      
+      var lon = lonlat[0];
+      var lat = lonlat[1];
+      alert(`lat: ${lat} long: ${lon}`);
+    });
   }
 
 
