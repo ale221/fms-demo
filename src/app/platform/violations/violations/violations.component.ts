@@ -155,7 +155,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     this.scrollToTop.nativeElement.scrollIntoView({ behavior: "instant", block: "end" });
-    this.optimized_violations_call(1);
+    // this.optimized_violations_call(1);
   }
   setupReport(event) {
     // console.log("coming in setup repoert");
