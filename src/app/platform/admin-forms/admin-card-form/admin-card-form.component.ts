@@ -29,7 +29,7 @@ export class AdminCardFormComponent implements OnInit {
   packageType: any;
   sidebarCheck: any;
   lastUpdatedobject: any;
-  idChanged: any;
+  idOfChangedDropDown: any;
 
   constructor(private formService: FormService,
     private swalService: SwalService,
@@ -70,7 +70,7 @@ export class AdminCardFormComponent implements OnInit {
               this.dashboards = element.dashboard;
               this.selectedDashboardObj = element.dashboard[0];
               let event = { value: { id: element.id } }
-              this.idChanged = event.value.id;
+              this.idOfChangedDropDown = event.value.id;
               this.dashboardChange(event)
             }
           });
@@ -89,7 +89,7 @@ export class AdminCardFormComponent implements OnInit {
   }
 
   dashboardChange(event) {
-    this.idChanged = event.value.id;
+    this.idOfChangedDropDown = event.value.id;
     this.formService.getUsecasesDashboards(event.value.id).subscribe(apiResponse => {
       this.usecasesDashboard = [];
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
@@ -134,10 +134,7 @@ export class AdminCardFormComponent implements OnInit {
       if (count > 2) {
         if (count > 8) {
           this.swalService.getErrorSwal('You can select maximum eight cards!');
-          // this.getUserCases();
-
-          this.shu(this.idChanged)
-
+          this.resetTheGraphs(this.idOfChangedDropDown)
           return;
         }
       } else {
@@ -157,7 +154,7 @@ export class AdminCardFormComponent implements OnInit {
   }
 
 
-  shu(id) {
+  resetTheGraphs(id) {
     this.formService.getUsecasesDashboards(id).subscribe(apiResponse => {
       this.usecasesDashboard = [];
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
