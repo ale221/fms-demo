@@ -665,6 +665,7 @@ export class DriverShiftAllocationComponent implements OnInit {
   }
 
   clearForm() {
+    this.selected_user = '';
     this.Submitted = false;
   }
   onSearch(val) {

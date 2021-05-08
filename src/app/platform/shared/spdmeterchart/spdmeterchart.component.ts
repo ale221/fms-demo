@@ -16,6 +16,7 @@ export class SpdmeterchartComponent implements OnInit {
 
   private chart: am4charts.GaugeChart;
   @Input() speed: any;
+  updated_speed;
 
   constructor(@Inject(PLATFORM_ID) private platformId, private zone: NgZone) {}
 
@@ -75,6 +76,12 @@ export class SpdmeterchartComponent implements OnInit {
 
   ngOnChanges() {
     console.log(this.speed, 'updating');
+    if(this.speed>0){
+      this.updated_speed=this.speed
+    }
+
+    console.log("this.updated_speed-= ", this.updated_speed);
+
     this.browserOnly(() => {
       let chart = am4core.create("spdmeter", am4charts.GaugeChart);
       chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
@@ -115,11 +122,12 @@ export class SpdmeterchartComponent implements OnInit {
 
       // using chart.setTimeout method as the timeout will be disposed together with a chart
       chart.setTimeout(randomValue, 2000);
-      let speed = this.speed;
+      
+      let speed = this.updated_speed;
       console.log("ahmmmm",speed);
       function randomValue() {
         if (speed) {
-          hand.showValue(speed, 1000, am4core.ease.cubicOut);
+          hand.showValue(speed, 5000, am4core.ease.cubicOut);
           chart.setTimeout(randomValue, 2000);
         }
       }

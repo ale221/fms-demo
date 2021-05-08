@@ -178,6 +178,13 @@ export class SidebarComponent implements OnInit, AfterViewInit, AfterContentInit
       }, 200);
     });
 
+    // if (this.translateDetector && this.translateDetector.menuData) {
+    //   this.translateDetector.menuData.subscribe(response => {
+      // TODO: store response in localStorage keep in mind that you response is same as menuArray as in login API.
+      // after that you ust need to set this.apiCall = 0; 
+    //   });
+    // }
+
   }
 
   getGroupData() {
