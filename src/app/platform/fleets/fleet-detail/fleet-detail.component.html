@@ -317,9 +317,11 @@
                 <div class="font-size-14  margin-bottom-10"> Vehicle Speed (km/h)</div>
                 <div class="">
                   <div class="chartbox">
-                    <app-spdmeterchart
+                    <div id="spdmeter" style="width: 230px; height: 143px;margin: auto"></div>
+
+                    <!-- <app-spdmeterchart
                       [speed]="((((truck?.signalRresponse?.spd > 5 && tooLongOrtooShortDistance) ? truck?.signalRresponse?.spd : (signalRstarted < 1) ? truck?.last_speed : '0' ))) || truck?.last_speed">
-                    </app-spdmeterchart>
+                    </app-spdmeterchart> -->
                   </div>
                 </div>
               </div>
@@ -594,10 +596,7 @@
                 </div>
                 <div class="media-right">
                   <div class="font-size-15">
-                    {{((((truck?.signalRresponse?.spd > 5 &&
-                    tooLongOrtooShortDistance) ?
-                    truck?.signalRresponse?.spd : (signalRstarted < 1) ? truck?.last_speed : '0' ) | number : '1.0-0' ))
-                      || truck?.last_speed}} km/h </div>
+                    {{ (lastSpeed | number : '1.0-0') || truck?.last_speed}} km/h </div>
                   </div>
                 </div>
                 <div class="media" *ngIf="selectedPkg === PackageType.standard">
@@ -669,7 +668,7 @@
                     <div class="row margin-top-30">
                       <div class="col-lg-12">
 
-                        <mat-tab-group style="overflow: visible;">
+                        <mat-tab-group style="overflow: visible;" (selectedTabChange)="selectedTab($event)">
 
                           <mat-tab label="Last Job Summary">
                             <div *ngIf="jobSummary;else noTask;">
@@ -1076,10 +1075,9 @@
                                   <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
                                     [infowindow]="violationInfoWindows">
                                   </app-google-map>
+                                  <!-- <div id="map" class="map"></div> -->
                                   <app-spin-loading [appLoader]="trailLoader"></app-spin-loading>
 
-                                  <!-- <div id="map" class="map"></div>
-                                  <div id="mouse-position"></div> -->
                                 </div>
 
                               </div>

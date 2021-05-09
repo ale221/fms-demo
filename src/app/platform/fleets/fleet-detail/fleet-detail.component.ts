@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { format, isValid } from 'date-fns';
 import { Subscription } from 'rxjs';
@@ -35,8 +35,14 @@ import { PackageType } from 'src/app/core/enum/packages-enum';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
 import { SignalRService } from 'src/app/Services/signal-r.service';
-import { any } from '@amcharts/amcharts4/.internal/core/utils/Array';
-import { PrimengDropdownItem } from '../../data/model/primng-dropdown-item';
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
+import { NgZone } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 declare var $: any;
 declare var ol: any;
 
@@ -84,6 +90,9 @@ export class FleetDetailComponent implements OnInit {
   MileageForm:FormGroup;
 
   selectedPkg;
+
+  speedChart;
+  hand;
 
   marker;
   infoWindow = new google.maps.InfoWindow();
@@ -153,6 +162,7 @@ export class FleetDetailComponent implements OnInit {
   fillups: FillupResponse[] = [];
   fillupCluster;
   lastupdated;
+  lastSpeed;
   lastFillUp;
 
   violation_count;
@@ -227,7 +237,7 @@ export class FleetDetailComponent implements OnInit {
       })
     })
   };
-
+  private chart: am4charts.GaugeChart;
 
   mileageFilter = []
   monthName = [{ id: 'January', name: "January" }, { id: 'February', name: "February" }, { id: 'March', name: "March" }, { id: 'April', name: "April" }, { id: 'May', name: "May" }, { id: 'June', name: "June" }, { id: 'July', name: "July" }, { id: 'August', name: "August" }, { id: 'September', name: "September" }, { id: 'October', name: "October" }, { id: 'November', name: "November" }, { id: 'December', name: "December" }];
@@ -242,7 +252,9 @@ export class FleetDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private breadcrumbService: BreadcrumbsService,
     private drawerService: DrawerService,
-    private signalRService: SignalRService
+    private httpCLient: HttpClient,
+    private signalRService: SignalRService,
+    @Inject(PLATFORM_ID) private platformId, private zone: NgZone
   ) {
     this.theme = this.brandingService.styleObject();
     this.connection = this.route.snapshot.data['connection'];
@@ -379,14 +391,14 @@ export class FleetDetailComponent implements OnInit {
       })
     });
 
-
+    /*
     let x = this;
     this.osrm.on('click', function(evt){
-      x.getNearest(evt.coordinate).then(function(coord_street){
-        var last_point = this.connectingPoints[this.connectingPoints.length - 1];
-        var points_length = this.connectingPoints.push(coord_street);
+      x.getNearest(evt.coordinate).then(function(coord_street: any){
+        var last_point = x.connectingPoints[x.connectingPoints.length - 1];
+        var points_length = x.connectingPoints.push(coord_street);
     
-        this.createFeature(coord_street);
+        x.createFeature(coord_street);
     
         // if (points_length < 2) {
         //   msg_el.innerHTML = 'Click to add another point';
@@ -395,29 +407,31 @@ export class FleetDetailComponent implements OnInit {
     
         //get the route
         var point1 = last_point.join();
-        // var point2 = coord_street.join();
+        var point2 = coord_street.join();
         
-        // fetch(this.url_osrm_route + point1 + ';' + point2).then(function(r) { 
-        //   return r.json();
-        // }).then(function(json) {
+        fetch(x.url_osrm_route + point1 + ';' + point2).then(function(r) { 
+          return r.json();
+        }).then(function(json) {
           // if(json.code !== 'Ok') {
           //   msg_el.innerHTML = 'No route found.';
           //   return;
           // }
           // msg_el.innerHTML = 'Route added';
           //points.length = 0;
-        //   this.createRoute(json.routes[0].geometry);
-        // });
+          x.createRoute(json.routes[0].geometry);
+        });
       });
     });
+    */
 
   }
   
   getNearest (coord){
-    var coord4326 = this.to4326(coord);    
+    var coord4326 = this.to4326(coord);  
+    let url_osrm_nearest = this.url_osrm_nearest;  
     return new Promise(function(resolve, reject) {
       //make sure the coord is on street
-      fetch(this.url_osrm_nearest + coord4326.join()).then(function(response) { 
+      fetch(url_osrm_nearest + coord4326.join()).then(function(response) { 
         // Convert to JSON
         return response.json();
       }).then(function(json) {
@@ -495,10 +509,17 @@ export class FleetDetailComponent implements OnInit {
     })
 
     }
-
-    
-
   }
+
+  selectedTab(tab) {
+    if (tab.index === 1) {
+      setTimeout(() => {
+        // this.initOSRM();
+      }, 500);
+    }
+  }
+
+
   onMonthChange(event) {
     if(event==""){
       this.MileageForm.controls.month.setValue('');
@@ -586,6 +607,7 @@ export class FleetDetailComponent implements OnInit {
 
   ngAfterViewInit() {
     this.initMap();
+    this.speedoMeter(0, true);
   }
 
   initMap() {
@@ -878,7 +900,7 @@ export class FleetDetailComponent implements OnInit {
         // subscribe to event
         this.subscription = newMessage.subscribe((response: string) => {
           const signalRresponse = JSON.parse(response) as SignalRresponse;
-          // console.log('signalResponse', signalRresponse);
+          console.log('signalResponse', signalRresponse);
           if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
             return;
           }
@@ -981,17 +1003,21 @@ export class FleetDetailComponent implements OnInit {
 
   private updateLocation(truck, tooLongOrtooShortDistance?, isUpdateTimeOnly?) { //data in popover
     if (this.locations.length) {
+
+      this.lastSpeed = Math.round((this.truck.signalRresponse.spd > 5 && tooLongOrtooShortDistance) ? this.truck.signalRresponse.spd : 0);
+
       this.lastUpdatedCard = (!isUpdateTimeOnly) ? DateUtils.getMMDDYYYYhhmmssA(this.truck.signalRresponse.t) : DateUtils.getLocalYYYYMMDDHHmmss(isUpdateTimeOnly);
       this.locations[0].latitude = this.truck.signalRresponse.latitude;
       this.locations[0].longitude = this.truck.signalRresponse.longitude;
       this.locations[0].infoList = [
-        new Item('Speed', Math.round((this.truck.signalRresponse.spd > 5 && tooLongOrtooShortDistance) ? this.truck.signalRresponse.spd : 0) + ' km/h'),
+        new Item('Speed', this.lastSpeed + ' km/h'),
         // new Item('Fuel', ((this.truck['vol']) ? this.truck['vol'].toFixed(3) : 0) + ' gal'),
         // new Item('Temperature', ((this.truck.signalRresponse.temp) ? this.truck.signalRresponse.temp : 0) + ' °C'),
         new Item('Last Updated', (!isUpdateTimeOnly) ? DateUtils.getMMDDYYYYhhmmssA(this.truck.signalRresponse.t) : DateUtils.getLocalYYYYMMDDHHmmss(isUpdateTimeOnly)),
         // new Item('Location', truck.location_address)
       ];
     }
+    this.speedoMeter(this.lastSpeed, false);
     this.updateInfoWindow();
   }
 
@@ -1143,7 +1169,7 @@ export class FleetDetailComponent implements OnInit {
         </tr>`;
     });
     info += '</tbody> </table>';
-    this.infoWindow.setContent(info);
+    this.updateInfoWindowContent(info)
   }
 
 
@@ -1514,15 +1540,15 @@ export class FleetDetailComponent implements OnInit {
           this.violationMarkers = [];
         }
 
-        this.tMap.resetMap();
-        this.tMap.createDummyMarkers(markers, infoWindows);
+        // this.tMap.resetMap();
+        // this.tMap.createDummyMarkers(markers, infoWindows);
         if (this.violationMarkers && this.violationMarkers.length > 1) {
           let selectedPackage = JSON.parse(localStorage.getItem('user'));
           selectedPackage = selectedPackage.package[0]
           if (selectedPackage.package_id === this.packageType.png) {
             this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
           } else {
-            this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+              this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
           }
         } else {
           this.swalService.getWarningSwal("No data found against this vehicle");
@@ -1793,11 +1819,250 @@ export class FleetDetailComponent implements OnInit {
     }
   }
 
+  speedoMeter(speed, firstTime) {
+    this.browserOnly(() => {
+      let hand;
+      if (firstTime) {
+        this.speedChart = am4core.create("spdmeter", am4charts.GaugeChart);
+        this.speedChart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
+  
+        this.speedChart.innerRadius = -25;
+  
+        let axis = this.speedChart.xAxes.push(new am4charts.ValueAxis<am4charts.AxisRendererCircular>());
+        axis.min = 0;
+        axis.max = 250;
+        axis.strictMinMax = true;
+        axis.renderer.grid.template.stroke = new am4core.InterfaceColorSet().getFor("background");
+        axis.renderer.grid.template.strokeOpacity = 0.3;
+  
+        let colorSet = new am4core.ColorSet();
+  
+        let range0 = axis.axisRanges.create();
+        range0.value = 0;
+        range0.endValue = 50;
+        range0.axisFill.fillOpacity = 1;
+        range0.axisFill.fill = colorSet.getIndex(0);
+        range0.axisFill.zIndex = - 1;
+  
+        let range1 = axis.axisRanges.create();
+        range1.value = 50;
+        range1.endValue = 80;
+        range1.axisFill.fillOpacity = 1;
+        range1.axisFill.fill = colorSet.getIndex(2);
+        range1.axisFill.zIndex = -1;
+  
+        let range2 = axis.axisRanges.create();
+        range2.value = 80;
+        range2.endValue = 250;
+        range2.axisFill.fillOpacity = 1;
+        range2.axisFill.fill = colorSet.getIndex(4);
+        range2.axisFill.zIndex = -1;
+        this.hand = this.speedChart.hands.push(new am4charts.ClockHand());
+      }
+
+      hand = this.hand;
+      let speedChart = this.speedChart;
+      // using chart.setTimeout method as the timeout will be disposed together with a chart
+      this.speedChart.setTimeout(randomValue, 2000);
+      function randomValue() {
+        if (speed > 0) {
+          hand.showValue(speed, 1000, am4core.ease.cubicOut);
+          // speedChart.setTimeout(randomValue, 2000);
+        }
+      }
+
+    });
+  }
+
+  browserOnly(f: () => void) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.zone.runOutsideAngular(() => {
+        f();
+      });
+    }
+
+  }
+snappedCoordinates;
+snappedCoodinatesFormatted;
+totalSnapToRoadCalls;
+
+createSnapToRoad(locations, info, zoom = null) {
+    const tempMarkersArr = [];
+    const bounds = new google.maps.LatLngBounds();
+    if (locations.length) {
+      let pathValues = [];
+      let timeStamps = [];
+      this.snappedCoordinates = [];
+      this.snappedCoodinatesFormatted = [];
+      let count = 0;
+      this.totalSnapToRoadCalls = Math.ceil(locations.length / 100);
+      const observables: Observable<any>[] = [];
+
+      locations.forEach((element, index) => {
+        // SnapToRoad only accept 100 paths, therefore we have to send multipe request to Google Roads Api
+        if (count === 99 || (index + 1) === locations.length) {
+          observables.push(this.sendSnapToRoadRequest(pathValues, locations, info, zoom));
+          pathValues = [];
+          count = 0;
+        } else {
+          count++;
+          pathValues.push(element.lng + "," + element.lat);
+          // timeStamps.push(element.times)
+        }
+      });
+
+
+      const result1 = forkJoin(observables);
+      result1.subscribe((result) => {
+        let arrayToProcess = [];
+        if (result && result.length) {
+          result.forEach((element, i) => {
+            if (element.code === 'Ok' && element.matchings && element.matchings.length > 0) {
+              element.matchings.forEach (match => {
+                  if (match.geometry && match.geometry.coordinates && match.geometry.coordinates.length > 0) {
+                    match.geometry.coordinates.forEach((coords, i) => {
+                      arrayToProcess.push(coords);
+                    });
+                  }
+              })
+
+            }
+
+            if ((i + 1) === result.length) {
+              const tempMarkersArr = [];
+              const bounds = new google.maps.LatLngBounds();
+              const startIcon = 'assets/images/iol/icon-map-pin-start.png';
+              const endIcon = 'assets/images/iol/icon-map-pin-end.png';
+
+              // Actual Start and End Points
+              // const trailMarker1 = this.createDummyMarker(startIcon, locations[0].lat, locations[0].lng, info[0]);
+              // const trailMarker2 = this.createDummyMarker(endIcon, locations[locations.length - 1].lat, locations[locations.length - 1].lng, info[1]);
+              // Snapped Start and End Points with Google
+              // const trailMarker1 = this.createDummyMarker(startIcon, this.snappedCoordinates[0].lat(), this.snappedCoordinates[0].lng(), info[0]);
+              // const trailMarker2 = this.createDummyMarker(endIcon, this.snappedCoordinates[this.snappedCoordinates.length - 1].lat(), this.snappedCoordinates[this.snappedCoordinates.length - 1].lng(), info[1]);
+              // Snapped Start and End Points with OSRM
+              // const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0][1], arrayToProcess[0][0], info[0]);
+              // const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1][1], arrayToProcess[arrayToProcess.length - 1][0], info[1]);
+
+              // tempMarkersArr.push(trailMarker1, trailMarker2);
+              // trailMarker1.setMap(this.map);
+              // trailMarker2.setMap(this.map);
+              // this._markers.push(trailMarker1, trailMarker2);
+              // this.bounds.extend(trailMarker1.getPosition());
+              // this.bounds.extend(trailMarker2.getPosition());
+              this.processSnapToRoadResponse(arrayToProcess);
+              // this.drawSnappedPolyline(zoom);
+            }
+
+
+          });
+        }
+
+
+      },
+      err => {
+        if (err && err.status != 200) {
+          this.swalService.getWarningSwal("Unable to find snapped route, Please select another time period");
+          // this.createTrail(locations, info, false);
+        }
+      });
+
+
+      // return tempMarkersArr;
+    }
+    return this.snappedCoordinates;
+  }
+
+  processSnapToRoadResponse(arrayToProcess){
+    var points = arrayToProcess;
+
+    for (var i = 0; i < points.length; i++) {
+      if (points[i]) {
+        points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
+      }
+    }
+
+    var featureLine = new ol.Feature({
+        geometry: new ol.geom.LineString(points)
+    });
+
+    var vectorLine = new ol.source.Vector({});
+    vectorLine.addFeature(featureLine);
+
+    var vectorLineLayer = new ol.layer.Vector({
+        source: vectorLine,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({ color: '#46be8a', weight: 4 }),
+            stroke: new ol.style.Stroke({ color: '#36ab7a', width: 2 })
+        })
+    });
+
+    const startIcon = 'assets/images/iol/icon-map-pin-start.png';
+    const endIcon = 'assets/images/iol/icon-map-pin-end.png';
+
+    var iconFeatures=[];
+
+    var iconFeature = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.transform([-72.0704, 46.678], 'EPSG:4326',     
+      'EPSG:3857')),
+      name: 'Null Island',
+      population: 4000,
+      rainfall: 500
+    });
+
+    var iconFeature1 = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.transform([-73.1234, 45.678], 'EPSG:4326',     
+      'EPSG:3857')),
+      name: 'Null Island Two',
+      population: 4001,
+      rainfall: 501
+    });
+
+    iconFeatures.push(iconFeature);
+    iconFeatures.push(iconFeature1);
+
+    var vectorSource = new ol.source.Vector({
+      features: iconFeatures //add an array of features
+    });
+
+    var iconStyle = new ol.style.Style({
+      image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+        anchor: [0.5, 46],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        opacity: 0.75,
+        src: startIcon
+      }))
+    });
+
+    var vectorLayer = new ol.layer.Vector({
+      source: vectorSource,
+      style: iconStyle
+    });
+
+    this.osrm.addLayer(vectorLayer)
+
+    this.osrm.addLayer(vectorLineLayer);
+  }
+
+  sendSnapToRoadRequest(pathValues, locations, info, zoom = null) {
+    if (pathValues && pathValues.length) {
+      let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=full&geometries=geojson";
+      return this.httpCLient.get(url);
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.signalRSubscription) {
       this.signalRService.close();
       this.signalRSubscription.unsubscribe();
     }
+    // Clean up chart when the component is removed
+    this.browserOnly(() => {
+      if (this.chart) {
+        this.chart.dispose();
+      }
+    });
   }
 
 }
