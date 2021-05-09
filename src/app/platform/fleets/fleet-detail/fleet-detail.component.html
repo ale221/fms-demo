@@ -1,6 +1,10 @@
+
+
+
 <app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
 
-<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' " #scrollToTop [hidden]="!isAuthorized">
+<div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
+  #scrollToTop [hidden]="!isAuthorized">
   <ol class="breadcrumb breadcrumb-arrow ">
     <li><a class="icon ion-ios-home" routerLink="/iol"> Dashboard </a> </li>
     <li><a routerLink="/iol/{{breadcrumbInner[0]}}"> {{breadcrumbInner[1]}} </a></li>
@@ -9,7 +13,9 @@
 </div>
 
 
-<div [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "    [hidden]="!isAuthorized">
+<div
+  [className]="sidebarCheck ? 'half-open-sidebar page-content  container-fluid' : 'full-open-sidebar page-content  container-fluid' "
+  [hidden]="!isAuthorized">
   <div class="row margin-bottom-30" *ngIf="cardsArray.length === 5">
     <div *ngFor="let card of cardsArray; let i = index" [attr.data-index]="i"
       [ngClass]="{'col-md-4': i === 0, 'col-md-2': i > 0}">
@@ -19,7 +25,8 @@
       </app-stats-icon-card>
     </div>
   </div>
-  <div [className]="cardsArray.length !== 5 && cardsArray.length !== 4 ? 'row' : 'row margin-bottom-30'"  *ngIf="cardsArray.length !== 5">
+  <div [className]="cardsArray.length !== 5 && cardsArray.length !== 4 ? 'row' : 'row margin-bottom-30'"
+    *ngIf="cardsArray.length !== 5">
     <div *ngFor="let card of cardsArray" [className]="colWidth">
       <app-stats-icon-card [icon]="card.icon" [bgStyle]="card.color" [totalCount]="card.data.total_count"
         [iconHeight]="35" [label]="card.name" [footerArr]="card.data.footer" [data]="card"
@@ -376,7 +383,7 @@
             </div>
 
             <div class="row card-group-row no-space1  ">
-              <div class="col-lg-6 card-group-row__col">
+              <!-- <div class="col-lg-6 card-group-row__col">
                 <div
                   class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative   card-border light ">
                   <div class="vertical-align-middle">
@@ -388,7 +395,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-lg-6 card-group-row__col">
                 <div
                   class="card  padding-5 shadow1   margin-bottom-15 vertical-align   text-center relative   card-border light ">
@@ -415,7 +422,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6 card-group-row__col">
+              <div class="col-lg-6 card-group-row__col" style="margin-left: 1px;">
                 <div
                   class="card  padding-5 shadow1   margin-bottom-0 vertical-align   text-center relative   card-border light ">
                   <div class="vertical-align-middle">
@@ -555,7 +562,8 @@
                   <!-- <span class="label label-success label-outline "> Enable </span> -->
                 </div>
                 <div class="media-right">
-                  <div class="font-size-15" style="padding-top: 6px;">{{(lastUpdatedCard | date: 'mediumDate') || '-'}} <br/> {{(lastUpdatedCard | date: 'mediumTime')}}</div>
+                  <div class="font-size-15" style="padding-top: 6px;">{{(lastUpdatedCard | date: 'mediumDate') || '-'}}
+                    <br /> {{(lastUpdatedCard | date: 'mediumTime')}}</div>
                 </div>
               </div>
               <div class="media">
@@ -611,7 +619,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="media" *ngIf="selectedPkg === PackageType.standard && truck?.signalRresponse?.vol">
+                <!-- <div class="media" *ngIf="selectedPkg === PackageType.standard && truck?.signalRresponse?.vol">
                   <div class="media-left">
                     <figure class="">
                       <img src="assets/images/icon-sensor (5).png" class="img-bordered1" style="height: 30px">
@@ -619,14 +627,14 @@
                   </div>
                   <div class="media-body">
                     <div class="font-size-18 grey-600"> Fuel Level</div>
-                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                    <div class="font-size-12 padding-top-0"> #DHT11</div>
                     <span class="label label-danger label-outline" *ngIf="truck?.fuel_senors === 0"> Disabled </span>
                     <span class="label label-success label-outline" *ngIf="truck?.fuel_senors === 1"> Enable </span>
                   </div>
                   <div class="media-right">
                     <div class="font-size-16 grey-600"> {{ truck?.last_volume ? truck?.last_volume : truck?.signalRresponse?.vol}}% - {{(truck?.volume_capacity * truck?.signalRresponse?.vol) / 100}}l of {{truck?.volume_capacity}}l </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="media" *ngIf="selectedPkg === PackageType.standard">
                   <div class="media-left">
                     <figure class="">
@@ -649,11 +657,10 @@
       </div>
     </div>
 
-    
-    <div class="row" style="border-radius: 20px;" *ngIf="selectedPkg === PackageType.standard">
+    <div class="row" style="border-radius: 20px;overflow: visible;" *ngIf="selectedPkg === PackageType.standard">
       <div class="col-lg-12">
         <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
-          
+
           <div class="panel-body padding-0">
             <div class="tab-content">
               <div class="tab-pane active" id="Summary">
@@ -662,7 +669,7 @@
                     <div class="row margin-top-30">
                       <div class="col-lg-12">
 
-                        <mat-tab-group (selectedTabChange)="getSelectedTab($event)">
+                        <mat-tab-group style="overflow: visible;">
 
                           <mat-tab label="Last Job Summary">
                             <div *ngIf="jobSummary;else noTask;">
@@ -926,7 +933,8 @@
                                                           </td>
                                                           <td>{{getTaskProgress(job?.job_status) || 'N/A'}}</td>
 
-                                                          <td style="white-space: break-spaces;">{{job.aborted_status || '-'}} : {{job.aborted_reason || '-'}}</td>
+                                                          <td style="white-space: break-spaces;">{{job.aborted_status ||
+                                                            '-'}} : {{job.aborted_reason || '-'}}</td>
 
                                                           <td style="display: none;">
                                                             <button type="button"
@@ -970,7 +978,6 @@
                             </ng-template>
                           </mat-tab>
 
-                          
                           <mat-tab label="Map Trail">
                             <div class="row margin-top-10">
                               <app-reporting-buttons [calendarDimension]="'col-sm-6'" [type]="'trail'"
@@ -1066,10 +1073,11 @@
                                 </div>
                                 <div class="margin-bottom-0"
                                   [ngClass]="showMarkersForTrail && trailWithStopsInfo.length? 'col-lg-9' : '' ">
-                                  <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
+                                  <!-- <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
                                     [infowindow]="violationInfoWindows">
-                                  </app-google-map>
-                                  <!-- <div id="map" class="map"></div> -->
+                                  </app-google-map> -->
+                                  <div id="map" class="map"></div>
+                                  <div id="mouse-position"></div>
                                 </div>
 
                               </div>
@@ -1088,6 +1096,137 @@
                               <app-maintenance-reporting [entity]="entityId" [serviceObj]="maintenanceService"
                                 [isEntityTruck]="true" (pdfReportObj)="generatePDFReport('maintenances', $event)">
                               </app-maintenance-reporting>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Mileage" *ngIf="selectedPkg==6">
+                            <div class="row margin-top-10" style="overflow: visible;">
+                              
+                              <div class="form-group" >
+                                <form [formGroup]="MileageForm" >
+                                  <div class="row" style="margin-top: 30px;margin-left: 13px;">
+                                    <div class="col-md-3">
+                                      <!-- <p-dropdown [options]="mileageFilter" name="year" formControlName="year"  (onChange)="onYearMonthChange($event)"
+                                        styleClass="prime-dropdown" placeholder="Select Year">
+                                      </p-dropdown> -->
+
+                                      <select class="form-control " formControlName="year" placeholder="Select Year"
+                                      (change)="onYearMonthChange($event.target.value)">
+                                      <option value="">Select Year</option>
+                                      <option *ngFor="let fleet of mileageFilter" [value]="fleet.value">
+                                        {{fleet.label}}</option>
+                                    </select>
+                                      <!-- <p-dropdown [options]="violationTypesDropDown" name="violation_type"
+                                        [(ngModel)]="violation_type_id" (onChange)="violationTypeChanged($event)"
+                                        styleClass="prime-dropdown" placeholder="Select Violation Type">
+                                      </p-dropdown> -->
+
+
+
+                                    </div>
+                                    <div class="col-md-3">
+
+                                      <select class="form-control " placeholder="Select Month" formControlName="month"
+                                      (change)="onMonthChange($event.target.value)">
+                                      <option value="">Select Month</option>
+                                      <option *ngFor="let fleet of monthName" [value]="fleet.id">
+                                        {{fleet.name}}</option>
+                                    </select>
+
+                                      <!-- <p-dropdown [options]="monthName" name="selectedGroup" formControlName="month" (onChange)="onMonthChange($event)" styleClass="prime-dropdown"
+                                        placeholder="Select Month">
+                                      </p-dropdown> -->
+                                    </div>
+                                  </div>
+                                </form>  
+                                <!-- (matSortChange)="sortUserList($event)" -->
+                                <div class="row" style="margin-top: 30px;margin-left: 13px;">
+                                  <div *ngIf="FilterTypeTable == 1 ">
+                                    <table matSort  class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                        mat-table [dataSource]="milageData" mat-elevation-z8>
+          
+                                        <ng-container matColumnDef="id">
+                                          <th mat-header-cell *matHeaderCellDef >{{selectedYear}}</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.month == null) ? '-': row.month}}
+                                          </td>
+                                          
+                                        </ng-container>
+                                        <ng-container matColumnDef="first_name">
+                                          <th mat-header-cell *matHeaderCellDef >Fuel Filled(Liter)</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.fuel_filled == null) ? '-': row.fuel_filled}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="last_name">
+                                          <th mat-header-cell *matHeaderCellDef >Distance Travelled(KM)</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.distance == null) ? '-': row.distance}}
+                                          </td>
+                                        </ng-container>
+          
+                                        <ng-container matColumnDef="date_joined">
+                                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mileage(KM/L)</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.mileage == null) ? '-': row.mileage}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container >
+                                         
+                                          <td mat-cell *matCellDef="let row">
+                                           Total
+                                          </td>
+                                        </ng-container>
+                                        
+                                        
+                                      
+          
+                                        <tr mat-header-row *matHeaderRowDef="displayedUserList"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedUserList;"></tr>
+                                    </table>
+                                  </div>
+
+
+                                  <div *ngIf="FilterTypeTable == 2 ">
+                                    <table matSort  class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                        mat-table [dataSource]="monthData" mat-elevation-z8>
+          
+                                        <ng-container matColumnDef="id">
+                                          <th mat-header-cell *matHeaderCellDef >{{selectedMonth}}</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.week == null) ? '-': row.week}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="first_name">
+                                          <th mat-header-cell *matHeaderCellDef >Fuel Filled(Liter)</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.fuel_filled == null) ? '-': row.fuel_filled}}
+                                          </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="last_name">
+                                          <th mat-header-cell *matHeaderCellDef >Distance Travelled(KM)</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.distance == null) ? '-': row.distance}}
+                                          </td>
+                                        </ng-container>
+          
+                                        <ng-container matColumnDef="date_joined">
+                                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mileage(KM/L)</th>
+                                          <td mat-cell *matCellDef="let row">
+                                            {{(row.mileage == null) ? '-': row.mileage}}
+                                          </td>
+                                        </ng-container>
+                                        
+                                        
+                                      
+          
+                                        <tr mat-header-row *matHeaderRowDef="displayedUserList2"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedUserList2;"></tr>
+                                    </table>
+                                  </div>
+                                </div>
+
+                              </div>
                             </div>
                           </mat-tab>
 
