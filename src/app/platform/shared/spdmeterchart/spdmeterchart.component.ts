@@ -29,7 +29,7 @@ export class SpdmeterchartComponent implements OnInit {
 
       let axis = chart.xAxes.push(new am4charts.ValueAxis<am4charts.AxisRendererCircular>());
       axis.min = 0;
-      axis.max = 100;
+      axis.max = 250;
       axis.strictMinMax = true;
       axis.renderer.grid.template.stroke = new am4core.InterfaceColorSet().getFor("background");
       axis.renderer.grid.template.strokeOpacity = 0.3;
@@ -52,7 +52,7 @@ export class SpdmeterchartComponent implements OnInit {
 
       let range2 = axis.axisRanges.create();
       range2.value = 80;
-      range2.endValue = 100;
+      range2.endValue = 250;
       range2.axisFill.fillOpacity = 1;
       range2.axisFill.fill = colorSet.getIndex(4);
       range2.axisFill.zIndex = -1;
@@ -90,7 +90,7 @@ export class SpdmeterchartComponent implements OnInit {
 
       let axis = chart.xAxes.push(new am4charts.ValueAxis<am4charts.AxisRendererCircular>());
       axis.min = 0;
-      axis.max = 100;
+      axis.max = 250;
       axis.strictMinMax = true;
       axis.renderer.grid.template.stroke = new am4core.InterfaceColorSet().getFor("background");
       axis.renderer.grid.template.strokeOpacity = 0.3;
@@ -113,7 +113,7 @@ export class SpdmeterchartComponent implements OnInit {
 
       let range2 = axis.axisRanges.create();
       range2.value = 80;
-      range2.endValue = 100;
+      range2.endValue = 250;
       range2.axisFill.fillOpacity = 1;
       range2.axisFill.fill = colorSet.getIndex(4);
       range2.axisFill.zIndex = -1;
