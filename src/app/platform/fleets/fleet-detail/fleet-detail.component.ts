@@ -130,6 +130,9 @@ export class FleetDetailComponent implements OnInit {
   @ViewChild('jobTrailMap') gmap: GoogleMapComponent;
   showMarkersForTrail = false;
   showMarkersForTrail2 = false;
+  trailLoader = {
+    visibility: false
+  }
 
   lastUpdatedCard;
 
@@ -204,7 +207,26 @@ export class FleetDetailComponent implements OnInit {
   monthfuelfilledTotal=0;
   monthdistance=0;
   monthmileage=0;
+  connectingPoints = [];
+  vectorSource = new ol.source.Vector();
+  vectorLayer;
 
+  url_osrm_nearest = '//router.project-osrm.org/nearest/v1/driving/';
+  url_osrm_route = '//router.project-osrm.org/route/v1/driving/';
+
+  styles = {
+    route: new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        width: 6, color: [40, 40, 40, 0.8]
+      })
+    }),
+    icon: new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [0.5, 1],
+        src: '//cdn.rawgit.com/openlayers/ol3/master/examples/data/icon.png'
+      })
+    })
+  };
 
 
   mileageFilter = []
@@ -324,17 +346,19 @@ export class FleetDetailComponent implements OnInit {
   }
 
   initOSRM() {
-    
+    this.vectorLayer = new ol.layer.Vector({
+      source: this.vectorSource
+    });
+
     var mousePositionControl = new ol.control.MousePosition({
       coordinateFormat: ol.coordinate.createStringXY(4),
       projection: 'EPSG:4326',
       // comment the following two lines to have the mouse position
       // be placed within the map.
-      className: 'custom-mouse-position',
-      target: document.getElementById('mouse-position'),
-      undefinedHTML: '&nbsp;'
+      // className: 'custom-mouse-position',
+      // target: document.getElementById('mouse-position'),
+      // undefinedHTML: '&nbsp;'
     });
-
 
     this.osrm = new ol.Map({
       target: 'map',
@@ -346,23 +370,91 @@ export class FleetDetailComponent implements OnInit {
       layers: [
         new ol.layer.Tile({
           source: new ol.source.OSM()
-        })
+        }),
+        this.vectorLayer
       ],
       view: new ol.View({
-        center: ol.proj.fromLonLat([73.8567, 18.5204]),
-        zoom: 8
+        center: ol.proj.fromLonLat([51.1839, 25.3548]),
+        zoom: 9
       })
     });
 
-    this.osrm.on('click', function (args) {
-      console.log(args.coordinate);
-      var lonlat = ol.proj.transform(args.coordinate, 'EPSG:3857', 'EPSG:4326');
-      console.log(lonlat);
-      
-      var lon = lonlat[0];
-      var lat = lonlat[1];
-      alert(`lat: ${lat} long: ${lon}`);
+
+    let x = this;
+    this.osrm.on('click', function(evt){
+      x.getNearest(evt.coordinate).then(function(coord_street){
+        var last_point = this.connectingPoints[this.connectingPoints.length - 1];
+        var points_length = this.connectingPoints.push(coord_street);
+    
+        this.createFeature(coord_street);
+    
+        // if (points_length < 2) {
+        //   msg_el.innerHTML = 'Click to add another point';
+        //   return;
+        // }
+    
+        //get the route
+        var point1 = last_point.join();
+        // var point2 = coord_street.join();
+        
+        // fetch(this.url_osrm_route + point1 + ';' + point2).then(function(r) { 
+        //   return r.json();
+        // }).then(function(json) {
+          // if(json.code !== 'Ok') {
+          //   msg_el.innerHTML = 'No route found.';
+          //   return;
+          // }
+          // msg_el.innerHTML = 'Route added';
+          //points.length = 0;
+        //   this.createRoute(json.routes[0].geometry);
+        // });
+      });
     });
+
+  }
+  
+  getNearest (coord){
+    var coord4326 = this.to4326(coord);    
+    return new Promise(function(resolve, reject) {
+      //make sure the coord is on street
+      fetch(this.url_osrm_nearest + coord4326.join()).then(function(response) { 
+        // Convert to JSON
+        return response.json();
+      }).then(function(json) {
+        if (json.code === 'Ok') resolve(json.waypoints[0].location);
+        else reject();
+      });
+    });
+  }
+
+  createFeature (coord) {
+    var feature = new ol.Feature({
+      type: 'place',
+      geometry: new ol.geom.Point(ol.proj.fromLonLat(coord))
+    });
+    feature.setStyle(this.styles.icon);
+    this.vectorSource.addFeature(feature);
+  }
+
+  createRoute (polyline) {
+    // route is ol.geom.LineString
+    var route = new ol.format.Polyline({
+      factor: 1e5
+    }).readGeometry(polyline, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857'
+    });
+    var feature = new ol.Feature({
+      type: 'route',
+      geometry: route
+    });
+    feature.setStyle(this.styles.route);
+    this.vectorSource.addFeature(feature);
+  }
+  to4326 (coord) {
+    return ol.proj.transform([
+      parseFloat(coord[0]), parseFloat(coord[1])
+    ], 'EPSG:3857', 'EPSG:4326');
   }
 
 
@@ -1332,6 +1424,9 @@ export class FleetDetailComponent implements OnInit {
     params['ignition'] = true;
 
     this.displayMapTrailCheck = false;
+    this.trailLoader = {
+      visibility: true
+    }
 
     // params.start_datetime += ' 00:00:00';
     // params.end_datetime += ' 23:59:59';
@@ -1348,6 +1443,10 @@ export class FleetDetailComponent implements OnInit {
       // else ratio = 1;
 
       this.getTotalDistance = apiResponse['data'];
+
+      this.trailLoader = {
+        visibility: false
+      }
 
       this.displayMapTrailCheck = true;
       // this.distance_travelled = ((this.getTotalDistance.total_distance || 0) / 1000).toFixed(2);
