@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { format, isValid } from 'date-fns';
@@ -129,6 +130,9 @@ export class FleetDetailComponent implements OnInit {
   @ViewChild('jobTrailMap') gmap: GoogleMapComponent;
   showMarkersForTrail = false;
   showMarkersForTrail2 = false;
+  trailLoader = {
+    visibility: false
+  }
 
   lastUpdatedCard;
 
@@ -203,7 +207,6 @@ export class FleetDetailComponent implements OnInit {
   monthfuelfilledTotal=0;
   monthdistance=0;
   monthmileage=0;
-
   connectingPoints = [];
   vectorSource = new ol.source.Vector();
   vectorLayer;
@@ -225,7 +228,8 @@ export class FleetDetailComponent implements OnInit {
     })
   };
 
-  mileageFilter = [{ value: '', label: '' }];
+
+  mileageFilter = []
   monthName = [{ id: 'January', name: "January" }, { id: 'February', name: "February" }, { id: 'March', name: "March" }, { id: 'April', name: "April" }, { id: 'May', name: "May" }, { id: 'June', name: "June" }, { id: 'July', name: "July" }, { id: 'August', name: "August" }, { id: 'September', name: "September" }, { id: 'October', name: "October" }, { id: 'November', name: "November" }, { id: 'December', name: "December" }];
 
   constructor(private truckService: TruckService,
@@ -335,6 +339,8 @@ export class FleetDetailComponent implements OnInit {
     setTimeout(() => {
       this.getFleetJobSummary(this.entityId);
     }, 200)
+
+    // this.initOSRM()
 
     // this.getMaintanceTypeCategory(this.entityId);
   }
@@ -451,6 +457,7 @@ export class FleetDetailComponent implements OnInit {
     ], 'EPSG:3857', 'EPSG:4326');
   }
 
+
   onYearMonthChange(event) {
     if(event==''){
       this.onYearMonthChange(this.currentyear)
@@ -493,6 +500,13 @@ export class FleetDetailComponent implements OnInit {
 
   }
   onMonthChange(event) {
+    if(event==""){
+      this.MileageForm.controls.month.setValue('');
+      this.MileageForm.controls.year.setValue('');
+      this.onYearMonthChange(this.currentyear);
+      this.FilterTypeTable=1;
+      
+    }else{
     this.monthData=[];
      this.monthfuelfilledTotal=0;
      this.monthdistance=0;
@@ -523,7 +537,7 @@ export class FleetDetailComponent implements OnInit {
       
     })
     
-
+   }
   }
 
 
@@ -572,16 +586,6 @@ export class FleetDetailComponent implements OnInit {
 
   ngAfterViewInit() {
     this.initMap();
-  }
-  
-  getSelectedTab(tab){
-    if (tab.index === 1) {
-      setTimeout(() => {
-        // this.initOSRM()
-      }, 300);
-    } else {
-      this.osrm = null;
-    }
   }
 
   initMap() {
@@ -1420,6 +1424,9 @@ export class FleetDetailComponent implements OnInit {
     params['ignition'] = true;
 
     this.displayMapTrailCheck = false;
+    this.trailLoader = {
+      visibility: true
+    }
 
     // params.start_datetime += ' 00:00:00';
     // params.end_datetime += ' 23:59:59';
@@ -1436,6 +1443,10 @@ export class FleetDetailComponent implements OnInit {
       // else ratio = 1;
 
       this.getTotalDistance = apiResponse['data'];
+
+      this.trailLoader = {
+        visibility: false
+      }
 
       this.displayMapTrailCheck = true;
       // this.distance_travelled = ((this.getTotalDistance.total_distance || 0) / 1000).toFixed(2);

@@ -63,6 +63,7 @@ export class ReportingButtonsComponent implements OnInit {
   @Input() showLabel?= false;
   @Input() hideCalendar?= false;
   @Input() btnsPosition?= 'pull-right margin-right-20';
+  @Input() makeDisable?;
 
   date1: Date;
 
@@ -130,6 +131,14 @@ export class ReportingButtonsComponent implements OnInit {
     }
     this.goBtnClicked();
 
+  }
+
+  ngOnChanges(): void {
+    if (this.makeDisable?.visibility) {
+      this.go = false;
+    } else {
+      this.go = true;
+    }
   }
 
   weekClicked(type) {
