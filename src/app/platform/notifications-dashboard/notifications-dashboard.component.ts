@@ -78,9 +78,9 @@ export class NotificationsDashboardComponent implements OnInit {
     let dateRange = event[0];
     const start_date = DateUtils.getYYYYMMDD(dateRange[0].toString()) + ' 00:00:00';
     const end_date = DateUtils.getYYYYMMDD(dateRange[1].toString()) + ' 23:59:59';
-    this.selectedDate[0] = start_date;
-    this.selectedDate[1] = end_date;
-    this.getNotifications(start_date, end_date);
+    this.selectedDate[0] = DateUtils.getUtcDateTimeStart(start_date);
+    this.selectedDate[1] = DateUtils.getUtcDateTimeStart(end_date);
+    this.getNotifications(DateUtils.getUtcDateTimeStart(start_date), DateUtils.getUtcDateTimeStart(end_date));
   }
 
   getNotifications(start_date?, end_date?, sortParams?) {

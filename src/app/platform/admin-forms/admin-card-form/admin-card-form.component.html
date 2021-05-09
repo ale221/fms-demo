@@ -73,13 +73,13 @@
                                     <td class="col-md-2" style="vertical-align: inherit;">
                                         <div class="  theme-color">
                                             <div class="onoffswitch ">
-                                                <input type="checkbox" (change)="setCardId(item, $event)"
+                                                <input type="checkbox" (change)="setCardId(item, $event, i)"
                                                     name="onoffswitch{{i}}" class="onoffswitch-checkbox"
-                                                    id="onoffswitch{{i}}" [value]="item.is_selected"
-                                                    [checked]="item.is_selected">
+                                                    id="onoffswitch{{i}}" [(value)]="item.is_selected"
+                                                    [(checked)]="item.is_selected">
+
                                                 <label class="onoffswitch-label" for="onoffswitch{{i}}">
                                                     <span class="onoffswitch-inner"></span>
-                                                    <!-- <span class="onoffswitch-switch"></span> -->
                                                 </label>
                                             </div>
                                         </div>
