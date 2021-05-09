@@ -407,35 +407,42 @@ export class FleetDetailComponent implements OnInit {
 
   }
   onMonthChange(event) {
-    this.monthData=[];
-     this.monthfuelfilledTotal=0;
-     this.monthdistance=0;
-     this.monthmileage=0;
-
-    this.FilterTypeTable=2;
-    this.selectedMonth=event;
-    this.truckService.getmonthData(this.selectedYear,this.entityId,event).subscribe((data: any) => {
-      console.log("getmonthData ", data)
-      this.monthData=data.data;
-      
-      for(let i=0;i<this.monthData.length;i++){
-        this.monthfuelfilledTotal = this.monthData[i]?.fuel_filled + this.monthfuelfilledTotal;
-        this.monthdistance = this.monthData[i]?.distance + this.monthdistance;
-        if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
-          this.monthmileage=0;
-        }else{
-          this.monthmileage=this.monthdistance/this.monthfuelfilledTotal;
-        }
-      }
-      let lastRow = {
-        week: 'Total',
-        fuel_filled: this.monthfuelfilledTotal,
-        distance: this.monthdistance,
-        mileage: this.monthmileage
-      }
-      this.monthData.push(lastRow);
-      
-    })
+    if(event==""){
+      this.MileageForm.controls.month.setValue('');
+      this.onYearMonthChange(this.currentyear);
+      this.FilterTypeTable=1;
+    }else{
+      this.monthData=[];
+      this.monthfuelfilledTotal=0;
+      this.monthdistance=0;
+      this.monthmileage=0;
+ 
+     this.FilterTypeTable=2;
+     this.selectedMonth=event;
+     this.truckService.getmonthData(this.selectedYear,this.entityId,event).subscribe((data: any) => {
+       console.log("getmonthData ", data)
+       this.monthData=data.data;
+       
+       for(let i=0;i<this.monthData.length;i++){
+         this.monthfuelfilledTotal = this.monthData[i]?.fuel_filled + this.monthfuelfilledTotal;
+         this.monthdistance = this.monthData[i]?.distance + this.monthdistance;
+         if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
+           this.monthmileage=0;
+         }else{
+           this.monthmileage=this.monthdistance/this.monthfuelfilledTotal;
+         }
+       }
+       let lastRow = {
+         week: 'Total',
+         fuel_filled: this.monthfuelfilledTotal,
+         distance: this.monthdistance,
+         mileage: this.monthmileage
+       }
+       this.monthData.push(lastRow);
+       
+     })
+    }
+    
     
 
   }
