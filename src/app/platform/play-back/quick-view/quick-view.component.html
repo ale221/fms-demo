@@ -18,7 +18,7 @@
           <div class="tab-content">
             <app-filters activePage="playback" [resetFilters]="resetFilters"></app-filters>
             <div class="form-group margin-bottom-0 text-center" style="padding-bottom: 25px;">
-              <button (click)="onSearch()" href="" type="submit" class="btn btn-success btn-round btn-block1"> <i
+              <button (click)="onSearch()" href="" [disabled]="playbackLoader" type="submit" class="btn btn-success btn-round btn-block1"> <i
                   class=" ri-search-line "></i>
                 Search</button>
               <button (click)="onClearSearch()" href=" " class="btn btn-default btn-round "> <i

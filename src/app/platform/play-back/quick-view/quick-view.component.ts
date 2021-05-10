@@ -217,6 +217,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   stop_time;
   played: boolean = false;
   show_controls: boolean = false;
+  playbackLoader = false;
   state: string = null;
   speed_marker: number = 500;
   zoomLevel = 15;
@@ -270,6 +271,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
       return false;
     }
 
+    this.playbackLoader = true;
     this.setupReport(this.filtersObject);
     this.getTravelHistoryListing(this.filtersTravelHistory);
 
@@ -300,9 +302,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
-  })
+    })
 
     this.packageType = PackageType;
     this.loggedInUser = this.authService.getUser();
@@ -967,11 +967,13 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
             visibility: false,
             dataError: false
           }
+          this.context.playbackLoader = false;
         }
 
         onNext(apiResponse: any): void {
           const markers = [];
           const infoWindows = [];
+          this.context.playbackLoader = false;
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.mapLoader = {
               visibility: false,
