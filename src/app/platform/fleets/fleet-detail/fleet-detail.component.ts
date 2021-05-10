@@ -423,7 +423,6 @@ export class FleetDetailComponent implements OnInit {
       });
     });
     */
-
   }
   
   getNearest (coord){
@@ -1017,8 +1016,8 @@ export class FleetDetailComponent implements OnInit {
         // new Item('Location', truck.location_address)
       ];
     }
-    this.speedoMeter(this.lastSpeed, false);
     this.updateInfoWindow();
+    this.speedoMeter(this.lastSpeed, false);
   }
 
   updateInvalidSignalData(truck) {
@@ -1169,7 +1168,7 @@ export class FleetDetailComponent implements OnInit {
         </tr>`;
     });
     info += '</tbody> </table>';
-    this.updateInfoWindowContent(info)
+    this.infoWindow.setContent(info);
   }
 
 
@@ -1545,10 +1544,11 @@ export class FleetDetailComponent implements OnInit {
         if (this.violationMarkers && this.violationMarkers.length > 1) {
           let selectedPackage = JSON.parse(localStorage.getItem('user'));
           selectedPackage = selectedPackage.package[0]
+          // this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
           if (selectedPackage.package_id === this.packageType.png) {
             this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
           } else {
-              this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+            this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
           }
         } else {
           this.swalService.getWarningSwal("No data found against this vehicle");
@@ -1865,7 +1865,7 @@ export class FleetDetailComponent implements OnInit {
       // using chart.setTimeout method as the timeout will be disposed together with a chart
       this.speedChart.setTimeout(randomValue, 2000);
       function randomValue() {
-        if (speed > 0) {
+        if (speed || speed === 0) {
           hand.showValue(speed, 1000, am4core.ease.cubicOut);
           // speedChart.setTimeout(randomValue, 2000);
         }
@@ -1976,6 +1976,9 @@ createSnapToRoad(locations, info, zoom = null) {
   processSnapToRoadResponse(arrayToProcess){
     var points = arrayToProcess;
 
+    let startPoint = points[0]
+    let endPoint = points[points.length - 1];
+
     for (var i = 0; i < points.length; i++) {
       if (points[i]) {
         points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
@@ -1997,50 +2000,55 @@ createSnapToRoad(locations, info, zoom = null) {
         })
     });
 
-    const startIcon = 'assets/images/iol/icon-map-pin-start.png';
-    const endIcon = 'assets/images/iol/icon-map-pin-end.png';
-
-    var iconFeatures=[];
+    const startIcon = 'assets/images/iol/map-marker-green.png';
+    const endIcon = 'assets/images/iol/map-marker-red.png';
 
     var iconFeature = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.transform([-72.0704, 46.678], 'EPSG:4326',     
-      'EPSG:3857')),
-      name: 'Null Island',
-      population: 4000,
-      rainfall: 500
+      geometry: new ol.geom.Point(ol.proj.transform(startPoint, 'EPSG:4326', 'EPSG:3857'))
     });
-
     var iconFeature1 = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.transform([-73.1234, 45.678], 'EPSG:4326',     
-      'EPSG:3857')),
-      name: 'Null Island Two',
-      population: 4001,
-      rainfall: 501
-    });
-
-    iconFeatures.push(iconFeature);
-    iconFeatures.push(iconFeature1);
-
-    var vectorSource = new ol.source.Vector({
-      features: iconFeatures //add an array of features
+      geometry: new ol.geom.Point(ol.proj.transform(endPoint, 'EPSG:4326', 'EPSG:3857'))
     });
 
     var iconStyle = new ol.style.Style({
-      image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-        anchor: [0.5, 46],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'pixels',
-        opacity: 0.75,
-        src: startIcon
+      image: new ol.style.Icon(({
+          anchor: [0.5, 32],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          opacity: 1,
+          src: startIcon
       }))
     });
 
-    var vectorLayer = new ol.layer.Vector({
-      source: vectorSource,
-      style: iconStyle
+    iconFeature.setStyle(iconStyle);
+
+    var vectorSource = new ol.source.Vector({
+        features: [iconFeature]
     });
 
-    this.osrm.addLayer(vectorLayer)
+    var iconStyle1 = new ol.style.Style({
+      image: new ol.style.Icon(({
+          anchor: [0.5, 32],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          opacity: 1,
+          src: endIcon
+      }))
+    });
+
+    iconFeature1.setStyle(iconStyle1);
+
+    var vectorSource1 = new ol.source.Vector({
+        features: [iconFeature1]
+    });
+
+    this.osrm.addLayer(new ol.layer.Vector({
+      source: vectorSource
+    })); 
+
+    this.osrm.addLayer(new ol.layer.Vector({
+      source: vectorSource1
+    })); 
 
     this.osrm.addLayer(vectorLineLayer);
   }
