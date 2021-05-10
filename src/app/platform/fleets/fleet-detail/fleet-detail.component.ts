@@ -424,6 +424,34 @@ export class FleetDetailComponent implements OnInit {
     });
     */
 
+    const startIcon = 'assets/images/iol/icon-map-pin-start.png';
+    const endIcon = 'assets/images/iol/icon-map-pin-end.png';
+
+    var iconFeature = new ol.Feature({
+      geometry: new ol.geom.Point(ol.proj.transform([51.1839, 25.3548], 'EPSG:4326', 'EPSG:3857'))
+    });
+
+    var iconStyle = new ol.style.Style({
+      image: new ol.style.Icon(({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          opacity: 1,
+          src: startIcon
+      }))
+    });
+
+    iconFeature.setStyle(iconStyle);
+
+    var vectorSource = new ol.source.Vector({
+        features: [iconFeature]
+    });
+
+    this.osrm.addLayer(new ol.layer.Vector({
+      source: vectorSource
+    })
+    )
+
   }
   
   getNearest (coord){
@@ -514,7 +542,7 @@ export class FleetDetailComponent implements OnInit {
   selectedTab(tab) {
     if (tab.index === 1) {
       setTimeout(() => {
-        // this.initOSRM();
+        this.initOSRM();
       }, 500);
     }
   }
@@ -1545,11 +1573,11 @@ export class FleetDetailComponent implements OnInit {
         if (this.violationMarkers && this.violationMarkers.length > 1) {
           let selectedPackage = JSON.parse(localStorage.getItem('user'));
           selectedPackage = selectedPackage.package[0]
-          if (selectedPackage.package_id === this.packageType.png) {
-            this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
-          } else {
-              this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
-          }
+          this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+          // if (selectedPackage.package_id === this.packageType.png) {
+          //   this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
+          // } else {
+          // }
         } else {
           this.swalService.getWarningSwal("No data found against this vehicle");
         }
@@ -2000,47 +2028,33 @@ createSnapToRoad(locations, info, zoom = null) {
     const startIcon = 'assets/images/iol/icon-map-pin-start.png';
     const endIcon = 'assets/images/iol/icon-map-pin-end.png';
 
-    var iconFeatures=[];
-
     var iconFeature = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.transform([-72.0704, 46.678], 'EPSG:4326',     
-      'EPSG:3857')),
+      geometry: new ol.geom.Point(ol.proj.transform([-73.1234, 45.678], 'EPSG:4326', 'EPSG:3857')),
       name: 'Null Island',
       population: 4000,
       rainfall: 500
     });
 
-    var iconFeature1 = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.transform([-73.1234, 45.678], 'EPSG:4326',     
-      'EPSG:3857')),
-      name: 'Null Island Two',
-      population: 4001,
-      rainfall: 501
-    });
-
-    iconFeatures.push(iconFeature);
-    iconFeatures.push(iconFeature1);
-
-    var vectorSource = new ol.source.Vector({
-      features: iconFeatures //add an array of features
-    });
-
     var iconStyle = new ol.style.Style({
-      image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-        anchor: [0.5, 46],
-        anchorXUnits: 'fraction',
-        anchorYUnits: 'pixels',
-        opacity: 0.75,
-        src: startIcon
+      image: new ol.style.Icon(({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          size: [48, 48],
+          opacity: 1,
+          src: '//cdn.rawgit.com/openlayers/ol3/master/examples/data/icon.png'
       }))
     });
 
-    var vectorLayer = new ol.layer.Vector({
-      source: vectorSource,
-      style: iconStyle
+    iconFeature.setStyle(iconStyle);
+
+    var vectorSource = new ol.source.Vector({
+        features: [iconFeature]
     });
 
-    this.osrm.addLayer(vectorLayer)
+    this.osrm.addLayer(new ol.layer.Vector({
+      source: vectorSource
+    })); 
 
     this.osrm.addLayer(vectorLineLayer);
   }
