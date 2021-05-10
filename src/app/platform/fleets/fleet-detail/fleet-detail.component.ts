@@ -755,7 +755,7 @@ export class FleetDetailComponent implements OnInit {
       marker.addListener('mouseout', event => {
         infowindow.close();
       });
-
+      this.infoWindow = infowindow;
     }
 
 
@@ -764,7 +764,6 @@ export class FleetDetailComponent implements OnInit {
       'transform': 'rotate(' + heading + 'deg)'
     });
 
-    this.infoWindow = infowindow;
     this.marker = marker;
     if (this.map && this.markerCount === 0) {
       this.map.setCenter(parsedPosition);
