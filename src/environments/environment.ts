@@ -11,7 +11,7 @@ export const environment = {
   sanpToRoadUrl: 'https://staging.iot.vodafone.com.qa:5000/match/v1/driving/', //dev
   translateUrl: '/assets/i18n/',
   // signalR: 'https://func-prod-fms.azurewebsites.net/api/'
-  signalR: 'https://broadcaster.iot.vodafone.com.qa'
+  signalR: 'https://staging.broadcaster.iot.vodafone.com.qa'
 };
 
 /*
