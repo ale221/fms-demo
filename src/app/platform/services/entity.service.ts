@@ -388,4 +388,11 @@ export class EntityService {
     const url = `/iof/driver_group_tab/?${params}`;
     return this.http.get<any>(url, params);
   }
+
+
+
+  downloadXLS(param) {
+    const url = `/iof/fleet_xls?${param}`
+    return this.http.get<any>(url);
+  }
 }
