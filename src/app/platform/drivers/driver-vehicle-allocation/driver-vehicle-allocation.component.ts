@@ -746,7 +746,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   formTitle = 'Create Allocation';
 
   clearForm(data = null) {
-    console.log("coming in clr form");
+    this.selectedUserID = '';
     this.driverForm.reset();
     // this.removeImage(data);
     this.enableSubmitButton();

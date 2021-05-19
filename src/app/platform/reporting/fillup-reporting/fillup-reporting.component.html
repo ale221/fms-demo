@@ -16,7 +16,7 @@
   </div>
 </div>
 
-<app-reporting-buttons [selected]="'month'" [calendarDimension]="'col-sm-6'" [type]="'trail'" [timeRange]="true"
+<app-reporting-buttons  [selected]="'month'" [calendarDimension]="'col-sm-6'" [type]="'trail'" [timeRange]="true"
   [hideBtn]="'today yesterday week month'" (btnClicked)="setupReport($event)" (generate)="generatePDFReport('fillup')">
 </app-reporting-buttons>
 
