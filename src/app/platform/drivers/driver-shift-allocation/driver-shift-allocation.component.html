@@ -56,7 +56,7 @@
                               <div class="form-group">
                                 <label class="control-label">Shift<span class="text-danger2">*</span></label>
                                 <p-dropdown [options]="shifts_list" styleClass="prime-dropdown"
-                                  filterPlaceholder="Search" formControlName="shift_id" placeholder="Select Shift">
+                                  filterPlaceholder="Search" formControlName="shift_id" (onChange)="selectShift($event)" placeholder="Select Shift">
                                 </p-dropdown>
                               </div>
                               <span class="error-message" style="margin-top: -16px"
@@ -74,7 +74,7 @@
                               <div class="form-group">
                                 <label class="control-label">Start Date<span class="text-danger2">*</span></label>
                                 <p-calendar [formControlName]="'start_date'" [monthNavigator]="true"
-                                  [yearNavigator]="true" [minDate]="currentDate" showTime="true" hourFormat="24"
+                                  [yearNavigator]="true" [minDate]="minCurrentDate" [maxDate]="maxCurrentDate" showTime="true" hourFormat="24"
                                   [yearRange]="'1950:'+(currentDate.getFullYear())" placeholder="MM/DD/YYYY"
                                   styleClass="prime-datetime">
                                 </p-calendar>
@@ -94,7 +94,7 @@
                               <div class="form-group">
                                 <label class="control-label">End Date<span class="text-danger2">*</span></label>
                                 <p-calendar [formControlName]="'end_date'" [monthNavigator]="true"
-                                  [yearNavigator]="true" [minDate]="currentDate" showTime="true" hourFormat="24"
+                                  [yearNavigator]="true" [minDate]="minCurrentDate" [maxDate]="maxCurrentDate" showTime="true" hourFormat="24"
                                   [yearRange]="'1950:'+(currentDate.getFullYear())" placeholder="MM/DD/YYYY"
                                   styleClass="prime-datetime">
                                 </p-calendar>
@@ -178,7 +178,6 @@
                     </p-dropdown>
                   </div>
                   <div class="form-group margin-bottom-10">
-
 
                     <p-dropdown [options]="drivers_list" formControlName="selectedDriver" name="selectedDriver"
                       (onChange)="selectDriverDropDownChange($event)" styleClass="prime-dropdown"
