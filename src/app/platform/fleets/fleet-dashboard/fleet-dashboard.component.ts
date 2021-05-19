@@ -39,6 +39,8 @@ import { PackageType } from 'src/app/core/enum/packages-enum';
 import { User } from 'src/app/core/model/user';
 import { DrawerService } from 'src/app/core/services/drawer.service';
 import { SignalRService } from 'src/app/Services/signal-r.service';
+import { HttpHeaders } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 declare var $: any;
 declare var google: any;
 
@@ -180,7 +182,7 @@ export class FleetDashboardComponent implements OnInit {
   loadingFilter = true;
   add_btn = 0;
   search_by = ' Search by Vehicle';
-  statusID=[];
+  statusID = [];
 
   mapData;
   // @ViewChild("map") map: GoogleMapComponent;
@@ -194,6 +196,8 @@ export class FleetDashboardComponent implements OnInit {
   geoZones;
   useCaseId = 0;
   packageType: any;
+
+  fileUrl;
   constructor(private entityService: EntityService,
     public gotoService: GotoPageService,
     private route: ActivatedRoute,
@@ -204,8 +208,9 @@ export class FleetDashboardComponent implements OnInit {
     private swalService: SwalService,
     public formBuilder: FormBuilder,
     private authService: AuthService,
-    private drawerService:DrawerService,
-    private signalRService: SignalRService
+    private drawerService: DrawerService,
+    private signalRService: SignalRService,
+    private sanitizer: DomSanitizer
   ) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
@@ -221,12 +226,12 @@ export class FleetDashboardComponent implements OnInit {
 
   ngOnInit() {
     // this.signalRService.init();
-    
-    this.drawerService.getValue().subscribe(res=>{
-      this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
-  })
+
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
+      console.log("ressssssssssssss1", res);
+      console.log("ressssssssssssss2", this.sidebarCheck);
+    })
     this.add_btn = 0;
     this.loadDashboardCards(hypernymModules[6], DashboardEnum.Fleets);
     this.getVehiclesListing(this.filters);
@@ -288,13 +293,13 @@ export class FleetDashboardComponent implements OnInit {
             this.dataSource = dataSource.filter(function (data) {
               return data.online_status === true || data.online_status === false;
             });
-            this.statusID=[];
-            for(let i=1;i<=this.dataSource.length;i++){
+            this.statusID = [];
+            for (let i = 1; i <= this.dataSource.length; i++) {
 
-              this.statusID.push(this.dataSource[i-1]['id']);
+              this.statusID.push(this.dataSource[i - 1]['id']);
             }
-            let check=this.statusID.toString();
-            this.filters['device_ids']=check;
+            let check = this.statusID.toString();
+            this.filters['device_ids'] = check;
             this.setExportUrls(this.filters);
             this.totalLength = this.dataSource.length;
           } else if (this.filters['status'].includes(1)) {
@@ -303,15 +308,15 @@ export class FleetDashboardComponent implements OnInit {
             this.dataSource = dataSource.filter(function (data) {
               return data.online_status === true;
             });
-            console.log("dataSourcedataSource2",this.dataSource);
-            this.statusID=[];
-            for(let i=1;i<=this.dataSource.length;i++){
+            console.log("dataSourcedataSource2", this.dataSource);
+            this.statusID = [];
+            for (let i = 1; i <= this.dataSource.length; i++) {
 
-              this.statusID.push(this.dataSource[i-1]['id']);
-             }
-             let check=this.statusID.toString();
-             this.filters['device_ids']=check;
-             this.setExportUrls(this.filters);
+              this.statusID.push(this.dataSource[i - 1]['id']);
+            }
+            let check = this.statusID.toString();
+            this.filters['device_ids'] = check;
+            this.setExportUrls(this.filters);
 
 
             this.totalLength = this.dataSource.length;
@@ -324,13 +329,13 @@ export class FleetDashboardComponent implements OnInit {
             this.dataSource = dataSource.filter(function (data) {
               return data.online_status === false;
             });
-            this.statusID=[];
-            for(let i=1;i<=this.dataSource.length;i++){
+            this.statusID = [];
+            for (let i = 1; i <= this.dataSource.length; i++) {
 
-              this.statusID.push(this.dataSource[i-1]['id']);
+              this.statusID.push(this.dataSource[i - 1]['id']);
             }
-            let check=this.statusID.toString();
-            this.filters['device_ids']=check;
+            let check = this.statusID.toString();
+            this.filters['device_ids'] = check;
             this.setExportUrls(this.filters);
             this.totalLength = this.dataSource.length;
             this.trucks = this.mapData.filter(function (data) {
@@ -355,8 +360,12 @@ export class FleetDashboardComponent implements OnInit {
       }
       this.loggedInUser = this.authService.getUser();
       this.customerID = this.loggedInUser.customer.id;
-      this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID +'&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // this.downloadXLS(this.downloadableLink)
       this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // this.downloadPDF(this.downloadableLink1)
     });
     this.getDetailedReportListing(this.filtersDetailedReport);
     this.getTravelHistoryListing(this.filtersTravelHistory);
@@ -445,6 +454,12 @@ export class FleetDashboardComponent implements OnInit {
       setTimeout(() => {
         this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?' + query + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
         this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?' + query + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // this.downloadableLink = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // this.downloadableLink1 = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // this.downloadXLS(this.downloadableLink);
+        // this.downloadPDF(this.downloadableLink1)
       }, 200);
 
       // this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + this.filters +'&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -988,7 +1003,7 @@ export class FleetDashboardComponent implements OnInit {
     }
   }*/
 
-  
+
   setupSignalR() {
     this.connection.start()
       .then((c) => {
@@ -1310,7 +1325,7 @@ export class FleetDashboardComponent implements OnInit {
 
   getSelectedWidgetOption(event) {
     if (event.reload) {
-      this.filters = { limit: 10, offset: 0, order_by: '', order: ''};
+      this.filters = { limit: 10, offset: 0, order_by: '', order: '' };
 
       this.getVehiclesListing(this.filters);
       this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
@@ -1359,5 +1374,28 @@ export class FleetDashboardComponent implements OnInit {
       this.signalRService.close();
       this.signalRSubscription.unsubscribe();
     }
+  }
+
+  downloadXLS(dowwn) {
+    console.log("Inside downloadXLS()== ", dowwn)
+
+    // let headers = new HttpHeaders();
+    // headers = headers.set('Accept', 'application/pdf');
+    // return this.http.get(url, { headers: headers, responseType: 'blob' as 'json' });
+
+
+    this.entityService.downloadXLS(dowwn).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/octet-stream' });
+      this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+    })
+  }
+
+  downloadPDF(dowwn) {
+    console.log("Inside downloadPDF()== ", dowwn)
+    // this.entityService.downloadPDF(dowwn).subscribe((apiResponse: any) => {
+
+    // })
   }
 }
