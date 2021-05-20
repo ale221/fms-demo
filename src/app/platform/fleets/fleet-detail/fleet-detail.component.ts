@@ -2108,8 +2108,8 @@ export class FleetDetailComponent implements OnInit {
 
       if (apiResponse.status === HttpStatusCodeEnum.Success) {
         // console.log("MAYYYYY-= ", apiResponse['data'].stops)
-        let test = apiResponse['data'].stops
-        let test2 = apiResponse['data'].stops[0].duration
+        // let test = apiResponse['data'].stops
+        // let test2 = apiResponse['data'].stops[0].duration
         if (apiResponse['data'].stops.length > 0) {
           this.idleDuration = apiResponse['data'].stops[0].duration;
         } else {
