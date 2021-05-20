@@ -87,7 +87,7 @@ export class FleetDetailComponent implements OnInit {
   sidebarCheck;
 
   snapForm: FormGroup;
-  MileageForm:FormGroup;
+  MileageForm: FormGroup;
 
   selectedPkg;
 
@@ -145,8 +145,8 @@ export class FleetDetailComponent implements OnInit {
 
   lastUpdatedCard;
 
-  displayedUserList = [ "id", "first_name", "last_name", "date_joined"]
-  displayedUserList2 = [ "id", "first_name", "last_name", "date_joined"]
+  displayedUserList = ["id", "first_name", "last_name", "date_joined"]
+  displayedUserList2 = ["id", "first_name", "last_name", "date_joined"]
 
   // Statistics
   trailDateRange: any[];
@@ -211,12 +211,12 @@ export class FleetDetailComponent implements OnInit {
   selectedMonth;
   FilterTypeTable;
   currentyear;
-  yearfuelFilledTotal=0;
-  yeardistance=0;
-  yearMileage=0;
-  monthfuelfilledTotal=0;
-  monthdistance=0;
-  monthmileage=0;
+  yearfuelFilledTotal = 0;
+  yeardistance = 0;
+  yearMileage = 0;
+  monthfuelfilledTotal = 0;
+  monthdistance = 0;
+  monthmileage = 0;
   connectingPoints = [];
   vectorSource = new ol.source.Vector();
   vectorLayer;
@@ -241,6 +241,7 @@ export class FleetDetailComponent implements OnInit {
 
   mileageFilter = []
   monthName = [{ id: 'January', name: "January" }, { id: 'February', name: "February" }, { id: 'March', name: "March" }, { id: 'April', name: "April" }, { id: 'May', name: "May" }, { id: 'June', name: "June" }, { id: 'July', name: "July" }, { id: 'August', name: "August" }, { id: 'September', name: "September" }, { id: 'October', name: "October" }, { id: 'November', name: "November" }, { id: 'December', name: "December" }];
+  idleDuration: any = null;
 
   constructor(private truckService: TruckService,
     private brandingService: BrandingService,
@@ -276,8 +277,9 @@ export class FleetDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+
     var year = new Date().getFullYear();
-    this.currentyear=new Date().getFullYear();
+    this.currentyear = new Date().getFullYear();
     var range = [];
     range.push(year);
     for (var i = 1; i < 30; i++) {
@@ -285,7 +287,7 @@ export class FleetDetailComponent implements OnInit {
       // this.mileageFilter.push(new PrimengDropdownItem(year - i, 'year - i'),)
     }
     // this.mileageFilter = range;
-    console.log("range== ", range);
+    // console.log("range== ", range);
 
     for (let i = 0; i < range.length; i++) {
       this.mileageFilter.push({ value: range[i], label: range[i] });
@@ -315,10 +317,8 @@ export class FleetDetailComponent implements OnInit {
 
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;
-      console.log("ressssssssssssss1", res);
-      console.log("ressssssssssssss2", this.sidebarCheck);
     })
-    console.log("jobTrailMap=== ", this.gmap);
+    // console.log("jobTrailMap=== ", this.gmap);
     this.packageType = PackageType;
     this.route.params.subscribe(params => {
       this.entityId = params['id'];
@@ -330,7 +330,7 @@ export class FleetDetailComponent implements OnInit {
     });
     this.MileageForm = this.formBuilder.group({
       month: '',
-      year:''
+      year: ''
     });
 
     this.breadcrumbService.getValue().subscribe(res => {
@@ -355,6 +355,8 @@ export class FleetDetailComponent implements OnInit {
     // this.initOSRM()
 
     // this.getMaintanceTypeCategory(this.entityId);
+
+    this.getMapTrailForIDLE();
   }
 
   initOSRM() {
@@ -424,23 +426,23 @@ export class FleetDetailComponent implements OnInit {
     });
     */
   }
-  
-  getNearest (coord){
-    var coord4326 = this.to4326(coord);  
-    let url_osrm_nearest = this.url_osrm_nearest;  
-    return new Promise(function(resolve, reject) {
+
+  getNearest(coord) {
+    var coord4326 = this.to4326(coord);
+    let url_osrm_nearest = this.url_osrm_nearest;
+    return new Promise(function (resolve, reject) {
       //make sure the coord is on street
-      fetch(url_osrm_nearest + coord4326.join()).then(function(response) { 
+      fetch(url_osrm_nearest + coord4326.join()).then(function (response) {
         // Convert to JSON
         return response.json();
-      }).then(function(json) {
+      }).then(function (json) {
         if (json.code === 'Ok') resolve(json.waypoints[0].location);
         else reject();
       });
     });
   }
 
-  createFeature (coord) {
+  createFeature(coord) {
     var feature = new ol.Feature({
       type: 'place',
       geometry: new ol.geom.Point(ol.proj.fromLonLat(coord))
@@ -449,7 +451,7 @@ export class FleetDetailComponent implements OnInit {
     this.vectorSource.addFeature(feature);
   }
 
-  createRoute (polyline) {
+  createRoute(polyline) {
     // route is ol.geom.LineString
     var route = new ol.format.Polyline({
       factor: 1e5
@@ -464,7 +466,7 @@ export class FleetDetailComponent implements OnInit {
     feature.setStyle(this.styles.route);
     this.vectorSource.addFeature(feature);
   }
-  to4326 (coord) {
+  to4326(coord) {
     return ol.proj.transform([
       parseFloat(coord[0]), parseFloat(coord[1])
     ], 'EPSG:3857', 'EPSG:4326');
@@ -472,40 +474,40 @@ export class FleetDetailComponent implements OnInit {
 
 
   onYearMonthChange(event) {
-    if(event==''){
+    if (event == '') {
       this.onYearMonthChange(this.currentyear)
-    }else{
-     this.milageData=[];
-     this.yearfuelFilledTotal=0;
-     this.yeardistance=0;
-     this.yearMileage=0;
-      console.log("event",event);
-    this.FilterTypeTable=1;
-    this.selectedYear=event;
-    this.selectedMonth='';
-    this.MileageForm.controls.month.setValue('');
-    this.truckService.getMilageData(event,this.entityId).subscribe((data: any) => {
-      // console.log("getMilageData ", data)
-      this.milageData=data.data;
-      console.log("milageData ", this.milageData)
-      for(let i=0;i<this.milageData.length;i++){
-        this.yearfuelFilledTotal = this.milageData[i]?.fuel_filled + this.yearfuelFilledTotal;
-        this.yeardistance = this.milageData[i]?.distance + this.yeardistance;
-        if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
-          this.yearMileage=0;
-        }else{
-          this.yearMileage=this.yeardistance/this.yearfuelFilledTotal;
+    } else {
+      this.milageData = [];
+      this.yearfuelFilledTotal = 0;
+      this.yeardistance = 0;
+      this.yearMileage = 0;
+      console.log("event", event);
+      this.FilterTypeTable = 1;
+      this.selectedYear = event;
+      this.selectedMonth = '';
+      this.MileageForm.controls.month.setValue('');
+      this.truckService.getMilageData(event, this.entityId).subscribe((data: any) => {
+        // console.log("getMilageData ", data)
+        this.milageData = data.data;
+        console.log("milageData ", this.milageData)
+        for (let i = 0; i < this.milageData.length; i++) {
+          this.yearfuelFilledTotal = this.milageData[i]?.fuel_filled + this.yearfuelFilledTotal;
+          this.yeardistance = this.milageData[i]?.distance + this.yeardistance;
+          if (this.monthfuelfilledTotal == 0 && this.monthdistance == 0) {
+            this.yearMileage = 0;
+          } else {
+            this.yearMileage = this.yeardistance / this.yearfuelFilledTotal;
+          }
+
         }
-       
-      }
-      let lastRow = {
-        month: 'Total',
-        fuel_filled: this.yearfuelFilledTotal,
-        distance: this.yeardistance,
-        mileage: this.yearMileage
-      }
-      this.milageData.push(lastRow);
-    })
+        let lastRow = {
+          month: 'Total',
+          fuel_filled: this.yearfuelFilledTotal,
+          distance: this.yeardistance,
+          mileage: this.yearMileage
+        }
+        this.milageData.push(lastRow);
+      })
 
     }
   }
@@ -520,44 +522,44 @@ export class FleetDetailComponent implements OnInit {
 
 
   onMonthChange(event) {
-    if(event==""){
+    if (event == "") {
       this.MileageForm.controls.month.setValue('');
       this.MileageForm.controls.year.setValue('');
       this.onYearMonthChange(this.currentyear);
-      this.FilterTypeTable=1;
-      
-    }else{
-    this.monthData=[];
-     this.monthfuelfilledTotal=0;
-     this.monthdistance=0;
-     this.monthmileage=0;
+      this.FilterTypeTable = 1;
 
-    this.FilterTypeTable=2;
-    this.selectedMonth=event;
-    this.truckService.getmonthData(this.selectedYear,this.entityId,event).subscribe((data: any) => {
-      console.log("getmonthData ", data)
-      this.monthData=data.data;
-      
-      for(let i=0;i<this.monthData.length;i++){
-        this.monthfuelfilledTotal = this.monthData[i]?.fuel_filled + this.monthfuelfilledTotal;
-        this.monthdistance = this.monthData[i]?.distance + this.monthdistance;
-        if(this.monthfuelfilledTotal==0 && this.monthdistance==0){
-          this.monthmileage=0;
-        }else{
-          this.monthmileage=this.monthdistance/this.monthfuelfilledTotal;
+    } else {
+      this.monthData = [];
+      this.monthfuelfilledTotal = 0;
+      this.monthdistance = 0;
+      this.monthmileage = 0;
+
+      this.FilterTypeTable = 2;
+      this.selectedMonth = event;
+      this.truckService.getmonthData(this.selectedYear, this.entityId, event).subscribe((data: any) => {
+        console.log("getmonthData ", data)
+        this.monthData = data.data;
+
+        for (let i = 0; i < this.monthData.length; i++) {
+          this.monthfuelfilledTotal = this.monthData[i]?.fuel_filled + this.monthfuelfilledTotal;
+          this.monthdistance = this.monthData[i]?.distance + this.monthdistance;
+          if (this.monthfuelfilledTotal == 0 && this.monthdistance == 0) {
+            this.monthmileage = 0;
+          } else {
+            this.monthmileage = this.monthdistance / this.monthfuelfilledTotal;
+          }
         }
-      }
-      let lastRow = {
-        week: 'Total',
-        fuel_filled: this.monthfuelfilledTotal,
-        distance: this.monthdistance,
-        mileage: this.monthmileage
-      }
-      this.monthData.push(lastRow);
-      
-    })
-    
-   }
+        let lastRow = {
+          week: 'Total',
+          fuel_filled: this.monthfuelfilledTotal,
+          distance: this.monthdistance,
+          mileage: this.monthmileage
+        }
+        this.monthData.push(lastRow);
+
+      })
+
+    }
   }
 
 
@@ -882,7 +884,7 @@ export class FleetDetailComponent implements OnInit {
     }
   }*/
 
-  
+
   private setupSignalR() {
     console.log("coming in setupsignalr");
     // console.log('setupSignalR fired');
@@ -1282,6 +1284,8 @@ export class FleetDetailComponent implements OnInit {
 
   showMarkerValueChanges() {
     // console.log('showMarkerValueChanges fired');
+    console.log("trailDateRange===== ", this.trailDateRange)
+    console.log("this.showMarkersForTrail2== ", this.showMarkersForTrail2)
     if (this.trailDateRange) {
       this.getReport(this.trailDateRange, 'trail', this.showMarkersForTrail2);
     }
@@ -1824,32 +1828,32 @@ export class FleetDetailComponent implements OnInit {
       if (firstTime) {
         this.speedChart = am4core.create("spdmeter", am4charts.GaugeChart);
         this.speedChart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
-  
+
         this.speedChart.innerRadius = -25;
-  
+
         let axis = this.speedChart.xAxes.push(new am4charts.ValueAxis<am4charts.AxisRendererCircular>());
         axis.min = 0;
         axis.max = 250;
         axis.strictMinMax = true;
         axis.renderer.grid.template.stroke = new am4core.InterfaceColorSet().getFor("background");
         axis.renderer.grid.template.strokeOpacity = 0.3;
-  
+
         let colorSet = new am4core.ColorSet();
-  
+
         let range0 = axis.axisRanges.create();
         range0.value = 0;
         range0.endValue = 50;
         range0.axisFill.fillOpacity = 1;
         range0.axisFill.fill = colorSet.getIndex(0);
         range0.axisFill.zIndex = - 1;
-  
+
         let range1 = axis.axisRanges.create();
         range1.value = 50;
         range1.endValue = 80;
         range1.axisFill.fillOpacity = 1;
         range1.axisFill.fill = colorSet.getIndex(2);
         range1.axisFill.zIndex = -1;
-  
+
         let range2 = axis.axisRanges.create();
         range2.value = 80;
         range2.endValue = 250;
@@ -1881,11 +1885,11 @@ export class FleetDetailComponent implements OnInit {
     }
 
   }
-snappedCoordinates;
-snappedCoodinatesFormatted;
-totalSnapToRoadCalls;
+  snappedCoordinates;
+  snappedCoodinatesFormatted;
+  totalSnapToRoadCalls;
 
-createSnapToRoad(locations, info, zoom = null) {
+  createSnapToRoad(locations, info, zoom = null) {
     const tempMarkersArr = [];
     const bounds = new google.maps.LatLngBounds();
     if (locations.length) {
@@ -1917,12 +1921,12 @@ createSnapToRoad(locations, info, zoom = null) {
         if (result && result.length) {
           result.forEach((element, i) => {
             if (element.code === 'Ok' && element.matchings && element.matchings.length > 0) {
-              element.matchings.forEach (match => {
-                  if (match.geometry && match.geometry.coordinates && match.geometry.coordinates.length > 0) {
-                    match.geometry.coordinates.forEach((coords, i) => {
-                      arrayToProcess.push(coords);
-                    });
-                  }
+              element.matchings.forEach(match => {
+                if (match.geometry && match.geometry.coordinates && match.geometry.coordinates.length > 0) {
+                  match.geometry.coordinates.forEach((coords, i) => {
+                    arrayToProcess.push(coords);
+                  });
+                }
               })
 
             }
@@ -1959,12 +1963,12 @@ createSnapToRoad(locations, info, zoom = null) {
 
 
       },
-      err => {
-        if (err && err.status != 200) {
-          this.swalService.getWarningSwal("Unable to find snapped route, Please select another time period");
-          // this.createTrail(locations, info, false);
-        }
-      });
+        err => {
+          if (err && err.status != 200) {
+            this.swalService.getWarningSwal("Unable to find snapped route, Please select another time period");
+            // this.createTrail(locations, info, false);
+          }
+        });
 
 
       // return tempMarkersArr;
@@ -1972,7 +1976,7 @@ createSnapToRoad(locations, info, zoom = null) {
     return this.snappedCoordinates;
   }
 
-  processSnapToRoadResponse(arrayToProcess){
+  processSnapToRoadResponse(arrayToProcess) {
     var points = arrayToProcess;
 
     let startPoint = points[0]
@@ -1985,18 +1989,18 @@ createSnapToRoad(locations, info, zoom = null) {
     }
 
     var featureLine = new ol.Feature({
-        geometry: new ol.geom.LineString(points)
+      geometry: new ol.geom.LineString(points)
     });
 
     var vectorLine = new ol.source.Vector({});
     vectorLine.addFeature(featureLine);
 
     var vectorLineLayer = new ol.layer.Vector({
-        source: vectorLine,
-        style: new ol.style.Style({
-            fill: new ol.style.Fill({ color: '#46be8a', weight: 4 }),
-            stroke: new ol.style.Stroke({ color: '#36ab7a', width: 2 })
-        })
+      source: vectorLine,
+      style: new ol.style.Style({
+        fill: new ol.style.Fill({ color: '#46be8a', weight: 4 }),
+        stroke: new ol.style.Stroke({ color: '#36ab7a', width: 2 })
+      })
     });
 
     const startIcon = 'assets/images/iol/map-marker-green.png';
@@ -2011,43 +2015,43 @@ createSnapToRoad(locations, info, zoom = null) {
 
     var iconStyle = new ol.style.Style({
       image: new ol.style.Icon(({
-          anchor: [0.5, 32],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          opacity: 1,
-          src: startIcon
+        anchor: [0.5, 32],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: startIcon
       }))
     });
 
     iconFeature.setStyle(iconStyle);
 
     var vectorSource = new ol.source.Vector({
-        features: [iconFeature]
+      features: [iconFeature]
     });
 
     var iconStyle1 = new ol.style.Style({
       image: new ol.style.Icon(({
-          anchor: [0.5, 32],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          opacity: 1,
-          src: endIcon
+        anchor: [0.5, 32],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        opacity: 1,
+        src: endIcon
       }))
     });
 
     iconFeature1.setStyle(iconStyle1);
 
     var vectorSource1 = new ol.source.Vector({
-        features: [iconFeature1]
+      features: [iconFeature1]
     });
 
     this.osrm.addLayer(new ol.layer.Vector({
       source: vectorSource
-    })); 
+    }));
 
     this.osrm.addLayer(new ol.layer.Vector({
       source: vectorSource1
-    })); 
+    }));
 
     this.osrm.addLayer(vectorLineLayer);
   }
@@ -2070,6 +2074,55 @@ createSnapToRoad(locations, info, zoom = null) {
         this.chart.dispose();
       }
     });
+  }
+
+
+
+
+
+
+
+  getMapTrailForIDLE() {
+    let end_date = new Date();
+    let start_date = new Date(end_date.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    let start_date1: any = DateUtils.getUtcDateTimeStart22(start_date);
+    let start_date2: any = DateUtils.getUtcDateTimeStart22(end_date);
+
+    const params = {
+      truck_id: this.entityId,
+      start_datetime: start_date1,
+      end_datetime: start_date2
+    };
+
+    // if (this.showMarkersForTrail) {
+    params['stops'] = true;
+    // }
+
+    params['ignition'] = true;
+    this.idleDuration = null;
+    this.truckService.getMapTrail(params).subscribe((apiResponse: any) => {
+      // console.log("ADAAAAAAAA-= ", apiResponse)
+
+
+      if (apiResponse.status === HttpStatusCodeEnum.Success) {
+        // console.log("MAYYYYY-= ", apiResponse['data'].stops)
+        let test = apiResponse['data'].stops
+        let test2 = apiResponse['data'].stops[0].duration
+        if (apiResponse['data'].stops.length > 0) {
+          this.idleDuration = apiResponse['data'].stops[0].duration;
+        } else {
+          this.idleDuration = null;
+        }
+
+      }
+
+    })
+    // console.log(" this.idleDuration===== ", this.idleDuration)
+  }
+
+  convert(date) {
+    return DateUtils.getDuration(Number(date));
   }
 
 }

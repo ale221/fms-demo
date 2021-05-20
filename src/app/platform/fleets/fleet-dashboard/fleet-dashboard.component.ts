@@ -119,6 +119,7 @@ export class FleetDashboardComponent implements OnInit {
   bounds1 = new google.maps.LatLngBounds();
   shapes = {};
   url = environment.baseUrl;
+  loggedUser;
   loggedInUser = this.authService.getUser() as User;
   customerID = this.loggedInUser.customer.id;
   widgetData = [
@@ -226,6 +227,7 @@ export class FleetDashboardComponent implements OnInit {
 
   ngOnInit() {
     // this.signalRService.init();
+    this.loggedUser = this.authService.getUser()
 
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;

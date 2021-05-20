@@ -274,7 +274,7 @@
               </div>
             </mat-tab>
 
-            <mat-tab label="Statistics">
+            <mat-tab label="Statistics" *ngIf="loggedInUser.package[0].package_id === packageType.standard">
               <!-- <div class="row padding-10 padding-bottom-0">
                 <app-reporting-buttons [calendarDimension]="'col-sm-9'" [type]="'trail'" [timeRange]="true"
                   [hideBtn]="'today yesterday week month'" (btnClicked)="filtersStatisticsListing($event)">
