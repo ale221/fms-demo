@@ -1544,6 +1544,7 @@ export class FleetDetailComponent implements OnInit {
           let selectedPackage = JSON.parse(localStorage.getItem('user'));
           selectedPackage = selectedPackage.package[0]
           // this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+          
           if (selectedPackage.package_id === this.packageType.png) {
             this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
           } else {
