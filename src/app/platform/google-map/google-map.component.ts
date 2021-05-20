@@ -543,7 +543,7 @@ export class GoogleMapComponent implements OnInit {
     if (pathValues && pathValues.length) {
       // let url = "https://roads.googleapis.com/v1/snapToRoads?path=" + pathValues.join('|') + "&interpolate=true&key=AIzaSyASI7bo-I7oh_xwVX_IoEHI7fawh3VqSuE";
       // let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=full&geometries=polyline6&steps=true";
-      let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=full&geometries=geojson";
+      let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=full&geometries=geojson&radius=all:15";
       return this.httpCLient.get(url);
       // .subscribe(res => {
       //   this.totalSnapToRoadResponses += 1;
