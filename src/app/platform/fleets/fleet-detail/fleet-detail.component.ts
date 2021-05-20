@@ -1543,12 +1543,13 @@ export class FleetDetailComponent implements OnInit {
         if (this.violationMarkers && this.violationMarkers.length > 1) {
           let selectedPackage = JSON.parse(localStorage.getItem('user'));
           selectedPackage = selectedPackage.package[0]
-          this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
-          // if (selectedPackage.package_id === this.packageType.png) {
-          //   this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
-          // } else {
-          //   this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
-          // }
+          // this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+          
+          if (selectedPackage.package_id === this.packageType.png) {
+            this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
+          } else {
+            this.tMap.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
+          }
         } else {
           this.swalService.getWarningSwal("No data found against this vehicle");
         }
