@@ -514,6 +514,7 @@ export class FleetDetailComponent implements OnInit {
     if (tab.index === 1) {
       setTimeout(() => {
         // this.initOSRM();
+        
       }, 500);
     }
   }
