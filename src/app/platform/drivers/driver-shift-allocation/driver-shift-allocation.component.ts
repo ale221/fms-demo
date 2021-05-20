@@ -100,6 +100,9 @@ export class DriverShiftAllocationComponent implements OnInit {
   activityLoader: AppLoader = new AppLoader();
   submitFormLoader: AppLoader = new AppLoader();
   currentDate = new Date();
+  minCurrentDate; //= new Date();
+  maxCurrentDate;// = new Date();
+
   branding: any;
   contract_list;
   viewJob: any;
@@ -147,6 +150,8 @@ export class DriverShiftAllocationComponent implements OnInit {
 
   filters = { limit: 10, offset: 0, order_by: '', order: '', fleet_id: '', category_id: '', shift_id: '', driver_id: '', entity_sub_type_id: '', vehicle_id: '', search: '' };
   sidebarCheck: any;
+
+  allShifts = [];
 
   constructor(public resizeDatatableSerivce: ResizeDatatableService,
     public formBuilder: FormBuilder,
@@ -253,6 +258,9 @@ export class DriverShiftAllocationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.minCurrentDate = new Date();
+    this.maxCurrentDate = null;
+
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;
     })
@@ -313,6 +321,8 @@ export class DriverShiftAllocationComponent implements OnInit {
     // this.templates = [];
     this.templateRouteService.getShiftDrivers().subscribe((data: any) => {
       this.showIndeterminateProgress = false;
+      this.allShifts = data.data.data;
+      // console.log("this.allShifts===== ", this.allShifts);
       this.shifts_list = data.data.data.map(
         item => new PrimengDropdownItem(item['id'], item['name'])
       );
@@ -749,6 +759,18 @@ export class DriverShiftAllocationComponent implements OnInit {
     this.selectedClients.push(row.client_id);
     // this.clientDropdownComponent.selectedValue.push(row.client_id);
     // this.clientDropdownComponent.selectedValue = [...this.clientDropdownComponent.selectedValue];
+  }
+
+  selectShift(event) {
+    for (let i = 0; i < this.allShifts.length; i++) {
+      if (this.allShifts[i].id == event.value) {
+        let startDate = new Date(this.allShifts[i].start_date)
+        let endDate = new Date(this.allShifts[i].end_date)
+        this.minCurrentDate = startDate;
+        this.maxCurrentDate = endDate;
+        break;
+      }
+    }
   }
 
 
