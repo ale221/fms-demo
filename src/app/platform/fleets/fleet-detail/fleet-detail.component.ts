@@ -1526,6 +1526,7 @@ export class FleetDetailComponent implements OnInit {
               this.violationMarkers.push({ lat: response[i].lat, lng: response[i].long });
             }
           }
+
           if (response.length > 1) {
             const info1 = [
               DateUtils.getLocalMMDDYYYYhhmmss(response[response.length - 2]['timestamp_unix']),
@@ -1542,8 +1543,8 @@ export class FleetDetailComponent implements OnInit {
           this.violationMarkers = [];
         }
 
-        // this.tMap.resetMap();
-        // this.tMap.createDummyMarkers(markers, infoWindows);
+        this.tMap.resetMap();
+        this.tMap.createDummyMarkers(markers, infoWindows);
         if (this.violationMarkers && this.violationMarkers.length > 1) {
           let selectedPackage = JSON.parse(localStorage.getItem('user'));
           selectedPackage = selectedPackage.package[0]

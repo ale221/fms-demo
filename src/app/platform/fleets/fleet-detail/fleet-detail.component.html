@@ -1049,7 +1049,7 @@
                                           <th class="text-center">Duration
                                           </th>
                                           <!-- <th class="text-center">Stop Type
-                                            </th> -->
+                                          </th> -->
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -1067,22 +1067,21 @@
                                           <td class="text-center">
                                             {{row.duration}}</td>
                                           <!-- <td class="text-center">
-                                              {{row.stop_type || 'N/A'}}</td> -->
+                                            {{row.stop_type || 'N/A'}}</td> -->
                                         </tr>
                                       </tbody>
                                     </table>
                                   </div>
                                 </div>
-                                <div class="margin-bottom-0"
-                                  [ngClass]="showMarkersForTrail && trailWithStopsInfo.length? 'col-lg-9' : '' ">
-                                  <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
-                                    [infowindow]="violationInfoWindows">
-                                  </app-google-map>
-                                  
-                                  <!-- <div id="map" class="map"></div> -->
-                                  <app-spin-loading [appLoader]="trailLoader"></app-spin-loading>
-
-                                </div>
+                              </div>
+                              <div class="margin-bottom-0"
+                                [ngClass]="showMarkersForTrail && trailWithStopsInfo.length? 'col-lg-9' : '' ">
+                                <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
+                                  [infowindow]="violationInfoWindows">
+                                </app-google-map>
+                                
+                                <!-- <div id="map" class="map"></div> -->
+                                <app-spin-loading [appLoader]="trailLoader"></app-spin-loading>
 
                               </div>
 
