@@ -461,6 +461,20 @@ export class DateUtils {
     return '';
   }
 
+
+  static getUtcDateTimeStart22(date: any) {
+    if (date) {
+      try {
+        const utcDate = Date.parse(date);
+        const localDate = addMinutes(utcDate, (new Date().getTimezoneOffset()));
+        return format(localDate, 'YYYY-MM-DD HH:mm:ss');
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return '';
+  }
+
   static getLocalDateTimeStart(date: string) {
     if (date) {
       try {

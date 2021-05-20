@@ -338,7 +338,7 @@ export class PredictiveMaintenanceComponent implements OnInit {
   }
 
   fleetDropdownChangedEfficiency(event) {
-    // console.log("event=-= ", event)
+    console.log("event=-= ", event)
     this.efficiencyFleet = event;
 
     this.maintenanceService.getVehicleOperationalEfficiencyChart(this.efficiencyFleet, this.efficiency).subscribe((data: any) => {
@@ -352,6 +352,14 @@ export class PredictiveMaintenanceComponent implements OnInit {
       }
     })
 
+    this.showIndeterminateProgress2 = true;
+    this.maintenanceService.getEfficiencyTableDataWithID(this.efficiencyFleet).subscribe((data: any) => {
+      this.showIndeterminateProgress2 = false;
+      if (!data.error) {
+        this.efficiencyTableData = data.data.data;
+        this.totalLengthEfficency = data.data.count;
+      }
+    })
 
   }
 

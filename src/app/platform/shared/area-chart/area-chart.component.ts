@@ -175,7 +175,7 @@ export class AreaChartComponent implements OnInit {
     // Create axes
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "category";
-    categoryAxis.title.text = "Category";
+    categoryAxis.title.text = "Fleet";
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 20;
     categoryAxis.startLocation = 0.5;
