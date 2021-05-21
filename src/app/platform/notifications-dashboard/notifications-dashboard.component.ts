@@ -10,6 +10,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { HeaderService } from '../shared/services/header.service';
 import { DateUtils } from 'src/app/Utils/DateUtils';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { PackageType } from 'src/app/core/enum/packages-enum';
 
 @Component({
   selector: 'app-notifications-dashboard',
@@ -26,7 +27,7 @@ export class NotificationsDashboardComponent implements OnInit {
   appLoader = new AppLoader();
   sidebarCheck;
 
-
+  loggedInUser;
   activity_review = [
     NotificationTypeEnum.NOTIFICATION_ADMIN_ACTIVITY_REVIEW,
     NotificationTypeEnum.NOTIFICATION_ADMIN_ACTIVITY_REVIEW_DRIVER_REJECT,
@@ -55,17 +56,24 @@ export class NotificationsDashboardComponent implements OnInit {
   notifications_list = [];
   showIndeterminateProgress: boolean;
   displayedColumns = ['title', 'minutes_ago', 'driver_name', 'assigned_device'];
+  packageType;
 
-  constructor(private headerService: HeaderService, private goto: GotoPageService, private router: Router, private authService: AuthService, private drawerService:DrawerService) {
+  constructor(private headerService: HeaderService, private goto: GotoPageService, private router: Router, private authService: AuthService, private drawerService: DrawerService) {
   }
 
   ngOnInit() {
+    this.packageType = PackageType;
+    this.loggedInUser = this.authService.getUser();
 
-    this.drawerService.getValue().subscribe(res=>{
-      this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
-  })
+    if (this.loggedInUser.package[0].package_id === this.packageType.standard) {
+      this.displayedColumns = ['title', 'minutes_ago', 'driver_name', 'assigned_device'];
+    } else {
+      this.displayedColumns = ['title', 'minutes_ago', 'assigned_device'];
+    }
+
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
+    })
     this.dropdownOptions = [
       { label: 'All', value: [] },
       { label: 'Activity Review', value: this.activity_review },

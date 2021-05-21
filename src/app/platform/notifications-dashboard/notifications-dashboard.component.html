@@ -45,7 +45,7 @@
                   {{ row.minutes_ago || 'N/A' }}
                 </td>
               </ng-container>
-              <ng-container matColumnDef="driver_name">
+              <ng-container matColumnDef="driver_name" *ngIf="loggedInUser.package[0].package_id === packageType.standard">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>DRIVER NAME</th>
                 <td mat-cell *matCellDef="let row">
                   {{ row.driver_name || '-' }}

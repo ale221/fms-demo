@@ -124,7 +124,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
     private entityService: EntityService,
 
     private authService: AuthService,
-    private drawerService:DrawerService) { }
+    private drawerService: DrawerService) { }
 
   isAuthorizedUser(value) {
     this.isAuthorized = value;
@@ -138,10 +138,9 @@ export class ViolationsComponent implements OnInit, OnDestroy {
 
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
-    console.log("this.customerid", this.customerID);
     const appendExport = 'offset=0&limit=10&order=&order_by=&days=1000&search_text=&violation_type=&driver_id=&start_datetime=&end_datetime=';
-    this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel';
-    this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf';
+    this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     // /iof/get_violation_data_report/?offset=${this.filters.offset}&search_text=${this.filters.search_text}&days=1000&violation_type=${this.filters.violation_type}&driver_id=${this.filters.driver_id}&export=excel&timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`
 
@@ -185,7 +184,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
     }
     this.filters.start_datetime = startDate;
     this.filters.end_datetime = endDate;
-    this.filters.search_text=this.searchText;
+    this.filters.search_text = this.searchText;
 
     this.optimizedCall = this.formService.getViolationEntities(this.filters)
       .subscribe(new class extends HttpController<TestApiResponse<EntityResponse[]>> {
@@ -392,9 +391,9 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   driverChanged(event) {
     this.selectedDriver = event.value;
     this.filters.driver_id = (this.selectedDriver) ? this.selectedDriver : '';
-    if(this.violations.paginator && this.violations.paginator.pageIndex ){
-    this.violations.paginator.pageIndex = 0;
-    this.filters.offset = 0;
+    if (this.violations.paginator && this.violations.paginator.pageIndex) {
+      this.violations.paginator.pageIndex = 0;
+      this.filters.offset = 0;
     }
     this.resetFiltersExport(this.filters);
     this.optimized_violations_call(1);
@@ -402,9 +401,9 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   violationTypeChanged(event) {
     this.selectedViolationType = event.value;
     this.filters.violation_type = this.selectedViolationType ? this.selectedViolationType : '';
-    if(this.violations.paginator && this.violations.paginator.pageIndex ){
-    this.violations.paginator.pageIndex = 0;
-    this.filters.offset = 0;
+    if (this.violations.paginator && this.violations.paginator.pageIndex) {
+      this.violations.paginator.pageIndex = 0;
+      this.filters.offset = 0;
     }
     this.resetFiltersExport(this.filters);
     this.optimized_violations_call(1);
@@ -484,7 +483,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
         }
 
         onNext(apiResponse: LoginApiResponse<any[]>): void {
-          console.log(apiResponse);
+          // console.log(apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.territoriesCount = apiResponse.response;
           }
@@ -499,7 +498,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   updateFilter(event) {
     if (event.target.value) {
       this.searchText = event.target.value;
-      if(this.violations.paginator && this.violations.paginator.pageIndex ){
+      if (this.violations.paginator && this.violations.paginator.pageIndex) {
         this.violations.paginator.pageIndex = 0;
       }
       this.filters.search_text = this.searchText;
@@ -507,7 +506,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
     } else {
       this.searchText = '';
       this.filters.search_text = this.searchText;
-      if(this.violations.paginator && this.violations.paginator.pageIndex ){
+      if (this.violations.paginator && this.violations.paginator.pageIndex) {
         this.violations.paginator.pageIndex = 0;
       }
       this.optimized_violations_call(1);
@@ -550,7 +549,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
       this.selectedTerritory = null;
     }
     else {
-      console.log(row);
+      // console.log(row);
       this.table.rowDetail.collapseAllRows();
       this.table.rowDetail.toggleExpandRow(row);
       this.onSelect(row)
@@ -563,7 +562,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   }
 
   sortData(event) {
-    console.log("sortData= ", event)
+    // console.log("sortData= ", event)
     this.filters.order_by = event.active;
     this.filters.order = event.direction;
     this.optimized_violations_call(1, this.searchText);
@@ -580,8 +579,8 @@ export class ViolationsComponent implements OnInit, OnDestroy {
 
   resetFiltersExport(filters) {
     const appendExport = `offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search_text=${filters.search_text}&days=1000&violation_type=${filters.violation_type}&driver_id=${filters.driver_id}&start_datetime=${filters.start_datetime}&end_datetime=${filters.end_datetime}`;
-    this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel';
-    this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf';
+    this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
 
 }
