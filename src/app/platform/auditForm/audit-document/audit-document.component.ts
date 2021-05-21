@@ -73,6 +73,8 @@ export class AuditDocumentComponent implements OnInit {
   selectedDocument;
   submitted = false;
 
+  reportTypeTable=0;
+
   driverGroup = [];
   drivers = [];
   documentType = [];
@@ -146,11 +148,23 @@ export class AuditDocumentComponent implements OnInit {
 
   totalContractsLength = 0;
   filtersContracts = { type: 2, limit: 5, offset: 0, order_by: '', order: '', search: '' };
+  filtersFleet = { limit: 10, offset: 0, order_by: '', order: '', search: '', entity_sub_type_id: '', fleet_id: '' };
   selectedDriver = '';
+  selectedFleet='';
   filesGreaterThanFive = [];
   sizeGreaterThanFive: boolean = false;
   expandedElement: any;
   sidebarCheck;
+
+  statusList = [{ id: 1, name: "Driver" }, { id: 2, name: "Fleet" }];
+  userType;
+  selectedType='';
+  fleets;
+  vehicles;
+  listVariable="Please Select From Dropdown";
+  selectedValue;
+  disableCheck=false;
+  selectedTypeSearch='';
 
   constructor(public formBuilder: FormBuilder,
     public gotoService: GotoPageService,
@@ -164,7 +178,10 @@ export class AuditDocumentComponent implements OnInit {
     private drawerService: DrawerService) {
     this.contractForm = this.formBuilder.group({
       id: [{ value: null, disabled: true }],
+      documentName: [null, [Validators.required]],
       select_group: [null, [Validators.required]],
+      select_fleet: [null, [Validators.required]],
+      select_vehicle: [null, [Validators.required]],
       // contract_name: [null, [Validators.required, CustomValidators.isNumbers]],
       // selected_client: [null, [Validators.required]],
       select_driver: [null, [Validators.required]],
@@ -195,16 +212,31 @@ export class AuditDocumentComponent implements OnInit {
   })
 
     this.loggedInUser = this.authService.getUser();
+    console.log("loggedInUser",this.loggedInUser);
+    this.statusList.forEach((element: any) => {
+      element.label = element.name;
+      element.value = element.id;
+    });
+    this.userType=this.loggedInUser.package[0].package_id;
+    if(this.userType==6){
+      this.statusList = [{ id: 1, name: "Driver" }, { id: 2, name: "Fleet" }];
+    }else{
+      this.statusList = [ { id: 2, name: "Fleet" }];
+    }
+
+    
     this.customerID = this.loggedInUser.customer.id;
     this.areas_loader_flag = false;
     this.locations_loader_flag = false;
     this.clients_loader_flag = false;
     this.deleteAllButton = false;
-    this.getContracts();
+    
     this.getDriversGroup();
-    this.getDocumentType();
+    
     this.getDriverFromGroup(null);
     this.sizeGreaterThanFive = false;
+
+    this.FleetDropdown();
   }
 
   ngAfterViewInit(): void {
@@ -223,10 +255,85 @@ export class AuditDocumentComponent implements OnInit {
         this.driverGroup = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
+        console.log("driver_grp",this.driverGroup);
       } else {
         console.log(data.message);
       }
     });
+  }
+  FleetDropdown() {
+    this.formService.getFleetFiltersDropdown().subscribe(apiResponse => {
+      this.fleets = apiResponse.data.data.map(
+        item => new DropDownItem(item['id'], item['name'])
+      );;
+      console.log("this.fleets2----", this.fleets);
+    })
+  }
+
+  onFleetChange(event){
+    console.log("evemn",event);
+    this.filtersFleet.fleet_id=event.id;
+   this.getFleets(event.id);
+  }
+
+  getFleets(fleetID): void {
+    console.log("coming i getfleet");
+    // let params = `limit=${filtersFleet.limit}&offset=${filtersFleet.offset}&order=${filtersFleet.order}&order_by=${filtersFleet.order_by}`;
+    // let params = `limit=${filtersFleet.limit}&offset=${filtersFleet.offset}&order=${filtersFleet.order}&order_by=${filtersFleet.order_by}&fleet_id=${filtersFleet.fleet_id}&search=${filtersFleet.search}`;
+    // this.inputValue = "";
+    // this.searchPlaceHolder = 'Loading...';
+    // this.enableSearch = true;
+    // this.trucks = [];
+
+    this.formService.getFleetsList(fleetID)
+      .subscribe((data: any) => {
+        if (!data.error) {
+          this.vehicles = data['data'].map(
+            item => new DropDownItem(item['id'], item['name'])
+          );;
+          console.log("this.vehicles= ", this.vehicles);
+         
+        }
+      });
+
+  }
+
+  onDocumentNameChangeTwo(event){
+    console.log("eventttt",event.id);
+   if(event.id==1){
+    
+     this.selectedType="driver";
+     this.selectedTypeSearch="driver";
+     this.reportTypeTable=1;
+     this.listVariable='Driver List';
+
+   }else{
+    this.selectedTypeSearch="fleet";
+     this.selectedType="fleet";
+     this.reportTypeTable=2;
+     this.listVariable='Fleet List';
+   }
+   console.log("this.selectedType",this.selectedType)
+  //  this.getDocumentType();
+   this.getContracts();
+  }
+  onDocumentNameChange(event){
+    console.log("eventttt",event.id);
+   if(event.id==1){
+    
+     this.selectedType="driver";
+     this.reportTypeTable=1;
+     this.listVariable='Driver List';
+
+   }else{
+    
+     this.selectedType="fleet";
+     this.reportTypeTable=2;
+     this.listVariable='Fleet List';
+   }
+   console.log("this.selectedType",this.selectedType)
+   this.getDocumentType();
+   this.getContracts();
   }
 
   onDriverGroupChange(event) {
@@ -246,21 +353,43 @@ export class AuditDocumentComponent implements OnInit {
     });
   }
   getDocumentType() {
+console.log("sekectedtype",this.selectedType);
+    if(this.selectedType=="driver"){
+      console.log("comin in driver");
+      this.documentType=[];
+      this.formService.getDocumentType().subscribe((data: any) => {
+        if (data.status === HttpStatusCodeEnum.Success) {
+          this.documentType = data.data.map(
+            item => new DropDownItem(item['id'], item['name'])
+          );
+          //  this.drivers=data.data;
+          // this.driverLists = [];
+          // this.typeList = [];
+          //  this.reportTypeTable=0;
+          // console.log("coming in documentType", this.documentType);
+        } else {
+          console.log(data.message);
+        }
+      });
+    }else{
     // console.log("coming in getDriversGroup");
-    this.formService.getDocumentType().subscribe((data: any) => {
-      if (data.status === HttpStatusCodeEnum.Success) {
-        this.documentType = data.data.map(
-          item => new DropDownItem(item['id'], item['name'])
-        );
-        //  this.drivers=data.data;
-        // this.driverLists = [];
-        // this.typeList = [];
-        //  this.reportTypeTable=0;
-        // console.log("coming in documentType", this.documentType);
-      } else {
-        console.log(data.message);
-      }
-    });
+    console.log("comin in fleet");
+    this.documentType=[];
+        this.formService.getDocumentTypeFleet().subscribe((data: any) => {
+          if (data.status === HttpStatusCodeEnum.Success) {
+            this.documentType = data.data.map(
+              item => new DropDownItem(item['id'], item['name'])
+            );
+            //  this.drivers=data.data;
+            // this.driverLists = [];
+            // this.typeList = [];
+            //  this.reportTypeTable=0;
+            // console.log("coming in documentType", this.documentType);
+          } else {
+            console.log(data.message);
+          }
+        });
+    }
   }
   // onDriverChange(event) {
   //   let id = event.id;
@@ -282,7 +411,7 @@ export class AuditDocumentComponent implements OnInit {
   validate(): boolean {
     let isValid = true;
     this.errorMessages = [];
-
+  if(this.selectedType=="driver"){
     if (this.contractForm.get('select_group').hasError('required')) {
       this.errorMessages.push('Group ' + ErrorMessage.REQUIRED);
       isValid = false;
@@ -295,10 +424,22 @@ export class AuditDocumentComponent implements OnInit {
       this.errorMessages.push('Document Type ' + ErrorMessage.IS_ALPHABETS_AND_NUMBERS);
       isValid = false;
     }
+  }else{
+    if (this.contractForm.get('select_fleet').hasError('required')) {
+      this.errorMessages.push('Fleet ' + ErrorMessage.REQUIRED);
+      isValid = false;
+    }
+    if (this.contractForm.get('select_vehicle').hasError('isAlphabets')) {
+      this.errorMessages.push('Driver ' + ErrorMessage.IS_ALPHABETS_AND_NUMBERS);
+      isValid = false;
+    }
+  }
+
     return isValid;
   }
 
   onSubmit1(value) {
+   console.log("valueeeee",value);
     const param: FormData = new FormData();
     this.submitted = true;
     if (this.validate()) {
@@ -313,21 +454,39 @@ export class AuditDocumentComponent implements OnInit {
       //   this.swalService.getWarningSwal('You cannot upload more than 10 documents');
       //   return;
       // }
-
+      console.log("coming1",value['documentName'])
+      console.log("coming1",value['documentName'].name)
+    if(value['documentName'].name=="Driver"){
+      console.log("coming11")
       param.append('driver_group_id', value['select_group']['id']);
       param.append('driver_id', value['select_driver']['id']);
+      this.selectedDriver = value['select_driver']['id']
+      console.log("coming2")
+    }else{
+      
+      param.append('fleet_id', value['select_fleet']['id']);
+      param.append('vehicle_id', value['select_vehicle']['id']);
+      this.selectedFleet = value['select_fleet']['id']
+      console.log("coming22")
+    }
+    
+      // param.append('documentName', value['documentName']['id']);
       param.append('document_type_id', value['document_type']['id']);
       console.log('form', param);
-      this.selectedDriver = value['select_driver']['id']
-
+      
+      console.log("coming3")
       delete value['select_driver'];
       delete value['document_type'];
       delete value['select_group'];
 
+      // delete value['select_fleet'];
+
       this.disableSubmitButton();
       if (this.selectedUser) {
+        console.log("coming5",param)
         this.patchContract(param);
       } else {
+        console.log("coming4")
         this.postContract(param);
       }
     } else {
@@ -337,11 +496,14 @@ export class AuditDocumentComponent implements OnInit {
   }
 
   postContract(param) {
+    console.log("parammmmmmmmmmm",this.selectedType);
     this.uploadedPercentage = 0;
+    if(this.selectedType=="driver"){
     // console.log("param before creating  document api= ", param)
     this.formService.postDocument(param).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.closeForm.nativeElement.click();
+        this.selectedType='driver';
         this.getContracts();
         this.swalService.getSuccessSwal(data.message);
         // this.context.updateContractsRows(apiResponse['body']);
@@ -350,17 +512,37 @@ export class AuditDocumentComponent implements OnInit {
         this.enableSubmitButton();
         this.swalService.getErrorSwalforDocument(data.message);
       }
-    }
-    );
+    });
+  }else{
+    this.formService.postDocumentFleet(param).subscribe((data: any) => {
+      if (data.status === HttpStatusCodeEnum.Success) {
+        this.closeForm.nativeElement.click();
+        this.selectedType='fleet';
+        this.getContracts();
+        this.swalService.getSuccessSwal(data.message);
+        // this.context.updateContractsRows(apiResponse['body']);
+      }
+      else {
+        this.enableSubmitButton();
+        this.swalService.getErrorSwalforDocument(data.message);
+      }
+    });
+  }
   }
   materials = [];
   patchContract(truck: FormData) {
-    // console.log("truck== ", truck)
+    console.log("truck== ", truck)
     truck.append('id', this.selectedUser);
+    if(this.selectedType=='driver'){
     truck.append('driver_id', this.selectedDriver);
+    }
+    // else{
+    //   truck.append('vehicle_id', this.selectedFleet);
+    // }
     // truck.delete('driver_id');
     this.uploadedPercentage = 0;
     // console.log("param before updating  document= ", truck);
+    if(this.selectedType=='driver'){
     this.formService.patchDocument(truck).subscribe(new class extends HttpController<HttpEvent<any>> {
       onComplete(): void {
       }
@@ -419,6 +601,66 @@ export class AuditDocumentComponent implements OnInit {
 
     }(this)
     );
+   }else{
+    this.formService.patchDocumentFleet(truck).subscribe(new class extends HttpController<HttpEvent<any>> {
+      onComplete(): void {
+      }
+
+      onError(errorMessage: string, err: any) {
+        this.context.enableSubmitButton();
+        this.context.swalService.getErrorSwal(errorMessage);
+        this.context.fileUploadStatus = false;
+        this.context.closeP.nativeElement.click();
+        console.log(errorMessage);
+      }
+
+      onNext(apiResponse: HttpEvent<any>): void {
+        switch (apiResponse.type) {
+          case HttpEventType.Sent:
+            if (this.context.fileUploadStatus) {
+              this.context.fileUploadStatus = true;
+              this.context.showP.nativeElement.click();
+              this.context.bringupModal();
+            }
+            break;
+          case HttpEventType.Response:
+            this.context.closeP.nativeElement.click();
+            this.context.fileUploadStatus = false;
+            if (apiResponse.body.error === false) {
+              this.context.enableSubmitButton();
+              this.context.closeForm.nativeElement.click();
+              this.context.swalService.getSuccessSwal(apiResponse.body.message);
+              // this.context.updateContractsRows(apiResponse['body']);
+              this.context.getContracts();
+            } else {
+              this.context.swalService.getErrorSwal(apiResponse.body.message);
+              this.context.btnText = "Update";
+              this.context.fileUploadStatus = false;
+              this.context.closeP.nativeElement.click();
+              // this.context.closeForm.nativeElement.click();
+            }
+            break;
+          case 1: {
+            if (this.context.fileUploadStatus) {
+              if (Math.round(this.context.uploadedPercentage) !== Math.round(event['loaded'] / event['total'] * 100)) {
+                this.context.uploadedPercentage = Math.ceil(event['loaded'] / event['total'] * 100);
+                if (Math.ceil(event['loaded'] / event['total'] * 100) == 100) {
+                  setTimeout(() => {
+                    this.context.closeP.nativeElement.click();
+                  }, 400
+                  );
+                }
+              }
+            }
+            break;
+          }
+        }
+        this.context.enableSubmitButton();
+      }
+
+    }(this)
+    );
+   }
   }
 
   getFileName(fileName) {
@@ -444,6 +686,8 @@ export class AuditDocumentComponent implements OnInit {
   }
 
   AdButtonClick(data) {
+    this.selectedType='';
+    this.disableCheck=false;
     this.submitted = false;
     this.deg = 0;
     this.uploader.files = [];
@@ -472,6 +716,7 @@ export class AuditDocumentComponent implements OnInit {
     if (!data) {
       this.selectedUser = 0;
       this.selectedDriver = '';
+      this.selectedFleet='';
     }
 
     setTimeout(() => {
@@ -616,34 +861,65 @@ export class AuditDocumentComponent implements OnInit {
 
   optimized_contract_call(index_a, index_b, filters) {
     this.showIndeterminateProgress = true;
-    this.optimizedCall = this.formService.getDocumentListing({
-      type_id: 42,
-      index_a: index_a,
-      index_b: index_b,
-      order: filters.order,
-      order_by: filters.order_by,
-    })
-      .subscribe((data: any) => {
+    if(this.selectedType=='driver'){
+      this.optimizedCall = this.formService.getDocumentListing({
+        type_id: 42,
+        index_a: index_a,
+        index_b: index_b,
+        order: filters.order,
+        order_by: filters.order_by,
+      })
+        .subscribe((data: any) => {
 
-        if (!data.error) {
+          if (!data.error) {
+            // this.contracts=data.data['data'];
+            this.contracts = data.response;
+            this.temp = this.contracts;
+            this.enableSearch = false;
+            this.showIndeterminateProgress = false;
+          } else {
+            this.swalService.getWarningSwal(data.message);
+          }
           // this.contracts=data.data['data'];
-          this.contracts = data.response;
-          this.temp = this.contracts;
-          this.enableSearch = false;
-          this.showIndeterminateProgress = false;
-        } else {
-          this.swalService.getWarningSwal(data.message);
+
+          this.totalContractsLength = data.data.count;
+          this.contracts = data['data'].data;
+          // this.contracts.paginator = this.totalpermissionLength;
+
+          this.downloadableLink = environment.baseUrl + '/hypernet/entity/documents?export=excel&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+          this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/documents?export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
         }
-        // this.contracts=data.data['data'];
+        );
+    } else{
+      this.optimizedCall = this.formService.getDocumentListingFleet({
+        type_id: 42,
+        index_a: index_a,
+        index_b: index_b,
+        order: filters.order,
+        order_by: filters.order_by,
+      })
+        .subscribe((data: any) => {
 
-        this.totalContractsLength = data.data.count;
-        this.contracts = data['data'].data;
-        // this.contracts.paginator = this.totalpermissionLength;
+          if (!data.error) {
+            // this.contracts=data.data['data'];
+            this.contracts = data.response;
+            this.temp = this.contracts;
+            this.enableSearch = false;
+            this.showIndeterminateProgress = false;
+          } else {
+            this.swalService.getWarningSwal(data.message);
+          }
+          // this.contracts=data.data['data'];
 
-        this.downloadableLink = environment.baseUrl + '/hypernet/entity/documents?export=excel&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/documents?export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      }
-      );
+          this.totalContractsLength = data.data.count;
+          this.contracts = data['data'].data;
+          // this.contracts.paginator = this.totalpermissionLength;
+
+          this.downloadableLink = environment.baseUrl + '/hypernet/entity/documents?export=excel&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+          this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/documents?export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        }
+        );
+    } 
   }
 
   expiring = [];
@@ -1041,15 +1317,27 @@ export class AuditDocumentComponent implements OnInit {
     const response = await this.swalService.getConfirmSwal();
     if (response) {
       this.hashMap[row.id] = true;
-      this.formService.deleteDocument({ 'id': [row.driver_id], 'documentTypeId': [row.document_type_id] }).subscribe((data: any) => {
-        if (!data.error) {
-          this.closeForm.nativeElement.click();
-          this.swalService.getSuccessSwal('Contract deleted successfully');
-          this.getContracts();
-        } else {
-          this.swalService.getWarningSwal(data.message);
-        }
-      });
+      if(row.driver_id){
+        this.formService.deleteDocument({ 'id': [row.driver_id], 'documentTypeId': [row.document_type_id] }).subscribe((data: any) => {
+          if (!data.error) {
+            this.closeForm.nativeElement.click();
+            this.swalService.getSuccessSwal('Contract deleted successfully');
+            this.getContracts();
+          } else {
+            this.swalService.getWarningSwal(data.message);
+          }
+        });
+      }else{
+        this.formService.deleteDocumentFleet({ 'id': [row.vehicle_id], 'documentTypeId': [row.document_type_id] }).subscribe((data: any) => {
+          if (!data.error) {
+            this.closeForm.nativeElement.click();
+            this.swalService.getSuccessSwal('Contract deleted successfully');
+            this.getContracts();
+          } else {
+            this.swalService.getWarningSwal(data.message);
+          }
+        });
+      }
     }
   }
 
@@ -1213,10 +1501,17 @@ export class AuditDocumentComponent implements OnInit {
   picName;
   rowIndexBeingEdited = null;
   openEditModal(row, index) {
+    console.log("rowwww",row);
     this.selectedUser = row.id;
     this.selectedDocument = row;
     // console.log("row", row);
     this.AdButtonClick(this.selectedUser);
+    if(row.driver_id){
+      this.selectedType="driver";
+    }else{
+      this.selectedType="fleet";
+    }
+    this.disableCheck=true;
     this.rowIndexBeingEdited = index;
     this.isFileImage = true;
     this.fileUploadProgressBar = true;
@@ -1234,10 +1529,23 @@ export class AuditDocumentComponent implements OnInit {
     }, 10);
 
     this.getDriverFromGroup(row.driver_group_id);
+    if(!row.fleet_name){
+      console.log("coming in fleet name empty");
     this.contractForm.patchValue({ select_group: row.driver_group_id ? new DropDownItem(row.driver_group_id, row.driver_group_name) : null });
     this.contractForm.patchValue({ select_driver: row.driver_id ? new DropDownItem(row.driver_id, row.driver_name) : null });
     this.contractForm.patchValue({ document_type: row.document_type_id ? new DropDownItem(row.document_type_id, row.document_type) : null });
-
+    // this.selectedValue = [{ id: 1, name: "Driver" }, { id: 2, name: "Fleet" }]; 
+    this.selectedValue = [{ id: 1, name: "Driver" },{ id: 2, name: "Fleet" }] 
+    console.log("selectedValue",this.selectedValue);
+  }else{
+      console.log("coming in fleet name ");
+      console.log("row.vehicle_id",row.vehicle_id)
+    this.contractForm.patchValue({ select_fleet: row.fleet_id ? new DropDownItem(row.fleet_id, row.fleet_name) : null });
+    this.contractForm.patchValue({ select_vehicle: row.vehicle_id ? new DropDownItem(row.vehicle_id, row.vehicle_name) : null });
+    this.contractForm.patchValue({ document_type: row.document_type_id ? new DropDownItem(row.document_type_id, row.document_type) : null });
+    this.selectedValue = { id: 2, name: "Fleet" } 
+    console.log("selectedValue",this.selectedValue);
+  }
     if (row.document_file) {
       for (let i = 0; i < row.document_file.length; i++) {
         const arr = row.document_file[i].split('/');
@@ -1312,29 +1620,56 @@ export class AuditDocumentComponent implements OnInit {
 
     this.downloadableLink = environment.baseUrl + '/hypernet/entity/documents?export=excel&customer_id=' + this.customerID + '&search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/documents?export=excel&customer_id=' + this.customerID + '&search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.optimizedCall = this.formService.getDocumentListingSearch({
-      type_id: 42,
-      index_a: index_a,
-      index_b: index_b,
-      search: this.searchForm.value.search
-    })
-      .subscribe((data: any) => {
+    if(this.selectedTypeSearch=="driver"){
+        this.optimizedCall = this.formService.getDocumentListingSearch({
+          type_id: 42,
+          index_a: index_a,
+          index_b: index_b,
+          search: this.searchForm.value.search
+        })
+          .subscribe((data: any) => {
 
-        if (!data.error) {
+            if (!data.error) {
+              // this.contracts=data.data['data'];
+              this.contracts = data.response;
+              this.temp = this.contracts;
+              this.enableSearch = false;
+              this.showIndeterminateProgress = false;
+            } else {
+              this.swalService.getWarningSwal(data.message);
+            }
+            console.log("asaaaaaaaaaaaaa", data['data'].data);
+            // this.contracts=data.data['data'];
+            this.totalContractsLength = data.data.count;
+            this.contracts = data['data'].data;
+          }
+          );
+    }else{
+
+      this.optimizedCall = this.formService.getDocumentListingSearchfleet({
+        type_id: 42,
+        index_a: index_a,
+        index_b: index_b,
+        search: this.searchForm.value.search
+      })
+        .subscribe((data: any) => {
+  
+          if (!data.error) {
+            // this.contracts=data.data['data'];
+            this.contracts = data.response;
+            this.temp = this.contracts;
+            this.enableSearch = false;
+            this.showIndeterminateProgress = false;
+          } else {
+            this.swalService.getWarningSwal(data.message);
+          }
+          console.log("asaaaaaaaaaaaaa", data['data'].data);
           // this.contracts=data.data['data'];
-          this.contracts = data.response;
-          this.temp = this.contracts;
-          this.enableSearch = false;
-          this.showIndeterminateProgress = false;
-        } else {
-          this.swalService.getWarningSwal(data.message);
+          this.totalContractsLength = data.data.count;
+          this.contracts = data['data'].data;
         }
-        console.log("asaaaaaaaaaaaaa", data['data'].data);
-        // this.contracts=data.data['data'];
-        this.totalContractsLength = data.data.count;
-        this.contracts = data['data'].data;
-      }
-      );
+        );
+    }     
     // this.contracts = this.datatableService.updateFilter(this.searchForm.value.search, this.temp, ['name', 'client_name', 'party_code']);
   }
   onClearSearch() {
