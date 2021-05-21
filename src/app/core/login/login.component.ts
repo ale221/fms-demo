@@ -310,15 +310,16 @@ export class LoginComponent implements OnInit {
     this.forgotPasswordForm.reset();
     this.userService.sendEmailForForgetPassword(params).subscribe(res => {
       // console.log(res['error']);
-      try {
-        if (res['error'] === true) {
-          this.defaultLoader = {
-            visibility: false
-          }
-          // this.invalidEmail=true;
-          this.swalService.getErrorSwal("User doesn't exist");
-        }
-        else {
+      
+      // try {
+        // if (res['error'] === true) {
+        //   this.defaultLoader = {
+        //     visibility: false
+        //   }
+        //   // this.invalidEmail=true;
+        //   this.swalService.getErrorSwal("User doesn't exist");
+        // }
+        // else {
           this.defaultLoader = {
             visibility: false
           }
@@ -329,11 +330,14 @@ export class LoginComponent implements OnInit {
           this.createpassword = false;
           this.forgetPassword = true;
           this.firstTimeUser = false;
-        }
+        // }
 
-      } catch (error) {
+      // } catch (error) {
 
-      }
+      // }
+
+
+
     });
 
   }
