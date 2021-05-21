@@ -461,13 +461,17 @@ export class GoogleMapComponent implements OnInit {
         if (result && result.length) {
           result.forEach((element, i) => {
             if (element.code === 'Ok' && element.matchings && element.matchings.length > 0) {
+              // Trail with OSRM Map 
               element.matchings.forEach (match => {
                   if (match.geometry && match.geometry.coordinates && match.geometry.coordinates.length > 0) {
                     match.geometry.coordinates.forEach(coords => {
                       arrayToProcess.push(coords);
                     });
                   }
+              })
 
+              // Trail with Google Map
+              // element.matchings.forEach (match => {
               //   if (match.legs && match.legs.length > 0) {
               //     match.legs.forEach(legs => {
               //       if (legs.steps && legs.steps.length > 0) {
@@ -481,8 +485,7 @@ export class GoogleMapComponent implements OnInit {
               //       }
               //     });
               //   }
-              })
-
+              // })
             }
 
             if ((i + 1) === result.length) {
@@ -497,9 +500,13 @@ export class GoogleMapComponent implements OnInit {
               // Snapped Start and End Points with Google
               // const trailMarker1 = this.createDummyMarker(startIcon, this.snappedCoordinates[0].lat(), this.snappedCoordinates[0].lng(), info[0]);
               // const trailMarker2 = this.createDummyMarker(endIcon, this.snappedCoordinates[this.snappedCoordinates.length - 1].lat(), this.snappedCoordinates[this.snappedCoordinates.length - 1].lng(), info[1]);
-              // Snapped Start and End Points with OSRM
+              // Snapped Start and End Points with OSRM with GeoJSON
               const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0][1], arrayToProcess[0][0], info[0]);
               const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1][1], arrayToProcess[arrayToProcess.length - 1][0], info[1]);
+
+              // Snapped Start and End Points with OSRM with Polyline
+              // const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0].location[1], arrayToProcess[0].location[0], info[0]);
+              // const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1].location[1], arrayToProcess[arrayToProcess.length - 1].location[0], info[1]);
 
               tempMarkersArr.push(trailMarker1, trailMarker2);
               trailMarker1.setMap(this.map);
@@ -564,6 +571,7 @@ export class GoogleMapComponent implements OnInit {
 
 
   // Store snapped polyline returned by the snap-to-road service.
+  // Bkp function is for OSRM with GeoJSON
   processSnapToRoadResponse(data) {
     for (var i = 0; i < data.length; i++) {
       if (data[i] && data[i] && data[i].length > 0) {
@@ -574,6 +582,27 @@ export class GoogleMapComponent implements OnInit {
 
         var formatted_latlng = {
           lat: data[i][1], lng: data[i][0]
+        }
+
+        this.snappedCoodinatesFormatted.push(formatted_latlng);
+      }
+    }
+
+    this.osrmLatLng = this.snappedCoodinatesFormatted;
+  }
+
+
+  // with osrm polyline
+  processSnapToRoadResponse1(data) {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i] && data[i].location && data[i].location.length > 0) {
+        var latlng = new google.maps.LatLng(
+          data[i].location[1],
+          data[i].location[0]);
+        this.snappedCoordinates.push(latlng);
+
+        var formatted_latlng = {
+          lat: data[i].location[1], lng: data[i].location[0]
         }
 
         this.snappedCoodinatesFormatted.push(formatted_latlng);

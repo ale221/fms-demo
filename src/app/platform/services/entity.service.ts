@@ -393,6 +393,14 @@ export class EntityService {
 
   downloadXLS(param) {
     const url = `/iof/fleet_xls?${param}`
+
+    // const options = {headers, param, responseType: 'text' as 'text'};
+
+    return this.http.get<any>(url).share();
+  }
+
+  downloadPDF(param) {
+    const url = `/iof/fleet_pdf?${param}`
     return this.http.get<any>(url);
   }
 }

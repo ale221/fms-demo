@@ -1,6 +1,3 @@
-
-
-
 <app-unauthorized-page (isAuthorized)="isAuthorizedUser($event)" *ngIf="!isAuthorized"></app-unauthorized-page>
 
 <div [className]="sidebarCheck ? 'half-open-breadcrum breadcrumb-box' : 'full-open-breadcrum breadcrumb-box' "
@@ -313,6 +310,13 @@
                   : '-'}}
                 </div>
               </div>
+
+              <div class="margin-bottom-15 text-center" *ngIf="idleDuration">
+                <div class="font-size-14  margin-bottom-0">Since last park</div>
+                <span> {{convert(idleDuration)}}</span>
+              </div>
+
+
               <div class="margin-bottom-15 text-center">
                 <div class="font-size-14  margin-bottom-10"> Vehicle Speed (km/h)</div>
                 <div class="">
@@ -565,7 +569,8 @@
                 </div>
                 <div class="media-right">
                   <div class="font-size-15" style="padding-top: 6px;">{{(lastUpdatedCard | date: 'mediumDate') || '-'}}
-                    <br /> {{(lastUpdatedCard | date: 'mediumTime')}}</div>
+                    <br /> {{(lastUpdatedCard | date: 'mediumTime')}}
+                  </div>
                 </div>
               </div>
               <div class="media">
@@ -597,28 +602,28 @@
                 <div class="media-right">
                   <div class="font-size-15">
                     {{ (lastSpeed | number : '1.0-0') || truck?.last_speed}} km/h </div>
+                </div>
+              </div>
+              <div class="media" *ngIf="selectedPkg === PackageType.standard">
+                <div class="media-left">
+                  <figure class="">
+                    <img src="assets/images/icon-sensor (4).png" class="img-bordered1" style="height: 30px">
+                  </figure>
+                </div>
+                <div class="media-body">
+                  <div class="font-size-18 "> Temperature</div>
+                  <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                  <span class="label label-danger label-outline" *ngIf="!truck?.temperature"> Disabled </span>
+                  <span class="label label-success label-outline" *ngIf="truck?.temperature"> Enable </span>
+                </div>
+                <div class="media-right">
+                  <div class="font-size-16">
+                    {{truck?.signalRresponse?.evTemp ? truck?.signalRresponse?.evTemp : ((truck?.on_board_temperature)
+                    ? truck?.on_board_temperature : '-')}}
                   </div>
                 </div>
-                <div class="media" *ngIf="selectedPkg === PackageType.standard">
-                  <div class="media-left">
-                    <figure class="">
-                      <img src="assets/images/icon-sensor (4).png" class="img-bordered1" style="height: 30px">
-                    </figure>
-                  </div>
-                  <div class="media-body">
-                    <div class="font-size-18 "> Temperature</div>
-                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
-                    <span class="label label-danger label-outline" *ngIf="!truck?.temperature"> Disabled </span>
-                    <span class="label label-success label-outline" *ngIf="truck?.temperature"> Enable </span>
-                  </div>
-                  <div class="media-right">
-                    <div class="font-size-16">
-                      {{truck?.signalRresponse?.evTemp ? truck?.signalRresponse?.evTemp : ((truck?.on_board_temperature)
-                      ? truck?.on_board_temperature : '-')}}
-                    </div>
-                  </div>
-                </div>
-                <!-- <div class="media" *ngIf="selectedPkg === PackageType.standard && truck?.signalRresponse?.vol">
+              </div>
+              <!-- <div class="media" *ngIf="selectedPkg === PackageType.standard && truck?.signalRresponse?.vol">
                   <div class="media-left">
                     <figure class="">
                       <img src="assets/images/icon-sensor (5).png" class="img-bordered1" style="height: 30px">
@@ -634,20 +639,19 @@
                     <div class="font-size-16 grey-600"> {{ truck?.last_volume ? truck?.last_volume : truck?.signalRresponse?.vol}}% - {{(truck?.volume_capacity * truck?.signalRresponse?.vol) / 100}}l of {{truck?.volume_capacity}}l </div>
                   </div>
                 </div> -->
-                <div class="media" *ngIf="selectedPkg === PackageType.standard">
-                  <div class="media-left">
-                    <figure class="">
-                      <img src="assets/images/icon-sensor.png" class="img-bordered1" style="height: 30px">
-                    </figure>
-                  </div>
-                  <div class="media-body" style="color: gray;">
-                    <div class="font-size-18 grey-600 "> Humidity</div>
-                    <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
-                    <span class=" label label-danger label-outline"> Disabled </span>
-                  </div>
-                  <div class="media-right" style="color: gray;">
-                    <div class="font-size-16">0</div>
-                  </div>
+              <div class="media" *ngIf="selectedPkg === PackageType.standard">
+                <div class="media-left">
+                  <figure class="">
+                    <img src="assets/images/icon-sensor.png" class="img-bordered1" style="height: 30px">
+                  </figure>
+                </div>
+                <div class="media-body" style="color: gray;">
+                  <div class="font-size-18 grey-600 "> Humidity</div>
+                  <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                  <span class=" label label-danger label-outline"> Disabled </span>
+                </div>
+                <div class="media-right" style="color: gray;">
+                  <div class="font-size-16">0</div>
                 </div>
               </div>
             </div>
@@ -655,670 +659,673 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="row" style="border-radius: 20px;overflow: visible;" *ngIf="selectedPkg === PackageType.standard">
-      <div class="col-lg-12">
-        <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
+  <div class="row" style="border-radius: 20px;overflow: visible;" *ngIf="selectedPkg === PackageType.standard">
+    <div class="col-lg-12">
+      <div class="panel panel-default padding-0 round card shadow light" style="min-height: 200px;">
 
-          <div class="panel-body padding-0">
-            <div class="tab-content">
-              <div class="tab-pane active" id="Summary">
-                <div class="panel panel-default margin-bottom-0 ">
-                  <div class="panel-body padding-15 ">
-                    <div class="row margin-top-30">
-                      <div class="col-lg-12">
+        <div class="panel-body padding-0">
+          <div class="tab-content">
+            <div class="tab-pane active" id="Summary">
+              <div class="panel panel-default margin-bottom-0 ">
+                <div class="panel-body padding-15 ">
+                  <div class="row margin-top-30">
+                    <div class="col-lg-12">
 
-                        <mat-tab-group style="overflow: visible;" (selectedTabChange)="selectedTab($event)">
+                      <mat-tab-group style="overflow: visible;" (selectedTabChange)="selectedTab($event)">
 
-                          <mat-tab label="Last Job Summary">
-                            <div *ngIf="jobSummary;else noTask;">
-                              <div class="margin-top-20 margin-bottom-20 padding-20"
-                                style="border: 1px solid #eee; background-color: #f9f9f9;">
-                                <div class="row">
-                                  <div class="col-md-3">
-                                    <div class="media">
-                                      <div class="media-left">
-                                        <figure class="">
-                                          <img src="assets/images/icon-datetime.png" class="img-bordered"
-                                            style="height: 50px">
-                                        </figure>
+                        <mat-tab label="Last Job Summary">
+                          <div *ngIf="jobSummary;else noTask;">
+                            <div class="margin-top-20 margin-bottom-20 padding-20"
+                              style="border: 1px solid #eee; background-color: #f9f9f9;">
+                              <div class="row">
+                                <div class="col-md-3">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      <figure class="">
+                                        <img src="assets/images/icon-datetime.png" class="img-bordered"
+                                          style="height: 50px">
+                                      </figure>
+                                    </div>
+                                    <div class="media-body">
+                                      <div class="font-size-16" *ngIf="fleetJobSummary?.start_datetime">
+                                        {{start_dateViewJob}}
                                       </div>
-                                      <div class="media-body">
-                                        <div class="font-size-16" *ngIf="fleetJobSummary?.start_datetime">
-                                          {{start_dateViewJob}}
-                                        </div>
-                                        <div class="font-size-16" *ngIf="!fleetJobSummary?.start_datetime">
-                                          -
-                                        </div>
-                                        <div class="font-size-12">Start Date</div>
+                                      <div class="font-size-16" *ngIf="!fleetJobSummary?.start_datetime">
+                                        -
                                       </div>
+                                      <div class="font-size-12">Start Date</div>
                                     </div>
                                   </div>
-                                  <div class="col-md-3">
-                                    <div class="media">
-                                      <div class="media-left">
-                                        <figure class="">
-                                          <img src="assets/images/icon-datetime.png" class="img-bordered"
-                                            style="height: 50px">
-                                        </figure>
+                                </div>
+                                <div class="col-md-3">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      <figure class="">
+                                        <img src="assets/images/icon-datetime.png" class="img-bordered"
+                                          style="height: 50px">
+                                      </figure>
+                                    </div>
+                                    <div class="media-body">
+                                      <div class="font-size-16" *ngIf="fleetJobSummary?.end_datetime">
+                                        {{end_dateViewjob}}
                                       </div>
-                                      <div class="media-body">
-                                        <div class="font-size-16" *ngIf="fleetJobSummary?.end_datetime">
-                                          {{end_dateViewjob}}
-                                        </div>
-                                        <div class="font-size-16" *ngIf="!fleetJobSummary?.end_datetime">
-                                          -
-                                        </div>
-                                        <div class="font-size-12"> End Date</div>
+                                      <div class="font-size-16" *ngIf="!fleetJobSummary?.end_datetime">
+                                        -
                                       </div>
+                                      <div class="font-size-12"> End Date</div>
                                     </div>
                                   </div>
+                                </div>
 
-                                  <div class="col-md-3">
-                                    <div class="media">
-                                      <div class="media-left">
-                                        <figure class="">
-                                          <img src="assets/images/iol/icon_fleet_management.png" class="img-bordered"
-                                            style="height: 50px">
-                                        </figure>
+                                <div class="col-md-3">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      <figure class="">
+                                        <img src="assets/images/iol/icon_fleet_management.png" class="img-bordered"
+                                          style="height: 50px">
+                                      </figure>
+                                    </div>
+                                    <div class="media-body">
+                                      <div class="font-size-16">
+                                        {{fleetJobSummary?.schedule_type_label}}
                                       </div>
-                                      <div class="media-body">
-                                        <div class="font-size-16">
-                                          {{fleetJobSummary?.schedule_type_label}}
-                                        </div>
-                                        <div class="font-size-12"> Job Type</div>
-                                      </div>
+                                      <div class="font-size-12"> Job Type</div>
                                     </div>
                                   </div>
-                                  <div class="col-md-3">
-                                    <div class="media">
-                                      <div class="media-left">
-                                        <figure class="">
-                                          <img
-                                            [src]="jobSummary?.driver_image ? jobSummary?.driver_image : 'assets/images/iol/driver_placeholder.png'"
-                                            class="img-bordered" style="height: 50px">
-                                        </figure>
+                                </div>
+                                <div class="col-md-3">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      <figure class="">
+                                        <img
+                                          [src]="jobSummary?.driver_image ? jobSummary?.driver_image : 'assets/images/iol/driver_placeholder.png'"
+                                          class="img-bordered" style="height: 50px">
+                                      </figure>
+                                    </div>
+                                    <div class="media-body">
+                                      <div class="font-size-16">
+                                        {{fleetJobSummary?.driver_name}}
                                       </div>
-                                      <div class="media-body">
-                                        <div class="font-size-16">
-                                          {{fleetJobSummary?.driver_name}}
-                                        </div>
-                                        <div class="font-size-12"> Driver
-                                        </div>
+                                      <div class="font-size-12"> Driver
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
+                            </div>
 
-                              <div class="col-lg-4 padding-0">
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <div class="panel panel-dark margin-bottom-0">
-                                      <div class="panel-heading margin-bottom-0">
-                                        <h3 class="panel-title">Details</h3>
-                                      </div>
+                            <div class="col-lg-4 padding-0">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="panel panel-dark margin-bottom-0">
+                                    <div class="panel-heading margin-bottom-0">
+                                      <h3 class="panel-title">Details</h3>
+                                    </div>
 
-                                      <div class="vscroll" style="max-height: 135px;">
-                                        <table class="table table-hover table-striped margin-bottom-0">
-                                          <tbody>
-                                            <tr>
-                                              <th> <b> Job Name </b> </th>
-                                              <td class="text-left">
-                                                {{fleetJobSummary?.job_name || '-'}}
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th> <b> Travelled Distance</b>
-                                              </th>
-                                              <td class="text-left">
-                                                {{(fleetJobSummary?.distance_travelled | number: '1.0-0') || 0}} Km
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th> <b> Speed </b> </th>
-                                              <td class="text-left text-break">
-                                                <!-- <div> Min: {{min_speed | number : '1.0-0' || '-'}} km/h </div> -->
-                                                <div>
-                                                  Max: {{fleetJobSummary?.max_speed || 0 }}
-                                                  km/h </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <th> <b> Violations</b>
-                                              </th>
-                                              <td class="text-left text-break">
-                                                {{fleetJobSummary?.violation_count || 0}}
-                                              </td>
-                                            </tr>
-                                            <!-- <tr>
+                                    <div class="vscroll" style="max-height: 135px;">
+                                      <table class="table table-hover table-striped margin-bottom-0">
+                                        <tbody>
+                                          <tr>
+                                            <th> <b> Job Name </b> </th>
+                                            <td class="text-left">
+                                              {{fleetJobSummary?.job_name || '-'}}
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Travelled Distance</b>
+                                            </th>
+                                            <td class="text-left">
+                                              {{(fleetJobSummary?.distance_travelled | number: '1.0-0') || 0}} Km
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Speed </b> </th>
+                                            <td class="text-left text-break">
+                                              <!-- <div> Min: {{min_speed | number : '1.0-0' || '-'}} km/h </div> -->
+                                              <div>
+                                                Max: {{fleetJobSummary?.max_speed || 0 }}
+                                                km/h </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <th> <b> Violations</b>
+                                            </th>
+                                            <td class="text-left text-break">
+                                              {{fleetJobSummary?.violation_count || 0}}
+                                            </td>
+                                          </tr>
+                                          <!-- <tr>
                                               <th> <b> Maintenances </b>
                                               </th>
                                               <td class="text-left text-break">
                                                 {{fleetJobSummary?.maintainance_count || 0}}
                                               </td>
                                             </tr> -->
-                                            <tr>
-                                              <th> <b> Fillups </b> </th>
-                                              <td class="text-left text-break">
-                                                {{fleetJobSummary?.fillup_count || 0}}
-                                              </td>
-                                            </tr>
-                                            <!-- <tr>
+                                          <tr>
+                                            <th> <b> Fillups </b> </th>
+                                            <td class="text-left text-break">
+                                              {{fleetJobSummary?.fillup_count || 0}}
+                                            </td>
+                                          </tr>
+                                          <!-- <tr>
                                               <th> <b> Aborted Reason </b> </th>
                                               <td class="text-left text-break aborted_reason">
                                                 {{fleetJobSummary?.aborted_reason || '-' }}
                                               </td>
                                             </tr> -->
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="col-lg-12 padding-top-20">
-                                    <div class="panel panel-dark margin-bottom-0">
-                                      <div class="panel-heading margin-bottom-0 ">
-                                        <h3 class="panel-title">Job Trail</h3>
-                                        <div class="margin-bottom-0 ">
-                                          <app-google-map #jobTrailMap mapType="false" style="width:100%; height:295px"
-                                            [height]="'295px'" [showSearchBar]="false">
-                                          </app-google-map>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-
-                              <div class="col-lg-8 ">
-                                <div class="row">
-                                  <div class="col-sm-4">
-                                    <div class="text-center  margin-bottom-10 font-size-16 ">
-                                      Completed Tasks
-                                    </div>
-
-                                    <div class="c100 small1 red"
-                                      [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.COMPLETED)">
-                                      <span class="pointer">
-                                        <!-- {{getProgress1(jobSummaryTasks, TaskStatus.COMPLETED )}} -->
-                                        {{fleetJobSummary?.completed_task}}
-                                      </span>
-                                      <div class="slice">
-                                        <div class="bar"></div>
-                                        <div class="fill"></div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="col-sm-4 ">
-                                    <div class="text-center margin-bottom-10 font-size-16 ">
-                                      Pending Tasks</div>
-                                    <div class="c100 small1 red"
-                                      [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.PENDING)">
-                                      <span class="pointer">
-                                        {{getProgress1(fleetJobSummary?.job_tasks, TaskStatus.PENDING)}}
-                                      </span>
-                                      <div class="slice">
-                                        <div class="bar"></div>
-                                        <div class="fill"></div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="col-sm-4 ">
-                                    <div class="text-center  margin-bottom-10 font-size-16 ">
-                                      Aborted Tasks</div>
-
-                                    <div class="c100 small1 red"
-                                      [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.ABORTED)">
-                                      <span class="pointer">
-                                        <!-- {{getProgress1(jobSummaryTasks, TaskStatus.ABORTED )}} -->
-                                        {{fleetJobSummary?.aborted_task}}
-                                      </span>
-                                      <div class="slice">
-                                        <div class="bar"></div>
-                                        <div class="fill"></div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-lg-12 padding-top-40">
-
-                                    <div class="panel panel-dark margin-bottom-0">
-                                      <div class="panel-heading margin-bottom-0 ">
-                                        <h3 class="panel-title">Listing</h3>
-                                      </div>
-                                      <div class="panel-body padding-15 padding-left-0 padding--0">
-                                        <div class="table-responsive   vscroll" style="height: auto;">
-                                          <div id="ppp_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer"
-                                            style="width: 100%;">
-
-                                            <div class="row">
-                                              <div class="col-sm-12">
-                                                <div class="dataTables_scroll">
-                                                  <div class="dataTables_scrollBody"
-                                                    style="position: relative; overflow: auto; max-height: 250px; height: 250px; width: 100%;">
-                                                    <table
-                                                      class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap dataTable no-footer dtr-inline collapsed"
-                                                      id="ppp" role="grid" aria-describedby="ppp_info"
-                                                      style="width: 100%;">
-                                                      <thead>
-                                                        <tr role="row" style="height: 0px;">
-                                                          <th class="sorting_asc" tabindex="0" aria-controls="ppp"
-                                                            rowspan="1" colspan="1" style="width: 53px;"
-                                                            aria-sort="ascending"
-                                                            aria-label=" Job Name: activate to sort column descending">
-                                                            Task Priority</th>
-                                                          <th class="sorting" tabindex="0" aria-controls="ppp"
-                                                            rowspan="1" colspan="1" style="width: 79px;"
-                                                            aria-label=" Start Date : activate to sort column ascending">
-                                                            Status </th>
-
-
-                                                          <th class="sorting" tabindex="0" aria-controls="ppp"
-                                                            rowspan="1" colspan="1" style="width: 112px;"
-                                                            aria-label="Description: activate to sort column ascending">
-                                                            Aborted Reason</th>
-
-                                                        </tr>
-                                                      </thead>
-
-                                                      <tbody>
-
-                                                        <tr role="row" class="odd"
-                                                          *ngFor="let job of fleetJobSummary?.job_tasks; ">
-                                                          <td> {{job.priority || 'N/A'}}
-                                                          </td>
-                                                          <td>{{getTaskProgress(job?.job_status) || 'N/A'}}</td>
-
-                                                          <td style="white-space: break-spaces;">{{job.aborted_status ||
-                                                            '-'}} : {{job.aborted_reason || '-'}}</td>
-
-                                                          <td style="display: none;">
-                                                            <button type="button"
-                                                              class="btn btn-icon  btn-info btn-xs "> <i
-                                                                class="ri-pencil-fill"></i> </button>
-                                                            <button type="button"
-                                                              class="btn btn-icon  btn-danger btn-xs "> <i
-                                                                class="ri-delete-bin-6-line"></i> </button>
-                                                          </td>
-                                                        </tr>
-
-                                                      </tbody>
-                                                    </table>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                        </div>
-
-
-
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-
-                              </div>
-
-
-
-                            </div>
-
-                            <ng-template #noTask>
-                              <div
-                                style="display: flex;justify-content: center;align-items: center;height:100%;font-size: 18px;">
-                                <span>No completed job found.</span>
-                              </div>
-                            </ng-template>
-                          </mat-tab>
-
-                          <mat-tab label="Map Trail">
-                            <div class="row margin-top-10">
-                              <app-reporting-buttons [calendarDimension]="'col-sm-6'" [type]="'trail'"
-                                [timeRange]="true" [hideBtn]="'today yesterday week month'"
-                                (btnClicked)="setupReport($event)" [makeDisable]="trailLoader">
-                              </app-reporting-buttons>
-                              <div class="col-lg-3">
-                                <div class="inline-block">
-                                  <div class="checkbox-custom checkbox-primary ">
-                                    <input type="checkbox" id="checkbox1" [(ngModel)]="showMarkersForTrail"
-                                      (change)="showMarkerValueChanges()" />
-                                    <label for="checkbox1">Show Idling Locations<i
-                                        [pTooltip]="'This will regenerate the map.'"
-                                        class="padding-left-3 fa fa-info-circle"></i></label>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row margin-top-20">
-                              <div class="col-lg-12">
-                                <div class="row text-center margin-bottom-20   clearfix  ">
-                                  <div class="col-sm-4">
-                                    <div class="vertical-align height-70  border-double">
-                                      <div class="vertical-align-middle">
-                                        <div class="font-size-10">Fuel Consumed
-                                        </div>
-                                        <b class="font-size-12">{{fuel_consumed ?
-                                          fuel_consumed : 0 | number: '1.0-2'}}
-                                          (L) </b>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-sm-4">
-                                    <div class="vertical-align height-70  border-double">
-                                      <div class="vertical-align-middle">
-                                        <div class="font-size-10">Distance Travelled
-                                        </div>
-                                        <b class="font-size-12">{{distance_travelled}}
-                                          (km)</b>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-sm-4">
-                                    <div class="vertical-align height-70  border-double">
-                                      <div class="vertical-align-middle">
-                                        <div class="font-size-10">Jobs
-                                          Completed</div>
-                                        <b class="font-size-12">{{activities_completed}}
-                                        </b>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div *ngIf="showMarkersForTrail && trailWithStopsInfo.length" class="col-lg-3">
-                                  <div class="bg-cyan-100 padding-0 ">
-                                    <div class="table-responsive vscroll" style="height:550px;">
-
-                                      <table class="table  table-condensed margin-bottom-0 bg-white">
-                                        <thead>
-                                          <tr>
-                                            <th class="text-center">Start Time
-                                            </th>
-                                            <th class="text-center">End Time
-                                            </th>
-                                            <th class="text-center">Duration
-                                            </th>
-                                            <!-- <th class="text-center">Stop Type
-                                            </th> -->
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr class="pointer" *ngFor="let row of trailWithStopsInfo; "
-                                            [class.active]="row === selected[0]"
-                                            (click)="onSelect({selected: row}, 'trail')">
-                                            <td class="text-center">
-                                              {{(row.start_time * 1000) |
-                                              date: 'short'}}
-                                            </td>
-                                            <td class="text-center">
-                                              {{(row.end_time * 1000) |
-                                              date:'short'}}
-                                            </td>
-                                            <td class="text-center">
-                                              {{row.duration}}</td>
-                                            <!-- <td class="text-center">
-                                              {{row.stop_type || 'N/A'}}</td> -->
-                                          </tr>
                                         </tbody>
                                       </table>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="margin-bottom-0"
-                                  [ngClass]="showMarkersForTrail && trailWithStopsInfo.length? 'col-lg-9' : '' ">
-                                  <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
-                                    [infowindow]="violationInfoWindows">
-                                  </app-google-map>
-                                  <!-- <div id="map" class="map"></div> -->
-                                  <app-spin-loading [appLoader]="trailLoader"></app-spin-loading>
 
+                                <div class="col-lg-12 padding-top-20">
+                                  <div class="panel panel-dark margin-bottom-0">
+                                    <div class="panel-heading margin-bottom-0 ">
+                                      <h3 class="panel-title">Job Trail</h3>
+                                      <div class="margin-bottom-0 ">
+                                        <app-google-map #jobTrailMap mapType="false" style="width:100%; height:295px"
+                                          [height]="'295px'" [showSearchBar]="false">
+                                        </app-google-map>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <div class="col-lg-8 ">
+                              <div class="row">
+                                <div class="col-sm-4">
+                                  <div class="text-center  margin-bottom-10 font-size-16 ">
+                                    Completed Tasks
+                                  </div>
+
+                                  <div class="c100 small1 red"
+                                    [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.COMPLETED)">
+                                    <span class="pointer">
+                                      <!-- {{getProgress1(jobSummaryTasks, TaskStatus.COMPLETED )}} -->
+                                      {{fleetJobSummary?.completed_task}}
+                                    </span>
+                                    <div class="slice">
+                                      <div class="bar"></div>
+                                      <div class="fill"></div>
+                                    </div>
+                                  </div>
                                 </div>
 
+                                <div class="col-sm-4 ">
+                                  <div class="text-center margin-bottom-10 font-size-16 ">
+                                    Pending Tasks</div>
+                                  <div class="c100 small1 red"
+                                    [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.PENDING)">
+                                    <span class="pointer">
+                                      {{getProgress1(fleetJobSummary?.job_tasks, TaskStatus.PENDING)}}
+                                    </span>
+                                    <div class="slice">
+                                      <div class="bar"></div>
+                                      <div class="fill"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-4 ">
+                                  <div class="text-center  margin-bottom-10 font-size-16 ">
+                                    Aborted Tasks</div>
+
+                                  <div class="c100 small1 red"
+                                    [ngClass]="getFillClass(jobSummaryTasks, TaskStatus.ABORTED)">
+                                    <span class="pointer">
+                                      <!-- {{getProgress1(jobSummaryTasks, TaskStatus.ABORTED )}} -->
+                                      {{fleetJobSummary?.aborted_task}}
+                                    </span>
+                                    <div class="slice">
+                                      <div class="bar"></div>
+                                      <div class="fill"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-lg-12 padding-top-40">
+
+                                  <div class="panel panel-dark margin-bottom-0">
+                                    <div class="panel-heading margin-bottom-0 ">
+                                      <h3 class="panel-title">Listing</h3>
+                                    </div>
+                                    <div class="panel-body padding-15 padding-left-0 padding--0">
+                                      <div class="table-responsive   vscroll" style="height: auto;">
+                                        <div id="ppp_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer"
+                                          style="width: 100%;">
+
+                                          <div class="row">
+                                            <div class="col-sm-12">
+                                              <div class="dataTables_scroll">
+                                                <div class="dataTables_scrollBody"
+                                                  style="position: relative; overflow: auto; max-height: 250px; height: 250px; width: 100%;">
+                                                  <table
+                                                    class="table nowrap margin-bottom-0 table-bordered  table-striped theme-table1  bg-white  table-condensed  text-wrap dataTable no-footer dtr-inline collapsed"
+                                                    id="ppp" role="grid" aria-describedby="ppp_info"
+                                                    style="width: 100%;">
+                                                    <thead>
+                                                      <tr role="row" style="height: 0px;">
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="ppp"
+                                                          rowspan="1" colspan="1" style="width: 53px;"
+                                                          aria-sort="ascending"
+                                                          aria-label=" Job Name: activate to sort column descending">
+                                                          Task Priority</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="ppp" rowspan="1"
+                                                          colspan="1" style="width: 79px;"
+                                                          aria-label=" Start Date : activate to sort column ascending">
+                                                          Status </th>
+
+
+                                                        <th class="sorting" tabindex="0" aria-controls="ppp" rowspan="1"
+                                                          colspan="1" style="width: 112px;"
+                                                          aria-label="Description: activate to sort column ascending">
+                                                          Aborted Reason</th>
+
+                                                      </tr>
+                                                    </thead>
+
+                                                    <tbody>
+
+                                                      <tr role="row" class="odd"
+                                                        *ngFor="let job of fleetJobSummary?.job_tasks; ">
+                                                        <td> {{job.priority || 'N/A'}}
+                                                        </td>
+                                                        <td>{{getTaskProgress(job?.job_status) || 'N/A'}}</td>
+
+                                                        <td style="white-space: break-spaces;">{{job.aborted_status ||
+                                                          '-'}} : {{job.aborted_reason || '-'}}</td>
+
+                                                        <td style="display: none;">
+                                                          <button type="button" class="btn btn-icon  btn-info btn-xs ">
+                                                            <i class="ri-pencil-fill"></i> </button>
+                                                          <button type="button"
+                                                            class="btn btn-icon  btn-danger btn-xs "> <i
+                                                              class="ri-delete-bin-6-line"></i> </button>
+                                                        </td>
+                                                      </tr>
+
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      </div>
+
+
+
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                            </div>
+
+
+
+                          </div>
+
+                          <ng-template #noTask>
+                            <div
+                              style="display: flex;justify-content: center;align-items: center;height:100%;font-size: 18px;">
+                              <span>No completed job found.</span>
+                            </div>
+                          </ng-template>
+                        </mat-tab>
+
+                        <mat-tab label="Map Trail">
+                          <div class="row margin-top-10">
+                            <app-reporting-buttons [calendarDimension]="'col-sm-6'" [type]="'trail'" [timeRange]="true"
+                              [hideBtn]="'today yesterday week month'" (btnClicked)="setupReport($event)"
+                              [makeDisable]="trailLoader">
+                            </app-reporting-buttons>
+                            <div class="col-lg-3">
+                              <div class="inline-block">
+                                <div class="checkbox-custom checkbox-primary ">
+                                  <input type="checkbox" id="checkbox1" [(ngModel)]="showMarkersForTrail"
+                                    (change)="showMarkerValueChanges()" />
+                                  <label for="checkbox1">Show Idling Locations<i
+                                      [pTooltip]="'This will regenerate the map.'"
+                                      class="padding-left-3 fa fa-info-circle"></i></label>
+                                </div>
                               </div>
                             </div>
-                          </mat-tab>
+                          </div>
+                          <div class="row margin-top-20">
+                            <div class="col-lg-12">
+                              <div class="row text-center margin-bottom-20   clearfix  ">
+                                <div class="col-sm-4">
+                                  <div class="vertical-align height-70  border-double">
+                                    <div class="vertical-align-middle">
+                                      <div class="font-size-10">Fuel Consumed
+                                      </div>
+                                      <b class="font-size-12">{{fuel_consumed ?
+                                        fuel_consumed : 0 | number: '1.0-2'}}
+                                        (L) </b>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="vertical-align height-70  border-double">
+                                    <div class="vertical-align-middle">
+                                      <div class="font-size-10">Distance Travelled
+                                      </div>
+                                      <b class="font-size-12">{{distance_travelled}}
+                                        (km)</b>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="vertical-align height-70  border-double">
+                                    <div class="vertical-align-middle">
+                                      <div class="font-size-10">Jobs
+                                        Completed</div>
+                                      <b class="font-size-12">{{activities_completed}}
+                                      </b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
 
-                          <mat-tab label="Fillups">
-                            <div class="row margin-top-10">
-                              <app-fillup-reporting [entity]="entityId">
-                              </app-fillup-reporting>
+                              <div *ngIf="showMarkersForTrail && trailWithStopsInfo.length" class="col-lg-3">
+                                <div class="bg-cyan-100 padding-0 ">
+                                  <div class="table-responsive vscroll" style="height:550px;">
+
+                                    <table class="table  table-condensed margin-bottom-0 bg-white">
+                                      <thead>
+                                        <tr>
+                                          <th class="text-center">Start Time
+                                          </th>
+                                          <th class="text-center">End Time
+                                          </th>
+                                          <th class="text-center">Duration
+                                          </th>
+                                          <!-- <th class="text-center">Stop Type
+                                          </th> -->
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr class="pointer" *ngFor="let row of trailWithStopsInfo; "
+                                          [class.active]="row === selected[0]"
+                                          (click)="onSelect({selected: row}, 'trail')">
+                                          <td class="text-center">
+                                            {{(row.start_time * 1000) |
+                                            date: 'short'}}
+                                          </td>
+                                          <td class="text-center">
+                                            {{(row.end_time * 1000) |
+                                            date:'short'}}
+                                          </td>
+                                          <td class="text-center">
+                                            {{row.duration}}</td>
+                                          <!-- <td class="text-center">
+                                            {{row.stop_type || 'N/A'}}</td> -->
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="margin-bottom-0"
+                                [ngClass]="showMarkersForTrail && trailWithStopsInfo.length? 'col-lg-9' : '' ">
+                                <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
+                                  [infowindow]="violationInfoWindows">
+                                </app-google-map>
+                                
+                                <!-- <div id="map" class="map"></div> -->
+                                <app-spin-loading [appLoader]="trailLoader"></app-spin-loading>
+
+                              </div>
+
                             </div>
-                          </mat-tab>
+                          </div>
+                        </mat-tab>
 
-                          <mat-tab label="Maintenances">
-                            <div class="row margin-top-10">
-                              <app-maintenance-reporting [entity]="entityId" [serviceObj]="maintenanceService"
-                                [isEntityTruck]="true" (pdfReportObj)="generatePDFReport('maintenances', $event)">
-                              </app-maintenance-reporting>
-                            </div>
-                          </mat-tab>
+                        <mat-tab label="Fillups">
+                          <div class="row margin-top-10">
+                            <app-fillup-reporting [entity]="entityId">
+                            </app-fillup-reporting>
+                          </div>
+                        </mat-tab>
 
-                          <mat-tab label="Mileage" *ngIf="selectedPkg==6">
-                            <div class="row margin-top-10" style="overflow: visible;">
-                              
-                              <div class="form-group" >
-                                <form [formGroup]="MileageForm" >
-                                  <div class="row" style="margin-top: 30px;margin-left: 13px;">
-                                    <div class="col-md-3">
-                                      <!-- <p-dropdown [options]="mileageFilter" name="year" formControlName="year"  (onChange)="onYearMonthChange($event)"
+                        <mat-tab label="Maintenances">
+                          <div class="row margin-top-10">
+                            <app-maintenance-reporting [entity]="entityId" [serviceObj]="maintenanceService"
+                              [isEntityTruck]="true" (pdfReportObj)="generatePDFReport('maintenances', $event)">
+                            </app-maintenance-reporting>
+                          </div>
+                        </mat-tab>
+
+                        <mat-tab label="Mileage" *ngIf="selectedPkg==6">
+                          <div class="row margin-top-10" style="overflow: visible;">
+
+                            <div class="form-group">
+                              <form [formGroup]="MileageForm">
+                                <div class="row" style="margin-top: 30px;margin-left: 13px;">
+                                  <div class="col-md-3">
+                                    <!-- <p-dropdown [options]="mileageFilter" name="year" formControlName="year"  (onChange)="onYearMonthChange($event)"
                                         styleClass="prime-dropdown" placeholder="Select Year">
                                       </p-dropdown> -->
 
-                                      <select class="form-control " formControlName="year" placeholder="Select Year"
+                                    <select class="form-control " formControlName="year" placeholder="Select Year"
                                       (change)="onYearMonthChange($event.target.value)">
                                       <option value="">Select Year</option>
                                       <option *ngFor="let fleet of mileageFilter" [value]="fleet.value">
                                         {{fleet.label}}</option>
                                     </select>
-                                      <!-- <p-dropdown [options]="violationTypesDropDown" name="violation_type"
+                                    <!-- <p-dropdown [options]="violationTypesDropDown" name="violation_type"
                                         [(ngModel)]="violation_type_id" (onChange)="violationTypeChanged($event)"
                                         styleClass="prime-dropdown" placeholder="Select Violation Type">
                                       </p-dropdown> -->
 
 
 
-                                    </div>
-                                    <div class="col-md-3">
+                                  </div>
+                                  <div class="col-md-3">
 
-                                      <select class="form-control " placeholder="Select Month" formControlName="month"
+                                    <select class="form-control " placeholder="Select Month" formControlName="month"
                                       (change)="onMonthChange($event.target.value)">
                                       <option value="">Select Month</option>
                                       <option *ngFor="let fleet of monthName" [value]="fleet.id">
                                         {{fleet.name}}</option>
                                     </select>
 
-                                      <!-- <p-dropdown [options]="monthName" name="selectedGroup" formControlName="month" (onChange)="onMonthChange($event)" styleClass="prime-dropdown"
+                                    <!-- <p-dropdown [options]="monthName" name="selectedGroup" formControlName="month" (onChange)="onMonthChange($event)" styleClass="prime-dropdown"
                                         placeholder="Select Month">
                                       </p-dropdown> -->
-                                    </div>
-                                  </div>
-                                </form>  
-                                <!-- (matSortChange)="sortUserList($event)" -->
-                                <div class="row" style="margin-top: 30px;margin-left: 13px;">
-                                  <div *ngIf="FilterTypeTable == 1 ">
-                                    <table matSort  class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
-                                        mat-table [dataSource]="milageData" mat-elevation-z8>
-          
-                                        <ng-container matColumnDef="id">
-                                          <th mat-header-cell *matHeaderCellDef >{{selectedYear}}</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.month == null) ? '-': row.month}}
-                                          </td>
-                                          
-                                        </ng-container>
-                                        <ng-container matColumnDef="first_name">
-                                          <th mat-header-cell *matHeaderCellDef >Fuel Filled(Liter)</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.fuel_filled == null) ? '-': row.fuel_filled}}
-                                          </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="last_name">
-                                          <th mat-header-cell *matHeaderCellDef >Distance Travelled(KM)</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.distance == null) ? '-': row.distance}}
-                                          </td>
-                                        </ng-container>
-          
-                                        <ng-container matColumnDef="date_joined">
-                                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mileage(KM/L)</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.mileage == null) ? '-': row.mileage}}
-                                          </td>
-                                        </ng-container>
-                                        <ng-container >
-                                         
-                                          <td mat-cell *matCellDef="let row">
-                                           Total
-                                          </td>
-                                        </ng-container>
-                                        
-                                        
-                                      
-          
-                                        <tr mat-header-row *matHeaderRowDef="displayedUserList"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: displayedUserList;"></tr>
-                                    </table>
-                                  </div>
-
-
-                                  <div *ngIf="FilterTypeTable == 2 ">
-                                    <table matSort  class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
-                                        mat-table [dataSource]="monthData" mat-elevation-z8>
-          
-                                        <ng-container matColumnDef="id">
-                                          <th mat-header-cell *matHeaderCellDef >{{selectedMonth}}</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.week == null) ? '-': row.week}}
-                                          </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="first_name">
-                                          <th mat-header-cell *matHeaderCellDef >Fuel Filled(Liter)</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.fuel_filled == null) ? '-': row.fuel_filled}}
-                                          </td>
-                                        </ng-container>
-                                        <ng-container matColumnDef="last_name">
-                                          <th mat-header-cell *matHeaderCellDef >Distance Travelled(KM)</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.distance == null) ? '-': row.distance}}
-                                          </td>
-                                        </ng-container>
-          
-                                        <ng-container matColumnDef="date_joined">
-                                          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mileage(KM/L)</th>
-                                          <td mat-cell *matCellDef="let row">
-                                            {{(row.mileage == null) ? '-': row.mileage}}
-                                          </td>
-                                        </ng-container>
-                                        
-                                        
-                                      
-          
-                                        <tr mat-header-row *matHeaderRowDef="displayedUserList2"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: displayedUserList2;"></tr>
-                                    </table>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </div>
-                          </mat-tab>
-
-                          <mat-tab label="Violations">
-                            <div class="row margin-top-10">
-                              <app-violation-reporting [entity]="entityId" [displayFilter]="true">
-                              </app-violation-reporting>
-                            </div>
-                          </mat-tab>
-
-                          <mat-tab label="Snapshot">
-                            <div class="margin-bottom-10 row margin-top-10">
-                              <form novalidate [formGroup]="snapForm">
-                                <div class="col-sm-4">
-                                  <div class="input-group">
-                                    <p-calendar formControlName="snapshotDate" [styleClass]="'prime-datetime'"
-                                      [showTime]="true" placeholder="Select Date" [(ngModel)]="snapshotDate">
-                                    </p-calendar>
-
-                                    <span class="input-group-btn">
-                                      <button [disabled]="!snapshotDate" (click)="onSubmit(snapForm.value)"
-                                        class="btn btn-success" [ngStyle]="theme">
-                                        <i class="ion-arrow-right-c"></i>
-                                      </button>
-                                    </span>
                                   </div>
                                 </div>
                               </form>
-                            </div>
-                            <div class="row">
-                              <div class="col-lg-8">
-                                <div class="row text-center   margin-bottom-20   clearfix  ">
-                                  <div class="col-sm-4">
-                                    <div class="vertical-align height-70  border-double">
-                                      <div class="vertical-align-middle">
-                                        <div class="font-size-10">Vehicle State
-                                        </div>
-                                        <b class="font-size-12">
-                                          {{snapshotData.vehicle_state ? (snapshotData.vehicle_state == 'Idle' ? 'Idle'
-                                          : 'Moving') : '-'}}
+                              <!-- (matSortChange)="sortUserList($event)" -->
+                              <div class="row" style="margin-top: 30px;margin-left: 13px;">
+                                <div *ngIf="FilterTypeTable == 1 ">
+                                  <table matSort
+                                    class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                    mat-table [dataSource]="milageData" mat-elevation-z8>
 
-                                        </b>
+                                    <ng-container matColumnDef="id">
+                                      <th mat-header-cell *matHeaderCellDef>{{selectedYear}}</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.month == null) ? '-': row.month}}
+                                      </td>
+
+                                    </ng-container>
+                                    <ng-container matColumnDef="first_name">
+                                      <th mat-header-cell *matHeaderCellDef>Fuel Filled(Liter)</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.fuel_filled == null) ? '-': row.fuel_filled}}
+                                      </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="last_name">
+                                      <th mat-header-cell *matHeaderCellDef>Distance Travelled(KM)</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.distance == null) ? '-': row.distance}}
+                                      </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="date_joined">
+                                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Mileage(KM/L)</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.mileage == null) ? '-': row.mileage}}
+                                      </td>
+                                    </ng-container>
+                                    <ng-container>
+
+                                      <td mat-cell *matCellDef="let row">
+                                        Total
+                                      </td>
+                                    </ng-container>
+
+
+
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedUserList"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedUserList;"></tr>
+                                  </table>
+                                </div>
+
+
+                                <div *ngIf="FilterTypeTable == 2 ">
+                                  <table matSort
+                                    class="table margin-bottom-0 table-condensed1 table-bordered1 text-wrap theme-table1"
+                                    mat-table [dataSource]="monthData" mat-elevation-z8>
+
+                                    <ng-container matColumnDef="id">
+                                      <th mat-header-cell *matHeaderCellDef>{{selectedMonth}}</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.week == null) ? '-': row.week}}
+                                      </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="first_name">
+                                      <th mat-header-cell *matHeaderCellDef>Fuel Filled(Liter)</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.fuel_filled == null) ? '-': row.fuel_filled}}
+                                      </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="last_name">
+                                      <th mat-header-cell *matHeaderCellDef>Distance Travelled(KM)</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.distance == null) ? '-': row.distance}}
+                                      </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="date_joined">
+                                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Mileage(KM/L)</th>
+                                      <td mat-cell *matCellDef="let row">
+                                        {{(row.mileage == null) ? '-': row.mileage}}
+                                      </td>
+                                    </ng-container>
+
+
+
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedUserList2"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedUserList2;"></tr>
+                                  </table>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </mat-tab>
+
+                        <mat-tab label="Violations">
+                          <div class="row margin-top-10">
+                            <app-violation-reporting [entity]="entityId" [displayFilter]="true">
+                            </app-violation-reporting>
+                          </div>
+                        </mat-tab>
+
+                        <mat-tab label="Snapshot">
+                          <div class="margin-bottom-10 row margin-top-10">
+                            <form novalidate [formGroup]="snapForm">
+                              <div class="col-sm-4">
+                                <div class="input-group">
+                                  <p-calendar formControlName="snapshotDate" [styleClass]="'prime-datetime'"
+                                    [showTime]="true" placeholder="Select Date" [(ngModel)]="snapshotDate">
+                                  </p-calendar>
+
+                                  <span class="input-group-btn">
+                                    <button [disabled]="!snapshotDate" (click)="onSubmit(snapForm.value)"
+                                      class="btn btn-success" [ngStyle]="theme">
+                                      <i class="ion-arrow-right-c"></i>
+                                    </button>
+                                  </span>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-8">
+                              <div class="row text-center   margin-bottom-20   clearfix  ">
+                                <div class="col-sm-4">
+                                  <div class="vertical-align height-70  border-double">
+                                    <div class="vertical-align-middle">
+                                      <div class="font-size-10">Vehicle State
                                       </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-sm-4">
-                                    <div class="vertical-align height-70  border-double">
-                                      <div class="vertical-align-middle">
-                                        <div class="font-size-10">Speed</div>
-                                        <b class="font-size-12">{{(snapshotData.speed
-                                          | number: '1.0-0') || '-' }} km/h</b>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-sm-4">
-                                    <div class="vertical-align height-70  border-double">
-                                      <div class="vertical-align-middle">
-                                        <div class="font-size-10">Timestamp</div>
-                                        <b class="font-size-12">{{(snapshotData.timestamp
-                                          | date: 'medium') || '-' }} </b>
-                                      </div>
+                                      <b class="font-size-12">
+                                        {{snapshotData.vehicle_state ? (snapshotData.vehicle_state == 'Idle' ? 'Idle'
+                                        : 'Moving') : '-'}}
+
+                                      </b>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="">
-                                  <div class="border-double1">
-                                    <table class="table  table-condensed  no-border1  margin-bottom-0">
-                                      <tbody>
-                                        <tr>
-                                          <th width="120"><b>Assigned Driver</b>
-                                          </th>
-                                          <td class="text-left">
-                                            <div class="media">
-                                              <div class="media-left padding-right-10">
-                                                <div class="">
-                                                  <img src="assets/images/iol/driver_placeholder.png" alt="..."
-                                                    width="30" class="img-rounded img-bordered img-bordered-warning">
-                                                </div>
+                                <div class="col-sm-4">
+                                  <div class="vertical-align height-70  border-double">
+                                    <div class="vertical-align-middle">
+                                      <div class="font-size-10">Speed</div>
+                                      <b class="font-size-12">{{(snapshotData.speed
+                                        | number: '1.0-0') || '-' }} km/h</b>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="vertical-align height-70  border-double">
+                                    <div class="vertical-align-middle">
+                                      <div class="font-size-10">Timestamp</div>
+                                      <b class="font-size-12">{{(snapshotData.timestamp
+                                        | date: 'medium') || '-' }} </b>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="">
+                                <div class="border-double1">
+                                  <table class="table  table-condensed  no-border1  margin-bottom-0">
+                                    <tbody>
+                                      <tr>
+                                        <th width="120"><b>Assigned Driver</b>
+                                        </th>
+                                        <td class="text-left">
+                                          <div class="media">
+                                            <div class="media-left padding-right-10">
+                                              <div class="">
+                                                <img src="assets/images/iol/driver_placeholder.png" alt="..." width="30"
+                                                  class="img-rounded img-bordered img-bordered-warning">
                                               </div>
-                                              <div class="media-body" style="vertical-align:middle;">
-                                                {{snapshotData.assigned_driver
-                                                === null ? '-' :
-                                                snapshotData.assigned_driver}}
-                                                <!-- <a
+                                            </div>
+                                            <div class="media-body" style="vertical-align:middle;">
+                                              {{snapshotData.assigned_driver
+                                              === null ? '-' :
+                                              snapshotData.assigned_driver}}
+                                              <!-- <a
                                                   [routerLink]="snapshotData['assigned_driver']? ('/iol/staff/' + snapshotData.assigned_driver.id) : null">{{snapshotData.assigned_driver
                                                   === null ? '-' :
                                                   snapshotData.assigned_driver}}</a> -->
-                                              </div>
                                             </div>
-                                          </td>
-                                        </tr>
-                                        <!-- <tr>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <!-- <tr>
                                           <th width="120"><b>Activity Status</b>
                                           </th>
                                           <td class="text-left">
@@ -1329,52 +1336,52 @@
                                           </td>
                                         </tr> -->
 
-                                        <tr>
-                                          <th width="120"><b> Assigned Route </b>
-                                          </th>
-                                          <td class="text-left text-break">
-                                            <span *ngIf="snapshotData['details_of_job']">
-                                              <a class=""
-                                                [routerLink]="gotoService.gotoRouteDetail(snapshotData['details_of_job']['id'])">
-                                                {{snapshotData['details_of_job']['route_name']
-                                                }}
-                                              </a>
-                                            </span>
-                                            <span *else>
-                                              -
-                                            </span>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <th width="150"><b>Assigned Geozone
-                                            </b></th>
-                                          <td class="text-left">
-                                            <span *ngFor="let t of snapshotData['territory']; let i = index">
-                                              <a [routerLink]="gotoService.gotoTerritories()">{{t.territory_name}}
-                                                <span *ngIf="i >= 1">,</span></a>
-                                            </span>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
+                                      <tr>
+                                        <th width="120"><b> Assigned Route </b>
+                                        </th>
+                                        <td class="text-left text-break">
+                                          <span *ngIf="snapshotData['details_of_job']">
+                                            <a class=""
+                                              [routerLink]="gotoService.gotoRouteDetail(snapshotData['details_of_job']['id'])">
+                                              {{snapshotData['details_of_job']['route_name']
+                                              }}
+                                            </a>
+                                          </span>
+                                          <span *else>
+                                            -
+                                          </span>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <th width="150"><b>Assigned Geozone
+                                          </b></th>
+                                        <td class="text-left">
+                                          <span *ngFor="let t of snapshotData['territory']; let i = index">
+                                            <a [routerLink]="gotoService.gotoTerritories()">{{t.territory_name}}
+                                              <span *ngIf="i >= 1">,</span></a>
+                                          </span>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-lg-4">
-                                <app-google-map #snapshotMap [height]="'300px'">
-                                </app-google-map>
-                              </div>
                             </div>
-                          </mat-tab>
-
-                          <mat-tab label="Ignition" [hidden]="">
-                            <div class="row margin-top-10">
-                              <app-ignition-reporting [entity]="entityId">
-                              </app-ignition-reporting>
+                            <div class="col-lg-4">
+                              <app-google-map #snapshotMap [height]="'300px'">
+                              </app-google-map>
                             </div>
-                          </mat-tab>
+                          </div>
+                        </mat-tab>
 
-                          <!-- <mat-tab label="Drill Down">
+                        <mat-tab label="Ignition" [hidden]="">
+                          <div class="row margin-top-10">
+                            <app-ignition-reporting [entity]="entityId">
+                            </app-ignition-reporting>
+                          </div>
+                        </mat-tab>
+
+                        <!-- <mat-tab label="Drill Down">
                                 <div class="row margin-top-10">
                                     <app-grouped-vertical-bar-chart *ngIf="variableDropdown" [entityId]="entityId"
                                         [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle"
@@ -1382,9 +1389,8 @@
                                     </app-grouped-vertical-bar-chart>
                                 </div>
                             </mat-tab> -->
-                        </mat-tab-group>
+                      </mat-tab-group>
 
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -1393,6 +1399,7 @@
           </div>
         </div>
       </div>
-
     </div>
+
   </div>
+</div>

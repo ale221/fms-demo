@@ -192,6 +192,12 @@ export class MaintenanceService {
     return this.http.get<LoginApiResponse<any>>(url);
   }
 
+  getEfficiencyTableDataWithID(params) {
+    const url = `/iof/predictive-maintenance-efficiency-table?fleet_id=${params}`;
+    return this.http.get<LoginApiResponse<any>>(url);
+  }
+
+
   getDataForMaintenancePredictive() {
     const url = `/iof/predictive-maintenance-monthly-prediction-chart`;
     return this.http.get<LoginApiResponse<any>>(url);

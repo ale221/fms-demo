@@ -53,8 +53,8 @@ export class LoginComponent implements OnInit {
   userData: any;
   newPasswordType = 'password'
   confirmPasswordType = 'password'
-  confirmPasswordEye=false;
-  newPasswordEye=false;
+  confirmPasswordEye = false;
+  newPasswordEye = false;
 
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService, public router: Router,
@@ -182,6 +182,9 @@ export class LoginComponent implements OnInit {
     let params = {};
     params['email'] = this.currentEmailSave.email; //localStorage.getItem('emailForgetPassword');
     params['password'] = this.createPasswordForm.value.confirmpassword
+    params['token'] = this.verifyForm.value.otp;
+    // console.log("params======= ", params)
+
     this.userService.createNewPassword(params).subscribe((res: any) => {
       // console.log(res);
       try {
@@ -198,6 +201,9 @@ export class LoginComponent implements OnInit {
 
       }
     });
+
+
+
   }
   verify() { }
   onCloseMember() {
@@ -292,6 +298,7 @@ export class LoginComponent implements OnInit {
     // this.forgetPassword=true;
     this.sendEmailOnForgetPassword();
   }
+
   sendEmailOnForgetPassword() {
     this.defaultLoader = {
       visibility: true
@@ -303,15 +310,16 @@ export class LoginComponent implements OnInit {
     this.forgotPasswordForm.reset();
     this.userService.sendEmailForForgetPassword(params).subscribe(res => {
       // console.log(res['error']);
-      try {
-        if (res['error'] === true) {
-          this.defaultLoader = {
-            visibility: false
-          }
-          // this.invalidEmail=true;
-          this.swalService.getErrorSwal("User doesn't exist");
-        }
-        else {
+      
+      // try {
+        // if (res['error'] === true) {
+        //   this.defaultLoader = {
+        //     visibility: false
+        //   }
+        //   // this.invalidEmail=true;
+        //   this.swalService.getErrorSwal("User doesn't exist");
+        // }
+        // else {
           this.defaultLoader = {
             visibility: false
           }
@@ -322,11 +330,14 @@ export class LoginComponent implements OnInit {
           this.createpassword = false;
           this.forgetPassword = true;
           this.firstTimeUser = false;
-        }
+        // }
 
-      } catch (error) {
+      // } catch (error) {
 
-      }
+      // }
+
+
+
     });
 
   }
@@ -400,15 +411,15 @@ export class LoginComponent implements OnInit {
             //   this.context.router.navigate(['unauthorized']);
             // } else {
 
-              if (apiResponse['data'].is_first_time_login) {
-                this.context.authService.unsetUser();//remove user from localstorage
-                this.context.firstTimeUser = true;
-                this.context.createpassword = false;
-                this.context.forgetPassword = false;
-              } else {
-                this.context.firstTimeUser = false;
-                this.context.redirect(apiResponse['data'].preferred_module, user);
-              }
+            if (apiResponse['data'].is_first_time_login) {
+              this.context.authService.unsetUser();//remove user from localstorage
+              this.context.firstTimeUser = true;
+              this.context.createpassword = false;
+              this.context.forgetPassword = false;
+            } else {
+              this.context.firstTimeUser = false;
+              this.context.redirect(apiResponse['data'].preferred_module, user);
+            }
 
             // }
           } else if (apiResponse.status === 500) {
@@ -516,20 +527,20 @@ export class LoginComponent implements OnInit {
 
   toggleNewPasswordType() {
     if (this.newPasswordType === 'password') {
-      this.newPasswordEye=true;
+      this.newPasswordEye = true;
       this.newPasswordType = 'text';
     } else if (this.newPasswordType === 'text') {
-      this.newPasswordEye=false;
+      this.newPasswordEye = false;
       this.newPasswordType = 'password';
     }
   }
 
   toggleConfirmPasswordType() {
     if (this.confirmPasswordType === 'password') {
-      this.confirmPasswordEye=true;
+      this.confirmPasswordEye = true;
       this.confirmPasswordType = 'text';
     } else if (this.confirmPasswordType === 'text') {
-      this.confirmPasswordEye=false;
+      this.confirmPasswordEye = false;
       this.confirmPasswordType = 'password';
     }
   }
