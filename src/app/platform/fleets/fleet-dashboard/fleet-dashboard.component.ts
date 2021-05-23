@@ -39,7 +39,7 @@ import { PackageType } from 'src/app/core/enum/packages-enum';
 import { User } from 'src/app/core/model/user';
 import { DrawerService } from 'src/app/core/services/drawer.service';
 import { SignalRService } from 'src/app/Services/signal-r.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 declare var $: any;
 declare var google: any;
@@ -198,7 +198,7 @@ export class FleetDashboardComponent implements OnInit {
   useCaseId = 0;
   packageType: any;
 
-  fileUrl;
+  // fileUrl;
   constructor(private entityService: EntityService,
     public gotoService: GotoPageService,
     private route: ActivatedRoute,
@@ -211,7 +211,8 @@ export class FleetDashboardComponent implements OnInit {
     private authService: AuthService,
     private drawerService: DrawerService,
     private signalRService: SignalRService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private _http: HttpClient
   ) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
@@ -362,9 +363,9 @@ export class FleetDashboardComponent implements OnInit {
       }
       this.loggedInUser = this.authService.getUser();
       this.customerID = this.loggedInUser.customer.id;
-      this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      // this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      // this.downloadXLS(this.downloadableLink)
+      // this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      this.downloadXLS(this.downloadableLink)
       this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
       // this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
       // this.downloadPDF(this.downloadableLink1)
@@ -454,14 +455,14 @@ export class FleetDashboardComponent implements OnInit {
 
       // const urlAppend = `is_poi=${filters.is_poi}&poi_value=${filters.poi_id}&poi_value_id=${filters.driver_id}&search=${filters.driver_group}`
       setTimeout(() => {
-        this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?' + query + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?' + query + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?' + query + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?' + query + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        // this.downloadableLink = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // this.downloadableLink1 = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.downloadableLink = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.downloadableLink1 = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        // this.downloadXLS(this.downloadableLink);
-        // this.downloadPDF(this.downloadableLink1)
+        this.downloadXLS(this.downloadableLink);
+        this.downloadPDF(this.downloadableLink1)
       }, 200);
 
       // this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + this.filters +'&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -472,9 +473,9 @@ export class FleetDashboardComponent implements OnInit {
 
   ngAfterViewInit() {
     const mapProp = GoogleMapModel.getMapProp();
-    console.log("this.gmapElement.nativeElement", this.gmapElement.nativeElement)
+    // console.log("this.gmapElement.nativeElement", this.gmapElement.nativeElement)
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-    console.log("this.map-----", this.map)
+    // console.log("this.map-----", this.map)
     this.mapZoom = this.map.getZoom();
   }
 
@@ -505,7 +506,7 @@ export class FleetDashboardComponent implements OnInit {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
         this.cardsArray = apiResponse.data.card;
         this.graphsArray = apiResponse.data.graph;
-        console.log(this.cardsArray, this.graphsArray);
+        // console.log(this.cardsArray, this.graphsArray);
       }
     })
   }
@@ -577,7 +578,7 @@ export class FleetDashboardComponent implements OnInit {
 
   activeTabFuction(index) {
     this.add_btn = index.index;
-    console.log("this.add_btn== ", this.add_btn);
+    // console.log("this.add_btn== ", this.add_btn);
     if (this.add_btn == 0) {  //searching for vehicle tab
       this.search_by = 'Search by Vehicle';
       this.searchForm.reset();
@@ -766,7 +767,6 @@ export class FleetDashboardComponent implements OnInit {
     this.filtersStops.end_datetime = DateUtils.getUtcDateTimeStart(dateRange[0][1])
     this.getStopsListing(this.filtersStops);
   }
-
 
   setupLocations() {
     this.locations = this.trucks.map(item =>
@@ -1378,20 +1378,42 @@ export class FleetDashboardComponent implements OnInit {
     }
   }
 
-  downloadXLS(dowwn) {
-    console.log("Inside downloadXLS()== ", dowwn)
-
-    // let headers = new HttpHeaders();
-    // headers = headers.set('Accept', 'application/pdf');
-    // return this.http.get(url, { headers: headers, responseType: 'blob' as 'json' });
-
+  
+  downloadXLS(dowwn) { //async
 
     this.entityService.downloadXLS(dowwn).subscribe((apiResponse: any) => {
       console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
-      const blob = new Blob([data], { type: 'application/octet-stream' });
-      this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      // const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      console.log("fireURL== ", fileUrl)
+
+      const url = window.URL.createObjectURL(blob)
+      console.log("url== ", url)
+      window.open(url);
+      // window.open(fileUrl);
     })
+
+
+    // const httpOptions = {
+    //   responseType: 'blob',
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'application/json', 
+    //     'Access-Control-Allow-Origin':'*', 
+    //     'Access-Control-Allow-Credentials': 'true'
+    //   })
+    // };
+
+
+
+
+
+
+
+
+
+
   }
 
   downloadPDF(dowwn) {
@@ -1400,4 +1422,22 @@ export class FleetDashboardComponent implements OnInit {
 
     // })
   }
+
+  // async DownloadOrdersByConSID(mid:string, cnum:String[]) {
+  //   var b=JSON.stringify(cnum);
+  //   var cnum1 =JSON.parse(b);
+
+  //   const httpOptions = {
+  //     responseType: 'blob' as 'json',
+  //     headers: new HttpHeaders({
+  //       'Content-Type': 'application/json', 'Access-Control-Allow-Origin':'*', 'Access-Control-Allow-Credentials': 'true'
+  //     })
+  //   };
+  //   // const blob = await this._http.post(this.rootPDFService+"BulkAirwayBill/DownloadAWB/" + mid,cnum1,httpOptions).toPromise()
+  //   const blob = await this._http.post(this.rootPDFService+"BulkAirwayBill/DownloadAWB_AdminPortal/" + mid,cnum1,httpOptions).toPromise()
+  //     .then(res => res as ResponseContentType.Blob);
+  //     const url = window.URL.createObjectURL(blob);
+  //     window.open(url);
+  // }
+
 }

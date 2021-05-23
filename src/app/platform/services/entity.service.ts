@@ -391,16 +391,21 @@ export class EntityService {
 
 
 
-  downloadXLS(param) {
+  // Download PDF and EXCEL File API
+  downloadXLS(param): Observable<Blob> {
     const url = `/iof/fleet_xls?${param}`
-
     // const options = {headers, param, responseType: 'text' as 'text'};
+    // return this.http.get<any>(url).share();
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
 
-    return this.http.get<any>(url).share();
   }
 
   downloadPDF(param) {
     const url = `/iof/fleet_pdf?${param}`
-    return this.http.get<any>(url);
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 }

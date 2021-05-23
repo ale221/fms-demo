@@ -107,8 +107,8 @@
             <label class="font-size-14 font-weight-600 ">Export:</label>
             <div class="btn-group btn-group-justified">
               <div class="btn-group" role="group">
-                <!-- (click)="downloadXLS(downloadableLink)" -->
-                <a [href]="downloadableLink" class="btn btn-outline btn-default"> <img
+                <!-- [href]="downloadableLink"|  -->
+                <a (click)="downloadXLS(downloadableLink)" class="btn btn-outline btn-default"> <img
                     src="../../../assets/images/icon-xls.png" height="50">
                   <div class="font-size-12">
                     Download XL
@@ -117,8 +117,8 @@
               </div>
               <!-- [disabled]="exportsid==true" -->
               <div class="btn-group" role="group">
-                <!--(click)="downloadPDF(downloadableLink1)"  -->
-                <a [href]="downloadableLink1" class="btn btn-outline btn-default"> <img
+                <!-- [href]="downloadableLink1" |   -->
+                <a (click)="downloadPDF(downloadableLink1)" class="btn btn-outline btn-default"> <img
                     src="../../../assets/images/icon-pdf.png" height="50">
                   <div class="font-size-12">
                     Download PDF

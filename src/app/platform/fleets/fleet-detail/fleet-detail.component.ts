@@ -2104,13 +2104,8 @@ export class FleetDetailComponent implements OnInit {
     params['ignition'] = true;
     this.idleDuration = null;
     this.truckService.getMapTrail(params).subscribe((apiResponse: any) => {
-      // console.log("ADAAAAAAAA-= ", apiResponse)
-
 
       if (apiResponse.status === HttpStatusCodeEnum.Success) {
-        // console.log("MAYYYYY-= ", apiResponse['data'].stops)
-        // let test = apiResponse['data'].stops
-        // let test2 = apiResponse['data'].stops[0].duration
         if (apiResponse['data'].stops.length > 0) {
           this.idleDuration = apiResponse['data'].stops[0].duration;
         } else {

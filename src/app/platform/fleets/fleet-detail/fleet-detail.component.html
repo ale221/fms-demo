@@ -304,16 +304,16 @@
                 <div class="font-size-14  margin-bottom-0">Vehicle State</div>
                 <div class="margin-top-0 padding-5 label" style="font-size: 100% !important;"
                   [ngClass]="(truck?.signalRresponse && truck?.signalRresponse?.spd > 0 && tooLongOrtooShortDistance) ? 'badge-success': 'badge-danger'">
-                  {{truck?.signalRresponse ?
-                  (((truck?.signalRresponse?.spd) > 0 &&
-                  tooLongOrtooShortDistance) ? 'Moving' : 'Idle')
-                  : '-'}}
+
+                  {{truck?.signalRresponse ? (((truck?.signalRresponse?.spd) > 0 &&
+                  tooLongOrtooShortDistance) ? 'Moving' : 'Idle') : '-'}}
+
                 </div>
               </div>
 
-              <div class="margin-bottom-15 text-center" *ngIf="idleDuration">
-                <div class="font-size-14  margin-bottom-0">Since last park</div>
-                <span> {{convert(idleDuration)}}</span>
+              <div class="margin-bottom-15 text-center" *ngIf="!(truck?.signalRresponse?.spd > 0 && tooLongOrtooShortDistance)">
+                <div *ngIf="idleDuration" class="font-size-14  margin-bottom-0">Since last park</div>
+                <span *ngIf="idleDuration"> {{convert(idleDuration)}}</span>
               </div>
 
 
@@ -1079,7 +1079,7 @@
                                 <app-google-map #trailMap [height]="'550px'" [markers]="violationMarkers"
                                   [infowindow]="violationInfoWindows">
                                 </app-google-map>
-                                
+
                                 <!-- <div id="map" class="map"></div> -->
                                 <app-spin-loading [appLoader]="trailLoader"></app-spin-loading>
 
