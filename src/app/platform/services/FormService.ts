@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppConfig } from '../../app.config';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { AuthService } from "../../core/services/auth.service";
 import { EntityStatusEnum } from "../../core/enum/entity-type.enum";
 import { ApiResponse, LoginApiResponse } from "../../core/model/api.response";
@@ -829,5 +829,54 @@ export class FormService {
     const url = `/iof/fleet`
     return this.http.get<any>(url);
   }
+
+
+
+
+
+  downloadFleetListingXLS(param): Observable<Blob> {
+    const url = `/iof/manage_xls/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadFleetListingPDF(param): Observable<Blob> {
+    const url = `/iof/manag_pdf/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadDriverListingXLS(param): Observable<Blob> {
+    const url = `/iof/dm1/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadDriverListingPDF(param): Observable<Blob> {
+    const url = `/iof/dm2/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadDriverGroupXLS(param): Observable<Blob> {
+    const url = `/iof/excletab/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadDriverGroupPDF(param): Observable<Blob> {
+    const url = `/iof/dpftab/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
 
 }

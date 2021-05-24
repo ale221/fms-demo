@@ -94,10 +94,10 @@ export class DashBoardDriverComponent implements OnInit {
         xls: environment.baseUrl + '/iof/Export_driver_dashboard?export=xls&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone
       },
       icon: 'fa fa-share-alt',
-      subNav: [{ name: 'Whatsapp', route: "" ,page:'drivers' }, { name: 'Email', route: '',page:'drivers' }]
+      subNav: [{ name: 'Whatsapp', route: "", page: 'drivers' }, { name: 'Email', route: '', page: 'drivers' }]
     },
     { name: 'Manage', icon: 'ri-exchange-line', route: '/iol/drivers', target: true, url: 'http://52.178.0.56/admin', queryParam: true },
-    { name: 'Allocate', icon: 'fa fa-location-arrow',  subNav: [{ name: 'Driver to Vehicle', route: '/iol/drivers/allocation' }, { name: 'Driver to Shift', route: '/iol/drivers/shiftallocation' }] },
+    { name: 'Allocate', icon: 'fa fa-location-arrow', subNav: [{ name: 'Driver to Vehicle', route: '/iol/drivers/allocation' }, { name: 'Driver to Shift', route: '/iol/drivers/shiftallocation' }] },
     { name: 'Shift', icon: 'fa fa-map-marker', route: '/iol/drivers/shifts' },
     { name: 'Jobs', icon: 'fa fa-map-marker', route: '/iol/templates' }
   ]
@@ -175,8 +175,12 @@ export class DashBoardDriverComponent implements OnInit {
       this.sidebarCheck = res;
     })
 
-    this.downloadableLink = environment.baseUrl + '/iof/Export_driver_dashboard?export=xls&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/iof/Export_driver_dashboard?export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink = environment.baseUrl + '/iof/Export_driver_dashboard?export=xls&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/Export_driver_dashboard?export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    this.downloadableLink = 'export=xls&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = 'export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
     this.loadDashboardCards(hypernymModules[6], DashboardEnum.Driver);
     this.filtersService.getValue().subscribe(data => {
       if (data) {
@@ -255,12 +259,11 @@ export class DashBoardDriverComponent implements OnInit {
   getGroupList() {
     this.driverService.getDriverGroup().subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
-        console.log(data.data);
+        // console.log(data.data);
         this.driverGroup = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
         this.driverLists = [];
-        console.log("coming in drivers", this.driverGroup);
       } else {
         console.log(data.message);
       }
@@ -589,7 +592,7 @@ export class DashBoardDriverComponent implements OnInit {
           dataError: false
         }
         this.dataSource = apiResponse['data'].data;
-        console.log("this.datasource",this.dataSource);
+        console.log("this.datasource", this.dataSource);
         this.totalLength = apiResponse['data'].count;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -648,8 +651,12 @@ export class DashBoardDriverComponent implements OnInit {
       var query = Object.keys(this.filters).map(key => key + '=' + this.filters[key]).join('&');
 
       setTimeout(() => {
-        this.downloadableLink = environment.baseUrl + '/iof/Export_driver_dashboard?' + query + '&export=xls&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        this.downloadableLink1 = environment.baseUrl + '/iof/Export_driver_dashboard?' + query + '&export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // this.downloadableLink = environment.baseUrl + '/iof/Export_driver_dashboard?' + query + '&export=xls&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // this.downloadableLink1 = environment.baseUrl + '/iof/Export_driver_dashboard?' + query + '&export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        this.downloadableLink = query + '&export=xls' + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.downloadableLink1 = query + '&export=pdf' + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       }, 500);
 
     }
@@ -1020,9 +1027,7 @@ export class DashBoardDriverComponent implements OnInit {
     }
   }
 
-  /*
-    Map
-     */
+  /*Map*/
   createMarkers(pos, i?, angle = 0) {
     let truckIcon = {
       url: this.tempIcon,
@@ -1084,7 +1089,12 @@ export class DashBoardDriverComponent implements OnInit {
 
   ExportDriverListAsCSV() {
     this.setExportUrls(this.filters);
+
+
+    // do something here
     window.open(this.downloadableLink, '_blank');
+  
+  
   }
 
   ngOnDestroy() {
@@ -1094,6 +1104,29 @@ export class DashBoardDriverComponent implements OnInit {
     if (this.connection) {
       this.connection.stop();
     }
+  }
+
+
+  downloadXLS(download) {
+    console.log("XLS before API= ", download)
+    this.entityService.downloadDriverDashboardXLS(download).subscribe(apiResponse => {
+      console.log("downloadDriverDashboardXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download) {
+    console.log("PDF before API= ", download)
+    this.entityService.downloadDriverDashboardXLS(download).subscribe(apiResponse => {
+      console.log("downloadDriverDashboardXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
   }
 
 }

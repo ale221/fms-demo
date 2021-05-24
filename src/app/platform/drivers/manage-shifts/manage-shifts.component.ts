@@ -103,8 +103,8 @@ export class ManageShiftsComponent implements OnInit {
   @ViewChild('closeForm') private closeForm;
   itemListMaritalStatus = [];
   showIndeterminateProgress: boolean;
-  downloadableLink: string;
-  downloadableLink1: string;
+  downloadableLink;
+  downloadableLink1;
   loggedInUser;
   customerID;
   inactiveRecord;
@@ -253,14 +253,14 @@ export class ManageShiftsComponent implements OnInit {
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
 
-    this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/shiftspdf/?customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/shiftspdf/?customer_id=' + this.customerID;
 
-    //   let date=new Date();
-    //  this.shiftstartDay=date.setDate(date.getDate() + 1);
-    //  this.shiftstartDay=DateUtils.getLocalMMDDYYYYhhmmss(this.shiftstartDay);
+    this.downloadableLink = '';
+    this.downloadableLink1 = '';
+
+
     this.shiftstartDay = new Date();
-
     this.shiftOption.forEach((element: any) => {
       element.label = element.name;
       element.value = element.id;
@@ -343,71 +343,46 @@ export class ManageShiftsComponent implements OnInit {
   }
 
   getStartDate(event) {
-    console.log("start date date", event)
     this.getSelectedDates = [];
     this.getSelectedDates.push(event);
     this.getDayName = [];
   }
   patchDatewithDays(start, end) {
-    console.log("coming")
     // this.getSelectedDates.push($event);
     // console.log(this.getSelectedDates);
-
     var startDate = start; //YYYY-MM-DD
     var endDate = end; //YYYY-MM-DD
 
     var getDateArray = function (start, end) {
-      console.log("coming start", start)
-      console.log("coming start", end)
-
       var arr = new Array();
       var dt = new Date(start);
       while (dt <= end) {
         arr.push(new Date(dt));
         dt.setDate(dt.getDate() + 1);
       }
-      console.log("coming inaaaaaaaa", arr)
       return arr;
-
     }
-
-
     var dateArr = getDateArray(startDate, endDate);
 
     // Output
-    console.log("<p>Start Date: " + startDate + "</p>");
-    console.log("<p>End Date: " + endDate + "</p>");
-    console.log("<p>Date Array</p>")
     for (var i = 0; i < dateArr.length; i++) {
       console.log("<p>" + dateArr[i] + "</p>");
       this.getDayName.push(moment(dateArr[i]).format('dddd'));
     }
-
-
-
-    console.log("-------", this.getDayName);
     this.getDayName = this.getDayName.filter((element, i) => i === this.getDayName.indexOf(element))
-
     // const result = Array.from(this.getDayName.reduce((m, t) => m.set(t.name, t), new Map()).values());
-    console.log(this.getDayName);
   }
   getEndDate(event) {
-    console.log("cominfg", event);
     this.getSelectedDates.push(event);
     if (this.getSelectedDates[1] != null) {
       this.getSelectedDates[1] = event;
     }
-    console.log("aaaaaaaaa", this.getSelectedDates);
     let startDateConvert = DateUtils.getYYYYMMDD(this.getSelectedDates[0]);
     startDateConvert = startDateConvert + ' 00:00:00'
     var startDate = new Date(startDateConvert); //YYYY-MM-DD
     var endDate = new Date(this.getSelectedDates[1]); //YYYY-MM-DD
-    console.log("start date", startDate);
-    console.log("end date", endDate);
 
     var getDateArray = function (start, end) {
-      console.log("coming start", start)
-      console.log("coming start", end)
       var arr = new Array();
       var dt = new Date(start);
       while (dt <= end) {
@@ -417,27 +392,16 @@ export class ManageShiftsComponent implements OnInit {
       return arr;
     }
 
-
     var dateArr = getDateArray(startDate, endDate);
 
     // Output
-    console.log("<p>Start Date: " + startDate + "</p>");
-    console.log("<p>End Date: " + endDate + "</p>");
-    console.log("<p>Date Array</p>")
     this.getDayName = [];
     for (var i = 0; i < dateArr.length; i++) {
-      console.log("<p>" + dateArr[i] + "</p>");
-
       this.getDayName.push(moment(dateArr[i]).format('dddd'));
     }
-
-
-
-    console.log("-------", this.getDayName);
     this.getDayName = this.getDayName.filter((element, i) => i === this.getDayName.indexOf(element))
 
     // const result = Array.from(this.getDayName.reduce((m, t) => m.set(t.name, t), new Map()).values());
-    console.log(this.getDayName);
     // let count=1;
     // for(let x=0;x<this.getDayName.length;x++)
     // {
@@ -655,8 +619,6 @@ export class ManageShiftsComponent implements OnInit {
       */
   }
 
-
-
   getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
   }
@@ -664,7 +626,6 @@ export class ManageShiftsComponent implements OnInit {
 
   activeTabFuction(index) {
     this.add_btn = index.index;
-    console.log("this.add_btn== ", this.add_btn);
   }
   validate(): boolean {
     let isValid = true;
@@ -725,23 +686,16 @@ export class ManageShiftsComponent implements OnInit {
 
 
   changeDay(event) {
-    console.log("coming in chngeday", event.target.value);
     this.dayChange = event.target.value;
     if (this.dayChange == "everyday") {
-      console.log("testing", this.driverForm);
-      console.log("coming in everyday");
       for (let x = 0; x < this.getDayName.length; x++) {
         let y = this.getDayName[x] + 'CB';
         this.driverForm.get(y).setValue(true);
       }
 
-      console.log(this.driverForm.value);
-
       this.everyDayChecked = true;
       this.weekDaychecked = false;
       this.weekendDayChecked = false;
-
-
     }
     else if (this.dayChange == "workingday") {
       this.everyDayChecked = false;
@@ -760,7 +714,6 @@ export class ManageShiftsComponent implements OnInit {
       this.driverForm.get("FridayCB").setValue(true);
       this.driverForm.get("SaturdayCB").setValue(true);
     }
-
   }
 
 
@@ -892,9 +845,7 @@ export class ManageShiftsComponent implements OnInit {
           visibility: this.loadingFilter,
           dataError: false
         }
-        console.log("this.dataSource", apiResponse['data']);
         this.dataSource = apiResponse['data'].data;
-        console.log("this.dataSource", this.dataSource);
         this.totalLength = apiResponse['data'].counts;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -918,12 +869,13 @@ export class ManageShiftsComponent implements OnInit {
   onClearSearch() {
     this.searchForm.reset();
     this.searchForm.get("search").setValue('');
-    //     console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
     this.filtersUser.search = "";
     this.getUsers(this.filtersUser);
-    this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
-    // this.downloadableLink = environment.baseUrl+'/api/users/user_data_export_xle/?'+this.filtersUser;
+    // this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
+ 
+    this.downloadableLink = '';
+    this.downloadableLink1 = '';
   }
 
   // getDriversForMap (filters) {
@@ -1268,8 +1220,11 @@ export class ManageShiftsComponent implements OnInit {
     this.filters.driver_id = this.searchForm.get('selectedDriver').value;
     console.log(this.filters);
     this.getDriversListing(this.filters);
-    this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/shiftspdf/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/shiftspdf/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+
+    this.downloadableLink =  'search=' + this.filters.search_key;
+    this.downloadableLink1 =  'search=' + this.filters.search_key;
   }
 
   togglePassword(value) {
@@ -1716,11 +1671,9 @@ export class ManageShiftsComponent implements OnInit {
     return this.userForm['controls'];
   }
   openEditModal(group) {
-    console.log("data= ", group)
     this.selectedUserId = true;
     for (let i = 0; i < this.statusList.length; i++) {
       if (group.status_id == this.statusList[i].id) {
-        console.log("this.statusList[i]== ", this.statusList[i]);
         group.status = this.statusList[i].id;
         this.selectedStatus = { value: this.statusList[i].id, label: this.statusList[i].name, id: this.statusList[i].id, name: this.statusList[i].name }
       }
@@ -1825,6 +1778,28 @@ export class ManageShiftsComponent implements OnInit {
     let currentDate = DateUtils.getYYYYMMDD(t.toDateString())
     currentDate = DateUtils.getLocalMMDDYYYYhhmmssATime(currentDate + ' ' + time);
     return currentDate;
+  }
+
+
+  downloadXLS(download) { 
+    this.entityService.downloadManageShiftsXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+
+  downloadPDF(download) { 
+    this.entityService.downloadManageShiftsPDF(download).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
   }
 
 }

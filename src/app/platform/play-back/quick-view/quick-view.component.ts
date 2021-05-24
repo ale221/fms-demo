@@ -230,6 +230,9 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   customerID;
   sidebarCheck;
 
+  downloadableLink;
+  downloadableLink1;
+
   constructor(private route: ActivatedRoute,
     public router: Router,
     private swalService: SwalService,
@@ -242,7 +245,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private brandingService: BrandingService,
     private entityService: EntityService,
     private filtersService: FiltersService,
-    private drawerService:DrawerService,
+    private drawerService: DrawerService,
     private signalRService: SignalRService
   ) {
     this.user = this.authService.getUser();
@@ -300,8 +303,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     // this.signalRService.init();
 
-    this.drawerService.getValue().subscribe(res=>{
-      this.sidebarCheck=res;
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
     })
 
     this.packageType = PackageType;
@@ -365,6 +368,13 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getTrucks();
     this.connection.status.subscribe((s) => console.warn('lala', s.name));
     this.getDropDownData(null);
+
+
+
+
+    this.downloadableLink = 'limit=' + this.filtersTravelHistory.limit + '&offset=' + this.filtersTravelHistory.offset + '&order=' + this.filtersTravelHistory.order + '&order_by=' + this.filtersTravelHistory.order_by + '&search_key=&truck_id=' + this.selectedDevice + '&start_datetime=' + this.st_date + '&end_datetime=' + this.end_date + '&export=excel&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = 'limit=' + this.filtersTravelHistory.limit + '&offset=' + this.filtersTravelHistory.offset + '&order=' + this.filtersTravelHistory.order + '&order_by=' + this.filtersTravelHistory.order_by + '&search_key=&truck_id=' + this.selectedDevice + '&start_datetime=' + this.st_date + '&end_datetime=' + this.end_date + '&export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   }
 
   ngOnDestroy() {
@@ -383,6 +393,8 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.$subscription1) {
       this.$subscription1.unsubscribe();
     }
+
+    this.filtersService.setValue(null);
 
     if (this.signalRSubscription) {
       this.signalRService.close();
@@ -1471,21 +1483,40 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map.generateMapView(null, this.trucks, this.locations);
   }
 
-  exportExcel() {
-    this.filtersTravelHistory
-    window.open(
-      `${environment.baseUrl}/iof/get_map_travel_history?limit=${this.filtersTravelHistory.limit}&offset=${this.filtersTravelHistory.offset}&order=${this.filtersTravelHistory.order}&order_by=${this.filtersTravelHistory.order_by}&search_key=&truck_id=${this.selectedDevice}&start_datetime=${this.st_date}&end_datetime=${this.end_date}&customer_id=${this.customerID}&export=excel&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-      '_blank'
-    );
+  exportExcel(download) {
+    this.downloadableLink = 'limit=' + this.filtersTravelHistory.limit + '&offset=' + this.filtersTravelHistory.offset + '&order=' + this.filtersTravelHistory.order + '&order_by=' + this.filtersTravelHistory.order_by + '&search_key=&truck_id=' + this.selectedDevice + '&start_datetime=' + this.st_date + '&end_datetime=' + this.end_date + '&export=excel&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.entityService.downloadTravelHistoryQuickViewXLS(this.downloadableLink).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+
+    // this.filtersTravelHistory
+    // window.open(
+    //   `${environment.baseUrl}/iof/get_map_travel_history?limit=${this.filtersTravelHistory.limit}&offset=${this.filtersTravelHistory.offset}&order=${this.filtersTravelHistory.order}&order_by=${this.filtersTravelHistory.order_by}&search_key=&truck_id=${this.selectedDevice}&start_datetime=${this.st_date}&end_datetime=${this.end_date}&customer_id=${this.customerID}&export=excel&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    //   '_blank'
+    // );
+
   }
 
-  exportPdf() {
+  exportPdf(download) {
+    this.downloadableLink1 = 'limit=' + this.filtersTravelHistory.limit + '&offset=' + this.filtersTravelHistory.offset + '&order=' + this.filtersTravelHistory.order + '&order_by=' + this.filtersTravelHistory.order_by + '&search_key=&truck_id=' + this.selectedDevice + '&start_datetime=' + this.st_date + '&end_datetime=' + this.end_date + '&export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.entityService.downloadTravelHistoryQuickViewXLS(this.downloadableLink1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
 
-    this.filtersTravelHistory
-    window.open(
-      `${environment.baseUrl}/iof/get_map_travel_history?limit=${this.filtersTravelHistory.limit}&offset=${this.filtersTravelHistory.offset}&order=${this.filtersTravelHistory.order}&order_by=${this.filtersTravelHistory.order_by}&search_key=&truck_id=${this.selectedDevice}&start_datetime=${this.st_date}&end_datetime=${this.end_date}&customer_id=${this.customerID}&export=pdf&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-      '_blank'
-    );
+
+    // this.filtersTravelHistory
+    // window.open(
+    //   `${environment.baseUrl}/iof/get_map_travel_history?limit=${this.filtersTravelHistory.limit}&offset=${this.filtersTravelHistory.offset}&order=${this.filtersTravelHistory.order}&order_by=${this.filtersTravelHistory.order_by}&search_key=&truck_id=${this.selectedDevice}&start_datetime=${this.st_date}&end_datetime=${this.end_date}&customer_id=${this.customerID}&export=pdf&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    //   '_blank'
+    // );
 
   }
 

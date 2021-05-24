@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AppConfig } from '../../app.config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { JobStatusEnum } from '../enum/iol-entity.enum';
-
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -139,5 +139,21 @@ export class TemplateAndRouteService {
   deleteJob(params?) {
     const url = `/hypernet/entity/job/delete_template/?id=${params}`;
     return this.http.delete(url, params);
+  }
+
+
+
+  downloadManageJobsXLS(param): Observable<Blob> {
+    const url = `/iof/job1/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadManageJobsPDF(param): Observable<Blob> {
+    const url = `/iof/job2/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 }

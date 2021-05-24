@@ -1,7 +1,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EntityService } from './entity.service';
 import { ApiResponse, ApiResponseNew, LoginApiResponse } from '../../core/model/api.response';
 import { TrailMarkerResponse, VehicleSummaryResponse } from '../data/model/location';
@@ -73,9 +73,9 @@ export class TruckService extends EntityService {
     }));
 
   }
-  getPurchaseTypes1(){
+  getPurchaseTypes1() {
     const url = `/hypernet/entity_sub_type/?key=trucktypes`;
-   return this.http.get(url);
+    return this.http.get(url);
 
   }
   getEntitySubType(params?: any, queryparam?: any) {
@@ -156,17 +156,23 @@ export class TruckService extends EntityService {
     const url = `/iof/fleet-job-summary/${params}`;
     return this.http.get(url);
   }
-  getMilageData(year,device_id) {
+  getMilageData(year, device_id) {
     const url = `/iof/fuel_consumption/?device_id=${device_id}&year_number=${year}`;
     return this.http.get(url);
-  
-   
+
+
   }
-  getmonthData(year,device_id,month) {
+  getmonthData(year, device_id, month) {
     const url = `/iof/fuel_consumption/?device_id=${device_id}&year_number=${year}&month=${month}`;
     return this.http.get(url);
-  
-   
+  }
+
+
+  downloadXLSPDFDriverDetail(param): Observable<Blob> {
+    const url = `/iof/export_pdf_excel_of_vehicle?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
 }

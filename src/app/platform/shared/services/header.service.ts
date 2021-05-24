@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppConfig } from 'src/app/app.config';
 import { Observable } from 'rxjs';
-import { ApiResponse } from 'src/app/core/model/api.response';
+import { ApiResponse, LoginApiResponse } from 'src/app/core/model/api.response';
+import { User } from 'src/app/core/model/user';
 
 
 @Injectable({
@@ -25,6 +26,12 @@ export class HeaderService {
   getIolNotifications(key, params?: any): Observable<ApiResponse<any>> {
     const url = `${AppConfig.APIOptionsHandler(key)}`;
     return this.http.get<ApiResponse<any>>(url, { params: params });
+  }
+
+
+  logOut(user): Observable<LoginApiResponse<User>> {
+    const url = `/api/users/logout_user/`;
+    return this.http.post<LoginApiResponse<User>>(url, user);
   }
 
 

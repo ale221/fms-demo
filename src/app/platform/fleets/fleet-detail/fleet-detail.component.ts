@@ -192,8 +192,8 @@ export class FleetDetailComponent implements OnInit {
 
   reportObj = new ReportResponse();
 
-  downloadableLink
-  downloadableLink1
+  downloadableLink;
+  downloadableLink1;
 
   packageType;
 
@@ -322,8 +322,13 @@ export class FleetDetailComponent implements OnInit {
     this.packageType = PackageType;
     this.route.params.subscribe(params => {
       this.entityId = params['id'];
-      this.downloadableLink = environment.baseUrl + '/iof/export_pdf_excel_of_vehicle?id=' + this.entityId + '&export=xls&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      this.downloadableLink1 = environment.baseUrl + '/iof/export_pdf_excel_of_vehicle?id=' + this.entityId + '&export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // this.downloadableLink = environment.baseUrl + '/iof/export_pdf_excel_of_vehicle?id=' + this.entityId + '&export=xls&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // this.downloadableLink1 = environment.baseUrl + '/iof/export_pdf_excel_of_vehicle?id=' + this.entityId + '&export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      this.downloadableLink = 'id=' + this.entityId + '&export=xls&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      this.downloadableLink1 = 'id=' + this.entityId + '&export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
     });
     this.snapForm = this.formBuilder.group({
       snapshotDate: null
@@ -2120,6 +2125,25 @@ export class FleetDetailComponent implements OnInit {
 
   convert(date) {
     return DateUtils.getDuration(Number(date));
+  }
+
+
+  downloadXLS(download) {
+    this.truckService.downloadXLSPDFDriverDetail(download).subscribe((apiResponse: any) => {
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download) {
+    this.truckService.downloadXLSPDFDriverDetail(download).subscribe((apiResponse: any) => {
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
   }
 
 }
