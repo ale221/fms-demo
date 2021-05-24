@@ -1000,9 +1000,12 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
 
                 infoWindows.push([
-                  new Item('Duration', DateUtils.getDuration(Number(stop_times[j].duration))),
-                  new Item('Start Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].start_time)),
-                  new Item('End Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].end_time)),
+                  // new Item('Duration', DateUtils.getDuration(Number(stop_times[j].duration))),
+                  // new Item('Start Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].start_time)),
+                  // new Item('End Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].end_time)),
+                  new Item('Duration', stop_times[j].duration),
+                  new Item('Start Time', DateUtils.getMMDDYYYYhhmmssA(stop_times[j].start_time)),
+                  new Item('End Time', DateUtils.getMMDDYYYYhhmmssA(stop_times[j].end_time)),
                 ]);
               }
               for (let i = 0; i < response.length; i += 1) {
