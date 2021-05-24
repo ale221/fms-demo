@@ -69,6 +69,8 @@ export class FleetPoiComponent implements OnInit {
     disabled: true,
   };
 
+  selected_poi_type = '';
+
   myInfowindow = new google.maps.InfoWindow();
   public _markers = [];
 
@@ -557,7 +559,11 @@ export class FleetPoiComponent implements OnInit {
 
     territory['status_id'] = territory.status_id === true ? 1 : 2;
     territory['id'] = territory.id;
-    territory['source_latlong'] = JSON.stringify(this.source_latlong);
+
+    if (this.selected_poi_type !== 'Routes') {
+      territory['source_latlong'] = JSON.stringify(this.source_latlong);
+    }
+
     // territory['type'] = EntityType.TERRITORY;
 
 
@@ -579,18 +585,15 @@ export class FleetPoiComponent implements OnInit {
   openEditModal(territory, readOnly = false) {
 
     this.territoryForm.get('status_id').setValue(territory.status === 1 ? true : false);
-
-
     this.binMap.resetMap();
+
+    this.selected_poi_type = '';
 
     // this.binMap.resetMap();
     this.formTitle = 'Update POI';
     this.btnText = "Update";
     this.inactiveRecord = this.disableButton(territory);
     this.source_latlong = territory.source_latlong;
-
-
-    //
 
     if (territory.poi_type === 73) {
       this.selectedPOI = { value: 73, label: 'Marker' }
@@ -607,15 +610,62 @@ export class FleetPoiComponent implements OnInit {
       poi_radius: territory.poi_radius
     });
 
+    
+    if (territory.poi_type_name === 'Zones') {
+      this.binMap.drawTerritory(territory.territory, territory.territory.name)
+    }
 
+    this.selected_poi_type = territory.poi_type_name;
 
-
-
+    if (territory.poi_type_name === 'Routes') {
+      this.source_latlong = territory.source_latlong;
+      this.destination_latlong = territory.destination_latlong;
+      if (!isNullOrUndefined(this.source_latlong) && !isNullOrUndefined(this.destination_latlong)) {
+        let tasksArr = [];
+        let waypts = [];
+        let icons_u = [];
+        let infowindow = [];
+        let source = (this.source_latlong);
+        let destination = (this.destination_latlong);
+  
+        tasksArr.push(new google.maps.LatLng(source.lat, source.lng))
+        tasksArr.push(new google.maps.LatLng(destination.lat, destination.lng));
+  
+        infowindow.push('Start Point');
+        infowindow.push('End Point');
+  
+        let start_pos = '';
+        let end_pos = '';
+  
+        start_pos = source.lat + "," + source.lng;
+        end_pos = destination.lat + "," + destination.lng;
+  
+  
+        icons_u.push(null);
+        icons_u.push(null);
+        var checkboxArray = tasksArr;
+        for (var i = 0; i < checkboxArray.length; i++) {
+          waypts.push({
+            location: checkboxArray[i],
+            stopover: true
+          });
+        }
+        const directionsService = new google.maps.DirectionsService;
+        const directionsDisplay = new google.maps.DirectionsRenderer({
+          suppressMarkers: true
+        });
+  
+        setTimeout(() => {
+          this.binMap.createMarkers(tasksArr, icons_u, infowindow, 'mouseover', 40, 30, 12);
+          this.binMap.createRouteWithMultipleWaypoints(directionsService, directionsDisplay, start_pos, end_pos, this, waypts);
+        }, 500);
+  
+      }
+    }
 
     if (!isNullOrUndefined(this.source_latlong)) {
       const latLng = new google.maps.LatLng(this.source_latlong.lat, this.source_latlong.lng)
       this.binMap.createMarker(latLng, null, '', 'Name:' + territory.name, 'mouseover', 12);
-
     }
 
     // this.enableSubmitButton();
@@ -743,7 +793,7 @@ export class FleetPoiComponent implements OnInit {
       radius: obj.radius
     });
 
-    circleShape.setMap(this.map);
+    circleShape.setMap(this.binMap);
     // this.map.setZoom(12);
     this.selectedshape = circleShape;
     this.territoryPath = cords;
@@ -907,6 +957,7 @@ export class FleetPoiComponent implements OnInit {
       return this._markers[0];
     }
   }
+
   updateFilter(value) {
 
     this.filterTerritory.search = value;

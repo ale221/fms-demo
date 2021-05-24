@@ -329,7 +329,7 @@ export class FormService {
   }
 
   getFleetsList(params) {
-    const url = `/iof/fleet?${params}`;
+    const url = `/iof/filtered_vehicles_active/?fleet_id=${params}`;
     return this.http.get(url);
   }
   getFleetsTruck(params) {
@@ -762,8 +762,18 @@ export class FormService {
     const url = `/iof/document-types-new`;
     return this.http.get(url);
   }
+  getDocumentTypeFleet() {
+    const url = `/hypernet/entity/fleet-document`;
+    return this.http.get(url);
+  }
   postDocument(param) {
     const url = `${'/hypernet/entity/documents'}`;
+    // let newData = this.converToFormdata(param);
+    // return this.http.post(url,param);
+    return this.http.post(url, param);
+  }
+  postDocumentFleet(param) {
+    const url = `${'/hypernet/entity/fleet-documents'}`;
     // let newData = this.converToFormdata(param);
     // return this.http.post(url,param);
     return this.http.post(url, param);
@@ -775,16 +785,35 @@ export class FormService {
       reportProgress: true, observe: 'events'
     });
   }
+  patchDocumentFleet(params: any) {
+    // let newData = this.converToFormdata(params);
+    const url = `${'/hypernet/entity/fleet-documents'}`;
+    return this.http.patch(url, params, {
+      reportProgress: true, observe: 'events'
+    });
+  }
   deleteDocument(params: any) {
     const url = `${'/hypernet/entity/documents/' + params['id'] + '/' + params['documentTypeId']}`;
+    return this.http.delete(url, params);
+  }
+  deleteDocumentFleet(params: any) {
+    const url = `${'/hypernet/entity/fleet-documents/' + params['id'] + '/' + params['documentTypeId']}`;
     return this.http.delete(url, params);
   }
   getDocumentListing(params: any) {
     const url = `/hypernet/entity/documents`;
     return this.http.get(url);
   }
+  getDocumentListingFleet(params: any) {
+    const url = `/hypernet/entity/fleet-documents`;
+    return this.http.get(url);
+  }
   getDocumentListingSearch(params: any) {
     const url = `/hypernet/entity/documents`;
+    return this.http.get(url, { params: params });
+  }
+  getDocumentListingSearchfleet(params: any){
+    const url = `/hypernet/entity/fleet-documents`;
     return this.http.get(url, { params: params });
   }
   uploadUserBulkUpload(param) {
@@ -795,6 +824,10 @@ export class FormService {
   multiDeleteUsers(params?: any) {
     const url = `/iof/bulk-delete-staff`;
     return this.http.patch(url, params);
+  }
+  getFleetFiltersDropdown() {
+    const url = `/iof/fleet`
+    return this.http.get<any>(url);
   }
 
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppConfig } from '../../app.config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiResponse, LoginApiResponse } from '../../core/model/api.response';
 import { ViolationResponse } from '../data/response/reports-response';
 import { maintenanceSummaryResponse } from '../data/response/entity-response';
@@ -212,4 +212,25 @@ export class MaintenanceService {
     const url = `/iof/predictive-maintenance-efficiency-chart?fleet_id=${fleet}&is_efficient=${efficiency}`;
     return this.http.get<LoginApiResponse<any>>(url);
   }
+
+
+  // download PDF and Excel APIS
+  downloadXLS(param): Observable<Blob> {
+    const url = `/iof/maintenance/records?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Disposition', 'inline');
+    myHeaders.append('Content-Disposition', 'attachment');
+    myHeaders.append('filename', 'MaintainceExcelReport');
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDF(param): Observable<Blob> {
+    const url = `/iof/maintenance/records?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
 }

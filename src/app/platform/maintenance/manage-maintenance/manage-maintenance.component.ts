@@ -26,6 +26,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { PackageType } from 'src/app/core/enum/packages-enum';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-manage-maintenance',
   templateUrl: './manage-maintenance.component.html',
@@ -138,7 +139,8 @@ export class ManageMaintenanceComponent implements OnInit {
     private filtersService: FiltersService,
     private authService: AuthService,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService:DrawerService
+    private drawerService: DrawerService,
+    private sanitizer: DomSanitizer,
   ) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
@@ -178,21 +180,21 @@ export class ManageMaintenanceComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.drawerService.getValue().subscribe(res=>{
-      this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
-  })
-
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
+    })
 
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
     // console.log("this.loggedInUser- ", this.loggedInUser, this.loggedInUser.package[0].package_id);
 
-    const appendExport = 'vehicle_group_id=&vehicle_id=&maintenance_type_id=&maintenance_id=&date_filter=&search=';
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&start_date=&end_date=';
-    this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&start_date=&end_date=';
-
+    const appendExport = 'order=&order_by=&vehicle_group_id=&vehicle_id=&maintenance_type_id=&maintenance_id=&date_filter=&search=';
+    // this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&start_date=&end_date=';
+    this.downloadableLink = appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&start_date=&end_date=';
+    this.downloadXLS(this.downloadableLink);
+    // this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&start_date=&end_date=';
+    this.downloadableLink1 = appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&start_date=&end_date=';
+    this.downloadPDF(this.downloadableLink1);
     this.loadDashboardCards(hypernymModules[6], DashboardEnum.Mainenance);
 
     //Get Fleet
@@ -261,11 +263,9 @@ export class ManageMaintenanceComponent implements OnInit {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner", this.breadcrumbInner);
       }
     })
 
-    console.log("this.breadcrumbInner", this.breadcrumbInner);
     if (this.breadcrumbInner[0] == 'maintenance' || this.breadcrumbInner[0] == 'admin/config') {
       setTimeout(() => {
         this.editpop.nativeElement.click();
@@ -280,20 +280,16 @@ export class ManageMaintenanceComponent implements OnInit {
   // }
 
   resetFiltersExport(filters) {
-    const appendExport = `vehicle_group_id=${filters.vehicle_group_id}&vehicle_id=${filters.vehicle_id}&maintenance_type_id=${filters.maintenance_type_id}&maintenance_id=${filters.maintenance_id}&date_filter=${filters.date_filter}&search=${filters.search}`;
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + `&start_date=${filters.start_date}&end_date=${filters.end_date}` + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + `&start_date=${filters.start_date}&end_date=${filters.end_date}` + '&customer_id=' + this.customerID;
-  }
+    const appendExport = `order=${filters.order}&order_by=${filters.order_by}&vehicle_group_id=${filters.vehicle_group_id}&vehicle_id=${filters.vehicle_id}&maintenance_type_id=${filters.maintenance_type_id}&maintenance_id=${filters.maintenance_id}&date_filter=${filters.date_filter}&search=${filters.search}`;
+    // this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + `&start_date=${filters.start_date}&end_date=${filters.end_date}` + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + `&start_date=${filters.start_date}&end_date=${filters.end_date}` + '&customer_id=' + this.customerID;
 
-  resetFiltersExportForType(filters) {
-    const appendExportForType = `search=${filters.search}`;
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance-types?' + appendExportForType + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/iof/maintenance-types?' + appendExportForType + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink = appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + `&start_date=${filters.start_date}&end_date=${filters.end_date}`;
+    this.downloadableLink1 = appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + `&start_date=${filters.start_date}&end_date=${filters.end_date}`;
   }
 
   selectDateRange(event, time_type) { //end_timef
     // const formValue = this.filtersForm.value;
-    console.log("event== ", event);
     const selectPeriodDate = DateUtils.getUtcDateTimeStart(event);
     if (time_type == 'start') {
       this.filters.start_date = selectPeriodDate
@@ -301,7 +297,6 @@ export class ManageMaintenanceComponent implements OnInit {
     if (time_type === 'end') {
       this.filters.end_date = selectPeriodDate
     }
-    console.log("this.filters-- ", this.filters);
     this.resetFiltersExport(this.filters); ///not sure to uncomment this or not
     this.getMaintanceTableData(this.filters);
   }
@@ -345,25 +340,6 @@ export class ManageMaintenanceComponent implements OnInit {
     })
 
   }
-
-  // getMaintanceTypeTableData(filters) {
-  //   this.showIndeterminateProgress = true;
-
-  //   let params = `offset=${filters.offset}&limit=${filters.limit}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}&export=${filters.export}&timeZone=${filters.timeZone}`;
-  //   console.log("params for getMaintanceTypeData()= ", params);
-
-  //   this.maintenanceService.getMaintanceType(params).subscribe((data: any) => {
-  //     this.showIndeterminateProgress = false;
-
-  //     if (!data.error) {
-  //       this.dataSourceType = data.data.data;
-  //       this.totalLengthType = data.data.count;
-  //       // this.dataSource.sort = this.sort;
-  //       // this.dataSource.paginator = this.paginator;
-  //     }
-  //   })
-
-  // }
 
   filterIdsFromJSON() {
     if (this.filters && this.filters['fleet_id']) {
@@ -452,7 +428,6 @@ export class ManageMaintenanceComponent implements OnInit {
     this.getMaintanceTableData(this.filters)
   }
   changeRadioButtons(event) {
-    console.log("selected radio|button== ", event.target.value);
     this.filters.date_filter = event.target.value;
     if (event.target.value == "today" || event.target.value == "week" || event.target.value == "month") {
       this.filters.start_date = '';
@@ -462,7 +437,6 @@ export class ManageMaintenanceComponent implements OnInit {
     this.getMaintanceTableData(this.filters);
   }
   selectPeriod(event) {
-    console.log("selectPeriod= ", event);
     const selectPeriodDate = DateUtils.getUtcDateTimeStart(event);
     // console.log("", selectPeriodDate);
     this.filters.date_filter = selectPeriodDate;
@@ -473,9 +447,7 @@ export class ManageMaintenanceComponent implements OnInit {
   //////////////////////////////////////////
 
   selectGroupDropDownChange(event) {
-    console.log("vehicle dropdown change= ", event)
     // console.log("device_id== ", this.maintainForm.controls['device_id'].value)
-    console.log("this.vehicleListingFromResponse===", this.vehicleListingFromResponse)
     for (let i = 0; i < this.vehicleListingFromResponse.length; i++) {
       if (event.value == this.vehicleListingFromResponse[i].id) {
         if (this.vehicleListingFromResponse[i].fleet_name != null) {
@@ -527,16 +499,9 @@ export class ManageMaintenanceComponent implements OnInit {
 
   onSubmitMaintainance(formValue) {
     this.submitted = true;
-    console.log("formValue--- ", formValue);
-
     const targetStartDate = DateUtils.getUtcDateTimeStart(formValue.target_start_date);
-    console.log("targetStartDate", targetStartDate)
-
     const targetDelieveryDate = DateUtils.getUtcDateTimeStart(formValue.target_delivery_date);
-    console.log("targetDelieveryDate", targetDelieveryDate)
-
     const nextMaintenanceDate = DateUtils.getUtcDateTimeStart(formValue.next_maintenance_date);
-    console.log("nextMaintenanceDate", nextMaintenanceDate)
 
     formValue['target_start_date'] = targetStartDate;
     formValue['target_delivery_date'] = targetDelieveryDate;
@@ -612,8 +577,6 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   postMaintenaceForm(formValue) {
-    console.log("POST()")
-
     this.maintenanceService.postMaintanceData(formValue).subscribe((data: any) => {
       this.enableSubmitButton();
       if (data.status === HttpStatusCodeEnum.Success) {
@@ -631,8 +594,6 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   patchMaintenaceForm(formValue) {
-    console.log("PATCH()")
-
     this.maintenanceService.patchMaintanceData(formValue).subscribe((data: any) => {
       this.enableSubmitButton();
       if (data.status === HttpStatusCodeEnum.Success) {
@@ -731,8 +692,6 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   editMaintenance(row) {
-    console.log('data-', row);
-
     this.submitted = false;
     this.selectedMaintenaceId = row.id;
     this.formTitle = 'Edit Maintenace Work Order';
@@ -821,13 +780,10 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   async showSwal(row) {
-    console.log('row', row);
     this.selectedMaintenaceForDelete = row;
     const shouldDelete = await this.swalService.getDeleteSwal(row, 'What do you want to do with this record?');
-    console.log('shouldDelete', shouldDelete);
 
     if (shouldDelete) {
-      console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteMaintenace(row.id, shouldDelete, 'Record has been' + message +
         'successfully');
@@ -835,9 +791,6 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   deleteMaintenace(id, actionType, message?) {
-    console.log("id-to-delete ", id);
-    console.log("actionType ", actionType);
-
     // const params = {};
     // params['id'] = id;
     // params['status'] = actionType;
@@ -858,7 +811,6 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   openNewMaintenanceForm(obj?) {
-    console.log("inside openNewForm")
     const initialState = {
       formTitle: 'Create Maintenance',
     };
@@ -887,102 +839,10 @@ export class ManageMaintenanceComponent implements OnInit {
     });
   }
 
-  // activeTabFuction(index) {
-  //   this.add_btn = index.index;
-
-  //   if (this.add_btn == 0) {
-  //     this.resetFiltersExport(this.filters)
-  //   } else {
-  //     this.resetFiltersExportForType(this.filtersType)
-  //   }
-  // }
-
-  // onSubmitType(formValue) {
-  //   this.submittedForType = true;
-  //   console.log("formValue--- ", formValue);
-
-  //   if (this.validateForType()) {
-  //     this.disableSubmitButton()
-  //     if (this.selectedTypeID > 0) {
-  //       formValue['id'] = this.selectedTypeID;
-  //       this.patchTypeForm(formValue);
-  //     } else {
-  //       formValue['key'] = "iof_maintenance";
-  //       this.postTypeForm(formValue);
-  //     }
-  //   } else {
-  //     console.log("else condition", this.errorMessages);
-  //   }
-  // }
-
-  // validateForType(): boolean {
-  //   let isValid = true;
-  //   this.errorMessages = [];
-
-  //   if (this.typeForm.get('value').hasError('required')) {
-  //     this.errorMessages.push('Maintenance Type ' + ErrorMessage.REQUIRED);
-  //     isValid = false;
-  //   }
-
-  //   if (this.typeForm.get('value').hasError('isAlphabetsAndNumbers')) {
-  //     this.errorMessages.push('Maintenance Type ' + ErrorMessage.IS_ALPHABETS_AND_NUMBERS);
-  //     isValid = false;
-  //   }
-  //   return isValid;
-  // }
-
-  // postTypeForm(formValue) {
-  //   console.log("POST()")
-  //   this.maintenanceService.postMaintanceTypeData(formValue).subscribe((data: any) => {
-  //     this.enableSubmitButton();
-  //     if (data.status === HttpStatusCodeEnum.Success) {
-  //       this.submittedForType = false;
-  //       this.closeTypeForm.nativeElement.click();
-  //       this.swalService.getSuccessSwal(data.message);
-  //       this.getMaintanceTypeTableData(this.filtersType);
-  //       this.getMaintenanceServiceType();
-  //       this.getCardsData();
-  //     } else {
-  //       console.log(data.message);
-  //       this.swalService.getErrorSwal(data.message);
-  //     }
-  //   })
-  // }
-
-  // patchTypeForm(formValue) {
-  //   console.log("PATCH()")
-  //   this.maintenanceService.patchMaintanceTypeData(formValue).subscribe((data: any) => {
-  //     this.enableSubmitButton();
-  //     if (data.status === HttpStatusCodeEnum.Success) {
-  //       this.submittedForType = false;
-  //       this.closeTypeForm.nativeElement.click();
-  //       this.swalService.getSuccessSwal(data.message);
-  //       this.getMaintanceTypeTableData(this.filtersType);
-  //       this.getMaintenanceServiceType();
-  //       this.getCardsData();
-  //     } else {
-  //       this.swalService.getErrorSwal(data.message);
-  //     }
-  //   })
-  // }
-
-  // editType(row) {
-  //   console.log('data-', row);
-
-  //   this.submittedForType = false;
-  //   this.selectedTypeID = row.id;
-  //   this.formTitleType = 'Edit Maintenace Type';
-  //   this.btnText = 'Update';
-  //   this.typeForm.patchValue({ value: row.label ? row.label : '' })
-  // }
-
   deleteMaintenaceType(id, actionType, message?) {
     // const params = {};
     // params['id'] = id;
     // params['status'] = actionType;
-
-    console.log('id= ', id)
-
     this.maintenanceService.deleteMaintenaceType(id).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
         // this.getMaintanceTypeTableData(this.filtersType);
@@ -1010,6 +870,26 @@ export class ManageMaintenanceComponent implements OnInit {
     let t = new Date(nextTargetDate);
     t.setSeconds(t.getSeconds() + 86400);
     return t;//nextTargetDate;
+  }
+
+  downloadXLS(download) {
+    this.maintenanceService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.maintenanceService.downloadPDF(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 
 }
