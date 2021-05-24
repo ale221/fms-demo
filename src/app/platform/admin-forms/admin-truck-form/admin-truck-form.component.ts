@@ -401,10 +401,11 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   getTruckTypeForm() {
+    console.log("coming second");
     this.truckService.getPurchaseTypes1()
       .subscribe((data: any) => {
         if (data.status === HttpStatusCodeEnum.Success) {
-          console.log(data.data['data']);
+          console.log("trucktypedataaa",data.data['data']);
           this.truckTypes = data.data['data'].map(
             item => ({ value: item['id'], label: item['label'] })
           );

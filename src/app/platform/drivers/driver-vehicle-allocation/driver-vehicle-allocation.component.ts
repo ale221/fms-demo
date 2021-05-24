@@ -317,9 +317,13 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
       this.driverLists
     });
 
-    this.downloadableLink = environment.baseUrl + '/iof/dvxle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/dvpdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/dvxle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/dvpdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
 
+     this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+     this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+
+    
   }
 
   dateFinal(event) {
@@ -387,14 +391,14 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
 
   selectDriverDropDownChange(event) {
     this.filters.vehicle_id = event.value;
-    this.downloadableLink = environment.baseUrl + '/iof/dvxle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&vehicle_id=' + this.filters.vehicle_id + '&driver_id=' + this.filters.driver_id;
-    this.downloadableLink1 = environment.baseUrl + '/iof/dvpdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&vehicle_id=' + this.filters.vehicle_id + '&driver_id=' + this.filters.driver_id;
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&vehicle_id=' + this.filters.vehicle_id + '&driver_id=' + this.filters.driver_id;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&vehicle_id=' + this.filters.vehicle_id + '&driver_id=' + this.filters.driver_id;
     this.getDrivers(this.filters);
   }
   selectVehicleDropDownChange(event) {
     this.filters.driver_id = event.value;
-    this.downloadableLink = environment.baseUrl + '/iof/dvxle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&driver_id=' + event.value + '&vehicle_id=' + this.filters.vehicle_id;
-    this.downloadableLink1 = environment.baseUrl + '/iof/dvpdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&driver_id=' + event.value + '&vehicle_id=' + this.filters.vehicle_id;
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&driver_id=' + event.value + '&vehicle_id=' + this.filters.vehicle_id;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&driver_id=' + event.value + '&vehicle_id=' + this.filters.vehicle_id;
     this.getDrivers(this.filters);
   }
 
@@ -606,8 +610,8 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
     //  }
     //  this.filterDrivers.search='';
     //   this.getDrivers(this.filterDrivers);
-    this.downloadableLink = environment.baseUrl + '/iof/dvxle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/dvpdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
     this.searchForm.reset();
     this.searchForm.get('search').setValue('');
     this.filters = { limit: 10, offset: 0, order_by: '', order: '', search: '', vehicle_id: '', driver_id: '', type_id: 5 };
@@ -822,6 +826,26 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   onDriverPagination(event) {
     this.filterDrivers.offset = (event.pageIndex * event.pageSize);
     this.getDrivers(this.filterDrivers);
+  }
+
+  downloadXLS(download) {
+    this.formService.downloadXLSVehicleAllocation(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.formService.downloadPDFVehicleAllocation(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 }
 

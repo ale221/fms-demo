@@ -227,8 +227,12 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     this.getContractTypes('invoice type');
     this.getSkipSizes('skip_sizes');
     this.getBinsTypes('bintypes');
-    this.downloadableLink = environment.baseUrl + '/iof/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+  
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+  
   }
 
   ngAfterViewInit(): void {
@@ -1594,8 +1598,8 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
   updateFilter(val) {
     console.log(this.searchForm.value.search);
-    this.downloadableLink = environment.baseUrl + '/iof/xle/?search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/pdf/?search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
     console.log("coming in updatefilter", this.downloadableLink);
     this.filters.search = this.searchForm.value.search;
     this.filters.offset = 0;
@@ -1642,8 +1646,8 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     // this.contracts = this.datatableService.updateFilter(this.searchForm.value.search, this.temp, ['name', 'client_name', 'party_code']);
   }
   onClearSearch() {
-    this.downloadableLink = environment.baseUrl + '/iof/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
     this.searchForm.reset();
     this.filters.search = '';
     this.filters.order = '';
@@ -1782,5 +1786,25 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   getFileName(fileName) {
     var filename = fileName.replace(/^.*[\\\/]/, '')
     return filename;
+  }
+
+  downloadXLS(download) {
+    this.formService.downloadXLSContract(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.formService.downloadPDFContract(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 }

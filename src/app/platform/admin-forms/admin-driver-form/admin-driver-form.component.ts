@@ -354,8 +354,11 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.downloadableLink = environment.baseUrl + '/iof/st1/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/st2/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/st1/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/st2/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
 
     this.submitted = false;
     this.closeForm.nativeElement.click();
@@ -727,6 +730,8 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
     }
     this.filterDrivers.search = '';
     this.getDrivers(this.filterDrivers);
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
   }
 
   binEncode(data) {
@@ -952,8 +957,8 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
 
     this.getDrivers(this.filterDrivers);
 
-    this.downloadableLink = environment.baseUrl + '/iof/st1/?search=' + this.filterDrivers.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/st2/?search=' + this.filterDrivers.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'search=' + this.filterDrivers.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = 'search=' + this.filterDrivers.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
 
   }
 
@@ -1119,6 +1124,26 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
   pageReload() {
     console.log("coming");
     window.location.reload()
+  }
+
+  downloadXLS(download) {
+    this.formService.downloadXLSStaff(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.formService.downloadPDFStaff(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 
 

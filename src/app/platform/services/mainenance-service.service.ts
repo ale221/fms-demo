@@ -218,9 +218,6 @@ export class MaintenanceService {
   downloadXLS(param): Observable<Blob> {
     const url = `/iof/maintenance/records?${param}`
     const myHeaders = new HttpHeaders();
-    myHeaders.append('Content-Disposition', 'inline');
-    myHeaders.append('Content-Disposition', 'attachment');
-    myHeaders.append('filename', 'MaintainceExcelReport');
     myHeaders.append('Access-Control-Allow-Origin', '*');
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }

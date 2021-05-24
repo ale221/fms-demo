@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EntityService } from './entity.service';
+import {  HttpHeaders } from '@angular/common/http';
 import { ApiResponse, ApiResponseNew, LoginApiResponse } from '../../core/model/api.response';
 import { TrailMarkerResponse, VehicleSummaryResponse } from '../data/model/location';
 import { DropDownItem } from "../data/model/dropdown-item";
@@ -167,6 +168,21 @@ export class TruckService extends EntityService {
     return this.http.get(url);
   
    
+  }
+
+  downloadXLS(param): Observable<Blob> {
+    const url = `/iof/FuelListexport1/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDF(param): Observable<Blob> {
+    const url = `/iof/FuelListexport2/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
 }

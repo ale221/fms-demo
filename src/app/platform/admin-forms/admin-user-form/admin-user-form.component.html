@@ -77,18 +77,19 @@
                         <label class="font-size-14 font-weight-600 ">Export:</label>
                         <div class="btn-group btn-group-justified">
                           <div class="btn-group" role="group">
-                            <a [href]="downloadableLink">
+                            <a  (click)="downloadXLS(downloadableLink)">
                               <button type="button" class="btn btn-outline btn-default"> <img
                                   src="../../../assets/images/icon-xls.png" height="50">
                                 <div class="font-size-12">
-                                  <a [href]="downloadableLink" class="enabled">
+                                  <!-- [href]="downloadableLink" -->
+                                  <a  class="enabled">
                                     Download XLS </a>
                                 </div>
                               </button>
                             </a>
                           </div>
                           <div class="btn-group" role="group">
-                            <a [href]="downloadableLink1">
+                            <a (click)="downloadPDF(downloadableLink1)">
                               <button type="button" class="btn btn-outline btn-default"> <img
                                   src="../../../assets/images/icon-pdf.png" height="50">
                                 <div class="font-size-12">Download PDF</div>
@@ -187,12 +188,12 @@
                                 </td>
                               </ng-container>
 
-                              <ng-container matColumnDef="id">
+                              <!-- <ng-container matColumnDef="id">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
                                 <td mat-cell *matCellDef="let row">
                                   {{(row.id == null) ? 'N/A': row.id}}
                                 </td>
-                              </ng-container>
+                              </ng-container> -->
                               <ng-container matColumnDef="first_name">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>FIRST NAME</th>
                                 <td mat-cell *matCellDef="let row">

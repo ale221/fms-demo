@@ -124,9 +124,11 @@ export class AdminPermissionsFormComponent implements OnInit {
       this.translate.use(event.lang);
     });
 
-    this.downloadableLink = environment.baseUrl + '/api/users/rolexle/?search=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/api/users/pdfrole/?search=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/api/users/rolexle/?search=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/api/users/pdfrole/?search=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
 
+    this.downloadableLink = 'search=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'search=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
   }
 
 
@@ -483,8 +485,8 @@ export class AdminPermissionsFormComponent implements OnInit {
       // this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 
-      this.downloadableLink = environment.baseUrl + '/api/users/rolexle/?search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-      this.downloadableLink1 = environment.baseUrl + '/api/users/pdfrole/?search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+      this.downloadableLink =  'search=' +this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+      this.downloadableLink1 = 'search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
 
     }
   }
@@ -496,8 +498,8 @@ export class AdminPermissionsFormComponent implements OnInit {
     this.filters.search_key = "";
     this.getGroupListingType(this.filters);
 
-    this.downloadableLink = environment.baseUrl + '/api/users/rolexle/?search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/api/users/pdfrole/?search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink = 'search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = 'search=' + this.filters.search_key + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   }
   sortRoles(event) {
@@ -509,6 +511,25 @@ export class AdminPermissionsFormComponent implements OnInit {
   pageReload(){
     console.log("coming");
     window.location.reload()
+  }
+  downloadXLS(download) {
+    this.formService.downloadXLSPermission(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.formService.downloadPDFPermission(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 
 }

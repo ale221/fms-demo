@@ -265,7 +265,7 @@
                 <div class="form-group margin-bottom-10">
                   <p-dropdown [options]="statusList" styleClass="prime-dropdown" name="documentName"
                              (onChange)="onDocumentNameChangeTwo($event.value)" filterPlaceholder="Search"
-                            formControlName="documentName" optionLabel="name" placeholder="Select Document Type">
+                             optionLabel="name" placeholder="Select Document Type">
                   </p-dropdown>
                 </div>
               </fieldset>
@@ -304,18 +304,18 @@
               <label class="font-size-14 font-weight-600 ">Export:</label>
               <div class="btn-group btn-group-justified">
                 <div class="btn-group" role="group">
-                  <a [href]="downloadableLink">
+                  <a (click)="downloadXLS(downloadableLink)">
                     <button type="button" class="btn btn-outline btn-default"> <img
                         src="../../../assets/images/icon-xls.png" height="50">
                       <div class="font-size-12">
-                        <a [href]="downloadableLink" class="enabled">
+                        <a  class="enabled">
                           Download XLS </a>
                       </div>
                     </button>
                   </a>
                 </div>
                 <div class="btn-group" role="group">
-                  <a [href]="downloadableLink1">
+                  <a (click)="downloadPDF(downloadableLink1)">
                     <button type="button" class="btn btn-outline btn-default"> <img
                         src="../../../assets/images/icon-pdf.png" height="50">
                       <div class="font-size-12">Download PDF</div>
@@ -336,7 +336,7 @@
       <div class="panel panel-default card shadow light">
         <div class="panel-heading" style="margin-bottom: 0px;">
           <div class="panel-actions"> </div>
-          <h3 class="panel-title "><b>{{listVariable}}</b></h3>
+          <h3 class="panel-title "><b>List</b></h3>
         </div>
         <div class="panel-body padding-0">
           <div class="padding-10">
