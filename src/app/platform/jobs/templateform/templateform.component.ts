@@ -130,8 +130,8 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   optimizedCall;
   contracts: any = [];
   inputValue: any;
-  downloadableLink: string;
-  downloadableLink1: string;
+  downloadableLink;
+  downloadableLink1;
   loggedInUser;
   customerID;
   sendObj = { search: '', job_type: '' };
@@ -216,8 +216,11 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
     this.getTemplates(this.filtersUser);
     this.branding = this.brandingService.styleObject();
 
-    this.downloadableLink = environment.baseUrl + '/iof/job1/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/job2/?customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/job1/?customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/job2/?customer_id=' + this.customerID;
+
+    this.downloadableLink = '';
+    this.downloadableLink1 = '';
 
   }
 
@@ -353,7 +356,6 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   }
 
   isExecuted: boolean = false;
-
   updateTask(job, count) {
     if (this.isExecuted) return;
     this.isExecuted = true;
@@ -426,7 +428,6 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   resetEverything() {
     this.taskHide = true;
     this.templateForm.reset();
-    console.log("reseting everything...");
     this.formTitle = 'Create';
     this.btnText = 'Save';
     this.templateForm.reset();
@@ -827,17 +828,26 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
     this.filtersUser.search = this.searchForm.value.search;
     this.filtersUser.offset = 0;
     this.getTemplates(this.filtersUser);
-    this.downloadableLink = environment.baseUrl + '/iof/job1/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/job2/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/job1/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/job2/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID;
+
+    this.downloadableLink =  'search=' + this.searchForm.value.search;
+    this.downloadableLink1 =  'search=' + this.searchForm.value.search;
+
+
   }
   onChange($event) {
-    console.log($event.value);
     var val = $event.value;
     this.sendObj.job_type = $event.value;
     this.filtersUser.job_type = $event.value;
     this.getTemplates(this.filtersUser)
-    this.downloadableLink = environment.baseUrl + '/iof/job1/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID + '&job_type=' + $event.value;
-    this.downloadableLink1 = environment.baseUrl + '/iof/job2/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID + '&job_type=' + $event.value;
+    // this.downloadableLink = environment.baseUrl + '/iof/job1/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID + '&job_type=' + $event.value;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/job2/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID + '&job_type=' + $event.value;
+
+    this.downloadableLink =  'search=' + this.searchForm.value.search + '&job_type=' + $event.value;
+    this.downloadableLink1 =  'search=' + this.searchForm.value.search + '&job_type=' + $event.value;
+
+
   }
 
   onClearSearch() {
@@ -1025,7 +1035,6 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
 
   getTemplates(filtersUser) {
     let params = `type_id=${filtersUser.type_id}&limit=${filtersUser.limit}&offset=${filtersUser.offset}&order=${filtersUser.order}&order_by=${filtersUser.order_by}&search=${filtersUser.search}&job_type=${filtersUser.job_type}`;
-    console.log("coming", params);
     this.showIndeterminateProgress = true;
     this.templates = [];
 
@@ -1099,6 +1108,27 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
         this.swalService.getErrorSwal(data.message)
       }
 
+    })
+  }
+
+
+
+
+  downloadXLS(download) {
+    this.templateRouteService.downloadManageJobsXLS(download).subscribe((apiResponse: any) => {
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download) {
+    this.templateRouteService.downloadManageJobsPDF(download).subscribe((apiResponse: any) => {
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
     })
   }
 

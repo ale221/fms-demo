@@ -188,7 +188,7 @@
                         <div class="btn-group btn-group-justified">
                           <div class="btn-group" role="group">
                             <!-- [disabled]="exportsid==true"  -->
-                            <button type="button" class="btn btn-outline btn-default" (click)="exportExcel()">
+                            <button type="button" class="btn btn-outline btn-default" (click)="exportExcel(downloadableLink)">
                               <img src="../../../assets/images/icon-xls.png" height="50">
                               <div class="font-size-12">
                                 <a>Download XLS</a>
@@ -197,7 +197,7 @@
                           </div>
                           <div class="btn-group" role="group">
                             <!-- [disabled]="exportsid==true"   -->
-                            <button type="button" class="btn btn-outline btn-default" (click)="exportPdf()">
+                            <button type="button" class="btn btn-outline btn-default" (click)="exportPdf(downloadableLink1)">
                               <img src="../../../assets/images/icon-pdf.png" height="50">
                               <div class="font-size-12">Download PDF</div>
                             </button>

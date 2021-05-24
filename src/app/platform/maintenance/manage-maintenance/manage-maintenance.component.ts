@@ -190,11 +190,12 @@ export class ManageMaintenanceComponent implements OnInit {
 
     const appendExport = 'order=&order_by=&vehicle_group_id=&vehicle_id=&maintenance_type_id=&maintenance_id=&date_filter=&search=';
     // this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&start_date=&end_date=';
+    
     this.downloadableLink = appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&start_date=&end_date=';
-    this.downloadXLS(this.downloadableLink);
+    // this.downloadXLS(this.downloadableLink);
     // this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&start_date=&end_date=';
     this.downloadableLink1 = appendExport + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&start_date=&end_date=';
-    this.downloadPDF(this.downloadableLink1);
+    // this.downloadPDF(this.downloadableLink1);
     this.loadDashboardCards(hypernymModules[6], DashboardEnum.Mainenance);
 
     //Get Fleet
@@ -873,6 +874,8 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   downloadXLS(download) {
+    console.log("download XLS= ", download)
+
     this.maintenanceService.downloadXLS(download).subscribe((apiResponse: any) => {
       console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
@@ -883,6 +886,8 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   downloadPDF(download1) {
+    console.log("download PDF= ", download1)
+    
     this.maintenanceService.downloadPDF(download1).subscribe((apiResponse: any) => {
       console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;

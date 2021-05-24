@@ -78,8 +78,8 @@ export class FleetDashboardComponent implements OnInit {
   displayedColumnsStatistics = ['employee_id', 'name', 'total_violations', 'saftey_score_card', 'total_jobs'];
   displayedColumnsStops = ['location', 'zone_name'];
   searchForm: FormGroup;
-  downloadableLink: string;
-  downloadableLink1: string;
+  downloadableLink;
+  downloadableLink1;
   dataSource: any;
   dataSource1: any;
   dataSourceDetailedReport: any;
@@ -364,10 +364,13 @@ export class FleetDashboardComponent implements OnInit {
       this.loggedInUser = this.authService.getUser();
       this.customerID = this.loggedInUser.customer.id;
       // this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      this.downloadXLS(this.downloadableLink)
-      this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      // this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+      const appendExport = 'trackVehicle=false&showLabels=null&automaticZoom=false&fleet_id=&type_id=&vehicle_id=&category_id=&search_key=&maintenance_status_id=&poi_id=&zone_id=&route_id=&shift_id=&stop_time=&track_date=&start_time=&end_time=&playBackTimeInterval=&poi_name_custom=&limit=&offset=&order_by=&order=';
+      this.downloadableLink = appendExport + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // this.downloadXLS(this.downloadableLink)
+      // this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      this.downloadableLink1 = appendExport + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
       // this.downloadPDF(this.downloadableLink1)
     });
     this.getDetailedReportListing(this.filtersDetailedReport);
@@ -461,8 +464,8 @@ export class FleetDashboardComponent implements OnInit {
         this.downloadableLink = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
         this.downloadableLink1 = query + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        this.downloadXLS(this.downloadableLink);
-        this.downloadPDF(this.downloadableLink1)
+        // this.downloadXLS(this.downloadableLink);
+        // this.downloadPDF(this.downloadableLink1)
       }, 200);
 
       // this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + this.filters +'&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -704,6 +707,9 @@ export class FleetDashboardComponent implements OnInit {
   sortData(event) {
     this.filters.order_by = event.active;
     this.filters.order = event.direction;
+
+    // add code here //add order & order_by in downloadableLink
+
     this.getVehiclesListing(this.filters);
   }
 
@@ -1378,21 +1384,15 @@ export class FleetDashboardComponent implements OnInit {
     }
   }
 
-  
+
   downloadXLS(dowwn) { //async
 
-    this.entityService.downloadXLS(dowwn).subscribe((apiResponse: any) => {
+    this.entityService.downloadFleetDashboardXLS(dowwn).subscribe((apiResponse: any) => {
       console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
-      // const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-      const fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-      console.log("fireURL== ", fileUrl)
-
       const url = window.URL.createObjectURL(blob)
-      console.log("url== ", url)
       window.open(url);
-      // window.open(fileUrl);
     })
 
 
@@ -1405,39 +1405,17 @@ export class FleetDashboardComponent implements OnInit {
     //   })
     // };
 
-
-
-
-
-
-
-
-
-
   }
 
   downloadPDF(dowwn) {
-    console.log("Inside downloadPDF()== ", dowwn)
-    // this.entityService.downloadPDF(dowwn).subscribe((apiResponse: any) => {
-
-    // })
+    this.entityService.downloadFleetDashboardPDF(dowwn).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
   }
 
-  // async DownloadOrdersByConSID(mid:string, cnum:String[]) {
-  //   var b=JSON.stringify(cnum);
-  //   var cnum1 =JSON.parse(b);
-
-  //   const httpOptions = {
-  //     responseType: 'blob' as 'json',
-  //     headers: new HttpHeaders({
-  //       'Content-Type': 'application/json', 'Access-Control-Allow-Origin':'*', 'Access-Control-Allow-Credentials': 'true'
-  //     })
-  //   };
-  //   // const blob = await this._http.post(this.rootPDFService+"BulkAirwayBill/DownloadAWB/" + mid,cnum1,httpOptions).toPromise()
-  //   const blob = await this._http.post(this.rootPDFService+"BulkAirwayBill/DownloadAWB_AdminPortal/" + mid,cnum1,httpOptions).toPromise()
-  //     .then(res => res as ResponseContentType.Blob);
-  //     const url = window.URL.createObjectURL(blob);
-  //     window.open(url);
-  // }
 
 }

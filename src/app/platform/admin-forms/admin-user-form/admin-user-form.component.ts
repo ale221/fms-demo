@@ -93,7 +93,7 @@ export class AdminUserFormComponent implements OnInit {
   @ViewChild('userPaginator') userPaginator: MatPaginator;
   @ViewChild('addEditUser') private addEditUser;
   totalUserLength = 0;
-  displayedUserList = ["select", "id", "first_name", "last_name", "email", "group", "date_joined", "status", "actions"]
+  displayedUserList = ["select", "first_name", "last_name", "email", "group", "date_joined", "status", "actions"]
   EntityType = EntityType;
   EntityStatusEnum = EntityStatusEnum;
   showIndeterminateProgress: boolean;
@@ -229,8 +229,13 @@ export class AdminUserFormComponent implements OnInit {
         this.getUsers(this.filtersUser);
       }
     });
-    this.downloadableLink = environment.baseUrl + '/api/users/user_data_export_xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
-    this.downloadableLink1 = environment.baseUrl + '/api/users/user_data_export_pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
+    // this.downloadableLink = environment.baseUrl + '/api/users/user_data_export_xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
+    // this.downloadableLink1 = environment.baseUrl + '/api/users/user_data_export_pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
+    
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
+    
+
     console.log("this.users= ", this.users);
   }
   get f() {
@@ -736,8 +741,12 @@ export class AdminUserFormComponent implements OnInit {
     this.searchForm.reset();
     this.filtersUser.search = "";
     this.getUsers(this.filtersUser);
-    this.downloadableLink = environment.baseUrl + '/api/users/user_data_export_xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
-    this.downloadableLink1 = environment.baseUrl + '/api/users/user_data_export_pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
+    // this.downloadableLink = environment.baseUrl + '/api/users/user_data_export_xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
+    // this.downloadableLink1 = environment.baseUrl + '/api/users/user_data_export_pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
+  
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
+  
   }
   onSearch($event) {
     // this.keyUp.pipe(
@@ -755,8 +764,8 @@ export class AdminUserFormComponent implements OnInit {
       console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
       this.filtersUser.search = this.searchForm.get('search').value;
       this.getUsers(this.filtersUser);
-      this.downloadableLink = environment.baseUrl + '/api/users/user_data_export_xle/?search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
-      this.downloadableLink1 = environment.baseUrl + '/api/users/user_data_export_pdf/?search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
+      this.downloadableLink = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
+      this.downloadableLink1 = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
     }
 
     console.log("this.users= ", this.users);;
@@ -854,6 +863,25 @@ export class AdminUserFormComponent implements OnInit {
   pageReload(){
     console.log("coming");
     window.location.reload()
+  }
+  downloadXLS(download) {
+    this.userService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.userService.downloadPDF(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 
 }

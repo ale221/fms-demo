@@ -97,6 +97,10 @@ export class DriverProfileReportingComponent implements OnInit {
   PackageType = PackageType;
   loggedInUser;
   pngUser;
+
+  downloadableLink
+  downloadableLink1
+
   constructor(
     private userService: UserService,
     private driverService: DriverDetailsService,
@@ -373,20 +377,44 @@ export class DriverProfileReportingComponent implements OnInit {
     '_blank');
     // this.filtersUser.export = "excel";
     this.filtersUser;
-    window.open(
-      `${environment.baseUrl}/iof/get_multi_report/?limit=10&offset=0&order=&order_by=&driver_id=${this.selectedDrivers}&device_id=${this.selectedvehicles}&report_id=${this.filtersUser.report_id}&date_filter=${this.filtersUser.date_filter}&export=excel&customer_id=${val}&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-      '_blank' // <- This is what makes it open in a new window.
-    );
+    this.downloadableLink=`order=&order_by=&driver_id=${this.selectedDrivers}&device_id=${this.selectedvehicles}&report_id=${this.filtersUser.report_id}&date_filter=${this.filtersUser.date_filter}&export=excel&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+    this.downloadXLS(this.downloadableLink);
+    // window.open(
+    //   `${environment.baseUrl}/iof/get_multi_report/?limit=10&offset=0&order=&order_by=&driver_id=${this.selectedDrivers}&device_id=${this.selectedvehicles}&report_id=${this.filtersUser.report_id}&date_filter=${this.filtersUser.date_filter}&export=excel&customer_id=${val}&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    //   '_blank' 
+    // );
   }
   exportPdf() {
     let val = this.loggedInUser.customer.id;
     console.log("coming in exportExcel");
     // this.filtersUser.export = "pdf";
     this.filtersUser
-    window.open(
-      `${environment.baseUrl}/iof/get_multi_report/?limit=10&offset=0&order=&order_by=&driver_id=${this.selectedDrivers}&device_id=${this.selectedvehicles}&report_id=${this.filtersUser.report_id}&date_filter=${this.filtersUser.date_filter}&export=pdf&customer_id=${val}&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-      '_blank' // <- This is what makes it open in a new window.
-    );
+    this.downloadableLink1=`${environment.baseUrl}/iof/get_multi_report/?limit=10&offset=0&order=&order_by=&driver_id=${this.selectedDrivers}&device_id=${this.selectedvehicles}&report_id=${this.filtersUser.report_id}&date_filter=${this.filtersUser.date_filter}&export=pdf&customer_id=${val}&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`
+    this.downloadPDF(this.downloadableLink1);
+    // window.open(
+    //   `${environment.baseUrl}/iof/get_multi_report/?limit=10&offset=0&order=&order_by=&driver_id=${this.selectedDrivers}&device_id=${this.selectedvehicles}&report_id=${this.filtersUser.report_id}&date_filter=${this.filtersUser.date_filter}&export=pdf&customer_id=${val}&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    //   '_blank' 
+    // );
+  }
+
+  downloadXLS(download) {
+    this.driverService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.driverService.downloadPDF(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 
   searchStatusDropDownChange(value) {

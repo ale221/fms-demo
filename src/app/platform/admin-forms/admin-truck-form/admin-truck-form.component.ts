@@ -218,7 +218,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     private brandingService: BrandingService,
     public router: Router,
     public breadcrumbService: BreadcrumbsService,
-    public drawerService:DrawerService) {
+    public drawerService: DrawerService) {
 
     this.searchForm = this.formBuilder.group({
       fleet_id: [''],
@@ -290,11 +290,11 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.drawerService.getValue().subscribe(res=>{
-      this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
-  })
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
+      console.log("ressssssssssssss1", res);
+      console.log("ressssssssssssss2", this.sidebarCheck);
+    })
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
     this.add_btn = 0;
@@ -378,8 +378,6 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
     this.getTruckTypeForm();
     this.setExportUrls(this.filtersTruck);
-    // this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     this.breadcrumbService.getValue().subscribe(res => {
       console.log("coming in ressssssssssss", res);
@@ -401,22 +399,25 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   getTruckTypeForm() {
-    this.truckService.getPurchaseTypes1()
-      .subscribe((data: any) => {
-        if (data.status === HttpStatusCodeEnum.Success) {
-          console.log(data.data['data']);
-          this.truckTypes = data.data['data'].map(
-            item => ({ value: item['id'], label: item['label'] })
-          );
-          console.log("trucktype1", this.truckType);
-          // this.truckTypes = data.response['option_values'];
-        } else {
-          this.swalService.getErrorSwal(data.message);
-        }
-      })
+    this.truckService.getPurchaseTypes1().subscribe((data: any) => {
+      if (data.status === HttpStatusCodeEnum.Success) {
+        console.log(data.data['data']);
+        this.truckTypes = data.data['data'].map(
+          item => ({ value: item['id'], label: item['label'] })
+        );
+        console.log("trucktype1", this.truckType);
+        // this.truckTypes = data.response['option_values'];
+      } else {
+        this.swalService.getErrorSwal(data.message);
+      }
+    })
 
-    this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    this.downloadableLink = "report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = "report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 
 
   }
@@ -455,26 +456,20 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         this.filtersTruck.search = this.searchForm.get('search').value;
         this.getTrucks(this.filtersTruck);
         this.setExportUrls(this.filtersTruck);
-        // this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?search=" + this.filtersTruck.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?search=" + this.filtersTruck.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
       } else if (this.add_btn == 1) { //searching for vehicle type tab
         this.filtersTruckType.search = this.searchForm.get('search').value;
         this.getTruckTypes(this.filtersTruckType);
         this.setExportUrls(this.filtersTruckType);
-        // this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?search=" + this.filtersTruckType.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?search=" + this.filtersTruckType.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
       } else if (this.add_btn == 2) {  //searching for fleet tab
         this.filtersFleet.search = this.searchForm.get('search').value;
         this.getFleets(this.filtersFleet);
         this.setExportUrls(this.filtersFleet);
-        // this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?search=" + this.filtersFleet.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?search=" + this.filtersFleet.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       } else if (this.add_btn == 3) {
         this.filtersCategory.search = this.searchForm.get('search').value;
         this.getCategory(this.filtersCategory);
         this.setExportUrls(this.filtersCategory);
-        // this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?search=" + this.filtersCategory.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?search=" + this.filtersCategory.search + "&customer_id=" + this.customerID + "&report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       } else {
         console.log("inside else condition of search input")
       }
@@ -509,8 +504,13 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.searchForm.controls.entity_sub_type_id.setValue('');
     this.searchForm.controls.category_id.setValue('')
 
-    this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink = environment.baseUrl + "/iof/manage_xls/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink1 = environment.baseUrl + "/iof/manag_pdf/?report_id=" + this.add_btn + "&customer_id=" + this.customerID + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+    this.downloadableLink = "report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = "report_id=" + this.add_btn + "&timeZone=" + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   }
 
   setExportUrls(filters) {
@@ -534,12 +534,14 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
       // const urlAppend = `is_poi=${filters.is_poi}&poi_value=${filters.poi_id}&poi_value_id=${filters.driver_id}&search=${filters.driver_group}`
       setTimeout(() => {
-        this.downloadableLink = environment.baseUrl + '/iof/manage_xls/?' + query + "&report_id=" + this.add_btn + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-        this.downloadableLink1 = environment.baseUrl + '/iof/manag_pdf/?' + query + "&report_id=" + this.add_btn + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      }, 200);
+        // this.downloadableLink = environment.baseUrl + '/iof/manage_xls/?' + query + "&report_id=" + this.add_btn + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // this.downloadableLink1 = environment.baseUrl + '/iof/manag_pdf/?' + query + "&report_id=" + this.add_btn + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      // this.downloadableLink = environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + this.filters +'&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-      // this.downloadableLink1 = environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + this.filters + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.downloadableLink = query + "&report_id=" + this.add_btn + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.downloadableLink1 = query + "&report_id=" + this.add_btn + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+      }, 200);
 
     }
   }
@@ -730,8 +732,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export: Vehicle List';
       this.setExportUrls(this.filtersTruck);
-      // this.downloadableLink = environment.baseUrl + `/iof/manage_xls/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
-      // this.downloadableLink1 = environment.baseUrl + `/iof/manag_pdf/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
+
     }
     else if (this.add_btn == 1) {
       this.getTrucksType(this.filtersTruckType);
@@ -739,24 +740,21 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export:Vehicle Type';
       this.setExportUrls(this.filtersTruckType);
-      // this.downloadableLink = environment.baseUrl + `/iof/manage_xls/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
-      // this.downloadableLink1 = environment.baseUrl + `/iof/manag_pdf/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
+
     }
     else if (this.add_btn == 2) {
       this.ptoolTip = 'Search by Fleet Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export: Fleet ';
       this.setExportUrls(this.filtersFleet);
-      // this.downloadableLink = environment.baseUrl + `/iof/manage_xls/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
-      // this.downloadableLink1 = environment.baseUrl + `/iof/manag_pdf/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
+
     }
     else if (this.add_btn == 3) {
       this.ptoolTip = 'Search by Category Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export:Category ';
       this.setExportUrls(this.filtersCategory);
-      // this.downloadableLink = environment.baseUrl + `/iof/manage_xls/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
-      // this.downloadableLink1 = environment.baseUrl + `/iof/manag_pdf/?report_id=${this.add_btn}&customer_id= ${this.customerID}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`;
+
     }
     console.log("this.add_btn== ", this.add_btn);
   }
@@ -887,7 +885,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       .subscribe((data: any) => {
         if (!data.error) {
           this.fleets = data['data'].data;
-          console.log("this.fleets= ", this.fleets, this.fleets.length);
+          console.log("this.fleets= ", this.fleets);
           this.totalLengthFleet = data['data'].count;
           this.showIndeterminateProgress = false;
           this.fleets.paginator = this.paginatorFleet;
@@ -2058,12 +2056,10 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
 
   closeFleetForm() {
-
     console.log("coming l");
   }
   exportExcel(add_btn) {
     console.log("coming in exportExcel", add_btn);
-
 
     window.open(
       environment.baseUrl + `/iof/manage_xls/?report_id=${add_btn}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`,
@@ -2079,5 +2075,34 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       '_blank' // <- This is what makes it open in a new window.
     );
   }
+
+
+
+  downloadXLS(download) {
+    this.formService.downloadFleetListingXLS(this.downloadableLink1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download) {
+    this.formService.downloadFleetListingPDF(this.downloadableLink1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+
+
+
+
+
+
 
 }
