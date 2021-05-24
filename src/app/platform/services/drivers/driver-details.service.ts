@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginApiResponse } from '../../../core/model/api.response';
+import {  HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -98,6 +99,20 @@ export class DriverDetailsService {
     const url = `/iof/driver_incident_records/?${params}`;
     return this.http.get(url);
 
+  }
+  downloadXLS(param): Observable<Blob> {
+    const url = `/iof/get_multi_report/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDF(param): Observable<Blob> {
+    const url = `/iof/get_multi_report/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
 

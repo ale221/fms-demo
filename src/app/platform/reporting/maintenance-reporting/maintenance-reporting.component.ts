@@ -74,7 +74,7 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
     }
     // this.isEntityTruck = this.entity.type === EntityType.TRUCK;
 
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?vehicle_group_id=&vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.loggedInUser.customer.id + '&start_date=&end_date=';
+    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?vehicle_group_id=&vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  + '&start_date=&end_date=';
 
   }
 
@@ -87,7 +87,7 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
     const start_date = DateUtils.getUtcDateTimeStart(event[0][0]);
     const end_date = DateUtils.getUtcDateTimeStart(event[0][1]);
 
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?vehicle_group_id=&vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.loggedInUser.customer.id + '&start_date=' + start_date + '&end_date=' + end_date;
+    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?vehicle_group_id=&vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  + '&start_date=' + start_date + '&end_date=' + end_date;
 
 
     this.filters.start_datetime = start_date;

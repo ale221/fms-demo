@@ -138,10 +138,15 @@ export class ViolationsComponent implements OnInit, OnDestroy {
 
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
-    const appendExport = 'offset=0&limit=10&order=&order_by=&days=1000&search_text=&violation_type=&driver_id=&start_datetime=&end_datetime=';
-    this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const appendExport = 'order=&order_by=&days=1000&search_text=&violation_type=&driver_id=&start_datetime=&end_datetime=';
+    // this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    this.downloadableLink = appendExport +  '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+    // this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    this.downloadableLink1 =  appendExport +  '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
     // /iof/get_violation_data_report/?offset=${this.filters.offset}&search_text=${this.filters.search_text}&days=1000&violation_type=${this.filters.violation_type}&driver_id=${this.filters.driver_id}&export=excel&timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`
 
     this.inputValue = "";
@@ -578,9 +583,35 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   }
 
   resetFiltersExport(filters) {
-    const appendExport = `offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search_text=${filters.search_text}&days=1000&violation_type=${filters.violation_type}&driver_id=${filters.driver_id}&start_datetime=${filters.start_datetime}&end_datetime=${filters.end_datetime}`;
-    this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const appendExport = `order=${filters.order}&order_by=${filters.order_by}&search_text=${filters.search_text}&days=1000&violation_type=${filters.violation_type}&driver_id=${filters.driver_id}&start_datetime=${filters.start_datetime}&end_datetime=${filters.end_datetime}`;
+    // this.downloadableLink = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/get_violation_data_report/?' + appendExport + '&customer_id=' + this.customerID + '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    this.downloadableLink =  appendExport +  '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = appendExport +  '&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  }
+
+  downloadXLS(download) {
+    this.formService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    console.log("ajaoh ahhh sajna",download1);
+    this.formService.downloadPDF(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      console.log("urlllllll",url)
+      window.open(url);
+    })
   }
 
 }

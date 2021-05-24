@@ -202,7 +202,7 @@ export class DriversDashboardComponent implements OnInit {
   //   code: '+974',
   //   name: 'Qatar'
   // }]
-  countryCode = [ {
+  countryCode = [{
     code: '+974',
     name: 'Qatar'
   }]
@@ -359,8 +359,11 @@ export class DriversDashboardComponent implements OnInit {
       }
     });
 
-    this.downloadableLink = environment.baseUrl + '/iof/dm1/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/dm1/?customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?customer_id=' + this.customerID;
+
+    this.downloadableLink = '';
+    this.downloadableLink1 = '';
 
     this.formService.getOptionsforDropDown('dropdown_data', { option_key: 'gender' })
       .subscribe((data: any) => {
@@ -399,15 +402,20 @@ export class DriversDashboardComponent implements OnInit {
   }
 
   resetExportUrls() {
-    console.log("coming in  reserexport");
     if (this.add_btn === 0) {
-      console.log("coming in  reserexport 000");
-      this.downloadableLink = environment.baseUrl + '/iof/dm1/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
-      this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
+      // this.downloadableLink = environment.baseUrl + '/iof/dm1/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
+      // this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
+
+      this.downloadableLink = 'search=&driver_id=&driver_group=';
+      this.downloadableLink1 = 'search=&driver_id=&driver_group=';
+
     } else {
-      console.log("coming in  reserexport1111");
-      this.downloadableLink = environment.baseUrl + '/iof/excletab/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
-      this.downloadableLink1 = environment.baseUrl + '/iof/dpftab/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
+      // this.downloadableLink = environment.baseUrl + '/iof/excletab/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
+      // this.downloadableLink1 = environment.baseUrl + '/iof/dpftab/?search=&customer_id=' + this.customerID + '&driver_id=&driver_group=';
+
+      this.downloadableLink = 'search=&driver_id=&driver_group=';
+      this.downloadableLink1 = 'search=&driver_id=&driver_group=';
+
     }
   }
 
@@ -424,7 +432,7 @@ export class DriversDashboardComponent implements OnInit {
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export:Driver Group';
     }
-    console.log("this.add_btn== ", this.add_btn);
+
     this.resetExportUrls();
 
   }
@@ -662,10 +670,8 @@ export class DriversDashboardComponent implements OnInit {
     this.searchForm.get('selectedDriver').reset();
     this.filters.driver_id = '';
     console.log(this.filters);
-    // this.downloadableLink = environment.baseUrl + '/iof/dm1/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_group=' + this.filters.driver_group;
-    // this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_group=' + this.filters.driver_group;
-    this.downloadableLink = environment.baseUrl + '/iof/dm1/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
-    this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
+    this.downloadableLink = 'search=' + this.filters.search_key + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
+    this.downloadableLink1 = 'search=' + this.filters.search_key + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
     this.getDriversListing(this.filters);
     this.getDriversDropdown(this.filters);
   }
@@ -674,8 +680,8 @@ export class DriversDashboardComponent implements OnInit {
     console.log(this.searchForm.get('selectedDriver').value)
     this.filters.driver_group = this.searchForm.get('selectGroup').value;
     this.filters.driver_id = this.searchForm.get('selectedDriver').value;
-    this.downloadableLink = environment.baseUrl + '/iof/dm1/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
-    this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
+    this.downloadableLink = 'search=' + this.filters.search_key + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
+    this.downloadableLink1 = 'search=' + this.filters.search_key + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
     this.getDriversListing(this.filters);
   }
 
@@ -781,9 +787,7 @@ export class DriversDashboardComponent implements OnInit {
     setTimeout(() => {
       this.resetExportUrls();
     }, 200);
-    // this.downloadableLink = environment.baseUrl+'/api/users/user_data_export_xle/';
-    // this.downloadableLink1 = environment.baseUrl+'/api/users/user_data_export_pdf/';
-    // this.downloadableLink = environment.baseUrl+'/api/users/user_data_export_xle/?'+this.filtersUser;
+
   }
 
   getDriversForMap(filters) {
@@ -1172,16 +1176,26 @@ export class DriversDashboardComponent implements OnInit {
       this.filters.driver_id = selectedDriver;
 
       this.getDriversListing(this.filters);
-      this.downloadableLink = environment.baseUrl + '/iof/dm1/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_id=' + selectedDriver + '&driver_group=' + selectGroup;
-      this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_id=' + selectedDriver + '&driver_group=' + selectGroup;
+      // this.downloadableLink = environment.baseUrl + '/iof/dm1/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_id=' + selectedDriver + '&driver_group=' + selectGroup;
+      // this.downloadableLink1 = environment.baseUrl + '/iof/dm2/?search=' + this.filters.search_key + '&customer_id=' + this.customerID + '&driver_id=' + selectedDriver + '&driver_group=' + selectGroup;
+
+      this.downloadableLink =  'search=' + this.filters.search_key + '&driver_id=' + selectedDriver + '&driver_group=' + selectGroup;
+      this.downloadableLink1 =  'search=' + this.filters.search_key + '&driver_id=' + selectedDriver + '&driver_group=' + selectGroup;
+
+
 
     }
     else if (this.add_btn === 1) {
       console.log(this.searchForm.get('search').value);
       this.filters.search_key = this.searchForm.get('search').value
       this.getGroupListingType(this.filters);
-      this.downloadableLink = environment.baseUrl + '/iof/excletab/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
-      this.downloadableLink1 = environment.baseUrl + '/iof/dpftab/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+      // this.downloadableLink = environment.baseUrl + '/iof/excletab/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+      // this.downloadableLink1 = environment.baseUrl + '/iof/dpftab/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+
+
+      this.downloadableLink = 'search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+      this.downloadableLink1 = 'search=' + this.filters.search_key + '&customer_id=' + this.customerID;
+
     }
   }
   // async deleteDriv(user)
@@ -1397,8 +1411,8 @@ export class DriversDashboardComponent implements OnInit {
     //   this.selectedCountry = this.countryCode[1]?.code;
     //   driver.contact_number = driver.contact_number.replace(this.selectedCountry, '');
     // }
-      this.selectedCountry = this.countryCode[0]?.code;
-      driver.contact_number = driver.contact_number.replace(this.selectedCountry, '');
+    this.selectedCountry = this.countryCode[0]?.code;
+    driver.contact_number = driver.contact_number.replace(this.selectedCountry, '');
 
     this.driverForm.patchValue({
       id: driver.id,
@@ -1512,9 +1526,6 @@ export class DriversDashboardComponent implements OnInit {
       })
     }
 
-
-
-
   }
   postGroup(param) {
     let array = [];
@@ -1555,11 +1566,6 @@ export class DriversDashboardComponent implements OnInit {
   }
   onSubmit(formValue) {
     this.submitted = true;
-
-
-
-
-
 
     if (this.validate()) {
       const id = this.driverForm.getRawValue().id;
@@ -1864,15 +1870,12 @@ export class DriversDashboardComponent implements OnInit {
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
-      console.log("file= ", file);
       this.selectedFile = file;
 
       if (this.selectedFile.type.indexOf('.sheet') != -1 || this.selectedFile.type.indexOf('.ms-excel') != -1) {
-        console.log("inside IF condition")
         this.notCSVExcel = false;
         this.disableButton = false;
       } else {
-        console.log("inside ELSE condition");
         this.disableButton = true;
         this.notCSVExcel = true;
       }
@@ -1943,15 +1946,58 @@ export class DriversDashboardComponent implements OnInit {
 
   }
   getSelectedCountry(country) {
-    console.log("country", country);
     if (country.code == "+92") {
-      console.log("coming1");
       this.dynamicMask = "9999999999";
     } else {
-      console.log("coming12");
       this.dynamicMask = "99999999";
     }
     this.selectedCountry = country.code;
   }
+
+
+
+  downloadXLS(download) {
+
+    if (this.add_btn === 0) {
+      this.formService.downloadDriverListingXLS(download).subscribe((apiResponse: any) => {
+        console.log("downloadXLS response== ", apiResponse)
+        const data = apiResponse;
+        const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+        const url = window.URL.createObjectURL(blob)
+        window.open(url);
+      })
+    } else {
+      this.formService.downloadDriverGroupXLS(download).subscribe((apiResponse: any) => {
+        console.log("downloadXLS response== ", apiResponse)
+        const data = apiResponse;
+        const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+        const url = window.URL.createObjectURL(blob)
+        window.open(url);
+      })
+    }
+
+
+
+  }
+
+  downloadPDF(download) {
+    if (this.add_btn === 0) {
+      this.formService.downloadDriverListingPDF(download).subscribe((apiResponse: any) => {
+        const data = apiResponse;
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob)
+        window.open(url);
+      })
+    } else {
+      this.formService.downloadDriverGroupPDF(download).subscribe((apiResponse: any) => {
+        const data = apiResponse;
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob)
+        window.open(url);
+      })
+    }
+  }
+
+
 
 }

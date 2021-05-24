@@ -174,8 +174,13 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.downloadableLink = environment.baseUrl + '/iof/tool1/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/tool2/?customer_id=' + this.customerID;
+    
+
+    // this.downloadableLink = environment.baseUrl + '/iof/tool1/?customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/tool2/?customer_id=' + this.customerID;
+
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
   }
 
   ngAfterViewInit(): void {
@@ -322,8 +327,8 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
     this.searchForm.reset();
     this.filterTool.search = '';
     this.getTrucks(this.filterTool);
-    this.downloadableLink = environment.baseUrl + '/iof/tool1/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/tool2/?customer_id=' + this.customerID;
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
   }
 
   validate(): boolean {
@@ -572,8 +577,8 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
       this.filterTool.search = this.searchForm.get('search').value;
       this.getTrucks(this.filterTool);
 
-      this.downloadableLink = environment.baseUrl + '/iof/tool1/?search=' + this.filterTool.search + '&customer_id=' + this.customerID;
-      this.downloadableLink1 = environment.baseUrl + '/iof/tool2/?search=' + this.filterTool.search + '&customer_id=' + this.customerID;
+      this.downloadableLink =  'search=' + this.filterTool.search + '&order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  ;
+      this.downloadableLink1 = 'search=' + this.filterTool.search + '&order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  ;
 
     }
   }
@@ -613,6 +618,26 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
     this.filterTool.order_by = event.active;
     this.filterTool.order = event.direction;
     this.getTrucks(this.filterTool);
+  }
+
+  downloadXLS(download) {
+    this.formService.downloadXLSTool(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.formService.downloadPDFTool(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 
 

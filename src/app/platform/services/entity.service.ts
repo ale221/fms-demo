@@ -392,7 +392,7 @@ export class EntityService {
 
 
   // Download PDF and EXCEL File API
-  downloadXLS(param): Observable<Blob> {
+  downloadFleetDashboardXLS(param): Observable<Blob> {
     const url = `/iof/fleet_xls?${param}`
     // const options = {headers, param, responseType: 'text' as 'text'};
     // return this.http.get<any>(url).share();
@@ -402,10 +402,53 @@ export class EntityService {
 
   }
 
-  downloadPDF(param) {
+  downloadFleetDashboardPDF(param): Observable<Blob> {
     const url = `/iof/fleet_pdf?${param}`
     const myHeaders = new HttpHeaders();
     myHeaders.append('Access-Control-Allow-Origin', '*');
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
+
+  downloadDriverDashboardXLS(param): Observable<Blob> {
+    const url = `/iof/Export_driver_dashboard?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+
+  }
+
+  downloadTravelHistoryQuickViewXLS(param): Observable<Blob> {
+    const url = `/iof/get_map_travel_history?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+
+  }
+
+
+
+  downloadManageShiftsXLS(param): Observable<Blob> {
+    const url = `/iof/shiftsxle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadManageShiftsPDF(param): Observable<Blob> {
+    const url = `/iof/shiftspdf/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+
+
+
+  // downloadDriverDashboardPDF(param): Observable<Blob> {
+  //   const url = `/iof/Export_driver_dashboard?${param}`
+  //   const myHeaders = new HttpHeaders();
+  //   myHeaders.append('Access-Control-Allow-Origin', '*');
+  //   return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  // }
 }

@@ -23,7 +23,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { DOCUMENT } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { GetUserService } from 'src/app/Services/get-profile.service';
-
+import { HttpStatusCodeEnum } from 'src/app/core/HttpStatusCodeEnum';
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
 import { StorageService } from 'src/app/Services/local-storage.service';
@@ -162,9 +162,6 @@ export class HeaderComponent implements OnInit {
     });
 
 
-
-
-
     // sets an idle timeout of 600 seconds, for testing purposes.
     idle.setIdle(600);
     // sets a timeout period of 600 seconds. after 10 seconds of inactivity, the user will be considered timed out.
@@ -186,9 +183,9 @@ export class HeaderComponent implements OnInit {
     });
 
     idle.onIdleStart.subscribe(() => {
-        this.idleState = 'You\'ve gone idle!'
-        console.log(this.idleState);
-        // this.childModal.show();
+      this.idleState = 'You\'ve gone idle!'
+      console.log(this.idleState);
+      // this.childModal.show();
     });
 
     idle.onTimeoutWarning.subscribe((countdown) => {
@@ -246,8 +243,8 @@ export class HeaderComponent implements OnInit {
       visibility: true
     }
     new google.translate.TranslateElement({ pageLanguage: lang, includedLanguages: 'en,ar', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-    
-    
+
+
     setTimeout(() => {
       this.defaultLoader = {
         visibility: false
@@ -258,7 +255,7 @@ export class HeaderComponent implements OnInit {
 
   Selected(item: SelectedAutocompleteItem) {
     const entity_type = item['item']['original']['entity_type'];
-    console.log(entity_type)
+    // console.log(entity_type)
     if (entity_type === 'Truck') {
       this.gotoPageWithRouteParams('trucks', item['item']['id']);
     } else if (entity_type === 'Job') {
@@ -277,15 +274,13 @@ export class HeaderComponent implements OnInit {
       this.gotoPage('dump');
     } else if (entity_type === 'Supervisor') {
       this.gotoPage('supervisor');
-    }else if (entity_type.trim() === 'POI') {
+    } else if (entity_type.trim() === 'POI') {
       this.gotoPage('fleets/flt/poi');
     }
     else if (entity_type === 'Route') {
       this.gotoPage('admin/territory');
     }
-
-
-  } 
+  }
 
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
@@ -326,21 +321,19 @@ export class HeaderComponent implements OnInit {
   disablePreferences = true;
 
   ngOnInit() {
-
     this.setUserInfo();
 
-    this.getUserService.getValue()
-      .subscribe(res => {
-        if (res) {
-          this.user = res;
-          this.setUserInfo();
-        }
-      });
+    this.getUserService.getValue().subscribe(res => {
+      if (res) {
+        this.user = res;
+        this.setUserInfo();
+      }
+    });
 
-      // watch for changes in localStorage, change header properties accordingly for user
-      this.userSubscription$ = this.storageService.changes.subscribe(res => {
+    // watch for changes in localStorage, change header properties accordingly for user
+    this.userSubscription$ = this.storageService.changes.subscribe(res => {
       const loggedInUserService = this.storageService.getItem('user');
-      if(loggedInUserService) {
+      if (loggedInUserService) {
         this.user = loggedInUserService;
         this.setUserInfo1();
         // if(this.userSubscription$) {
@@ -351,7 +344,7 @@ export class HeaderComponent implements OnInit {
         window.location.reload()
       }
 
-  });
+    });
 
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -465,44 +458,56 @@ export class HeaderComponent implements OnInit {
 
   /*** logout the cureent logged In user */
   logout() {
-    this.authService.unsetUser();
-    let val = localStorage.getItem('setvalue');
+    let userEmail = JSON.parse(localStorage.getItem('user'))
+    let params = { 'email': userEmail.email }
 
-    if (val) {
-      this.route.navigateByUrl('/');
-    }
-    else {
-      localStorage.setItem('setvalue', "false");
-      this.route.navigateByUrl('/');
-    }
-    window.location.reload()
+    this.headerService.logOut(params).subscribe((data: any) => {
+      // console.log("datahhh= ", data)
+
+      if (data['status'] === HttpStatusCodeEnum.Success) {
+        this.authService.unsetUser();
+        let val = localStorage.getItem('setvalue');
+
+        if (val) {
+          this.route.navigateByUrl('/');
+        }
+        else {
+          localStorage.setItem('setvalue', "false");
+          this.route.navigateByUrl('/');
+        }
+        window.location.reload()
+      }
+
+    })
+
+
   }
+
 
   alert_count: any;
   /*** Method that hits the API to get the total alerts count from bakend */
   getAlertCount() {
-    console.log('alert----count')
+    // console.log('alert----count')
     if (this.authService.isLoggedIn()) {
-      this.headerService.getIoLNotificationCount()
-        .subscribe(new class extends HttpController<ApiResponse<any>> {
-          onComplete(): void {
+      this.headerService.getIoLNotificationCount().subscribe(new class extends HttpController<ApiResponse<any>> {
+        onComplete(): void {
+        }
+
+        onError(errorMessage: string, err: any) {
+          // do
+          console.log(errorMessage);
+        }
+
+        onNext(apiResponse: ApiResponse<any>): void {
+          if (apiResponse.status) {
+            // console.log('notifications count ', apiResponse.response[0].count);
+            this.context.alert_count = apiResponse.response[0].count;
           }
 
-          onError(errorMessage: string, err: any) {
-            // do
-            console.log(errorMessage);
-          }
+        }
 
-          onNext(apiResponse: ApiResponse<any>): void {
-            if (apiResponse.status) {
-              // console.log('notifications count ', apiResponse.response[0].count);
-              this.context.alert_count = apiResponse.response[0].count;
-            }
-
-          }
-
-        }(this)
-        );
+      }(this)
+      );
     }
   }
 
@@ -831,7 +836,7 @@ export class HeaderComponent implements OnInit {
     return true;
   }
 
-  toggleSideMenu () {
+  toggleSideMenu() {
     if ($('.mat-drawer-container.mat-sidenav-container').hasClass('collapseDrawer')) {
       console.log("coming in iffffffffffff");
       $('.mat-drawer-container.mat-sidenav-container').removeClass('collapseDrawer');
@@ -850,7 +855,7 @@ export class HeaderComponent implements OnInit {
 
       $('.breadcrumb-box').removeClass('full-open-breadcrum');
       $('.breadcrumb-box').addClass('half-open-breadcrum');
-      $('.navbar-brand-text.hidden-xs').css('display', 'none' );
+      $('.navbar-brand-text.hidden-xs').css('display', 'none');
 
 
       this.drawerService.setValue(true);

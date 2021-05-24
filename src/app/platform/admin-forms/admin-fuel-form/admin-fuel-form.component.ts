@@ -190,8 +190,11 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.downloadableLink = environment.baseUrl + '/iof/FuelListexport1/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/FuelListexport2/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/iof/FuelListexport1/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/FuelListexport2/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+
+    this.downloadableLink = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
 
   }
 
@@ -484,8 +487,8 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
     this.filtersFuel.search = '';
     this.getTrucks(this.filtersFuel);
     this.getFuelReporting(this.filtersFuelReporting);
-    this.downloadableLink = environment.baseUrl + '/iof/FuelListexport1/' + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/FuelListexport2/' + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink =  '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 =  '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
   }
 
   deleteTruck(truckId, actionType) {
@@ -509,8 +512,8 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
 
   updateFilter(event) {
     this.filtersFuel.search = event;
-    this.downloadableLink = environment.baseUrl + '/iof/FuelListexport1/?search=' + event + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/iof/FuelListexport2/?search=' + event + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink = 'search=' + event + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = 'search=' + event + '&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
     // this.trucks = this.datatableService.updateFilter(event.target.value, this.temp);
     this.getTrucks(this.filtersFuel);
     this.getFuelReporting(this.filtersFuelReporting);
@@ -637,7 +640,25 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
   //   });
   // }
 
+  downloadXLS(download) {
+    this.truckService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
 
+  downloadPDF(download1) {
+    this.truckService.downloadPDF(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
+  }
 
 
 

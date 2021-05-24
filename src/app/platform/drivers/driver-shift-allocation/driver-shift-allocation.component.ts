@@ -274,8 +274,13 @@ export class DriverShiftAllocationComponent implements OnInit {
     this.getTemplates(this.filters);
     this.branding = this.brandingService.styleObject();
 
-    this.downloadableLink = environment.baseUrl + '/iof/sdxle/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/sdpdf/?customer_id=' + this.customerID;
+    'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id
+    
+    // this.downloadableLink = environment.baseUrl + '/iof/sdxle/?customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/sdpdf/?customer_id=' + this.customerID;
+
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
 
   }
 
@@ -400,8 +405,8 @@ export class DriverShiftAllocationComponent implements OnInit {
   selectGroupDropDownChange($event) {
     this.filters.shift_id = $event.value;
     this.getTemplates(this.filters);
-    this.downloadableLink = environment.baseUrl + '/iof/sdxle/?shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/sdpdf/?shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id ;
+    this.downloadableLink1 = 'shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id ;
     // this.getDriverFilter($event.value);
     // this.filters.shift_id = this.searchForm.get('selectGroup').value;
     // this.filters.driver_id=this.searchForm.get('selectedDriver').value;
@@ -409,8 +414,8 @@ export class DriverShiftAllocationComponent implements OnInit {
   }
   selectDriverDropDownChange($event) {
     this.filters.driver_id = $event.value;
-    this.downloadableLink = environment.baseUrl + '/iof/sdxle/?shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/sdpdf/?shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id + '&customer_id=' + this.customerID;
+    this.downloadableLink1 = 'shift_id=' + this.filters.shift_id + '&driver_id=' + this.filters.driver_id + '&customer_id=' + this.customerID;
     this.getTemplates(this.filters);
     // this.getDriverFilter($event.value);
     // this.filters.shift_id = this.searchForm.get('selectGroup').value;
@@ -682,8 +687,8 @@ export class DriverShiftAllocationComponent implements OnInit {
     this.sendObj.search = this.searchForm.value.search;
     this.filters.search = this.searchForm.value.search;
     this.getTemplates(this.filters);
-    this.downloadableLink = environment.baseUrl + '/iof/sdxle/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/sdpdf/?search=' + this.searchForm.value.search + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id + '&search=' + this.searchForm.value.search ;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id+ '&search=' + this.searchForm.value.search ;
   }
   onChange($event) {
     var val = $event.value;
@@ -691,8 +696,8 @@ export class DriverShiftAllocationComponent implements OnInit {
   }
 
   onClearSearch() {
-    this.downloadableLink = environment.baseUrl + '/iof/sdxle/?customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/iof/sdpdf/?customer_id=' + this.customerID;
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
     this.searchForm.reset();
     this.filters.shift_id = '';
     this.filters.driver_id = '';
@@ -814,6 +819,27 @@ export class DriverShiftAllocationComponent implements OnInit {
     // return currentDate;
   }
 
+
+  downloadXLS(download) {
+    this.templateRouteService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.templateRouteService.downloadPDF(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
+  }
+
 }
 
 
@@ -850,3 +876,5 @@ export class TemplatesModel {
   schedule_clients: string;
   schedule_contracts: string;
 }
+
+

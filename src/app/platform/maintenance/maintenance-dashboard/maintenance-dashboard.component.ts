@@ -147,20 +147,16 @@ export class MaintenanceDashboardComponent implements OnInit {
     })
 
     const appendExport = 'vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&start_date=&end_date=';
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    this.downloadableLink = appendExport + '&export=excel' + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = appendExport + '&export=pdf' + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 
     this.loadDashboardCards(hypernymModules[6], DashboardEnum.Mainenance);
 
-    // this.entityService.getVehicleMaintenanceChart().subscribe((data: any) => {
-    //   if (data['status'] === HttpStatusCodeEnum.Success) {
-    //     this.vehicleMaintenance = data.data.chart_data;
-    //     console.log("this.vehicleMaintenance= ", this.vehicleMaintenance)
-    //     setTimeout(() => {
-    //       this.generateChart(this.vehicleMaintenance);
-    //     }, 100)
-    //   }
-    // })
+
 
     //Get Fleet
     this.maintenanceService.getFleetListing().subscribe((data: any) => {
@@ -199,8 +195,13 @@ export class MaintenanceDashboardComponent implements OnInit {
   resetFiltersExport(filters) {
     // console.log("resetFilter filters: ", filters)
     const appendExport = `vehicle_group_id=${filters.vehicle_group_id}&vehicle_id=${filters.vehicle_id}&maintenance_type_id=${filters.maintenance_type_id}&date_filter=${filters.date_filter}&search=${filters.search}&start_date=${filters.start_date}&end_date=${filters.end_date}`;
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+    this.downloadableLink = appendExport + '&export=excel' + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = appendExport + '&export=pdf' + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   }
 
   filterIdsFromJSON() {
@@ -505,15 +506,29 @@ export class MaintenanceDashboardComponent implements OnInit {
   }
 
 
+  downloadXLS(download) {
+    console.log("download XLS= ", download)
 
+    this.maintenanceService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
 
+  downloadPDF(download) {
+    console.log("download PDF= ", download)
 
-
-  // https://dev.iot.vodafone.com.qa/backend/iof/maintenance/records?vehicle_group_id=&amp;vehicle_id=&amp;maintenance_type_id=&amp;date_filter=&amp;search=&amp;export=excel&amp;timeZone=Asia/Karachi&amp;customer_id=1&amp;start_date=&amp;end_date=
-
-
-  // https://dev.iot.vodafone.com.qa/backend/iof/maintenance/records?order=&order_by=&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=&timeZone=Asia/Karachi&start_date=&end_date=
-
+    this.maintenanceService.downloadPDF(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
 
 
 
