@@ -793,6 +793,27 @@ export class DriverShiftAllocationComponent implements OnInit {
     return ts;
   }
 
+
+  startTimeConversion(time) {
+    let offset = Math.abs(new Date().getTimezoneOffset());
+    var t = new Date();
+    t.setSeconds(t.getSeconds() + offset);
+    let currentDate = DateUtils.getYYYYMMDD(t.toDateString())
+    currentDate = DateUtils.getLocalMMDDYYYYhhmmssATime(currentDate + ' ' + time);
+    return this.startTimeConvert(currentDate);
+    // return currentDate;
+  }
+
+  endTimeConversion(time) {
+    let offset = Math.abs(new Date().getTimezoneOffset());
+    var t = new Date();
+    t.setSeconds(t.getSeconds() + offset);
+    let currentDate = DateUtils.getYYYYMMDD(t.toDateString())
+    currentDate = DateUtils.getLocalMMDDYYYYhhmmssATime(currentDate + ' ' + time);
+    return this.endTimetConvert(currentDate);
+    // return currentDate;
+  }
+
 }
 
 
