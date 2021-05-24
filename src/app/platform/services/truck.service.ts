@@ -3,7 +3,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EntityService } from './entity.service';
-import {  HttpHeaders } from '@angular/common/http';
 import { ApiResponse, ApiResponseNew, LoginApiResponse } from '../../core/model/api.response';
 import { TrailMarkerResponse, VehicleSummaryResponse } from '../data/model/location';
 import { DropDownItem } from "../data/model/dropdown-item";

@@ -7,7 +7,6 @@ import { ApiResponse, LoginApiResponse } from "../../core/model/api.response";
 import { DropDownItem } from "../data/model/dropdown-item";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {  HttpHeaders } from '@angular/common/http';
 // import { debugger } from 'fusioncharts';
 
 @Injectable({
