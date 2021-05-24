@@ -143,6 +143,7 @@ export class TemplateAndRouteService {
 
 
 
+
   downloadManageJobsXLS(param): Observable<Blob> {
     const url = `/iof/job1/?${param}`
     const myHeaders = new HttpHeaders();
@@ -150,8 +151,22 @@ export class TemplateAndRouteService {
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
+  downloadXLS(param): Observable<Blob> {
+    const url = `/iof/sdxle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
   downloadManageJobsPDF(param): Observable<Blob> {
     const url = `/iof/job2/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadPDF(param): Observable<Blob> {
+    const url = `/iof/sdpdf/?${param}`
     const myHeaders = new HttpHeaders();
     myHeaders.append('Access-Control-Allow-Origin', '*');
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });

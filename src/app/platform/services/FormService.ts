@@ -7,6 +7,7 @@ import { ApiResponse, LoginApiResponse } from "../../core/model/api.response";
 import { DropDownItem } from "../data/model/dropdown-item";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {  HttpHeaders } from '@angular/common/http';
 // import { debugger } from 'fusioncharts';
 
 @Injectable({
@@ -828,6 +829,121 @@ export class FormService {
   getFleetFiltersDropdown() {
     const url = `/iof/fleet`
     return this.http.get<any>(url);
+  }
+  downloadXLS(param): Observable<Blob> {
+    const url = `/iof/get_violation_data_report/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDF(param): Observable<Blob> {
+    const url = `/iof/get_violation_data_report/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+  downloadXLSStaff(param): Observable<Blob> {
+    const url = `/iof/st1/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDFStaff(param): Observable<Blob> {
+    const url = `/iof/st2/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadXLSPermission(param): Observable<Blob> {
+    const url = `/api/users/rolexle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDFPermission(param): Observable<Blob> {
+    const url = `/api/users/pdfrole/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadXLSContract(param): Observable<Blob> {
+    const url = `/iof/xle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDFContract(param): Observable<Blob> {
+    const url = `/iof/pdf/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadXLSAuditDocumentDriver(param): Observable<Blob> {
+    const url = `/hypernet/entity/documents?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+  downloadXLSAuditDocumentFleet(param): Observable<Blob> {
+    const url = `/hypernet/entity/fleet-documents?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDFAuditDocumentDriver(param): Observable<Blob> {
+    const url = `/hypernet/entity/documents?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+  downloadPDFAuditDocumentFleet(param): Observable<Blob> {
+    const url = `/hypernet/entity/fleet-documents?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadXLSTool(param): Observable<Blob> {
+    const url = `/iof/tool1/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDFTool(param): Observable<Blob> {
+    const url = `/iof/tool2/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadXLSVehicleAllocation(param): Observable<Blob> {
+    const url = `/iof/dvxle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDFVehicleAllocation(param): Observable<Blob> {
+    const url = `/iof/dvpdf/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
 

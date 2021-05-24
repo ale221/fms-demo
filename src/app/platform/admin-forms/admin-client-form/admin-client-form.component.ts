@@ -203,8 +203,13 @@ export class AdminClientFormComponent implements OnInit {
         this.getUsers(this.filtersUser);
       }
     });
-    this.downloadableLink = environment.baseUrl + '/hypernet/entity/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink = environment.baseUrl + '/hypernet/entity/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    // this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+  
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+  
+
   }
 
   searchStatusDropDownChange(event) {
@@ -631,15 +636,15 @@ export class AdminClientFormComponent implements OnInit {
       this.filtersUser.search = this.searchForm.get('search').value;
       this.getUsers(this.filtersUser);
     }
-    this.downloadableLink = environment.baseUrl + '/hypernet/entity/xle/?search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
+    this.downloadableLink1 = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
   }
   onClearSearch() {
     this.searchForm.reset();
     this.filtersUser.search = "";
     this.getUsers(this.filtersUser);
-    this.downloadableLink = environment.baseUrl + '/hypernet/entity/xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
-    this.downloadableLink1 = environment.baseUrl + '/hypernet/entity/pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID;
   }
 
   sortUserList(event) {
@@ -654,5 +659,24 @@ export class AdminClientFormComponent implements OnInit {
   }
   pageReload() {
     window.location.reload()
+  }
+  downloadXLS(download) {
+    this.clientService.downloadXLS(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.clientService.downloadPDF(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 }

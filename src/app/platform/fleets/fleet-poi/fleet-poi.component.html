@@ -241,7 +241,7 @@
                         (click)="mapClicked($event)" [showSearchBar]="true"></app-google-map>
 
                       <fieldset [disabled]="inactiveRecord">
-                        <button type="button" class="btn btn-warning btn-block" [disabled]="!source_latlong"
+                        <button type="button" class="btn btn-warning btn-block" [disabled]="!source_latlong || selected_poi_type === 'Routes'"
                           (click)="resetMap()">Remove Marker
                         </button>
                         <span *ngIf="inactiveRecord || !source_latlong"><i

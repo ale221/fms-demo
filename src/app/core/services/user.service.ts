@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiResponse, LoginApiResponse } from '../model/api.response';
 import { User } from '../model/user';
 import { Observable } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -290,5 +291,34 @@ export class UserService {
       form_data.append(key, data[key]);
     }
     return form_data;
+  }
+  downloadXLS(param): Observable<Blob> {
+    const url = `/api/users/user_data_export_xle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDF(param): Observable<Blob> {
+    const url = `/api/users/user_data_export_pdf/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+  downloadXLSAuditForm(param): Observable<Blob> {
+    const url = `/options/xle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDFAuditForm(param): Observable<Blob> {
+    const url = `/options/pdf/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 }

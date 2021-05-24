@@ -137,8 +137,11 @@ export class AuditFormComponent implements OnInit {
         this.showIndeterminateProgress = false;
         this.totalUserLength = data['data'].count;
         this.users.pagination = this.totalUserLength;
-        this.downloadableLink = environment.baseUrl + '/options/xle/?' + params;
-        this.downloadableLink1 = environment.baseUrl + '/options/pdf/?' + params;
+        // this.downloadableLink = environment.baseUrl + '/options/xle/?' + params;
+        // this.downloadableLink1 = environment.baseUrl + '/options/pdf/?' + params;
+        this.downloadableLink =  params;
+        this.downloadableLink1 =  params;
+
         this.showExportFile = true;
       }
       else if (data.error == true) {
@@ -192,8 +195,8 @@ export class AuditFormComponent implements OnInit {
         this.showIndeterminateProgress = false;
         this.totalUserLength = data['data'].count;
         this.users.pagination = this.totalUserLength;
-        this.downloadableLink = environment.baseUrl + '/options/xle/?' + params;
-        this.downloadableLink1 = environment.baseUrl + '/options/pdf/?' + params;
+        this.downloadableLink =  params;
+        this.downloadableLink1 =  params;
         this.showExportFile = true;
       }
       else if (data.error == true) {
@@ -224,8 +227,8 @@ export class AuditFormComponent implements OnInit {
         this.showIndeterminateProgress = false;
         this.totalUserLength = data['data'].count;
         this.users.pagination = this.totalUserLength;
-        this.downloadableLink = environment.baseUrl + '/options/xle/?' + params;
-        this.downloadableLink1 = environment.baseUrl + '/options/pdf/?' + params;
+        this.downloadableLink =  params;
+        this.downloadableLink1 =  params;
         this.showExportFile = true;
       }
       else if (data.error == true) {
@@ -241,5 +244,25 @@ export class AuditFormComponent implements OnInit {
       }
 
     });
+  }
+
+  downloadXLS(download) {
+    this.userService.downloadXLSAuditForm(download).subscribe((apiResponse: any) => {
+      console.log("downloadXLS response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      window.open(url);
+    })
+  }
+
+  downloadPDF(download1) {
+    this.userService.downloadPDFAuditForm(download1).subscribe((apiResponse: any) => {
+      console.log("downloadPDF response== ", apiResponse)
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    })
   }
 }

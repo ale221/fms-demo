@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { AppConfig } from 'src/app/app.config';
+import {  HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ClientService {
@@ -31,6 +33,20 @@ export class ClientService {
     const url =  '/hypernet/entity/delete_clients';
 
     return this.http.patch(url, params);
+  }
+  downloadXLS(param): Observable<Blob> {
+    const url = `/hypernet/entity/xle/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+
+
+  downloadPDF(param): Observable<Blob> {
+    const url = `/hypernet/entity/pdf/?${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
 }
