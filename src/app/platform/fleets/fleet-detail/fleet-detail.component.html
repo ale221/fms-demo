@@ -306,15 +306,15 @@
                   [ngClass]="(truck?.signalRresponse && truck?.signalRresponse?.spd > 0 && tooLongOrtooShortDistance) ? 'badge-success': 'badge-danger'">
                   {{truck?.signalRresponse ?
                   (((truck?.signalRresponse?.spd) > 0 &&
-                  tooLongOrtooShortDistance) ? 'Moving' : 'Idle')
+                  tooLongOrtooShortDistance) ? 'Moving' : 'Idle Since: ' + idleDuration)
                   : '-'}}
                 </div>
               </div>
 
-              <div class="margin-bottom-15 text-center" *ngIf="idleDuration">
+              <!-- <div class="margin-bottom-15 text-center" *ngIf="idleDuration">
                 <div class="font-size-14  margin-bottom-0">Since last park</div>
                 <span> {{convert(idleDuration)}}</span>
-              </div>
+              </div> -->
 
 
               <div class="margin-bottom-15 text-center">
@@ -1057,11 +1057,11 @@
                                           [class.active]="row === selected[0]"
                                           (click)="onSelect({selected: row}, 'trail')">
                                           <td class="text-center">
-                                            {{(row.start_time * 1000) |
+                                            {{(row.start_time) |
                                             date: 'short'}}
                                           </td>
                                           <td class="text-center">
-                                            {{(row.end_time * 1000) |
+                                            {{(row.end_time) |
                                             date:'short'}}
                                           </td>
                                           <td class="text-center">

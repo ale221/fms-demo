@@ -1492,17 +1492,23 @@ export class FleetDetailComponent implements OnInit {
             this.trailWithStopsInfo = stop_times;
 
             for (let j = 0; j < stop_times.length; j++) {
-              stop_times[j].duration = DateUtils.getDuration(Number(stop_times[j].duration));
+              // stop_times[j].duration = DateUtils.getDuration(Number(stop_times[j].duration));
+              stop_times[j].duration = stop_times[j].duration;
 
               markers.push({
                 latitude: stop_times[j].latitude,
                 longitude: stop_times[j].longitude,
               });
 
+              // this.trailWithStopsInfo[j].start_time = DateUtils.getUTCYYYYMMDDHHmmss(stop_times[j].start_time);
+              // this.trailWithStopsInfo[j].end_time = DateUtils.getUTCYYYYMMDDHHmmss(stop_times[j].end_time);
+
               infoWindows.push([
                 new Item('Duration', (stop_times[j].duration)),
-                new Item('Start Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].start_time)),
-                new Item('End Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].end_time)),
+                // new Item('Start Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].start_time)),
+                // new Item('End Time', DateUtils.getLocalMMDDYYYYhhmmss(stop_times[j].end_time)),
+                new Item('Start Time', DateUtils.getMMDDYYYYhhmmssA(stop_times[j].start_time)),
+                new Item('End Time', DateUtils.getMMDDYYYYhhmmssA(stop_times[j].end_time)),
                 // new Item('Stop Type', (stop_times[j].stop_type || 'N/A')),
               ]);
             }
