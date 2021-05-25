@@ -4,6 +4,7 @@ import { GetUsecaseService } from '../../services/get-usecase.service';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
+import { EntityService } from '../../services/entity.service';
 
 
 @Component({
@@ -21,69 +22,58 @@ export class DashboardWidgetComponent implements OnInit {
   loggedInUser;
   customerID;
   userEmail;
-  constructor(private router: Router,
-     private getUsecase: GetUsecaseService,
-     public breadcrumbsService : BreadcrumbsService,
-     private authService:AuthService) {
-
+  constructor(private router: Router, private entityService: EntityService,
+    private getUsecase: GetUsecaseService,
+    public breadcrumbsService: BreadcrumbsService,
+    private authService: AuthService) {
   }
   url;
 
   ngOnInit(): void {
     this.useCaseId = this.getUsecase.getUsecaseId();
     this.loggedInUser = this.authService.getUser();
-    console.log("loggedinuser",this.loggedInUser);
-      this.customerID = this.loggedInUser.customer.id;
-      this.userEmail=this.loggedInUser.email;
-      console.log("mailllll", this.userEmail)
+    this.customerID = this.loggedInUser.customer.id;
+    this.userEmail = this.loggedInUser.email;
   }
 
   whatsAppLink(page) {
-
     let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    if(page=='fleet'){
-      this.url=environment.baseUrl + '/iof/share_fleet/' + this.customerID + '/' + timeZone  + '/';
-    }else if(page=='drivers'){
-      this.url= environment.baseUrl + '/iof/share_driver/' + this.customerID + '/' + timeZone  + '/';
-    }else if(page=='maintenance'){
-      this.url=environment.baseUrl + '/iof/share_maintenance/' + this.customerID + '/' + timeZone  + '/';
-          }
-
-    else{
-      this.url = window.location.href;
-
+    if (page == 'fleet') {
+      this.url = environment.baseUrl + '/iof/share_fleet/' + this.customerID + '/' + timeZone + '/';
+    } else if (page == 'drivers') {
+      this.url = environment.baseUrl + '/iof/share_driver/' + this.customerID + '/' + timeZone + '/';
+    } else if (page == 'maintenance') {
+      this.url = environment.baseUrl + '/iof/share_maintenance/' + this.customerID + '/' + timeZone + '/';
     }
-    // [
-    //   {pdf: environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone},
-    //   {xls: environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone}
-    // ];
-    // console.log("widgetData= ", this.widgetData[3].shareUrls.pdf)
-    // let x = this.widgetData[3].shareUrls.pdf + ' ' + this.widgetData[3].shareUrls.xls;
+    else {
+      this.url = window.location.href;
+    }
+
     window.open(
       "https://api.whatsapp.com/send?text=" + this.url,
       '_blank'
     );
   }
 
-  emailLink(page,url) {
+  emailLink(page, url) {
     let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    if(page=='fleet'){
-      this.url=environment.baseUrl + '/iof/share_fleet/' + this.customerID + '/' + timeZone + '/';
+    if (page == 'fleet') {
+      this.url = environment.baseUrl + '/iof/share_fleet/' + this.customerID + '/' + timeZone + '/';
 
-    }else if(page=='drivers'){
-      this.url= environment.baseUrl + '/iof/share_driver/' + this.customerID + '/' + timeZone + '/';
-    }else if(page=='maintenance'){
-      this.url=environment.baseUrl + '/iof/share_maintenance/' + this.customerID + '/' + timeZone + '/';
+    } else if (page == 'drivers') {
+      this.url = environment.baseUrl + '/iof/share_driver/' + this.customerID + '/' + timeZone + '/';
+    } else if (page == 'maintenance') {
+      this.url = environment.baseUrl + '/iof/share_maintenance/' + this.customerID + '/' + timeZone + '/';
     }
 
-    else{
+    else {
       this.url = window.location.href;
 
     }
     // let x = this.widgetData[3].shareUrls.pdf + ' ' + this.widgetData[3].shareUrls.xls;
 
     window.open(
-      "mailto:"+this.userEmail+"?subject=VFQ-PDF Report!&body=" + this.url,
+      "mailto:" + this.userEmail + "?subject=VFQ-PDF Report!&body=" + this.url,
       '_blank'
     );
   }
@@ -97,20 +87,86 @@ export class DashboardWidgetComponent implements OnInit {
   }
 
   ExportToCSV(event) {
-    // console.log("event= ", event)
     this.exportToCSV.emit(null);
   }
-  manageTest(){
-     let route=[];
-    route[0]="forChangingmanagepath";
-    route[1]="forChangingmanagepath";
+  manageTest() {
+    let route = [];
+    route[0] = "forChangingmanagepath";
+    route[1] = "forChangingmanagepath";
     this.breadcrumbsService.setValue(route);
   }
-  manageTest2(){
-    console.log("managetest22");
-    let route=[];
-   route[0]="maintenance";
-   route[1]="Maintenance";
-   this.breadcrumbsService.setValue(route);
- }
+  manageTest2() {
+    let route = [];
+    route[0] = "maintenance";
+    route[1] = "Maintenance";
+    this.breadcrumbsService.setValue(route);
+  }
+
+  downloadExcelPdf(item) {
+    if (item.dashboard_Type === "fleet") {
+      // console.log("fleet dashboard")
+      if (item.name === "PDF") {
+        let param = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.entityService.fleetdashboardExportPDF(param).subscribe((apiResponse: any) => {
+          const data = apiResponse;
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob)
+          window.open(url);
+        })
+      }
+      else if (item.name === "XLS") {
+        let param = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.entityService.fleetdashboardExportXLS(param).subscribe((apiResponse: any) => {
+          const data = apiResponse;
+          const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+          const url = window.URL.createObjectURL(blob)
+          window.open(url);
+        })
+      }
+
+    }
+    else if (item.dashboard_Type === "driver") {
+      // console.log("driver dashboard")
+      if (item.name === "PDF") {
+        let param = 'export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.entityService.driverdashboardExportPDF(param).subscribe((apiResponse: any) => {
+          const data = apiResponse;
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob)
+          window.open(url);
+        })
+      }
+      else if (item.name === "XLS") {
+        let param = 'export=xls&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.entityService.driverdashboardExportXLS(param).subscribe((apiResponse: any) => {
+          const data = apiResponse;
+          const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+          const url = window.URL.createObjectURL(blob)
+          window.open(url);
+        })
+      }
+
+    }
+    else if (item.dashboard_Type === "maintenance") {
+      if (item.name === "PDF") {
+        let param = '&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=pdf&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.entityService.maintenancedashboardExportPDF(param).subscribe((apiResponse: any) => {
+          const data = apiResponse;
+          const blob = new Blob([data], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob)
+          window.open(url);
+        })
+      }
+      else if (item.name === "XLS") {
+        let param = '&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+        this.entityService.maintenancedashboardExportPDF(param).subscribe((apiResponse: any) => {
+          const data = apiResponse;
+          const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+          const url = window.URL.createObjectURL(blob)
+          window.open(url);
+        })
+      }
+    }
+  }
+
 }

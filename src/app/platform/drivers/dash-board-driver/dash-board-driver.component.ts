@@ -82,8 +82,8 @@ export class DashBoardDriverComponent implements OnInit {
     {
       name: 'Export', icon: 'fa fa-download', export: true,
       subNav: [
-        { name: 'PDF', target: true, url: environment.baseUrl + '/iof/Export_driver_dashboard?export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone },
-        { name: 'XLS', target: true, url: environment.baseUrl + '/iof/Export_driver_dashboard?export=xls&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone }
+        { name: 'PDF', target: true, url: environment.baseUrl + '/iof/Export_driver_dashboard?export=pdf&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone, dashboard_Type: 'driver' },
+        { name: 'XLS', target: true, url: environment.baseUrl + '/iof/Export_driver_dashboard?export=xls&customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone, dashboard_Type: 'driver' }
       ]
     },
     {
@@ -1093,8 +1093,8 @@ export class DashBoardDriverComponent implements OnInit {
 
     // do something here
     window.open(this.downloadableLink, '_blank');
-  
-  
+
+
   }
 
   ngOnDestroy() {

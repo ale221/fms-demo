@@ -26,7 +26,7 @@
 
         <div *ngIf="widget.subNav && widget.name != 'Share'" id="myDropdown" class="wrapper-widget dropdown-content">
           <div href="#" *ngFor="let item of widget.subNav">
-            <a [href]="item.url" target="_blank" *ngIf="item.target">{{item.name}}</a>
+            <a (click)="downloadExcelPdf(item)" *ngIf="item.target">{{item.name}}</a>
             <a [routerLink]="item.route" *ngIf="!item.target">{{item.name}}</a>
           </div>
         </div>
@@ -37,8 +37,6 @@
             <a (click)="emailLink(item.page,item.url)" *ngIf="item.name == 'Email'">{{item.name}}</a>
           </div>
         </div>
-
-       
 
       </div>
     </li>

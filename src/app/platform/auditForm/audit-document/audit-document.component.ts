@@ -286,7 +286,7 @@ export class AuditDocumentComponent implements OnInit {
     // this.enableSearch = true;
     // this.trucks = [];
 
-    this.formService.getFleetsList(fleetID)
+    this.formService.getFleetsListAudit(fleetID)
       .subscribe((data: any) => {
         if (!data.error) {
           this.vehicles = data['data'].map(

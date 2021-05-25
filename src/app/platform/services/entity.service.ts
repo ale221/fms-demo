@@ -441,14 +441,35 @@ export class EntityService {
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
+  fleetdashboardExportPDF(params): Observable<Blob> {
+    const url = `/iof/fleet_pdf?${params}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+  fleetdashboardExportXLS(params): Observable<Blob> {
+    const url = `/iof/fleet_xls?${params}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+  driverdashboardExportPDF(params): Observable<Blob> {
+    const url = `/iof/Export_driver_dashboard?${params}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+  driverdashboardExportXLS(params): Observable<Blob> {
+    const url = `/iof/Export_driver_dashboard?${params}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
+  maintenancedashboardExportPDF(params): Observable<Blob> {
+    const url = `/iof/maintenance/records?${params}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
 
-
-
-
-  // downloadDriverDashboardPDF(param): Observable<Blob> {
-  //   const url = `/iof/Export_driver_dashboard?${param}`
-  //   const myHeaders = new HttpHeaders();
-  //   myHeaders.append('Access-Control-Allow-Origin', '*');
-  //   return this.http.get(url, { responseType: 'blob', headers: myHeaders });
-  // }
 }
