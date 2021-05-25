@@ -318,7 +318,7 @@ export class AuditDocumentComponent implements OnInit {
       this.listVariable = 'Fleet List';
     }
     console.log("this.selectedType", this.selectedType)
-    //  this.getDocumentType();
+    this.getDocumentType();
     this.getContracts();
   }
   onDocumentNameChange(event) {
@@ -328,16 +328,24 @@ export class AuditDocumentComponent implements OnInit {
       this.selectedType = "driver";
       this.reportTypeTable = 1;
       this.listVariable = 'Driver List';
+      this.contractForm.controls.select_group.reset();
+      this.contractForm.controls.select_driver.reset();
+      this.contractForm.controls.document_type.reset();
 
     } else {
+
 
       this.selectedType = "fleet";
       this.reportTypeTable = 2;
       this.listVariable = 'Fleet List';
+      this.contractForm.controls.select_fleet.reset();
+      this.contractForm.controls.select_vehicle.reset();
+      this.contractForm.controls.document_type.reset();
     }
-    console.log("this.selectedType", this.selectedType)
+    // this.contractForm.reset();
     this.getDocumentType();
-    this.getContracts();
+    console.log("this.selectedType", this.selectedType)
+    // this.getDocumentType();
   }
 
   onDriverGroupChange(event) {
@@ -460,7 +468,7 @@ export class AuditDocumentComponent implements OnInit {
       // }
       console.log("coming1", value['documentName'])
       // console.log("coming1",value['documentName'].name)
-      if (value['documentName'][0]?.name == "Driver") {
+      if (value['documentName'].name == "Driver") {
         console.log("coming11")
         param.append('driver_group_id', value['select_group']['id']);
         param.append('driver_id', value['select_driver']['id']);
@@ -475,12 +483,15 @@ export class AuditDocumentComponent implements OnInit {
       }
 
       // param.append('documentName', value['documentName']['id']);
-      if (value['documentName'][0]?.id) {
-        param.append('document_type_id', value['documentName'][0]?.id);
-      } else {
-        param.append('document_type_id', value['documentName']?.id);
-      }
-      console.log('form', param);
+      // if (value['documentName'][0]?.id) {
+      //   param.append('document_type_id', value['documentName'][0]?.id);
+      // } else {
+      //   param.append('document_type_id', value['documentName']?.id);
+      // }
+      console.log('document_typedocument_type', value['document_type']);
+      
+      console.log('document_typedocument_type', value['document_type'].id);
+      param.append('document_type_id', value['document_type'].id);
 
       console.log("coming3")
       delete value['select_driver'];
@@ -1344,6 +1355,7 @@ export class AuditDocumentComponent implements OnInit {
           if (!data.error) {
             this.closeForm.nativeElement.click();
             this.swalService.getSuccessSwal('Contract deleted successfully');
+            this.selectedType='driver';
             this.getContracts();
           } else {
             this.swalService.getWarningSwal(data.message);
@@ -1562,6 +1574,7 @@ export class AuditDocumentComponent implements OnInit {
     } else {
       console.log("coming in fleet name ");
       console.log("row.vehicle_id", row.vehicle_id)
+      this.getFleets(row.fleet_id);
       this.contractForm.patchValue({ select_fleet: row.fleet_id ? new DropDownItem(row.fleet_id, row.fleet_name) : null });
       this.contractForm.patchValue({ select_vehicle: row.vehicle_id ? new DropDownItem(row.vehicle_id, row.vehicle_name) : null });
       this.contractForm.patchValue({ document_type: row.document_type_id ? new DropDownItem(row.document_type_id, row.document_type) : null });
