@@ -1,0 +1,21 @@
+body {
+  color: #ffffff;
+}
+
+a {
+  text-decoration:none !important;
+}
+
+.sub-navbar {
+  margin-bottom: 10px !important;
+}
+
+.sub-navbar-header h1,h2,h3 {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.breadcrumb {
+  margin-top:10px;
+  margin-bottom:10px;
+}
