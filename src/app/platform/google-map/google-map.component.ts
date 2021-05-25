@@ -352,6 +352,7 @@ export class GoogleMapComponent implements OnInit {
 
     let trailMarker;
     const tempMarkersArr = [];
+    this.snappedCoordinates = [];
     const bounds = new google.maps.LatLngBounds();
     if (locations.length) {
       if (!showCircleMarkers && showMarkers) {
@@ -422,6 +423,9 @@ export class GoogleMapComponent implements OnInit {
       });
       this.map.fitBounds(bounds);
       // this.map.fitBounds(this.bounds);
+
+      this.processSnapToRoadResponsePng(locations);
+
       return tempMarkersArr;
     }
   }
@@ -582,6 +586,27 @@ export class GoogleMapComponent implements OnInit {
 
         var formatted_latlng = {
           lat: data[i][1], lng: data[i][0]
+        }
+
+        this.snappedCoodinatesFormatted.push(formatted_latlng);
+      }
+    }
+
+    this.osrmLatLng = this.snappedCoodinatesFormatted;
+  }
+
+
+  // PNG Users play animation
+  processSnapToRoadResponsePng(data) {
+    for (var i = 0; i < data.length; i++) {
+      if (data.length > 0) {
+        var latlng = new google.maps.LatLng(
+          data[i]?.lat,
+          data[i]?.lng);
+        this.snappedCoordinates.push(latlng);
+
+        var formatted_latlng = {
+          lat: data[i]?.lat, lng: data[i]?.lng
         }
 
         this.snappedCoodinatesFormatted.push(formatted_latlng);
