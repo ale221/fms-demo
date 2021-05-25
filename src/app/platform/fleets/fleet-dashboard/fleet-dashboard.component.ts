@@ -128,8 +128,8 @@ export class FleetDashboardComponent implements OnInit {
     {
       name: 'Export', icon: 'fa fa-download', export: true,
       subNav: [
-        { name: 'PDF', target: true, url: environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone },
-        { name: 'XLS', target: true, url: environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone }
+        { name: 'PDF', target: true, url: environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone, dashboard_Type: 'fleet' },
+        { name: 'XLS', target: true, url: environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone, dashboard_Type: 'fleet' }
       ]
     },
     {
@@ -232,8 +232,6 @@ export class FleetDashboardComponent implements OnInit {
 
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;
-      console.log("ressssssssssssss1", res);
-      console.log("ressssssssssssss2", this.sidebarCheck);
     })
     this.add_btn = 0;
     this.loadDashboardCards(hypernymModules[6], DashboardEnum.Fleets);
@@ -426,8 +424,8 @@ export class FleetDashboardComponent implements OnInit {
         {
           name: 'Export', icon: 'fa fa-download', export: true,
           subNav: [
-            { name: 'PDF', target: true, url: environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone },
-            { name: 'XLS', target: true, url: environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone }
+            { name: 'PDF', target: true, url: environment.baseUrl + '/iof/fleet_pdf?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone, dashboard_Type: 'fleet' },
+            { name: 'XLS', target: true, url: environment.baseUrl + '/iof/fleet_xls?customer_id=' + this.customerID + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone, dashboard_Type: 'fleet' }
           ]
         },
         {
@@ -1419,3 +1417,5 @@ export class FleetDashboardComponent implements OnInit {
 
 
 }
+
+

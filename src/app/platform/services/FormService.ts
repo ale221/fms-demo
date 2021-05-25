@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AppConfig } from '../../app.config';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthService } from "../../core/services/auth.service";
 import { EntityStatusEnum } from "../../core/enum/entity-type.enum";
 import { ApiResponse, LoginApiResponse } from "../../core/model/api.response";
 import { DropDownItem } from "../data/model/dropdown-item";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {  HttpHeaders } from '@angular/common/http';
 // import { debugger } from 'fusioncharts';
 
 @Injectable({
@@ -327,8 +328,12 @@ export class FormService {
     const url = `/iof/dropdown_zone`;
     return this.http.post(url, param);
   }
-
   getFleetsList(params) {
+    const url = `/iof/fleet?${params}`;
+    return this.http.get(url);
+  }
+
+  getFleetsListAudit(params) {
     const url = `/iof/filtered_vehicles_active/?fleet_id=${params}`;
     return this.http.get(url);
   }
@@ -946,9 +951,6 @@ export class FormService {
   }
 
 
-
-
-
   downloadFleetListingXLS(param): Observable<Blob> {
     const url = `/iof/manage_xls/?${param}`
     const myHeaders = new HttpHeaders();
@@ -991,7 +993,5 @@ export class FormService {
     myHeaders.append('Access-Control-Allow-Origin', '*');
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
-
-
 
 }

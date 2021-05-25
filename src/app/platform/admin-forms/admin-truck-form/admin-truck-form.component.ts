@@ -884,11 +884,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.formService.getFleetsList(params)
       .subscribe((data: any) => {
         if (!data.error) {
+          console.log("this.fleets=this.fleets=this.fleets=",data);
           this.fleets = data['data'].data;
           console.log("this.fleets= ", this.fleets);
           this.totalLengthFleet = data['data'].count;
           this.showIndeterminateProgress = false;
-          this.fleets.paginator = this.paginatorFleet;
+          // this.fleets.paginator = this.paginatorFleet;
         } else {
           this.swalService.getErrorSwal(data.message);
         }
