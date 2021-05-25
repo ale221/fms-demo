@@ -55,8 +55,8 @@ export class MaintenanceDashboardComponent implements OnInit {
     {
       name: 'Export', icon: 'fa fa-download', export: true,
       subNav: [
-        { name: 'PDF', target: true, url: environment.baseUrl + '/iof/maintenance/records?' + '&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=pdf&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone },
-        { name: 'XLS', target: true, url: environment.baseUrl + '/iof/maintenance/records?' + '&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=excel&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone }
+        { name: 'PDF', target: true, url: environment.baseUrl + '/iof/maintenance/records?' + '&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=pdf&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone, dashboard_Type: "maintenance" },
+        { name: 'XLS', target: true, url: environment.baseUrl + '/iof/maintenance/records?' + '&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=excel&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone , dashboard_Type: "maintenance"}
       ]
     },
 
@@ -169,7 +169,6 @@ export class MaintenanceDashboardComponent implements OnInit {
 
     // Get Vehicle Listing
     this.maintenanceService.getVehicleListing().subscribe((data: any) => {
-      // console.log("getVehicleListing== ", data);
       if (!data.error) {
         this.vehicleListing = data.data.data.map(
           item => new PrimengDropdownItem(item['id'], item['name'])
@@ -193,15 +192,9 @@ export class MaintenanceDashboardComponent implements OnInit {
 
 
   resetFiltersExport(filters) {
-    // console.log("resetFilter filters: ", filters)
     const appendExport = `vehicle_group_id=${filters.vehicle_group_id}&vehicle_id=${filters.vehicle_id}&maintenance_type_id=${filters.maintenance_type_id}&date_filter=${filters.date_filter}&search=${filters.search}&start_date=${filters.start_date}&end_date=${filters.end_date}`;
-    // this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // this.downloadableLink1 = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=pdf&customer_id=' + this.customerID + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-
     this.downloadableLink = appendExport + '&export=excel' + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.downloadableLink1 = appendExport + '&export=pdf' + '&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-
   }
 
   filterIdsFromJSON() {
@@ -227,7 +220,6 @@ export class MaintenanceDashboardComponent implements OnInit {
             if (this.graphsArray[i].name == 'Vehicle Maintenance Graph') {
               this.vehicleMaintenanceGraph = this.graphsArray[i];
               this.vehicleMaintenance = this.graphsArray[i].data.chart_data;
-              // console.log("this.vehicleMaintenance= ", this.vehicleMaintenance)
               setTimeout(() => {
                 this.generateChart(this.vehicleMaintenance);
               }, 100)
@@ -237,7 +229,6 @@ export class MaintenanceDashboardComponent implements OnInit {
             }
           }
         }
-        // console.log("graphsArray= ", this.graphsArray)
       }
     })
 
@@ -350,12 +341,9 @@ export class MaintenanceDashboardComponent implements OnInit {
     am4core.ready(function () {
       // Themes
       am4core.useTheme(am4themes_animated);
-
       var chart = am4core.create("chartdiv", am4charts.XYChart);
       chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-
       chart.data = chartData;
-      // console.log("GEN CHART func= ", chartData);
       chart.colors.step = 5;
 
       // Add legend
@@ -424,13 +412,9 @@ export class MaintenanceDashboardComponent implements OnInit {
 
   getMaintanceTableData(filters) {
     this.showIndeterminateProgress = true;
-
     let params = `offset=${filters.offset}&limit=${filters.limit}&order=${filters.order}&order_by=${filters.order_by}&vehicle_group_id=${filters.vehicle_group_id}&vehicle_id=${filters.vehicle_id}&maintenance_type_id=${filters.maintenance_type_id}&date_filter=${filters.date_filter}&search=${filters.search}&export=${filters.export}&timeZone=${filters.timeZone}&start_date=${filters.start_date}&end_date=${filters.end_date}`;
-    // console.log("params for getMaintanceData()= ", params);
-
     this.maintenanceService.getMaintanceData(params).subscribe((data: any) => {
       this.showIndeterminateProgress = false;
-      // console.log("getMaintanceData()== ", data)
       if (!data.error) {
         this.dataSource = data.data.data;
         this.totalLength = data.data.count;
@@ -463,9 +447,7 @@ export class MaintenanceDashboardComponent implements OnInit {
     this.getMaintanceTableData(this.filters)
   }
   selectPeriod(event) {
-    // console.log("selectPeriod= ", event);
     const selectPeriodDate = DateUtils.getUtcDateTimeStart(event);
-    // console.log("", selectPeriodDate);
     this.filters.date_filter = selectPeriodDate;
     this.getMaintanceTableData(this.filters);
   }
@@ -507,10 +489,7 @@ export class MaintenanceDashboardComponent implements OnInit {
 
 
   downloadXLS(download) {
-    console.log("download XLS= ", download)
-
     this.maintenanceService.downloadXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -519,10 +498,7 @@ export class MaintenanceDashboardComponent implements OnInit {
   }
 
   downloadPDF(download) {
-    console.log("download PDF= ", download)
-
     this.maintenanceService.downloadPDF(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
