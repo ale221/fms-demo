@@ -869,8 +869,14 @@ export class AdminUserFormComponent implements OnInit {
       console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-      const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      const url = window.URL.createObjectURL(blob);
+
+      var fileLink = document.createElement('a');
+      fileLink.href = url
+      fileLink.download = 'User Managemwnt'
+      fileLink.click();
+
+      // window.open(url);
     })
   }
 
@@ -880,7 +886,13 @@ export class AdminUserFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      
+      var fileLink = document.createElement('a');
+      fileLink.href = url
+      fileLink.download = 'User Managemwnt'
+      fileLink.click();
+
+      // window.open(url);
     })
   }
 
