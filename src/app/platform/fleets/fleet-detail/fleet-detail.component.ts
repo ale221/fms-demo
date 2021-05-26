@@ -552,13 +552,14 @@ export class FleetDetailComponent implements OnInit {
             this.monthmileage = 0;
           } else {
             this.monthmileage = this.monthdistance / this.monthfuelfilledTotal;
+            console.log("this.monthmilage",this.monthmileage);
           }
         }
         let lastRow = {
           week: 'Total',
           fuel_filled: this.monthfuelfilledTotal,
           distance: this.monthdistance,
-          mileage: this.monthmileage
+          mileage: this.monthmileage != Infinity ? this.monthmileage : null
         }
         this.monthData.push(lastRow);
 

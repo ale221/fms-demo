@@ -125,6 +125,7 @@ export class DashBoardDriverComponent implements OnInit {
   myInfowindow = new google.maps.InfoWindow();
   public _markers = [];
   loadingFilter = true;
+  loadingFilterForMap = "on";
   mapLoader = new AppLoader();
   totalLength = 0;
   totalLengthForMap = 0;
@@ -203,7 +204,7 @@ export class DashBoardDriverComponent implements OnInit {
     });
 
     this.getDriversListing(this.filters)
-    this.getDriversForMap(null);
+    this.getDriversForMap(this.filters);
     this.getAllZones(null);
 
     this.keyUp.pipe(
@@ -271,6 +272,7 @@ export class DashBoardDriverComponent implements OnInit {
   }
 
   selectGroupDropDownChange($event) {
+    
     this.getDrivers($event.value);
     // let param = { 'driver_group': $event.value }
     this.filters.driver_group = $event.value;
@@ -285,6 +287,7 @@ export class DashBoardDriverComponent implements OnInit {
         this.totalLengthForMap = apiResponse['data'].count;
         // this.dataSourceForMap.sort = this.sort;
         this.dataSourceForMap.paginator = this.paginatorForMap;
+        
 
         this.mapData = apiResponse['data'].data;
         if (this.mapData && this.mapData.length > 0) {
@@ -625,12 +628,16 @@ export class DashBoardDriverComponent implements OnInit {
 
 
   getDriversForMap(filters) {
+    console.log("params in mappppppppp",filters);
+    this.loadingFilterForMap="on";
     this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
     this.entityService.getFleetDriversForMap(filters).subscribe(apiResponse => {
       // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
+        this.loadingFilterForMap="off";
         this.dataSourceForMap = apiResponse['data'].data;
+        console.log("this.dataSourceforMap",this.dataSourceForMap);
         this.totalLengthForMap = apiResponse['data'].count;
         // this.dataSourceForMap.sort = this.sort;
         // this.dataSourceForMap.paginator = this.paginatorForMap;
