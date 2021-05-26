@@ -1114,7 +1114,9 @@ export class FleetDashboardComponent implements OnInit {
                 // this.updateInvalidSignalData(i, this.trucks);
               }
 
-              this.dataSource[i].signalRresponse = this.trucks[i].signalRresponse;
+              if (this.dataSource && this.dataSource[i]) {
+                this.dataSource[i]['signalRresponse'] = this.trucks[i]?.signalRresponse;
+              }
 
             }
           }
