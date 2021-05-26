@@ -31,6 +31,7 @@ import { PackageType } from 'src/app/core/enum/packages-enum';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 @Component({
   selector: 'app-admin-driver-form',
   templateUrl: './admin-driver-form.component.html',
@@ -212,7 +213,8 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
     private swalService: SwalService,
     private authService: AuthService,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
 
     this.selectedFile = new Object();
 
@@ -1132,7 +1134,8 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Staff_Report.xls')
+      // window.open(url);
     })
   }
 
@@ -1142,7 +1145,8 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Staff_Report.pdf')
+      // window.open(url);
     })
   }
 

@@ -27,6 +27,7 @@ import { PackageType } from 'src/app/core/enum/packages-enum';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 @Component({
   selector: 'app-manage-maintenance',
   templateUrl: './manage-maintenance.component.html',
@@ -141,6 +142,7 @@ export class ManageMaintenanceComponent implements OnInit {
     private breadcrumbService: BreadcrumbsService,
     private drawerService: DrawerService,
     private sanitizer: DomSanitizer,
+    private xlsPdfService:XlsPdfService
   ) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
@@ -881,7 +883,7 @@ export class ManageMaintenanceComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'ManageMaintenance-Reports.xls')
     })
   }
 
@@ -893,7 +895,7 @@ export class ManageMaintenanceComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'ManageMaintenance-Reports.pdf')
     })
   }
 

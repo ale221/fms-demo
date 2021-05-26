@@ -11,6 +11,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../services/xls-pdf.service';
 
 @Component({
   selector: 'app-auditForm',
@@ -52,7 +53,8 @@ export class AuditFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService:AuthService,
     private router: Router,
-    private drawerService:DrawerService
+    private drawerService:DrawerService,
+    private xlsPdfService:XlsPdfService
   ) {
     this.searchForm = this.formBuilder.group({
       search: [''],
@@ -252,7 +254,7 @@ export class AuditFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Audit_Form.xls')
     })
   }
 
@@ -262,7 +264,7 @@ export class AuditFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Audit_Form.pdf')
     })
   }
 }

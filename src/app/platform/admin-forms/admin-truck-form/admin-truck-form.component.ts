@@ -30,6 +30,7 @@ import { FiltersService } from 'src/app/core/services/filters.service';
 import { environment } from 'src/environments/environment';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 declare var $: any;
 
 @Component({
@@ -121,6 +122,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
   ptoolTip = 'Search by Vehicle';
   exportVariable = 'Export: Vehicle List';
+  ReportName='VehicleList-Report';
 
   downloadableLink: string;
   downloadableLink1: string;
@@ -218,7 +220,8 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     private brandingService: BrandingService,
     public router: Router,
     public breadcrumbService: BreadcrumbsService,
-    public drawerService: DrawerService) {
+    public drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
 
     this.searchForm = this.formBuilder.group({
       fleet_id: [''],
@@ -731,6 +734,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Vehicle';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export: Vehicle List';
+      this.ReportName= 'VehicleList-Report';
       this.setExportUrls(this.filtersTruck);
 
     }
@@ -739,6 +743,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Type Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export:Vehicle Type';
+      this.ReportName= 'VehicleType-Report';
       this.setExportUrls(this.filtersTruckType);
 
     }
@@ -746,6 +751,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Fleet Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export: Fleet ';
+      this.ReportName= 'Fleet-Report';
       this.setExportUrls(this.filtersFleet);
 
     }
@@ -753,6 +759,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Category Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export:Category ';
+      this.ReportName= 'CategoryList-Report';
       this.setExportUrls(this.filtersCategory);
 
     }
@@ -2085,7 +2092,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,this.ReportName+'.xls')
     })
   }
 
@@ -2095,7 +2102,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,this.ReportName+'.pdf')
     })
   }
 

@@ -35,6 +35,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 @Component({
   selector: 'app-dash-board-driver',
@@ -161,7 +162,8 @@ export class DashBoardDriverComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute, private formBuilder: FormBuilder,
     private filtersService: FiltersService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
     this.connection = this.route.snapshot.data['connection'];
@@ -1121,7 +1123,7 @@ export class DashBoardDriverComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'DriversDashboard-Report.xls')
     })
   }
 
@@ -1132,7 +1134,7 @@ export class DashBoardDriverComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'DriversDashboard-Report.pdf')
     })
   }
 

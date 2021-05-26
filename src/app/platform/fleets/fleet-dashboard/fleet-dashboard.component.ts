@@ -41,6 +41,7 @@ import { DrawerService } from 'src/app/core/services/drawer.service';
 import { SignalRService } from 'src/app/Services/signal-r.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 declare var $: any;
 declare var google: any;
 
@@ -212,7 +213,8 @@ export class FleetDashboardComponent implements OnInit {
     private drawerService: DrawerService,
     private signalRService: SignalRService,
     private sanitizer: DomSanitizer,
-    private _http: HttpClient
+    private _http: HttpClient,
+    private xlsPdfService:XlsPdfService
   ) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
@@ -1390,7 +1392,7 @@ export class FleetDashboardComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Fleets-Report.xls')
     })
 
 
@@ -1411,7 +1413,7 @@ export class FleetDashboardComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Fleets-Report.pdf')
     })
   }
 

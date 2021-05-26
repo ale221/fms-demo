@@ -27,6 +27,7 @@ import { debounceTime, delay, distinctUntilChanged, map, mergeMap } from 'rxjs/o
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 @Component({
   selector: 'app-admin-tool-form',
@@ -123,7 +124,8 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
     private brandingService: BrandingService,
     public router: Router,
     private activated_route: ActivatedRoute,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService: XlsPdfService) {
 
     this.searchForm = this.formBuilder.group({
       search: ['']
@@ -626,7 +628,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Tool-Report.xls')
     })
   }
 
@@ -636,7 +638,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Tool-Report.pdf')
     })
   }
 

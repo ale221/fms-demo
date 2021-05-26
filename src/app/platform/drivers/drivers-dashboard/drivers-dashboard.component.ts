@@ -44,6 +44,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 // import { debugger } from 'fusioncharts';
 
 @Component({
@@ -217,7 +218,8 @@ export class DriversDashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private filtersService: FiltersService,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
     this.connection = this.route.snapshot.data['connection'];
@@ -1964,7 +1966,7 @@ export class DriversDashboardComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'Driver-Reports.xls')
       })
     } else {
       this.formService.downloadDriverGroupXLS(download).subscribe((apiResponse: any) => {
@@ -1972,7 +1974,7 @@ export class DriversDashboardComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'Driver-Reports.xls')
       })
     }
 
@@ -1986,14 +1988,14 @@ export class DriversDashboardComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob)
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'DriverGroup-Reports.pdf')
       })
     } else {
       this.formService.downloadDriverGroupPDF(download).subscribe((apiResponse: any) => {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob)
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'DriverGroup-Reports.pdf')
       })
     }
   }

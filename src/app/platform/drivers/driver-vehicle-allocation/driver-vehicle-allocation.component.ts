@@ -29,6 +29,7 @@ import { DriverDetailsService } from '../../services/drivers/driver-details.serv
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 @Component({
   selector: 'app-driver-vehicle-allocation',
@@ -205,7 +206,8 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
     private datatableService: DatatableService,
     private brandingService: BrandingService,
     private swalService: SwalService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
 
     this.searchForm = this.formBuilder.group({
       search: [''],
@@ -834,7 +836,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'VehicleAllocation.xls')
     })
   }
 
@@ -844,7 +846,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'DriverAllocation.pdf')
     })
   }
 }
