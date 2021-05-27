@@ -264,7 +264,7 @@
                 <legend>Select Type</legend>
                 <div class="form-group margin-bottom-10">
                   <p-dropdown [options]="statusList" [(ngModel)]="selectedDropdown" styleClass="prime-dropdown" name="documentName" 
-                             (onChange)="onDocumentNameChangeTwo($event.value)" filterPlaceholder="Search"
+                             (onChange)="onDocumentNameChangeTwo($event.value)" filterPlaceholder="Search" formControlName="testing"
                              optionLabel="name" placeholder="Select Document Type">
                   </p-dropdown>
                 </div>
