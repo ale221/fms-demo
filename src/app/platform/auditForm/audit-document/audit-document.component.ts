@@ -26,6 +26,7 @@ import { BrandingService } from '../../shared/services/branding.service';
 import { ErrorMessage } from '../../error-message';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 // import { debugger } from 'fusioncharts';
 declare var $: any;
 declare var google: any;
@@ -176,7 +177,8 @@ export class AuditDocumentComponent implements OnInit {
     private brandingService: BrandingService,
     public formService: FormService,
     public getIconsService: GetIconsService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService: XlsPdfService) {
     this.contractForm = this.formBuilder.group({
       id: [{ value: null, disabled: true }],
       documentName: [null],
@@ -1849,7 +1851,7 @@ export class AuditDocumentComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'Driver_Document.xls')
       })
     } else {
       this.formService.downloadXLSAuditDocumentFleet(download).subscribe((apiResponse: any) => {
@@ -1857,7 +1859,7 @@ export class AuditDocumentComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'Driver_Fleet.xls')
       })
     }
   }
@@ -1869,7 +1871,7 @@ export class AuditDocumentComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'Driver_Document.pdf')
       })
     } else {
       this.formService.downloadPDFAuditDocumentFleet(download1).subscribe((apiResponse: any) => {
@@ -1877,7 +1879,7 @@ export class AuditDocumentComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        window.open(url);
+        this.xlsPdfService.downloadXlsPdf(url,'Driver_Fleet.pdf')
       })
     }
 

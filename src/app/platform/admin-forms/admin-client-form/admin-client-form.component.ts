@@ -26,6 +26,7 @@ import { debounceTime, delay, distinctUntilChanged, map, mergeMap } from 'rxjs/o
 import { environment } from 'src/environments/environment';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 
 @Component({
@@ -119,7 +120,8 @@ export class AdminClientFormComponent implements OnInit {
     private brandingService: BrandingService,
     private datatableService: DatatableService,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService : XlsPdfService) {
 
     this.selectedFile = new Object();
     this.theme = this.brandingService.styleObject();
@@ -666,7 +668,8 @@ export class AdminClientFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Customer_Report.xls')
+      // window.open(url);
     })
   }
 
@@ -676,7 +679,8 @@ export class AdminClientFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Customer_Report.pdf')
+      // window.open(url);
     })
   }
 }

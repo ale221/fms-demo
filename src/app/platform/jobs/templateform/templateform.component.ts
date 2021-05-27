@@ -29,6 +29,7 @@ import { PackageType } from 'src/app/core/enum/packages-enum';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 
 enum TaskStatus {
@@ -171,7 +172,8 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
     private entityService: EntityService,
     public truckService: TruckService,
     public authService: AuthService,
-    private drawerService: DrawerService
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService
   ) {
     this.searchForm = this.formBuilder.group({
       search: [''],
@@ -1119,7 +1121,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'ManageJobs-Reports.xls')
     })
   }
 
@@ -1128,7 +1130,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'ManageJobs-Reports.pdf')
     })
   }
 

@@ -26,6 +26,7 @@ import { environment } from 'src/environments/environment';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 @Component({
   selector: 'app-violations',
@@ -124,7 +125,8 @@ export class ViolationsComponent implements OnInit, OnDestroy {
     private entityService: EntityService,
 
     private authService: AuthService,
-    private drawerService: DrawerService) { }
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) { }
 
   isAuthorizedUser(value) {
     this.isAuthorized = value;
@@ -598,7 +600,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Violation_Report.xls')
     })
   }
 
@@ -609,8 +611,8 @@ export class ViolationsComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
+      this.xlsPdfService.downloadXlsPdf(url,'Violation_Report.pdf')
       console.log("urlllllll",url)
-      window.open(url);
     })
   }
 

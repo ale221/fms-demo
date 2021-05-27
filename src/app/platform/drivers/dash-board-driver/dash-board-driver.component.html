@@ -133,7 +133,7 @@
 
                                             <!-- Mat-Table -->
                                             <div class="panel-body padding-15">
-                                                <p-progressBar *ngIf="loadingFilter" [style]="{'height': '3px'}"
+                                                <p-progressBar *ngIf="loadingFilterForMap=='on' " [style]="{'height': '3px'}"
                                                     mode="indeterminate"></p-progressBar>
                                                 <div class="table-responsive" style="border: 1px solid #ebebeb;">
                                                     <table matSort (matSortChange)="sortDataForMap($event)"
@@ -189,7 +189,7 @@
                                                     <mat-paginator translate="no" #paginatorForMap
                                                         [length]="totalLengthForMap" [hidePageSize]="true"
                                                         showFirstLastButtons [pageSize]="10"
-                                                        (page)="onPaginateChange($event)">
+                                                        (page)="onPaginateChangeForMap($event)">
                                                     </mat-paginator>
                                                 </div>
                                                 <ng-template #tpl let-row>

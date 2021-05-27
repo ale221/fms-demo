@@ -26,6 +26,7 @@ import { of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, map, mergeMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 @Component({
   selector: 'app-admin-fuel-form',
@@ -129,7 +130,8 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private brandingService: BrandingService,
     public router: Router,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
 
     this.searchForm = this.formBuilder.group({
       search: ['']
@@ -646,7 +648,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'FuelFillup-Report.xls')
     })
   }
 
@@ -656,7 +658,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'FuelFillup-Report.pdf')
     })
   }
 

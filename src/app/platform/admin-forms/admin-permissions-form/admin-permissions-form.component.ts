@@ -14,6 +14,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { PackageType } from 'src/app/core/enum/packages-enum';
 import { DropDownItem } from '../../data/model/dropdown-item';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 declare var $: any;
 
@@ -81,7 +82,8 @@ export class AdminPermissionsFormComponent implements OnInit {
     private authService: AuthService,
     private formService: FormService,
     public translate: TranslateService,
-    private drawerService : DrawerService) { };
+    private drawerService : DrawerService,
+    private xlsPdfService : XlsPdfService) { };
 
   isAuthorizedUser(value) {
     this.isAuthorized = value;
@@ -518,7 +520,8 @@ export class AdminPermissionsFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Role&Access_report.xls')
+      // window.open(url);
     })
   }
 
@@ -528,7 +531,8 @@ export class AdminPermissionsFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Role&Access_report.pdf')
+      // window.open(url);
     })
   }
 

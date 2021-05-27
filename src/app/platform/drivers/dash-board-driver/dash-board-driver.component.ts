@@ -35,6 +35,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 @Component({
   selector: 'app-dash-board-driver',
@@ -125,6 +126,7 @@ export class DashBoardDriverComponent implements OnInit {
   myInfowindow = new google.maps.InfoWindow();
   public _markers = [];
   loadingFilter = true;
+  loadingFilterForMap = "on";
   mapLoader = new AppLoader();
   totalLength = 0;
   totalLengthForMap = 0;
@@ -160,7 +162,8 @@ export class DashBoardDriverComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute, private formBuilder: FormBuilder,
     private filtersService: FiltersService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
     this.connection = this.route.snapshot.data['connection'];
@@ -203,7 +206,7 @@ export class DashBoardDriverComponent implements OnInit {
     });
 
     this.getDriversListing(this.filters)
-    this.getDriversForMap(null);
+    this.getDriversForMap(this.filters);
     this.getAllZones(null);
 
     this.keyUp.pipe(
@@ -271,6 +274,7 @@ export class DashBoardDriverComponent implements OnInit {
   }
 
   selectGroupDropDownChange($event) {
+    
     this.getDrivers($event.value);
     // let param = { 'driver_group': $event.value }
     this.filters.driver_group = $event.value;
@@ -285,6 +289,7 @@ export class DashBoardDriverComponent implements OnInit {
         this.totalLengthForMap = apiResponse['data'].count;
         // this.dataSourceForMap.sort = this.sort;
         this.dataSourceForMap.paginator = this.paginatorForMap;
+        
 
         this.mapData = apiResponse['data'].data;
         if (this.mapData && this.mapData.length > 0) {
@@ -625,12 +630,16 @@ export class DashBoardDriverComponent implements OnInit {
 
 
   getDriversForMap(filters) {
+    console.log("params in mappppppppp",filters);
+    this.loadingFilterForMap="on";
     this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
     this.entityService.getFleetDriversForMap(filters).subscribe(apiResponse => {
       // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
+        this.loadingFilterForMap="off";
         this.dataSourceForMap = apiResponse['data'].data;
+        console.log("this.dataSourceforMap",this.dataSourceForMap);
         this.totalLengthForMap = apiResponse['data'].count;
         // this.dataSourceForMap.sort = this.sort;
         // this.dataSourceForMap.paginator = this.paginatorForMap;
@@ -1114,7 +1123,7 @@ export class DashBoardDriverComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'DriversDashboard-Report.xls')
     })
   }
 
@@ -1125,7 +1134,7 @@ export class DashBoardDriverComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'DriversDashboard-Report.pdf')
     })
   }
 

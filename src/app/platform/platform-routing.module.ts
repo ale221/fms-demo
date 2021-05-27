@@ -20,19 +20,14 @@ const routes: Routes = [
       // { path: 'vehicles', loadChildren:'./vehicles/vehicles.module#VehiclesModule' },
        { path: 'quick-view', loadChildren:() => import('./play-back/play-back.module').then(m => m.PlayBackModule) },
       // { path: 'staff', loadChildren:'./staff/staff.module#StaffModule' },
-      // { path: 'maintenances', loadChildren:'./maintenances/maintenances.module#MaintenancesModule' },
-      // { path: 'client', loadChildren:'./clients/clients.module#ClientsModule' },
-      // { path: 'contract', loadChildren:'./contracts/contracts.module#ContractsModule' },
       { path: 'templates', loadChildren:() => import('./jobs/jobs.module').then(m => m.JobsModule) },
       { path: 'territories', loadChildren:() => import('./territories/territories.module').then(m => m.TerritoriesModule) },
       { path: 'violations', loadChildren:() => import('./violations/violations.module').then(m => m.ViolationsModule) },
       { path: 'audit', loadChildren: () => import('./auditForm/audit.module').then(m => m.AuditModule) },
       { path: 'help',  component: HelppageComponent },
-      // { path: 'violations', loadChildren:'./violations/violations.module#ViolationsModule' },
       {
         path: 'profile',
         component: UserProfileComponent,
-        // canDeactivate: [CanDeactivateService]
       },
       {
         path: 'notifications',
