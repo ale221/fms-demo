@@ -775,6 +775,8 @@ export class DriverShiftAllocationComponent implements OnInit {
         let endDate = new Date(this.allShifts[i].end_date)
         this.minCurrentDate = startDate;
         this.maxCurrentDate = endDate;
+        this.templateForm.controls.start_date.setValue(null);
+        this.templateForm.controls.end_date.setValue(null);
         break;
       }
     }

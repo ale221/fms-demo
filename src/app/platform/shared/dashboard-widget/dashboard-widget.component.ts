@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { EntityService } from '../../services/entity.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class DashboardWidgetComponent implements OnInit {
   constructor(private router: Router, private entityService: EntityService,
     private getUsecase: GetUsecaseService,
     public breadcrumbsService: BreadcrumbsService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private xlsPdfService: XlsPdfService) {
   }
   url;
 
@@ -111,7 +113,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob)
-          window.open(url);
+          this.xlsPdfService.downloadXlsPdf(url, 'Fleets-Report.pdf')
         })
       }
       else if (item.name === "XLS") {
@@ -120,7 +122,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
           const url = window.URL.createObjectURL(blob)
-          window.open(url);
+          this.xlsPdfService.downloadXlsPdf(url, 'Fleets-Report.xls')
         })
       }
 
@@ -133,7 +135,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob)
-          window.open(url);
+          this.xlsPdfService.downloadXlsPdf(url, 'DriversDashboard.pdf')
         })
       }
       else if (item.name === "XLS") {
@@ -142,7 +144,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
           const url = window.URL.createObjectURL(blob)
-          window.open(url);
+          this.xlsPdfService.downloadXlsPdf(url, 'DriversDashboard.xls')
         })
       }
 
@@ -154,7 +156,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob)
-          window.open(url);
+          this.xlsPdfService.downloadXlsPdf(url, 'MaintenanceDashboard.pdf')
         })
       }
       else if (item.name === "XLS") {
@@ -163,7 +165,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
           const url = window.URL.createObjectURL(blob)
-          window.open(url);
+          this.xlsPdfService.downloadXlsPdf(url, 'MaintenanceDashboard.xls')
         })
       }
     }
