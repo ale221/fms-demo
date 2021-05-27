@@ -302,7 +302,8 @@ export class EntityService {
 
 
   getFleetDriversForMap(params) {
-    const url = `/iof/driver_dashboard`;
+    console.log("service params",params);
+    const url = `/iof/driver_dashboard?limit=${params.limit}&offset=${params.offset}`;
     return this.http.post<any>(url, params);
   }
 

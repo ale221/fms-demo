@@ -26,6 +26,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ErrorMessage } from '../../error-message';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 // import { EntityType, EntityStatusEnum } from 'src/app/core/enum/entity-type.enum';
 // import { ContractsDropdownComponent } from '../../shared/contracts-dropdown/contracts-dropdown.component';
 // import { ClientDropdownComponent } from '../../shared/client-dropdown/client-dropdown.component';
@@ -164,7 +165,8 @@ export class DriverShiftAllocationComponent implements OnInit {
     private templateRouteService: TemplateAndRouteService,
     private brandingService: BrandingService,
     private entityService: EntityService,
-    public truckService: TruckService, public drawerService: DrawerService
+    public truckService: TruckService, public drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService
   ) {
 
     this.searchForm = this.formBuilder.group({
@@ -826,7 +828,7 @@ export class DriverShiftAllocationComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'ShiftAllocation.xls')
     })
   }
 
@@ -836,7 +838,7 @@ export class DriverShiftAllocationComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'ShiftAllocation.pdf')
     })
   }
 

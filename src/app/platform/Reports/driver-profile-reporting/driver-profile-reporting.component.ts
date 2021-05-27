@@ -14,6 +14,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { SwalService } from 'src/app/core/services/swal.service';
 import { GoogleMapComponent } from '../../google-map/google-map.component';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 @Component({
   selector: 'app-driver-profile-reporting',
@@ -108,7 +109,8 @@ export class DriverProfileReportingComponent implements OnInit {
     public formBuilder: FormBuilder,
     private authService: AuthService,
     public swalService: SwalService,
-    public drawerService: DrawerService
+    public drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService
   ) {
     this.reportSearchForm = this.formBuilder.group({
       reportDropDown: [''],
@@ -403,7 +405,8 @@ export class DriverProfileReportingComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Reports.xls')
+      // window.open(url);
     })
   }
 
@@ -413,7 +416,8 @@ export class DriverProfileReportingComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Reports.pdf')
+      // window.open(url);
     })
   }
 

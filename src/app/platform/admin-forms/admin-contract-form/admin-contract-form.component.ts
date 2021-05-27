@@ -36,6 +36,7 @@ import { ErrorMessage } from '../../error-message';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BreadcrumbsService } from 'src/app/core/services/breadcrumbs-service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 declare var $: any;
 declare var google: any;
 
@@ -167,7 +168,8 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     public formService: FormService,
     public getIconsService: GetIconsService,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService: DrawerService) {
+    private drawerService: DrawerService,
+    private xlsPdfService:XlsPdfService) {
     this.contractForm = this.formBuilder.group({
       id: [{ value: null, disabled: true }],
       contract_name: [null, [Validators.required, CustomValidators.isAlphabetsAndNumbers]],
@@ -1794,7 +1796,8 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Contract_Report.xls')
+      // window.open(url);
     })
   }
 
@@ -1804,7 +1807,8 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'Contract_Report.pdf')
+      // window.open(url);
     })
   }
 }

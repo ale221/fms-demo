@@ -26,6 +26,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UtillsService } from '../../services/common/utills.service';
 import { DrawerService } from 'src/app/core/services/drawer.service';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 declare var $: any;
 
 
@@ -124,7 +125,8 @@ export class MaintenanceDashboardComponent implements OnInit {
     private maintenanceService: MaintenanceService,
     private filtersService: FiltersService,
     private formBuilder: FormBuilder,
-    private srvUtillsService: UtillsService, private drawerService: DrawerService
+    private srvUtillsService: UtillsService, private drawerService: DrawerService,
+    private xlsPdfService : XlsPdfService
   ) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
@@ -493,7 +495,7 @@ export class MaintenanceDashboardComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'MaintenanceDashboard.xls')
     })
   }
 
@@ -502,7 +504,7 @@ export class MaintenanceDashboardComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url,'MaintenanceDashboard.pdf')
     })
   }
 
