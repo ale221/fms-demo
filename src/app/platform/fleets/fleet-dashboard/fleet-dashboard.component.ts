@@ -1388,7 +1388,6 @@ export class FleetDashboardComponent implements OnInit {
 
 
   downloadXLS(dowwn) { //async
-
     this.entityService.downloadFleetDashboardXLS(dowwn).subscribe((apiResponse: any) => {
       console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
@@ -1396,17 +1395,6 @@ export class FleetDashboardComponent implements OnInit {
       const url = window.URL.createObjectURL(blob)
       this.xlsPdfService.downloadXlsPdf(url,'Fleets-Report.xls')
     })
-
-
-    // const httpOptions = {
-    //   responseType: 'blob',
-    //   headers: new HttpHeaders({
-    //     'Content-Type': 'application/json', 
-    //     'Access-Control-Allow-Origin':'*', 
-    //     'Access-Control-Allow-Credentials': 'true'
-    //   })
-    // };
-
   }
 
   downloadPDF(dowwn) {
