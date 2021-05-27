@@ -165,6 +165,7 @@ export class AuditDocumentComponent implements OnInit {
   vehicles;
   listVariable = "Please Select From Dropdown";
   selectedValue;
+  selectedDropdown;
   disableCheck = false;
   selectedTypeSearch = '';
 
@@ -525,6 +526,8 @@ export class AuditDocumentComponent implements OnInit {
         if (data.status === HttpStatusCodeEnum.Success) {
           this.closeForm.nativeElement.click();
           this.selectedType = 'driver';
+          this.selectedDropdown = { id: 1, name: "Driver" }
+          console.log("selected dropdown",this.selectedDropdown);
           this.getContracts();
           this.swalService.getSuccessSwal(data.message);
           // this.context.updateContractsRows(apiResponse['body']);
@@ -539,6 +542,8 @@ export class AuditDocumentComponent implements OnInit {
         if (data.status === HttpStatusCodeEnum.Success) {
           this.closeForm.nativeElement.click();
           this.selectedType = 'fleet';
+          this.selectedDropdown =  { id: 2, name: "Fleet" }
+          console.log("selected dropdown",this.selectedDropdown);
           this.getContracts();
           this.swalService.getSuccessSwal(data.message);
           // this.context.updateContractsRows(apiResponse['body']);
@@ -597,6 +602,7 @@ export class AuditDocumentComponent implements OnInit {
                 this.context.swalService.getSuccessSwal(apiResponse.body.message);
                 // this.context.updateContractsRows(apiResponse['body']);
                 this.context.selectedType = selectedType;
+                this.context.selectedDropdown = { id: 1, name: "Driver" };
                 this.context.getContracts();
               } else {
                 this.context.swalService.getErrorSwal(apiResponse.body.message);
@@ -658,6 +664,7 @@ export class AuditDocumentComponent implements OnInit {
                 this.context.swalService.getSuccessSwal(apiResponse.body.message);
                 // this.context.updateContractsRows(apiResponse['body']);
                 this.context.selectedType = selectedType;
+                this.context.selectedDropdown = { id: 2, name: "Fleet" };
 
                 this.context.getContracts();
               } else {

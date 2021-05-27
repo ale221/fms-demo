@@ -263,7 +263,7 @@
               <fieldset class="form-fieldset">
                 <legend>Select Type</legend>
                 <div class="form-group margin-bottom-10">
-                  <p-dropdown [options]="statusList" styleClass="prime-dropdown" name="documentName"
+                  <p-dropdown [options]="statusList" [(ngModel)]="selectedDropdown" styleClass="prime-dropdown" name="documentName" 
                              (onChange)="onDocumentNameChangeTwo($event.value)" filterPlaceholder="Search"
                              optionLabel="name" placeholder="Select Document Type">
                   </p-dropdown>
