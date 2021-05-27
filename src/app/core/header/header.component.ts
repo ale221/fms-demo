@@ -222,7 +222,7 @@ export class HeaderComponent implements OnInit {
       var target = document.querySelector('html')
       // create an observer instance
       var observer = new MutationObserver((mutations) => {
-        this.translateDetector.init();
+        // this.translateDetector.init();
       });
       // configuration of the observer:
       var config = { attributes: true, childList: true, characterData: true };
