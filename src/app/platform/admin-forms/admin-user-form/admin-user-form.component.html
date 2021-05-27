@@ -208,7 +208,7 @@
                               </ng-container>
 
                               <ng-container matColumnDef="date_joined">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>JOIN DATE</th>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>JOIN DATE TIME</th>
                                 <td mat-cell *matCellDef="let row">
                                   {{(row.date_joined == null) ? 'N/A': row.date_joined | date: 'MM/dd/yyyy hh:mm:ss a'}}
                                 </td>
