@@ -574,7 +574,7 @@ export class DriversDashboardComponent implements OnInit {
 
   ngAfterViewInit() {
     const mapProp = GoogleMapModel.getMapProp();
-    this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+    this.map = new google.maps.Map(this.gmapElement?.nativeElement, mapProp);
     this.mapZoom = this.map.getZoom();
   }
 
