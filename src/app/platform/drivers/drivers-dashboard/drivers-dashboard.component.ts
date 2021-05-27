@@ -1039,8 +1039,9 @@ export class DriversDashboardComponent implements OnInit {
     this.avatar = null;
     this.isEditImage = true;
     if (!data) {
-      if (this.image && this.image.nativeElement && this.image.nativeElement.src)
-      this.image.nativeElement.src = '/assets/images/iol/driver_placeholder.png';
+      if (this.image && this.image.nativeElement && this.image.nativeElement.src) {
+        this.image.nativeElement.src = '/assets/images/iol/driver_placeholder.png';
+      }
     }
   }
   enableSubmitButton() {
