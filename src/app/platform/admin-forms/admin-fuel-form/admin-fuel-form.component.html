@@ -165,7 +165,7 @@
                             <td mat-cell *matCellDef="let row">{{ row.fuel_supervisor_name }}</td>
                           </ng-container>
                           <ng-container matColumnDef="fill_up_date">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>FILLUP DATE</th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>FILLUP DATE TIME</th>
                             <td mat-cell *matCellDef="let row">
                               {{ (row.fill_up_date | date: 'M/d/yyyy h:mm:ss a ') || 'N/A' }}</td>
                           </ng-container>
