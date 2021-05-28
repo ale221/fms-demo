@@ -1389,7 +1389,6 @@ export class FleetDashboardComponent implements OnInit {
 
   downloadXLS(dowwn) { //async
     this.entityService.downloadFleetDashboardXLS(dowwn).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -1399,7 +1398,6 @@ export class FleetDashboardComponent implements OnInit {
 
   downloadPDF(dowwn) {
     this.entityService.downloadFleetDashboardPDF(dowwn).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)

@@ -574,7 +574,7 @@ export class DriversDashboardComponent implements OnInit {
 
   ngAfterViewInit() {
     const mapProp = GoogleMapModel.getMapProp();
-    this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+    this.map = new google.maps.Map(this.gmapElement?.nativeElement, mapProp);
     this.mapZoom = this.map.getZoom();
   }
 
@@ -1039,7 +1039,9 @@ export class DriversDashboardComponent implements OnInit {
     this.avatar = null;
     this.isEditImage = true;
     if (!data) {
-      this.image.nativeElement.src = '/assets/images/iol/driver_placeholder.png';
+      if (this.image && this.image.nativeElement && this.image.nativeElement.src) {
+        this.image.nativeElement.src = '/assets/images/iol/driver_placeholder.png';
+      }
     }
   }
   enableSubmitButton() {

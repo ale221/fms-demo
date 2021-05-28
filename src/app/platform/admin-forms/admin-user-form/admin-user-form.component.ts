@@ -107,7 +107,7 @@ export class AdminUserFormComponent implements OnInit {
   selectedGroupDrop;
   selectedStatus;
   selectedStatusDrop;
-  breadcrumbInner=[];
+  breadcrumbInner = [];
   addUser: boolean = true;
   statusList = [{ id: 1, name: "Active" }, { id: 2, name: "Inactive" }];
   statusLists = [{ id: '', name: "All" }, { id: 1, name: "Active" }, { id: 2, name: "Inactive" }];
@@ -133,7 +133,7 @@ export class AdminUserFormComponent implements OnInit {
     private brandingService: BrandingService,
     private datatableService: DatatableService,
     private breadcrumbService: BreadcrumbsService,
-    private drawerService: DrawerService  ) {
+    private drawerService: DrawerService) {
 
     this.selectedFile = new Object();
     this.theme = this.brandingService.styleObject();
@@ -176,28 +176,24 @@ export class AdminUserFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.drawerService.getValue().subscribe(res=>{
-        this.sidebarCheck=res;
-        console.log("ressssssssssssss1",res);
-      console.log("ressssssssssssss2",this.sidebarCheck);
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
     })
     this.breadcrumbService.getValue().subscribe(res => {
       if (res && res.length) {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner",this.breadcrumbInner);
       }
     })
-    console.log("this.breadcrumbInner",this.breadcrumbInner);
-  if(this.breadcrumbInner[0]=='admin/config'){
-    setTimeout(() => {
-      this.addEditUser.nativeElement.click();
-    }, 1000);
-  }
+
+    if (this.breadcrumbInner[0] == 'admin/config') {
+      setTimeout(() => {
+        this.addEditUser.nativeElement.click();
+      }, 1000);
+    }
 
     this.loggedInUser = this.authService.getUser();
-    console.log("loggedInUser= ", this.loggedInUser)
     this.customerID = this.loggedInUser.customer.id;
     this.getUsers(this.filtersUser);
     this.getGroupList(this.filtersPermission);
@@ -224,30 +220,26 @@ export class AdminUserFormComponent implements OnInit {
       this.searchText = newValue;
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
         this.filtersUser.search = this.searchForm.get('search').value;
         this.getUsers(this.filtersUser);
       }
     });
     // this.downloadableLink = environment.baseUrl + '/api/users/user_data_export_xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
     // this.downloadableLink1 = environment.baseUrl + '/api/users/user_data_export_pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
-    
-    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
-    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
-    
 
-    console.log("this.users= ", this.users);
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+
   }
   get f() {
     return this.userForm.controls;
   }
   searchStatusDropDownChange(event) {
-    console.log("event:: ", event.value);
     this.filtersUser.status = event.value;
     this.getUsers(this.filtersUser);
   }
 
-  getRoleGroups () {
+  getRoleGroups() {
     let params = ``;
     this.formService.getGroup(params).subscribe(apiResponse => {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
@@ -263,7 +255,6 @@ export class AdminUserFormComponent implements OnInit {
   }
 
   alphaOnly(event) {
-    console.log(event.keyCode)
     var key = event.keyCode;
     if ((key >= 49 && key <= 57) || key == 48) {
       this.userForm.get('first_name').setValue('')
@@ -274,10 +265,7 @@ export class AdminUserFormComponent implements OnInit {
 
   getGroupList(filters) {
     let params = `type=${filters.type}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}`;
-    console.log("params for Group List= ", params);
-
     this.userService.getAllGroups(params).subscribe((response: any) => {
-      console.log("getAllGroups() [response.data] =", response.data['data']);
       if (!response.error) {
         //Method2
         this.mapArrayGroups = response.data['data'];
@@ -285,8 +273,6 @@ export class AdminUserFormComponent implements OnInit {
           element.label = element.name;
           element.value = element.id;
         });
-
-        console.log("mapArrayGroups== ", this.mapArrayGroups);
 
       } else {
         this.swalService.getErrorSwal(response.message);
@@ -296,36 +282,28 @@ export class AdminUserFormComponent implements OnInit {
   }
 
   groupDropDownChange(event) {
-    console.log("event= ", event);
     this.selectedGroupDrop = event.value;
     this.userForm.get('group').setValue(this.selectedGroupDrop);
   }
 
   statusDropDownChange(event) {
-    console.log("this.ecevt= ", event);
     this.selectedStatusDrop = event.value;
     this.userForm.get('status').setValue(this.selectedStatusDrop)
   }
 
   async showSwal(user) {
     this.selectedUser = user;
-    console.log('user', user);
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
     const shouldDelete = await this.swalService.getDeleteSwal(user, 'What do you want to do with ' + user.email + ' ?');
-    console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteUser(user.id, shouldDelete, 'Record has been' + message + 'successfully');
     }
   }
   async showSwalBulk() {
-    console.log("coming oin bulkdel");
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
     const shouldDelete = await this.swalService.getDeleteSwalBulk2('Do you want to delete these record(s)');
-    console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteThroughCheckbox();
     }
@@ -340,14 +318,11 @@ export class AdminUserFormComponent implements OnInit {
     const params = {};
     params['user_id'] = (userId);
     params['status'] = actionType;
-
-    console.log('params', params);
     this.userService.deleteUsers(params).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.swalService.getSuccessSwal(message);
         this.getUsers(this.filtersUser);
       } else {
-        console.log(data.message);
         this.swalService.getErrorSwal(data.message)
       }
     })
@@ -357,7 +332,6 @@ export class AdminUserFormComponent implements OnInit {
   }
 
   openEditModal(user) {
-    console.log("user=", user);
     this.submitted = false;
     this.selectedUserId = user.id;
     this.formTitle = 'Update User';
@@ -365,13 +339,10 @@ export class AdminUserFormComponent implements OnInit {
 
     for (let i = 0; i < this.statusList.length; i++) {
       if (user.status == this.statusList[i].id) {
-        console.log("this.statusList[i]== ", this.statusList[i]);
         user.status = this.statusList[i].id;
         this.selectedStatus = { value: this.statusList[i].id, label: this.statusList[i].name, id: this.statusList[i].id, name: this.statusList[i].name }
       }
     }
-
-    console.log("selectedStatus=== ", this.selectedStatus.id);
 
     setTimeout(() => {
       this.userForm.patchValue({
@@ -391,7 +362,6 @@ export class AdminUserFormComponent implements OnInit {
       this.userForm.controls.password.setValidators(null);
       this.userForm.controls.password.updateValueAndValidity();
     }, 300);
-    console.log("this.userForm.value= ", this.userForm.value);
   }
 
   converToFormdata(data) {
@@ -426,7 +396,6 @@ export class AdminUserFormComponent implements OnInit {
     }
 
     if (this.validate()) {
-      console.log("Form is valid");
       if (value['password'] != value['confirm_password'] && !this.selectedUserId) {
         this.passwordNotMatch = 'Password does not match.';
         this.addUser = true;
@@ -443,13 +412,11 @@ export class AdminUserFormComponent implements OnInit {
         delete value.email;
         delete value.confirm_password;
         value['id'] = this.selectedUserId;
-        console.log("formValue (before convertToFormData)--", value);
         http = this.userService.editNewUser(this.converToFormdata(value));
       } else {
         value['type_id'] = 36;
         value['status'] = 1;
         value['email'] = value.email.toLowerCase();
-        console.log("formValue (before convertToFormData)=", value);
         http = this.userService.addNewUser(this.converToFormdata(value));
       }
 
@@ -462,7 +429,6 @@ export class AdminUserFormComponent implements OnInit {
           this.swalService.getSuccessSwal(data.message);
           this.getUsers(this.filtersUser);
         } else if (data.message === 'A user already exist with same email') {
-          console.log("coming", data.message);
           this.swalService.getErrorSwal(data.message);
           this.addUser = true;
           this.submitted = false;
@@ -471,7 +437,6 @@ export class AdminUserFormComponent implements OnInit {
           this.enableSubmitButton();
           this.submitted = true;
         } else {
-          console.log("coming222", data.message);
           this.addUser = true;
           // this.userForm.reset();
           // this.closeForm.nativeElement.click();
@@ -487,7 +452,6 @@ export class AdminUserFormComponent implements OnInit {
 
     } else {
       this.addUser = true;
-      console.log("Form is invalid[in else condition]", this.errorMessages);
     }
   }
 
@@ -608,7 +572,7 @@ export class AdminUserFormComponent implements OnInit {
         if (data.status === HttpStatusCodeEnum.Success) {
           this.swalService.getInfoSwal('Please check ' + row.email + ' for further assistance');
         } else {
-          console.log(data.message)
+
         }
       })
   }
@@ -679,47 +643,34 @@ export class AdminUserFormComponent implements OnInit {
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
-      console.log("file= ", file);
       this.selectedFile = file;
-      console.log("this.selectedFile.type- ", this.selectedFile.type)
 
       if (this.selectedFile.type.indexOf('.sheet') != -1 || this.selectedFile.type.indexOf('.ms-excel') != -1) { //|| this.selectedFile.type.indexOf('.ms-excel') != -1 //xlsx, xls
-        console.log("inside IF condition")
         this.notCSVExcel = false;
         this.disableButton = false;
       } else {
-        console.log("inside ELSE condition")
         this.notCSVExcel = true;
         this.disableButton = true;
       }
-
       this.selectedFileName = this.selectedFile.name;
     }
   }
 
   bulkUploadSubmit(formValue: Object) {
-    console.log("inside submit function(formValue)= ", formValue);
     const params: FormData = new FormData();
-
     if (!isNullOrUndefined(formValue['csvFiles'])) {
       params.append('source_file', this.selectedFile);
     }
-    console.log("params== ", params)
 
     this.userService.uploadUserBulkUpload(params).subscribe((data: any) => {
-      console.log("uploadBulk() response= ", data);
-
       if (data.status === HttpStatusCodeEnum.Success) {
         this.bulkUploadApiResponse = data.data[0];
-        console.log("this.bulkUploadApiResponse- ", this.bulkUploadApiResponse);
 
         if (data.data[0].rejected_users.length > 0) {
           this.rejectedUsersList = data.data[0].rejected_users;
-
           if (data.data[0].created_users.length >= 1) {
             this.getUsers(this.filtersUser);
           }
-
         } else {
           this.closeFormBulk.nativeElement.click();
           this.swalService.getSuccessSwal("File uploaded successfully");
@@ -728,9 +679,7 @@ export class AdminUserFormComponent implements OnInit {
           this.bulkUploadForm.reset();
           this.rejectedUsersList = [];
         }
-
       } else {
-        console.log("data.message== ", data.message)
         this.swalService.getErrorSwal(data.message);
       }
 
@@ -743,33 +692,20 @@ export class AdminUserFormComponent implements OnInit {
     this.getUsers(this.filtersUser);
     // this.downloadableLink = environment.baseUrl + '/api/users/user_data_export_xle/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
     // this.downloadableLink1 = environment.baseUrl + '/api/users/user_data_export_pdf/?time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&login_user=' + this.loggedInUser.id;
-  
-    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
-    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
-  
+
+    this.downloadableLink = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+    this.downloadableLink1 = 'order=&order_by=&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+
   }
   onSearch($event) {
-    // this.keyUp.pipe(
-    //   map(event => event.target['value']),
-    //   debounceTime(500),
-    //   distinctUntilChanged(),
-    //   mergeMap(search => of(search).pipe(
-    //     delay(500),
-    //   )),
-    // ).subscribe(newValue => {
-
     this.searchText = $event.search;
     if (this.searchText.length > 0 || this.searchText.length === 0) {
       this.searchForm.get("search").setValue(this.searchText);
-      console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
       this.filtersUser.search = this.searchForm.get('search').value;
       this.getUsers(this.filtersUser);
-      this.downloadableLink = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
-      this.downloadableLink1 = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +  '&login_user=' + this.loggedInUser.id;
+      this.downloadableLink = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
+      this.downloadableLink1 = 'order=&order_by=&search=' + this.filtersUser.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&login_user=' + this.loggedInUser.id;
     }
-
-    console.log("this.users= ", this.users);;
-
   }
 
   sortUserList(event) {
@@ -778,7 +714,6 @@ export class AdminUserFormComponent implements OnInit {
     this.getUsers(this.filtersUser);
   }
   onUserPagination(event) {
-    console.log("coming in pagination", event);
     this.filtersUser.offset = (event.pageIndex * event.pageSize);
     this.getUsers(this.filtersUser);
   }
@@ -798,49 +733,39 @@ export class AdminUserFormComponent implements OnInit {
 
   deleteThroughCheckbox() {
     this.selectedIDToDelete = [];
-
     if (this.selection.selected.length > 0) {
       for (let i = 0; i < this.selection.selected.length; i++) {
         if (this.selection.selected[i].id !== this.loggedInUser?.id && this.selection.selected[i].type !== 35) {
           this.selectedIDToDelete.push(this.selection.selected[i].id);
         }
       }
-      console.log("this.selectedIDToDelete=== ", this.selectedIDToDelete)
     }
-
     if (this.selectedIDToDelete && this.selectedIDToDelete.length === 0) {
       this.swalService.getWarningSwal('Please provide valid users to delete');
       return false;
     }
-
     let params = {
       id: this.selectedIDToDelete
     }
-
     this.userService.multiDeleteUsers(params).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.selection = new SelectionModel<any>(true, []);
         this.swalService.getSuccessSwal('Record(s) has been deleted successfully');
         this.getUsers(this.filtersUser);
       } else {
-        console.log(data.message);
         this.swalService.getErrorSwal(data.message)
       }
     })
-
   }
 
   async showSwalForSelectedDelete() {
     const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this record(s)?');
-    console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      console.log("coming in should del");
       this.deleteThroughCheckbox()
     }
   }
 
   downloadRejectedUser() {
-    console.log("rejectedUsersList= ", this.rejectedUsersList);
     // if (this.rejectedUsersList.length > 0) {
     //   const result = this.rejectedUsersList.map(({
     //     first_name, last_name, email, password
@@ -860,39 +785,30 @@ export class AdminUserFormComponent implements OnInit {
     //   })
     // }
   }
-  pageReload(){
-    console.log("coming");
+  pageReload() {
     window.location.reload()
   }
   downloadXLS(download) {
     this.userService.downloadXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob);
-
       var fileLink = document.createElement('a');
       fileLink.href = url
       fileLink.download = 'User Report'
       fileLink.click();
-
-      // window.open(url);
     })
   }
 
   downloadPDF(download1) {
     this.userService.downloadPDF(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      
       var fileLink = document.createElement('a');
       fileLink.href = url
       fileLink.download = 'User Report'
       fileLink.click();
-
-      // window.open(url);
     })
   }
 
