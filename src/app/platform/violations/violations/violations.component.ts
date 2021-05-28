@@ -600,7 +600,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Violation_Report.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Violations Report.xls')
     })
   }
 
@@ -611,7 +611,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      this.xlsPdfService.downloadXlsPdf(url,'Violation_Report.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Violations Report.pdf')
       console.log("urlllllll",url)
     })
   }

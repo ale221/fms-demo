@@ -1968,7 +1968,7 @@ export class DriversDashboardComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        this.xlsPdfService.downloadXlsPdf(url,'Driver-Reports.xls')
+        this.xlsPdfService.downloadXlsPdf(url,'Driver Report.xls')
       })
     } else {
       this.formService.downloadDriverGroupXLS(download).subscribe((apiResponse: any) => {
@@ -1976,7 +1976,7 @@ export class DriversDashboardComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        this.xlsPdfService.downloadXlsPdf(url,'Driver-Reports.xls')
+        this.xlsPdfService.downloadXlsPdf(url,'Driver Group Report.xls')
       })
     }
 
@@ -1990,14 +1990,14 @@ export class DriversDashboardComponent implements OnInit {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob)
-        this.xlsPdfService.downloadXlsPdf(url,'DriverGroup-Reports.pdf')
+        this.xlsPdfService.downloadXlsPdf(url,'Driver Report.pdf')
       })
     } else {
       this.formService.downloadDriverGroupPDF(download).subscribe((apiResponse: any) => {
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob)
-        this.xlsPdfService.downloadXlsPdf(url,'DriverGroup-Reports.pdf')
+        this.xlsPdfService.downloadXlsPdf(url,'Driver Group Report.pdf')
       })
     }
   }

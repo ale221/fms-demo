@@ -795,7 +795,7 @@ export class AdminUserFormComponent implements OnInit {
       const url = window.URL.createObjectURL(blob);
       var fileLink = document.createElement('a');
       fileLink.href = url
-      fileLink.download = 'User Managemwnt'
+      fileLink.download = 'User Report'
       fileLink.click();
     })
   }
@@ -807,7 +807,7 @@ export class AdminUserFormComponent implements OnInit {
       const url = window.URL.createObjectURL(blob);
       var fileLink = document.createElement('a');
       fileLink.href = url
-      fileLink.download = 'User Managemwnt'
+      fileLink.download = 'User Report'
       fileLink.click();
     })
   }

@@ -405,7 +405,7 @@ export class DriverProfileReportingComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Reports.xls')
+      this.xlsPdfService.downloadXlsPdf(url,this.tableHeading)
       // window.open(url);
     })
   }
@@ -416,7 +416,7 @@ export class DriverProfileReportingComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      this.xlsPdfService.downloadXlsPdf(url,'Reports.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,this.tableHeading)
       // window.open(url);
     })
   }

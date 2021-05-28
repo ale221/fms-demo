@@ -291,13 +291,13 @@
               <ng-container matColumnDef="start_datetime">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>START DATE</th>
                 <td mat-cell *matCellDef="let row">
-                  {{ (row.start_datetime | date:'M/d/yyyy, hh:mm:ss') || '-'}}
+                  {{ (row.start_datetime | date:'M/d/yyyy, hh:mm:ss a') || '-'}}
                 </td>
               </ng-container>
               <ng-container matColumnDef="end_datetime">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>END DATE</th>
                 <td mat-cell *matCellDef="let row">
-                  {{ (row.end_datetime | date:'M/d/yyyy, hh:mm:ss' ) || '-'}}
+                  {{ (row.end_datetime | date:'M/d/yyyy, hh:mm:ss a' ) || '-'}}
                 </td>
               </ng-container>
               <ng-container matColumnDef="action">

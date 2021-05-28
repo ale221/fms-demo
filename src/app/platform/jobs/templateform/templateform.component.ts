@@ -1121,7 +1121,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'ManageJobs-Reports.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Job Report.xls')
     })
   }
 
@@ -1130,7 +1130,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'ManageJobs-Reports.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Job Report.pdf')
     })
   }
 

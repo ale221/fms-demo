@@ -668,7 +668,7 @@ export class AdminClientFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Customer_Report.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Customer Report.xls')
       // window.open(url);
     })
   }
@@ -679,7 +679,7 @@ export class AdminClientFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      this.xlsPdfService.downloadXlsPdf(url,'Customer_Report.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Customer Report.pdf')
       // window.open(url);
     })
   }

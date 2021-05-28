@@ -836,7 +836,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'VehicleAllocation.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Vehicle Allocation Report.xls')
     })
   }
 
@@ -846,7 +846,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      this.xlsPdfService.downloadXlsPdf(url,'DriverAllocation.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Vehicle Allocation Report.pdf')
     })
   }
 }
