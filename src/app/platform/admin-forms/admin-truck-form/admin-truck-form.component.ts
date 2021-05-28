@@ -122,7 +122,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
   ptoolTip = 'Search by Vehicle';
   exportVariable = 'Export: Vehicle List';
-  ReportName='VehicleList-Report';
+  ReportName='Vehicles Report';
 
   downloadableLink: string;
   downloadableLink1: string;
@@ -734,7 +734,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Vehicle';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export: Vehicle List';
-      this.ReportName= 'VehicleList-Report';
+      this.ReportName= 'Vehicles Report';
       this.setExportUrls(this.filtersTruck);
 
     }
@@ -743,7 +743,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Type Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export:Vehicle Type';
-      this.ReportName= 'VehicleType-Report';
+      this.ReportName= 'Vehicle_Type';
       this.setExportUrls(this.filtersTruckType);
 
     }
@@ -751,7 +751,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Fleet Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export: Fleet ';
-      this.ReportName= 'Fleet-Report';
+      this.ReportName= 'Fleet';
       this.setExportUrls(this.filtersFleet);
 
     }
@@ -759,7 +759,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.ptoolTip = 'Search by Category Name';
       this.searchForm.get("search").reset();
       this.exportVariable = 'Export:Category ';
-      this.ReportName= 'CategoryList-Report';
+      this.ReportName= 'Fleet Category Report';
       this.setExportUrls(this.filtersCategory);
 
     }

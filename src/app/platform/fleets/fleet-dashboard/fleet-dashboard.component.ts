@@ -1392,7 +1392,7 @@ export class FleetDashboardComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Fleets-Report.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Fleet Dashboard.xls')
     })
   }
 
@@ -1401,7 +1401,7 @@ export class FleetDashboardComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Fleets-Report.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Fleet Dashboard.pdf')
     })
   }
 

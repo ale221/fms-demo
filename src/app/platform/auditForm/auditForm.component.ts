@@ -254,7 +254,7 @@ export class AuditFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Audit_Form.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Audit Report.xls')
     })
   }
 
@@ -264,7 +264,7 @@ export class AuditFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      this.xlsPdfService.downloadXlsPdf(url,'Audit_Form.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Audit Report.pdf')
     })
   }
 }

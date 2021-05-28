@@ -520,7 +520,7 @@ export class AdminPermissionsFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Role&Access_report.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Role Access Report.xls')
       // window.open(url);
     })
   }
@@ -531,7 +531,7 @@ export class AdminPermissionsFormComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      this.xlsPdfService.downloadXlsPdf(url,'Role&Access_report.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Role Access Report.pdf')
       // window.open(url);
     })
   }
