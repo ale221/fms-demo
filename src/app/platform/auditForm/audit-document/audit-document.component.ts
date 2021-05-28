@@ -168,6 +168,7 @@ export class AuditDocumentComponent implements OnInit {
   selectedDropdown;
   disableCheck = false;
   selectedTypeSearch = '';
+  showExportFile=false;
 
   constructor(public formBuilder: FormBuilder,
     public gotoService: GotoPageService,
@@ -302,6 +303,7 @@ export class AuditDocumentComponent implements OnInit {
 
   onDocumentNameChangeTwo(event) {
     console.log("eventttt", event.id);
+    this.showExportFile=true;
 
     if (event.id == 1) {
       console.log("1= ");
