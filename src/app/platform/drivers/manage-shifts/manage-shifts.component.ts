@@ -208,7 +208,7 @@ export class ManageShiftsComponent implements OnInit {
     private filtersService: FiltersService,
     private breadcrumbService: BreadcrumbsService,
     private drawerService: DrawerService,
-    private xlsPdfService:XlsPdfService) {
+    private xlsPdfService: XlsPdfService) {
     this.theme = this.brandingService.styleObject();
     this.useCaseId = this.getUsecase.getUsecaseId();
     this.connection = this.route.snapshot.data['connection'];
@@ -310,37 +310,29 @@ export class ManageShiftsComponent implements OnInit {
     this.getGroupList();
 
 
-    this.formService.getOptionsforDropDown('dropdown_data', { option_key: 'gender' })
-      .subscribe((data: any) => {
-        console.log("getOptionsforDropDown() response=== ", data.response['option_values']);
-
-        if (data.status === HttpStatusCodeEnum.Success) {
-          // this.itemListGenders = data.response['option_values'].map(function (obj) {
-          //   return { value: obj.id, name: obj.label, id: obj.id, label: obj.label };
-          // });
-          this.itemListGenders = data.response['option_values'].map(
-            item => ({ value: item['id'], label: item['label'] })
-          );
-        } else {
-          this.swalService.getErrorSwal(data.message);
-        }
-        console.log("itemListGenders (from ngOninIt)", this.itemListGenders);
-      })
+    this.formService.getOptionsforDropDown('dropdown_data', { option_key: 'gender' }).subscribe((data: any) => {
+      if (data.status === HttpStatusCodeEnum.Success) {
+        // this.itemListGenders = data.response['option_values'].map(function (obj) {
+        //   return { value: obj.id, name: obj.label, id: obj.id, label: obj.label };
+        // });
+        this.itemListGenders = data.response['option_values'].map(
+          item => ({ value: item['id'], label: item['label'] })
+        );
+      } else {
+        this.swalService.getErrorSwal(data.message);
+      }
+    })
 
 
-    this.formService.getOptionsforDropDown('dropdown_data', { option_key: 'maritalstatus' })
-      .subscribe((data: any) => {
-        console.log("getOptionsforDropDown() response- ", data)
-
-        if (data.status === HttpStatusCodeEnum.Success) {
-          this.itemListMaritalStatus = data.response['option_values'].map(
-            item => ({ value: item['id'], label: item['label'] })
-          );
-          console.log(this.itemListMaritalStatus)
-        } else {
-          this.swalService.getErrorSwal(data.message);
-        }
-      })
+    this.formService.getOptionsforDropDown('dropdown_data', { option_key: 'maritalstatus' }).subscribe((data: any) => {
+      if (data.status === HttpStatusCodeEnum.Success) {
+        this.itemListMaritalStatus = data.response['option_values'].map(
+          item => ({ value: item['id'], label: item['label'] })
+        );
+      } else {
+        this.swalService.getErrorSwal(data.message);
+      }
+    })
 
   }
 
@@ -351,7 +343,6 @@ export class ManageShiftsComponent implements OnInit {
   }
   patchDatewithDays(start, end) {
     // this.getSelectedDates.push($event);
-    // console.log(this.getSelectedDates);
     var startDate = start; //YYYY-MM-DD
     var endDate = end; //YYYY-MM-DD
 
@@ -368,7 +359,6 @@ export class ManageShiftsComponent implements OnInit {
 
     // Output
     for (var i = 0; i < dateArr.length; i++) {
-      console.log("<p>" + dateArr[i] + "</p>");
       this.getDayName.push(moment(dateArr[i]).format('dddd'));
     }
     this.getDayName = this.getDayName.filter((element, i) => i === this.getDayName.indexOf(element))
@@ -767,11 +757,9 @@ export class ManageShiftsComponent implements OnInit {
 
   }
   getGroupList() {
-    console.log("coming in getDriversGroup");
     this.driverService.getDriverGroup().subscribe((data: any) => {
 
       if (data.status === HttpStatusCodeEnum.Success) {
-        console.log(data.data);
         this.driverGroup = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
@@ -779,14 +767,12 @@ export class ManageShiftsComponent implements OnInit {
         this.driverLists = [];
         this.typeList = [];
         //  this.reportTypeTable=0;
-        console.log("coming in drivers", this.driverGroup);
       } else {
         console.log(data.message);
       }
     });
   }
   shiftDropdownChange($event) {
-    console.log("asassssssssssss", $event.value);
     if ($event.value == 1) {
       this.demoTimeStart = ('09:30');
       this.demoTimeEnd = ('17:30');
@@ -816,11 +802,9 @@ export class ManageShiftsComponent implements OnInit {
 
   }
   getDrivers(driverGroupID) {
-    console.log("coming in drivers");
     this.driverService.getDriver(driverGroupID).subscribe((data: any) => {
 
       if (data.status === HttpStatusCodeEnum.Success) {
-        console.log(data.data);
         this.driverLists = data.data.map(
           item => new DropDownItem(item['id'], item[
             'driver_name'])
@@ -863,7 +847,6 @@ export class ManageShiftsComponent implements OnInit {
   }
 
   onPaginateChange(event) {
-    console.log(event);
     this.filters.offset = (event.pageIndex * event.pageSize);
     this.getDriversListing(this.filters);
   }
@@ -875,7 +858,7 @@ export class ManageShiftsComponent implements OnInit {
     this.getUsers(this.filtersUser);
     // this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
     // this.downloadableLink1 = environment.baseUrl + '/iof/shiftsxle/?customer_id=' + this.customerID;
- 
+
     this.downloadableLink = '';
     this.downloadableLink1 = '';
   }
@@ -1153,7 +1136,6 @@ export class ManageShiftsComponent implements OnInit {
   getTrucks(value) {
     this.formService.getOptions('unassigned_trucks', {})
       .subscribe((data: any) => {
-        console.log('getOptions() response* ', data);
 
         if (data.status === HttpStatusCodeEnum.Success) {
           if (data.status === HttpStatusCodeEnum.Success) {
@@ -1162,10 +1144,8 @@ export class ManageShiftsComponent implements OnInit {
             );
           }
           if (!(value === null)) {
-            console.log(value);
             // this.context.itemListTrucks.push(new PrimengDropdownItem(value['id'], value['itemName']));
             this.itemListTrucks.unshift(value);
-            console.log('trucks', this.itemListTrucks);
           }
 
         } else {
@@ -1220,17 +1200,15 @@ export class ManageShiftsComponent implements OnInit {
     this.filters.search_key = this.searchForm.get('search').value;
     this.filters.driver_group = this.searchForm.get('selectGroup').value;
     this.filters.driver_id = this.searchForm.get('selectedDriver').value;
-    console.log(this.filters);
     this.getDriversListing(this.filters);
     // this.downloadableLink = environment.baseUrl + '/iof/shiftsxle/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
     // this.downloadableLink1 = environment.baseUrl + '/iof/shiftspdf/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
 
-    this.downloadableLink =  'search=' + this.filters.search_key;
-    this.downloadableLink1 =  'search=' + this.filters.search_key;
+    this.downloadableLink = 'search=' + this.filters.search_key;
+    this.downloadableLink1 = 'search=' + this.filters.search_key;
   }
 
   togglePassword(value) {
-    console.log(value);
     this.show_password = value;
     // this.hidePassword=false;
   }
@@ -1241,17 +1219,14 @@ export class ManageShiftsComponent implements OnInit {
   converToFormdata(data) {
     var form_data = new FormData();
     for (var key in data) {
-      // console.log(key,data[key]);
       form_data.append(key, data[key]);
     }
     return form_data;
   }
   onSubmit(formValue) {
     this.submitted = true;
-    console.log("----", formValue);
     if (this.validate()) {
       const id = this.driverForm.getRawValue().id;
-      console.log("idddddddd", id);
       // if (formValue['dob']) {
       //   const dob = new Date(formValue['dob']);
 
@@ -1344,7 +1319,6 @@ export class ManageShiftsComponent implements OnInit {
       formValue.startDate = DateUtils.getYYYYMMDD(formValue.startDate);
       formValue.endDate = DateUtils.getYYYYMMDD(formValue.endDate);
       formValue.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      console.log('formValue', formValue);
       this.disableSubmitButton();
       if (id) {
         formValue['id'] = id;
@@ -1358,7 +1332,6 @@ export class ManageShiftsComponent implements OnInit {
   }
 
   postDriverForm(param) {
-    console.log(param);
     delete param['FridayCB'];
     delete param['SaturdayCB'];
     delete param['SundayCB'];
@@ -1384,23 +1357,20 @@ export class ManageShiftsComponent implements OnInit {
     param.SundayStartTime = param.SundayStartTime ? DateUtils.getUTCYYYYMMDDHHmmsstemp(currentDate + ' ' + param.SundayStartTime).split('T')[1] : null;
     param.SundayEndTime = param.SundayEndTime ? DateUtils.getUTCYYYYMMDDHHmmsstemp(currentDate + ' ' + param.SundayEndTime).split('T')[1] : null;
 
-    this.formService.postShift(param)
-      .subscribe((data: any) => {
-        console.log('postData() response=', data);
-        if (data.status === HttpStatusCodeEnum.Success) {
-          this.submitted = false;
-          this.getDayName = [];
-          this.closeForm.nativeElement.click();
-          this.getDriversListing(this.filters);
-          this.swalService.getSuccessSwal(data.message);
-          this.getDayName = [];
-          console.log("for checking", this.getDayName);
-          // this.getDrivers(this.filterDrivers);
-        } else {
-          console.log(data.message);
-          this.swalService.getErrorSwal(data.message);
-        }
-      })
+    this.formService.postShift(param).subscribe((data: any) => {
+      if (data.status === HttpStatusCodeEnum.Success) {
+        this.submitted = false;
+        this.getDayName = [];
+        this.closeForm.nativeElement.click();
+        this.getDriversListing(this.filters);
+        this.swalService.getSuccessSwal(data.message);
+        this.getDayName = [];
+        // this.getDrivers(this.filterDrivers);
+      } else {
+        console.log(data.message);
+        this.swalService.getErrorSwal(data.message);
+      }
+    })
 
     this.btnText = "Submit";
 
@@ -1411,7 +1381,6 @@ export class ManageShiftsComponent implements OnInit {
     // driver.append('id', String(this.selectedDriver.id));
     // driver.append('type', String(this.selectedRole));
     // Display the values
-    console.log("coming in patch", driver);
 
     let currentDate = DateUtils.getYYYYMMDD((new Date().toISOString()));
 
@@ -1430,21 +1399,19 @@ export class ManageShiftsComponent implements OnInit {
     driver.SundayStartTime = driver.SundayStartTime ? DateUtils.getUTCYYYYMMDDHHmmsstemp(currentDate + ' ' + driver.SundayStartTime).split('T')[1] : null;
     driver.SundayEndTime = driver.SundayEndTime ? DateUtils.getUTCYYYYMMDDHHmmsstemp(currentDate + ' ' + driver.SundayEndTime).split('T')[1] : null;
 
-    this.formService.patchShift(driver)
-      .subscribe((data: any) => {
-        console.log(data);
-        if (data.status === HttpStatusCodeEnum.Success) {
-          this.submitted = false;
-          this.getDayName = [];
-          // this.getDrivers(this.filterDrivers)
-          this.closeForm.nativeElement.click();
-          this.swalService.getSuccessSwal(data.message);
-          this.getDriversListing(this.filters);
-        } else {
-          this.swalService.getErrorSwal(data.message);
-          console.log(data.message);
-        }
-      })
+    this.formService.patchShift(driver).subscribe((data: any) => {
+      if (data.status === HttpStatusCodeEnum.Success) {
+        this.submitted = false;
+        this.getDayName = [];
+        // this.getDrivers(this.filterDrivers)
+        this.closeForm.nativeElement.click();
+        this.swalService.getSuccessSwal(data.message);
+        this.getDriversListing(this.filters);
+      } else {
+        this.swalService.getErrorSwal(data.message);
+        console.log(data.message);
+      }
+    })
   }
   closeFunction() {
     this.submitted = false;
@@ -1456,10 +1423,8 @@ export class ManageShiftsComponent implements OnInit {
 
     // let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}`;
     let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}&status=${filters.status}`;
-    console.log("params for getUserList()= ", params);
 
     this.userService.getUsers(params).subscribe((data: any) => {
-      console.log("getUsers()- ", data);
       this.showIndeterminateProgress = false;
 
       if (data.status === HttpStatusCodeEnum.Success) {
@@ -1469,7 +1434,6 @@ export class ManageShiftsComponent implements OnInit {
       } else {
         console.log(data.message);
       }
-      console.log("this.users= ", this.users);
     });
   }
   returndob() {
@@ -1478,7 +1442,6 @@ export class ManageShiftsComponent implements OnInit {
         if (this.date_of_joining) {
           const a: any = (this.dob.valueOf());
           const b: any = (this.date_of_joining.valueOf());
-          console.log(a, b);
           if (a >= b) {
             this.date_of_joining = null;
           }
@@ -1645,7 +1608,6 @@ export class ManageShiftsComponent implements OnInit {
   async showSwal(territory) {
     const shouldDelete = await this.swalService.getDeleteSwal2(territory, 'What do you want to do with this record?');
     if (shouldDelete) {
-      console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteUser(territory.id, shouldDelete, 'Record has been' + message + 'successfully');
     }
@@ -1657,7 +1619,6 @@ export class ManageShiftsComponent implements OnInit {
     params['id'] = (userId);
     params['status'] = actionType;
 
-    console.log('params', params);
     this.userService.deleteShift(params).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.swalService.getSuccessSwal(message);
@@ -1765,11 +1726,9 @@ export class ManageShiftsComponent implements OnInit {
         status: this.selectedStatus.id
       });
     }, 500);
-    console.log("start date", group.start_date)
 
     let x = new Date(group.start_date);
     let y = new Date(group.end_date);
-    console.log("x,y", x, y)
     this.patchDatewithDays(x, y);
   }
 
@@ -1783,25 +1742,23 @@ export class ManageShiftsComponent implements OnInit {
   }
 
 
-  downloadXLS(download) { 
+  downloadXLS(download) {
     this.entityService.downloadManageShiftsXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Shift Report.xls')
+      this.xlsPdfService.downloadXlsPdf(url, 'Shift Report.xls')
       // window.open(url);
     })
   }
 
 
-  downloadPDF(download) { 
+  downloadPDF(download) {
     this.entityService.downloadManageShiftsPDF(download).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'Shift Report.pdf')
+      this.xlsPdfService.downloadXlsPdf(url, 'Shift Report.pdf')
       // window.open(url);
     })
   }

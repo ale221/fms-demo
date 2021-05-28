@@ -213,12 +213,9 @@ export class AuditDocumentComponent implements OnInit {
   ngOnInit() {
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;
-      console.log("ressssssssssssss1", res);
-      console.log("ressssssssssssss2", this.sidebarCheck);
     })
 
     this.loggedInUser = this.authService.getUser();
-    console.log("loggedInUser", this.loggedInUser);
     this.statusList.forEach((element: any) => {
       element.label = element.name;
       element.value = element.id;
@@ -258,7 +255,6 @@ export class AuditDocumentComponent implements OnInit {
         this.driverGroup = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
-        console.log("driver_grp", this.driverGroup);
       } else {
         console.log(data.message);
       }
@@ -269,65 +265,45 @@ export class AuditDocumentComponent implements OnInit {
       this.fleets = apiResponse.data.data.map(
         item => new DropDownItem(item['id'], item['name'])
       );;
-      console.log("this.fleets2----", this.fleets);
     })
   }
 
   onFleetChange(event) {
-    console.log("evemn", event);
     this.filtersFleet.fleet_id = event.id;
     this.getFleets(event.id);
   }
 
   getFleets(fleetID): void {
-    console.log("coming i getfleet");
-    // let params = `limit=${filtersFleet.limit}&offset=${filtersFleet.offset}&order=${filtersFleet.order}&order_by=${filtersFleet.order_by}`;
-    // let params = `limit=${filtersFleet.limit}&offset=${filtersFleet.offset}&order=${filtersFleet.order}&order_by=${filtersFleet.order_by}&fleet_id=${filtersFleet.fleet_id}&search=${filtersFleet.search}`;
-    // this.inputValue = "";
-    // this.searchPlaceHolder = 'Loading...';
-    // this.enableSearch = true;
-    // this.trucks = [];
-
     this.formService.getFleetsListAudit(fleetID)
       .subscribe((data: any) => {
         if (!data.error) {
           this.vehicles = data['data'].map(
             item => new DropDownItem(item['id'], item['name'])
-          );;
-          console.log("this.vehicles= ", this.vehicles);
-
+          );
         }
       });
 
   }
 
   onDocumentNameChangeTwo(event) {
-    console.log("eventttt", event.id);
     this.showExportFile=true;
 
     if (event.id == 1) {
-      console.log("1= ");
       this.selectedType = "driver";
       this.selectedTypeSearch = "driver";
       this.reportTypeTable = 1;
       this.listVariable = 'Driver List';
-
-
     } else {
-      console.log("2");
       this.selectedTypeSearch = "fleet";
       this.selectedType = "fleet";
       this.reportTypeTable = 2;
       this.listVariable = 'Fleet List';
     }
-    console.log("this.selectedType", this.selectedType)
     this.getDocumentType();
     this.getContracts();
   }
   onDocumentNameChange(event) {
-    console.log("eventttt", event.id);
     if (event.id == 1) {
-
       this.selectedType = "driver";
       this.reportTypeTable = 1;
       this.listVariable = 'Driver List';
@@ -336,8 +312,6 @@ export class AuditDocumentComponent implements OnInit {
       this.contractForm.controls.document_type.reset();
 
     } else {
-
-
       this.selectedType = "fleet";
       this.reportTypeTable = 2;
       this.listVariable = 'Fleet List';
@@ -347,7 +321,6 @@ export class AuditDocumentComponent implements OnInit {
     }
     // this.contractForm.reset();
     this.getDocumentType();
-    console.log("this.selectedType", this.selectedType)
     // this.getDocumentType();
   }
 
@@ -368,38 +341,24 @@ export class AuditDocumentComponent implements OnInit {
     });
   }
   getDocumentType() {
-    console.log("sekectedtype", this.selectedType);
     if (this.selectedType == "driver") {
-      console.log("comin in driver");
       this.documentType = [];
       this.formService.getDocumentType().subscribe((data: any) => {
         if (data.status === HttpStatusCodeEnum.Success) {
           this.documentType = data.data.map(
             item => new DropDownItem(item['id'], item['name'])
           );
-          //  this.drivers=data.data;
-          // this.driverLists = [];
-          // this.typeList = [];
-          //  this.reportTypeTable=0;
-          // console.log("coming in documentType", this.documentType);
         } else {
           console.log(data.message);
         }
       });
     } else {
-      // console.log("coming in getDriversGroup");
-      console.log("comin in fleet");
       this.documentType = [];
       this.formService.getDocumentTypeFleet().subscribe((data: any) => {
         if (data.status === HttpStatusCodeEnum.Success) {
           this.documentType = data.data.map(
             item => new DropDownItem(item['id'], item['name'])
           );
-          //  this.drivers=data.data;
-          // this.driverLists = [];
-          // this.typeList = [];
-          //  this.reportTypeTable=0;
-          // console.log("coming in documentType", this.documentType);
         } else {
           console.log(data.message);
         }
@@ -454,7 +413,6 @@ export class AuditDocumentComponent implements OnInit {
   }
 
   onSubmit1(value) {
-    console.log("valueeeee", value);
     const param: FormData = new FormData();
     this.submitted = true;
     if (this.validate()) {
@@ -469,34 +427,19 @@ export class AuditDocumentComponent implements OnInit {
       //   this.swalService.getWarningSwal('You cannot upload more than 10 documents');
       //   return;
       // }
-      console.log("coming1", value['documentName'])
       // console.log("coming1",value['documentName'].name)
       if (value['documentName'].name == "Driver") {
-        console.log("coming11")
         param.append('driver_group_id', value['select_group']['id']);
         param.append('driver_id', value['select_driver']['id']);
         this.selectedDriver = value['select_driver']['id']
-        console.log("coming11")
       } else {
-        console.log("coming22")
         param.append('fleet_id', value['select_fleet']['id']);
         param.append('vehicle_id', value['select_vehicle']['id']);
         this.selectedFleet = value['select_fleet']['id']
-        console.log("coming22")
       }
 
-      // param.append('documentName', value['documentName']['id']);
-      // if (value['documentName'][0]?.id) {
-      //   param.append('document_type_id', value['documentName'][0]?.id);
-      // } else {
-      //   param.append('document_type_id', value['documentName']?.id);
-      // }
-      console.log('document_typedocument_type', value['document_type']);
-      
-      console.log('document_typedocument_type', value['document_type'].id);
       param.append('document_type_id', value['document_type'].id);
 
-      console.log("coming3")
       delete value['select_driver'];
       delete value['document_type'];
       delete value['select_group'];
@@ -518,7 +461,6 @@ export class AuditDocumentComponent implements OnInit {
   }
 
   postContract(param) {
-    console.log("parammmmmmmmmmm", this.selectedType);
     this.uploadedPercentage = 0;
     if (this.selectedType == "driver") {
       // console.log("param before creating  document api= ", param)
@@ -528,7 +470,6 @@ export class AuditDocumentComponent implements OnInit {
           this.selectedType = 'driver';
           this.selectedDropdown = { id: 1, name: "Driver" }
           this.searchForm.controls.testing.reset({ id: 1, name: "Driver" });
-          console.log("selected dropdown",this.selectedDropdown);
           this.getContracts();
           this.swalService.getSuccessSwal(data.message);
           // this.context.updateContractsRows(apiResponse['body']);
@@ -544,7 +485,6 @@ export class AuditDocumentComponent implements OnInit {
           this.closeForm.nativeElement.click();
           this.selectedType = 'fleet';
           this.selectedDropdown =  { id: 2, name: "Fleet" }
-          console.log("selected dropdown",this.selectedDropdown);
           this.searchForm.controls.testing.reset({ id: 2, name: "Fleet" });
           this.getContracts();
           this.swalService.getSuccessSwal(data.message);
@@ -559,15 +499,11 @@ export class AuditDocumentComponent implements OnInit {
   }
   materials = [];
   patchContract(truck: FormData) {
-    console.log("truck== ", truck)
     truck.append('id', this.selectedUser);
     if (this.selectedType == 'driver') {
       truck.append('driver_id', this.selectedDriver);
     }
-    // else{
-    //   truck.append('vehicle_id', this.selectedFleet);
-    // }
-    // truck.delete('driver_id');
+
     this.uploadedPercentage = 0;
     // console.log("param before updating  document= ", truck);
     if (this.selectedType == 'driver') {
@@ -886,8 +822,6 @@ export class AuditDocumentComponent implements OnInit {
   }
 
   getContracts() {
-    console.log("selectedType", this.selectedType);
-    // console.log("coming in ");
     this.inputValue = '';
     this.searchPlaceHolder = 'Loading...';
     this.enableSearch = true;
@@ -1344,7 +1278,6 @@ export class AuditDocumentComponent implements OnInit {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    console.log('hashmap', this.hashMap);
   }
 
   getprogress(area) {
@@ -1353,13 +1286,11 @@ export class AuditDocumentComponent implements OnInit {
 
 
   onSelect({ selected }) {
-    console.log("onSelect: ", selected);
     this.selectedRows.splice(0, this.selectedRows.length);
     this.selectedRows.push(...selected);
   }
 
   async showDeleteCategoryConfirmation(row) {
-    // console.log("call delete api = ", row);
     const response = await this.swalService.getConfirmSwal();
     if (response) {
       this.hashMap[row.id] = true;
@@ -1548,10 +1479,8 @@ export class AuditDocumentComponent implements OnInit {
   picName;
   rowIndexBeingEdited = null;
   openEditModal(row, index) {
-    console.log("rowwww", row);
     this.selectedUser = row.id;
     this.selectedDocument = row;
-    // console.log("row", row);
     this.AdButtonClick(this.selectedUser);
     if (row.driver_id) {
       this.selectedType = "driver";
@@ -1577,22 +1506,17 @@ export class AuditDocumentComponent implements OnInit {
 
     this.getDriverFromGroup(row.driver_group_id);
     if (!row.fleet_name) {
-      console.log("coming in fleet name empty");
       this.contractForm.patchValue({ select_group: row.driver_group_id ? new DropDownItem(row.driver_group_id, row.driver_group_name) : null });
       this.contractForm.patchValue({ select_driver: row.driver_id ? new DropDownItem(row.driver_id, row.driver_name) : null });
       this.contractForm.patchValue({ document_type: row.document_type_id ? new DropDownItem(row.document_type_id, row.document_type) : null });
       // this.selectedValue = [{ id: 1, name: "Driver" }, { id: 2, name: "Fleet" }]; 
       this.selectedValue = { id: 1, name: "Driver" }
-      console.log("selectedValue", this.selectedValue);
     } else {
-      console.log("coming in fleet name ");
-      console.log("row.vehicle_id", row.vehicle_id)
       this.getFleets(row.fleet_id);
       this.contractForm.patchValue({ select_fleet: row.fleet_id ? new DropDownItem(row.fleet_id, row.fleet_name) : null });
       this.contractForm.patchValue({ select_vehicle: row.vehicle_id ? new DropDownItem(row.vehicle_id, row.vehicle_name) : null });
       this.contractForm.patchValue({ document_type: row.document_type_id ? new DropDownItem(row.document_type_id, row.document_type) : null });
       this.selectedValue = { id: 2, name: "Fleet" }
-      console.log("selectedValue", this.selectedValue);
     }
     if (row.document_file) {
       for (let i = 0; i < row.document_file.length; i++) {
@@ -1603,8 +1527,6 @@ export class AuditDocumentComponent implements OnInit {
           picTooltip = picName;
           // picName = picName.substring(0, 33) + '...';
         }
-        // console.log(arr, picName);
-
         this.createFile(row.document_file[i], picName, picTooltip);
       }
     } else {
@@ -1629,35 +1551,23 @@ export class AuditDocumentComponent implements OnInit {
     let data = await response.blob();
     let file = new File([data], filename);
     file['tooltip'] = fileTooltip;
-    console.log('new file', file);
     this.uploader.files.push(file);
     this.fileUploadProgressBar = false;
   }
 
   onBinChange(obj) {
     if ('itemValue' in obj) {
-      console.log(obj);
       if (obj.value.indexOf(obj.itemValue) > -1) {
         // this.tempMarkers[obj.itemValue['id']].setIcon(this.getMapIcon(true));
       } else {
         // this.tempMarkers[obj.itemValue['id']].setIcon(this.tempMarkers[obj.itemValue['id']].oldIcon);
       }
     } else {
-      // if (obj.value.length) {
-      //   for (let i = 0; i < obj.value.length; i++)
-      //     this.tempMarkers[obj.value[i]['id']].setIcon(this.getMapIcon(true));
-      // }
-      // else {
-      //   for (let i = 0; i <  this.markers.length; i++)
-      //     this.markers[i].setIcon(this.markers[i].oldIcon);
-      // }
+
     }
   }
 
   updateFilter(val) {
-    console.log(this.searchForm.value.search);
-
-    console.log("coming in ");
     // this.inputValue = '';
     this.searchPlaceHolder = 'Loading...';
     this.enableSearch = true;
@@ -1686,7 +1596,6 @@ export class AuditDocumentComponent implements OnInit {
           } else {
             this.swalService.getWarningSwal(data.message);
           }
-          console.log("asaaaaaaaaaaaaa", data['data'].data);
           // this.contracts=data.data['data'];
           this.totalContractsLength = data.data.count;
           this.contracts = data['data'].data;
@@ -1711,7 +1620,6 @@ export class AuditDocumentComponent implements OnInit {
           } else {
             this.swalService.getWarningSwal(data.message);
           }
-          console.log("asaaaaaaaaaaaaa", data['data'].data);
           // this.contracts=data.data['data'];
           this.totalContractsLength = data.data.count;
           this.contracts = data['data'].data;
@@ -1745,17 +1653,13 @@ export class AuditDocumentComponent implements OnInit {
   avatar_url;
   uploadedFiles = [];
   fileChange(event) {
-    console.log("filechange: ", event);
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
       const img = document.querySelector('#preview img') as HTMLImageElement;
 
-      // if (fileList[0].type.indexOf('image') === -1) {
-      //   this.notImage = true;
-      // }
       this.isFileImage = fileList[0].type.indexOf('png') > -1 || fileList[0].type.indexOf('jpg') > -1 || fileList[0].type.indexOf('jpeg') > -1;
-      console.log('file type', fileList[0].type, this.isFileImage);
+
       if (this.isFileImage) {
 
         if (file.size > 1000000000) { // 1MB
@@ -1769,7 +1673,6 @@ export class AuditDocumentComponent implements OnInit {
           reader.onload = (function (aImg) {
             return function (e) {
               aImg.src = e.target.result;
-              console.log(aImg, 'image');
               self.avatar_url = aImg.src;
             };
           })(img);
@@ -1803,7 +1706,6 @@ export class AuditDocumentComponent implements OnInit {
 
   changeMaterial() {
     if (this.selected_skip_size) {
-      console.log('option', this.getIconsService.getMaterialLabel(SkipSizeToMaterialEnum['_' + this.selected_skip_size]));
       this.selected_entity_sub_type = this.getIconsService.getMaterialLabel(SkipSizeToMaterialEnum['_' + this.selected_skip_size]);
     } else {
       this.selected_entity_sub_type = null;
@@ -1811,7 +1713,6 @@ export class AuditDocumentComponent implements OnInit {
   }
 
   remove(file: File, uploader: FileUpload) {
-    console.log("remove...");
     const index = uploader.files.indexOf(file);
     uploader.remove(null, index);
   }
@@ -1826,12 +1727,10 @@ export class AuditDocumentComponent implements OnInit {
 
 
   fileSelected(event) {
-    console.log("eventttttttttttttt", event);
     this.showIndeterminateProgressforFile = true;
     if (event) {
       this.showIndeterminateProgressforFile = false;
     }
-    console.log('file selected', event);
   }
 
   onPaginateTool(event) {
@@ -1846,10 +1745,7 @@ export class AuditDocumentComponent implements OnInit {
   }
 
   showPDF(row) {
-    // console.log("data- ", row)
-    // console.log("Download PDF= ", row.document_file[0])
     var data: string = row;
-
     const newBlob = new Blob([data], { type: 'application/pdf' }); //'text/plain' //application/pdf
     window.open(row, '_blank');
   }
@@ -1858,19 +1754,17 @@ export class AuditDocumentComponent implements OnInit {
   downloadXLS(download) {
     if (this.selectedType == 'driver') {
       this.formService.downloadXLSAuditDocumentDriver(download).subscribe((apiResponse: any) => {
-        console.log("downloadXLS response== ", apiResponse)
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        this.xlsPdfService.downloadXlsPdf(url,'Driver_Document.xls')
+        this.xlsPdfService.downloadXlsPdf(url,'Driver Documents Report.xls')
       })
     } else {
       this.formService.downloadXLSAuditDocumentFleet(download).subscribe((apiResponse: any) => {
-        console.log("downloadXLS response== ", apiResponse)
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
-        this.xlsPdfService.downloadXlsPdf(url,'Driver_Fleet.xls')
+        this.xlsPdfService.downloadXlsPdf(url,'Fleet Documents Report.xls')
       })
     }
   }
@@ -1878,19 +1772,17 @@ export class AuditDocumentComponent implements OnInit {
   downloadPDF(download1) {
     if (this.selectedType == 'driver') {
       this.formService.downloadPDFAuditDocumentDriver(download1).subscribe((apiResponse: any) => {
-        console.log("downloadPDF response== ", apiResponse)
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        this.xlsPdfService.downloadXlsPdf(url,'Driver_Document.pdf')
+        this.xlsPdfService.downloadXlsPdf(url,'Driver Documents Report.pdf')
       })
     } else {
       this.formService.downloadPDFAuditDocumentFleet(download1).subscribe((apiResponse: any) => {
-        console.log("downloadPDF response== ", apiResponse)
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        this.xlsPdfService.downloadXlsPdf(url,'Driver_Fleet.pdf')
+        this.xlsPdfService.downloadXlsPdf(url,'Fleet Documents Report.pdf')
       })
     }
 
