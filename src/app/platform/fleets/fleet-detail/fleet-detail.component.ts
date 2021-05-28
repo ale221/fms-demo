@@ -42,7 +42,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { NamedTimeZoneImpl } from '@fullcalendar/common';
 
 declare var $: any;
 declare var ol: any;
