@@ -229,7 +229,6 @@ export class AuditDocumentComponent implements OnInit {
       this.statusList = [{ id: 2, name: "Fleet" }];
     }
 
-
     this.customerID = this.loggedInUser.customer.id;
     this.areas_loader_flag = false;
     this.locations_loader_flag = false;
@@ -237,8 +236,6 @@ export class AuditDocumentComponent implements OnInit {
     this.deleteAllButton = false;
 
     this.getDriversGroup();
-
-    this.getDriverFromGroup(null);
     this.sizeGreaterThanFive = false;
 
     this.FleetDropdown();
