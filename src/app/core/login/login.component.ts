@@ -310,27 +310,27 @@ export class LoginComponent implements OnInit {
     this.forgotPasswordForm.reset();
     this.userService.sendEmailForForgetPassword(params).subscribe(res => {
       // console.log(res['error']);
-      
+
       // try {
-        // if (res['error'] === true) {
-        //   this.defaultLoader = {
-        //     visibility: false
-        //   }
-        //   // this.invalidEmail=true;
-        //   this.swalService.getErrorSwal("User doesn't exist");
-        // }
-        // else {
-          this.defaultLoader = {
-            visibility: false
-          }
-          this.verifyForm.reset();
-          localStorage.setItem('emailForgetPassword', params['email']);
-          this.swalService.getSuccessSwal("OTP sent successfully on the provided email");
-          this.closeForgotPasswordForm.nativeElement.click();
-          this.createpassword = false;
-          this.forgetPassword = true;
-          this.firstTimeUser = false;
-        // }
+      // if (res['error'] === true) {
+      //   this.defaultLoader = {
+      //     visibility: false
+      //   }
+      //   // this.invalidEmail=true;
+      //   this.swalService.getErrorSwal("User doesn't exist");
+      // }
+      // else {
+      this.defaultLoader = {
+        visibility: false
+      }
+      this.verifyForm.reset();
+      localStorage.setItem('emailForgetPassword', params['email']);
+      this.swalService.getSuccessSwal("OTP sent successfully on the provided email");
+      this.closeForgotPasswordForm.nativeElement.click();
+      this.createpassword = false;
+      this.forgetPassword = true;
+      this.firstTimeUser = false;
+      // }
 
       // } catch (error) {
 
@@ -411,7 +411,7 @@ export class LoginComponent implements OnInit {
             //   this.context.router.navigate(['unauthorized']);
             // } else {
 
-            if (apiResponse['data'].is_first_time_login) {
+            if (apiResponse['data'].is_first_time_login || apiResponse['data'].is_first_time_login == null) {
               this.context.authService.unsetUser();//remove user from localstorage
               this.context.firstTimeUser = true;
               this.context.createpassword = false;

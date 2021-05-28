@@ -12,7 +12,7 @@
   [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
     <mat-nav-list>
       <span *ngFor="let nav of menu; index as i">
-        <a [ngClass]="isCollapsed === true? 'icon-hover':''" *ngIf="(nav.parent != 'Maintenances' && user.package[0].package_id == packageType.png) || user.package[0].package_id == packageType.standard"
+        <a [ngClass]="isCollapsed === true? 'icon-hover':''" *ngIf="(nav.parent != 'Maintenances' && nav.parent != 'Reports' && user.package[0].package_id == packageType.png) || user.package[0].package_id == packageType.standard"
           mat-list-item [routerLink]="nav?.url" id="{{nav?.id}}" (click)="onItemSelected(nav, i)">
           <i class="site-menu-icon icon"><i [ngStyle]="sidebarIconsBranding" className="{{nav.icon}}"></i></i>
           <span  [ngClass]="isCollapsed === true? 'site-menu-title text-show':'site-menu-title'">{{nav?.parent}}</span>
