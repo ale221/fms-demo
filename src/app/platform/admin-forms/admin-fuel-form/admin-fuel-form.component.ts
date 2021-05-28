@@ -648,7 +648,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'FuelFillup-Report.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Fuel Fillup Report.xls')
     })
   }
 
@@ -658,7 +658,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-      this.xlsPdfService.downloadXlsPdf(url,'FuelFillup-Report.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Fuel Fillup Report.pdf')
     })
   }
 

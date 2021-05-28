@@ -42,6 +42,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { NamedTimeZoneImpl } from '@fullcalendar/common';
 
 declare var $: any;
 declare var ol: any;
@@ -498,18 +499,24 @@ export class FleetDetailComponent implements OnInit {
         for (let i = 0; i < this.milageData.length; i++) {
           this.yearfuelFilledTotal = this.milageData[i]?.fuel_filled + this.yearfuelFilledTotal;
           this.yeardistance = this.milageData[i]?.distance + this.yeardistance;
+          console.log("ths.yearfuelFilledTotal",this.yearfuelFilledTotal)
+          console.log("ths.yeardistance",this.yeardistance)
           if (this.monthfuelfilledTotal == 0 && this.monthdistance == 0) {
-            this.yearMileage = 0;
+            this.yearMileage = this.yeardistance / this.yearfuelFilledTotal;
+            console.log("ths.yearMileage1",this.yearMileage)
           } else {
             this.yearMileage = this.yeardistance / this.yearfuelFilledTotal;
+            console.log("ths.yearMileage2",this.yearMileage)
           }
+          
+          console.log("ths.yearMileageeeeeeeee",this.yearMileage)
 
         }
         let lastRow = {
           month: 'Total',
           fuel_filled: this.yearfuelFilledTotal,
           distance: this.yeardistance,
-          mileage: this.yearMileage
+          mileage: (Number.isNaN(this.yearMileage)) ? null : this.yearMileage
         }
         this.milageData.push(lastRow);
       })

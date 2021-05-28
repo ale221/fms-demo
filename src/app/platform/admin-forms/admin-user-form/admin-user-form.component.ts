@@ -873,7 +873,7 @@ export class AdminUserFormComponent implements OnInit {
 
       var fileLink = document.createElement('a');
       fileLink.href = url
-      fileLink.download = 'User Managemwnt'
+      fileLink.download = 'User Report'
       fileLink.click();
 
       // window.open(url);
@@ -889,7 +889,7 @@ export class AdminUserFormComponent implements OnInit {
       
       var fileLink = document.createElement('a');
       fileLink.href = url
-      fileLink.download = 'User Managemwnt'
+      fileLink.download = 'User Report'
       fileLink.click();
 
       // window.open(url);

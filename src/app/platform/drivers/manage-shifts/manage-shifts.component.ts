@@ -1789,7 +1789,7 @@ export class ManageShiftsComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'ManageShifts-Reports.xls')
+      this.xlsPdfService.downloadXlsPdf(url,'Shift Report.xls')
       // window.open(url);
     })
   }
@@ -1801,7 +1801,7 @@ export class ManageShiftsComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      this.xlsPdfService.downloadXlsPdf(url,'ManageShifts-Reports.pdf')
+      this.xlsPdfService.downloadXlsPdf(url,'Shift Report.pdf')
       // window.open(url);
     })
   }
