@@ -161,7 +161,7 @@ export class MaintenanceService {
   }
 
   deleteMaintenace(params) {
-    console.log("params", params)
+    // console.log("params", params)
     // let newData2 = this.converToFormdata(params);
     const url = `/iof/maintenance/${params}`;
     return this.http.delete(url);
@@ -169,7 +169,7 @@ export class MaintenanceService {
   }
 
   deleteMaintenaceType(params) {
-    console.log("params", params)
+    // console.log("params", params)
     const url = `/iof/maintenance-types/${params}`;
     return this.http.delete(url);
   }

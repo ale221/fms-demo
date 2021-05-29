@@ -139,7 +139,7 @@
 //       //   if (!isNullOrUndefined(current.cost)) {
 //       //     total += (prev.cost + current.cost);
 //       //   }
-//       //   console.log(total);
+//       //   // console.log(total);
 //       //   return total;
 //       // });
 //       this.maxCost = max;
@@ -149,10 +149,10 @@
 
 //   maintenanceDataSaved(event) {
 //     if (event) {
-//       console.log('data saved successfully');
+//       // console.log('data saved successfully');
 //       this.getMaintenanceData();
 //     } else {
-//       console.log('data saved unsuccessfully');
+//       // console.log('data saved unsuccessfully');
 //       this.getMaintenanceData();
 //     }
 //   }
@@ -162,7 +162,7 @@
 //   }
 
 //   editMaintenance() {
-//     console.log(this.maintenance);
+//     // console.log(this.maintenance);
 //     const obj = {
 //       id: this.maintenance.id,
 //       maintenance_type: this.maintenance.maintenance_type,
@@ -412,7 +412,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   private setSignalRresponse() {
-    // console.log('setSignalRresponse fired');
+    // // console.log('setSignalRresponse fired');
     this.truck['signalRresponse'] = new SignalRresponse(
       null,
       null,
@@ -453,8 +453,8 @@ export class MaintenanceDetailComponent implements OnInit {
 
   setupLocations() {
     this.trafficLayer();
-    // console.log(this.truck['location_address']);
-    // console.log('setupLocations fired');
+    // // console.log(this.truck['location_address']);
+    // // console.log('setupLocations fired');
     this.locations = new Array(new AppLocation(
       this.truck.id,
       this.truck.last_latitude,
@@ -488,7 +488,7 @@ export class MaintenanceDetailComponent implements OnInit {
 
   private createMarker(lat, long) {
 
-    // console.log('createMarker fired');
+    // // console.log('createMarker fired');
     // TODO: check if polyline not create, than remove @if (this.marker && this.marker.setMap) check
     if (!isNullOrUndefined(this.marker)) {
       this.marker.setMap(null);
@@ -539,7 +539,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   private setupSignalR() {
-    // console.log('setupSignalR fired');
+    // // console.log('setupSignalR fired');
     if (!isNullOrUndefined(this.connection)) {
       this.connection.start().then((c) => {
         this.connection.invoke('register', this.truck.device_id)
@@ -552,7 +552,7 @@ export class MaintenanceDetailComponent implements OnInit {
         // subscribe to event
         this.subscription = newMessage.subscribe((response: string) => {
           const signalRresponse = JSON.parse(response) as SignalRresponse;
-          console.log('signalResponse', signalRresponse);
+          // console.log('signalResponse', signalRresponse);
           if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
             return;
           }
@@ -599,7 +599,7 @@ export class MaintenanceDetailComponent implements OnInit {
             //   }
             // });
 
-            // console.log(this.truck);
+            // // console.log(this.truck);
 
             // if(this.showSignals){
             //   this.mss = this.truck.signalRresponse.mss;
@@ -647,7 +647,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   private verifyFirmware(d?) {
-    // console.log('verifyFirmware fired');
+    // // console.log('verifyFirmware fired');
     const version = d.split(',');
     this.showSignals = version[0] > '6.2.2';
     this.signalsStrength = version[2];
@@ -680,7 +680,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   private transition(_newLatLng, spd) {
-    // console.log('transition fired');
+    // // console.log('transition fired');
     this.i = 0;
     if (isNullOrUndefined(this._oldLatLng)) {
       this._oldLatLng = [0, 0];
@@ -694,7 +694,7 @@ export class MaintenanceDetailComponent implements OnInit {
 
 
   verifySignalRData(signalRresponse) {
-    // console.log('verifySignalRData fired');
+    // // console.log('verifySignalRData fired');
     return (signalRresponse.lat !== 0 && signalRresponse.lon !== 0)
       &&
       (!isNullOrUndefined(signalRresponse.lat) && (!isNullOrUndefined(signalRresponse.lon)))
@@ -736,11 +736,11 @@ export class MaintenanceDetailComponent implements OnInit {
     this.truckService.getFleetDetailById(entityId).subscribe(data => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.truck = data['data'];
-        console.log("this.truckkkkkkkkkk",this.truck);
+        // console.log("this.truckkkkkkkkkk",this.truck);
         this.lastupdated=DateUtils.getLocalMMDDYYYYhhmmss(this.truck.last_updated);
         this.lastFillUp = DateUtils.getLocalMMDDYYYYhhmmss(this.truck.fill_up_date);
-        console.log("---------222222",this.truck.fill_up_date);
-        console.log("-----------",this.lastFillUp);
+        // console.log("---------222222",this.truck.fill_up_date);
+        // console.log("-----------",this.lastFillUp);
         this.setSignalRresponse();
         this.setupLocations();
         this.setupSignalR();
@@ -894,7 +894,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   showMarkerValueChanges() {
-    // console.log('showMarkerValueChanges fired');
+    // // console.log('showMarkerValueChanges fired');
     if (this.trailDateRange) {
       this.getReport(this.trailDateRange, 'trail', this.showMarkersForTrail2);
     }
@@ -905,14 +905,14 @@ export class MaintenanceDetailComponent implements OnInit {
   // }
 
   setupReport(event) {
-    // console.log('setupReport fired');
+    // // console.log('setupReport fired');
     this.getReport(event[0], event[1]);
   }
 
   // Reporting Section
 
   private getReport(dateRange, type, actual?) {
-    // console.log('getReport fired');
+    // // console.log('getReport fired');
     this.violationMarkers = [];
     this.violationInfoWindows = [];
 
@@ -944,7 +944,7 @@ export class MaintenanceDetailComponent implements OnInit {
 
 
   private getFillupReport(start_date, end_date) {
-    // console.log('getFillupReport fired');
+    // // console.log('getFillupReport fired');
     const params = {
       truck_id: this.entityId,
       start_datetime: start_date,
@@ -1004,7 +1004,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   private getSnapshot() {
-    // console.log('getSnapshot fired');
+    // // console.log('getSnapshot fired');
     this.snapshotData = new SnapshotResponse();
     const params = {
       truck_id: this.entityId,
@@ -1047,7 +1047,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   private getTrailReport(start_date, end_date) {
-    // console.log('getTrailReport fired');
+    // // console.log('getTrailReport fired');
     this.trailWithStopsInfo = [];
     const params = {
       truck_id: this.entityId,
@@ -1088,7 +1088,7 @@ export class MaintenanceDetailComponent implements OnInit {
 
           if (this.showMarkersForTrail) {
 
-            // console.log(stop_times);
+            // // console.log(stop_times);
             this.trailWithStopsInfo = stop_times;
 
             for (let j = 0; j < stop_times.length; j++) {
@@ -1159,7 +1159,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   validate(): boolean {
-    // console.log('validate fired');
+    // // console.log('validate fired');
     if (this.snapForm.value) {
       return true;
     }
@@ -1167,14 +1167,14 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   onSubmit(formValue: Object) {
-    // console.log('onSubmit fired');
+    // // console.log('onSubmit fired');
     if (this.validate()) {
       this.getReport(this.snapshotDate, 'snapshot');
     }
   }
 
   createInfowindowTemplate(msg, title?) {
-    // console.log('createInfowindowTemplate fired');
+    // // console.log('createInfowindowTemplate fired');
     // InfoWindow content
     let content = `<div id="iw-container"> <div class="iw-content">`;
     if (title) {
@@ -1187,7 +1187,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
 
   getFinesReport(startDate, endDate) {
-    // console.log('getFinesReport fired');
+    // // console.log('getFinesReport fired');
     const params = {
       truck_id: this.entityId,
       start_datetime: startDate,
@@ -1357,7 +1357,7 @@ export class MaintenanceDetailComponent implements OnInit {
   }
   
   private getPDFReport() {
-    // console.log('getPDFReport fired');
+    // // console.log('getPDFReport fired');
     const params = {
       report_title: this.reportObj.report_title,
       meta: JSON.stringify(this.reportObj.meta),

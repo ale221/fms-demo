@@ -42,7 +42,7 @@ export class DateUtils {
         // const localDate = addMinutes(utcDate, -(new Date().getTimezoneOffset()));
         return format(localDate, 'hh:mm A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -59,7 +59,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, -(new Date().getTimezoneOffset()));
         return format(localDate, 'MMM, DD, YYYY, hh:mm:ss A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -75,7 +75,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, -(new Date().getTimezoneOffset()));
         return format(localDate, 'MMM, DD, YYYY, hh:mm:ss A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -89,7 +89,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, -(new Date().getTimezoneOffset()));
         return format(localDate, 'HH:mm:ss');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -103,7 +103,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, -(new Date().getTimezoneOffset()));
         return format(localDate, 'hh:mm:ss A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -129,7 +129,7 @@ export class DateUtils {
         // return format(localDate, 'MMM, DD, YYYY, hh:mm:ss A');
         return localDate.toLocaleDateString('en-EN', options);
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -144,7 +144,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, new Date().getTimezoneOffset());
         return format(localDate, 'YYYY-MM-DDTHH:mm');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -157,7 +157,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, new Date().getTimezoneOffset());
         return format(localDate, 'YYYY-MM-DD HH:mm:ss');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -170,7 +170,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, -(new Date().getTimezoneOffset()));
         return format(localDate, 'YYYY:MM:DD : HH:mm:ss A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -184,7 +184,7 @@ export class DateUtils {
       return (moment(local).format('MMM DD, YYYY, hh:mm:ss A'));
 
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -197,7 +197,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'MMM DD, YYYY, hh:mm:ss A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -220,7 +220,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'YYYY');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -232,7 +232,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'MMM');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -244,7 +244,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'DD');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -256,7 +256,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'MMM-YY');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -268,7 +268,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'MMM-YYYY');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -280,7 +280,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'DD-MMM');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -293,7 +293,7 @@ export class DateUtils {
         const utcDate = addMinutes(localDate, new Date().getTimezoneOffset());
         return format(utcDate, 'HH:mm:ss');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -306,7 +306,7 @@ export class DateUtils {
         const utcDate = addMinutes(localDate, new Date().getTimezoneOffset());
         return format(utcDate, 'hh:mm:ss A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -319,7 +319,7 @@ export class DateUtils {
         const utcDate = addMinutes(localDate, new Date().getTimezoneOffset());
         return format(utcDate, 'hh:mm A');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -332,7 +332,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'hh:mm:a');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -348,7 +348,7 @@ export class DateUtils {
         const localDateTime = addMinutes(utcTimestamp, -(new Date().getTimezoneOffset()));
         return localDateTime.getTime();
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return 0;
@@ -360,7 +360,7 @@ export class DateUtils {
         const localDate = Date.parse(date);
         return format(localDate, 'YYYY-MM-DD');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -376,7 +376,7 @@ export class DateUtils {
           return format(localDate, 'DD-MMM-YYYY hh:mm:a');
         }
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -392,7 +392,7 @@ export class DateUtils {
     today.setSeconds(0);
     today.setDate(1);
     today.setHours(0);
-    // console.log(today);
+    // // console.log(today);
     // const day = today.getDay(),
     //   diff = today.getDate() - day + (day === 0 ? -6 : 0);
     return new Date(today);
@@ -403,7 +403,7 @@ export class DateUtils {
     today.setMinutes(23);
     today.setSeconds(0);
     today.setHours(0);
-    // console.log(today);
+    // // console.log(today);
     // const day = today.getDay(),
     //   diff = today.getDate() - day + (day === 0 ? -6 : 0);
     return new Date(today);
@@ -455,7 +455,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, (new Date().getTimezoneOffset()));
         return format(localDate, 'YYYY-MM-DD HH:mm:ss');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -469,7 +469,7 @@ export class DateUtils {
         const localDate = addMinutes(utcDate, (new Date().getTimezoneOffset()));
         return format(localDate, 'YYYY-MM-DD HH:mm:ss');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -482,7 +482,7 @@ export class DateUtils {
         // const localDate = addMinutes(utcDate, (new Date().getTimezoneOffset()));
         return format(utcDate, 'YYYY-MM-DD HH:mm:ss');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -496,7 +496,7 @@ export class DateUtils {
         const resultDate = addMinutes(utcDate, new Date().getTimezoneOffset());
         return format(resultDate, 'YYYY-MM-DD HH:mm:ss');
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     }
     return '';
@@ -541,7 +541,7 @@ export class DateUtils {
       let b = new Date(date2);
       const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
       const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-      // console.log(utc1, utc2, utc1 - utc2);
+      // // console.log(utc1, utc2, utc1 - utc2);
       let timeDiff = Math.floor((utc1 - utc2) / _MS_PER_YEAR);
       return timeDiff;
     }

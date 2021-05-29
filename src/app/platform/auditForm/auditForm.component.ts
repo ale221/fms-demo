@@ -69,8 +69,8 @@ export class AuditFormComponent implements OnInit {
   ngOnInit(): void {
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
 
     this.loggedInUser = this.authService.getUser();
@@ -96,7 +96,7 @@ export class AuditFormComponent implements OnInit {
       this.filtersUser = { limit: 10, offset: 0, order_by: '', order: '', search: '', status: '' };
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+        // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
         this.filtersUser.search = this.searchForm.get('search').value;
         this.generateReport();
       }
@@ -111,17 +111,17 @@ export class AuditFormComponent implements OnInit {
 
   getDropDOwnData() {
     this.userService.getDropDownData().subscribe((data: any) => {
-      console.log("getDropDownData()- ", data);
+      // console.log("getDropDownData()- ", data);
 
       if (data.status === HttpStatusCodeEnum.Success) {
         this.getCategories = data.data['category'];
         this.getTypes = data.data['type'];
 
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
-      console.log("this.getCategories= ", this.getCategories);
-      console.log("this.getTypes= ", this.getTypes);
+      // console.log("this.getCategories= ", this.getCategories);
+      // console.log("this.getTypes= ", this.getTypes);
     });
   }
 
@@ -132,7 +132,7 @@ export class AuditFormComponent implements OnInit {
     //
     this.statusForExport = false;
     this.userService.sendDataForExportAudit(params).subscribe((data: any) => {
-      console.log("sendDataForExportAudit()- ", data);
+      // console.log("sendDataForExportAudit()- ", data);
 
       if (data.status === HttpStatusCodeEnum.Success) {
         this.users = data.data['data'];
@@ -147,7 +147,7 @@ export class AuditFormComponent implements OnInit {
         this.showExportFile = true;
       }
       else if (data.error == true) {
-        console.log("error");
+        // console.log("error");
         this.users.pagination = 0;
         this.totalUserLength = 0;
         this.users = [];
@@ -156,7 +156,7 @@ export class AuditFormComponent implements OnInit {
 
       }
       else {
-        console.log(data.message);
+        // console.log(data.message);
       }
 
     });
@@ -164,12 +164,12 @@ export class AuditFormComponent implements OnInit {
 
   onUserPagination(event) {
     this.filtersUser.offset = (event.pageIndex * event.pageSize);
-    console.log(this.filtersUser);
+    // console.log(this.filtersUser);
     this.generateReportPagination();
     // sorry last hour work
   }
   searchStatusDropDownChangeforCategory(value) {
-    console.log("event:: ", value);
+    // console.log("event:: ", value);
     this.selectedCategory = value;
     this.formForFilter.patchValue({
       category: this.selectedCategory
@@ -178,7 +178,7 @@ export class AuditFormComponent implements OnInit {
 
   }
   searchStatusDropDownChangeforType(value) {
-    console.log("event:: ", value);
+    // console.log("event:: ", value);
     this.selectedType = value;
     this.formForFilter.patchValue({
       type: this.selectedType
@@ -190,7 +190,7 @@ export class AuditFormComponent implements OnInit {
     //
     this.statusForExport = false;
     this.userService.sendDataForExportAudit(params).subscribe((data: any) => {
-      console.log("sendDataForExportAudit()- ", data);
+      // console.log("sendDataForExportAudit()- ", data);
 
       if (data.status === HttpStatusCodeEnum.Success) {
         this.users = data.data['data'];
@@ -202,7 +202,7 @@ export class AuditFormComponent implements OnInit {
         this.showExportFile = true;
       }
       else if (data.error == true) {
-        console.log("error");
+        // console.log("error");
         this.users.pagination = 0;
         this.totalUserLength = 0;
         this.users = [];
@@ -210,7 +210,7 @@ export class AuditFormComponent implements OnInit {
         this.showExportFile = false;
       }
       else {
-        console.log(data.message);
+        // console.log(data.message);
       }
 
     });
@@ -222,7 +222,7 @@ export class AuditFormComponent implements OnInit {
     this.statusForExport = false;
     this.userPaginator.firstPage();
     this.userService.sendDataForExportAudit(params).subscribe((data: any) => {
-      console.log("sendDataForExportAudit()- ", data);
+      // console.log("sendDataForExportAudit()- ", data);
 
       if (data.status === HttpStatusCodeEnum.Success) {
         this.users = data.data['data'];
@@ -234,7 +234,7 @@ export class AuditFormComponent implements OnInit {
         this.showExportFile = true;
       }
       else if (data.error == true) {
-        console.log("error");
+        // console.log("error");
         this.users.pagination = 0;
         this.totalUserLength = 0;
         this.users = [];
@@ -242,7 +242,7 @@ export class AuditFormComponent implements OnInit {
         this.showExportFile = false;
       }
       else {
-        console.log(data.message);
+        // console.log(data.message);
       }
 
     });
@@ -250,7 +250,7 @@ export class AuditFormComponent implements OnInit {
 
   downloadXLS(download) {
     this.userService.downloadXLSAuditForm(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -260,7 +260,7 @@ export class AuditFormComponent implements OnInit {
 
   downloadPDF(download1) {
     this.userService.downloadPDFAuditForm(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

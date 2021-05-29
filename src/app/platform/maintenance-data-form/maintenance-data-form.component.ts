@@ -65,7 +65,7 @@ export class MaintenanceDataFormComponent implements OnInit {
     // costControl.valueChanges
     //   .subscribe(valueOfCost => {
     //     if (!isNullOrUndefined(valueOfCost)) {
-    //       console.log('valueOfCost', valueOfCost.toString().indexOf('e') > -1);
+    //       // console.log('valueOfCost', valueOfCost.toString().indexOf('e') > -1);
     //     }
     //
     //   });
@@ -92,7 +92,7 @@ export class MaintenanceDataFormComponent implements OnInit {
       formValue['driver'] = this.maintenance['driver'];
       formValue['maintenance'] = this.maintenance['id'];
       formValue['action'] = MaintenanceStatusEnum.ADDITION_OF_COST;
-      console.log(formValue);
+      // console.log(formValue);
       if (isNullOrUndefined(id)) {
         this.postMaintenance(formValue);
       }
@@ -107,11 +107,11 @@ export class MaintenanceDataFormComponent implements OnInit {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any[]>): void {
-            console.log('maintenance status', apiResponse);
+            // console.log('maintenance status', apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.itemListCostType = apiResponse.response['option_values'].map(
                 item => new DropDownItem(item['id'], item['label'])
@@ -123,7 +123,7 @@ export class MaintenanceDataFormComponent implements OnInit {
   }
 
   private postMaintenance(formValue): void {
-    console.log('posting', formValue);
+    // console.log('posting', formValue);
     this.maintenanceService.postMaintenanceData(formValue)
       .subscribe(new class extends HttpController <LoginApiResponse<any>> {
           onComplete(): void {
@@ -133,7 +133,7 @@ export class MaintenanceDataFormComponent implements OnInit {
           onError(errorMessage: string, err: any) {
             // do
             this.context.swalService.getErrorSwal(errorMessage);
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {

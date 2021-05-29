@@ -46,12 +46,12 @@ export class LocationDropdownComponent implements OnInit, AfterViewInit, OnChang
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
             this.context.loader_flag = false;
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {
-            console.log('locations', apiResponse);
+            // console.log('locations', apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               if (apiResponse.response !== undefined) {
                 this.context.location_list = apiResponse.response.map(

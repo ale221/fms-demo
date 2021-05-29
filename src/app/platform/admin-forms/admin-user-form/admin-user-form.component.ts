@@ -367,7 +367,7 @@ export class AdminUserFormComponent implements OnInit {
   converToFormdata(data) {
     var form_data = new FormData();
     for (var key in data) {
-      // console.log(key,data[key]);
+      // // console.log(key,data[key]);
       form_data.append(key, data[key]);
     }
     return form_data;
@@ -386,12 +386,12 @@ export class AdminUserFormComponent implements OnInit {
     if (!isNullOrUndefined(this.selectedClient)) {
       value['associated_client'] = this.selectedClient;
     }
-    // console.log(this.f.password.errors,this.f.password.errors.pattern)
+    // // console.log(this.f.password.errors,this.f.password.errors.pattern)
     if (this.f.password.errors || this.userForm.get('first_name').getError('required') || this.userForm.get('first_name').hasError('whitespace') || this.userForm.get('last_name').hasError('whitespace')) {
       this.addUser = true;
-      // console.log(value['first_name'].errors, this.f.password.errors)
+      // // console.log(value['first_name'].errors, this.f.password.errors)
       // this.swalService.getErrorSwal("Please provide correct pattern");
-      // console.log("Form is invalid[in else condition]", this.errorMessages);
+      // // console.log("Form is invalid[in else condition]", this.errorMessages);
       return;
     }
 
@@ -582,10 +582,10 @@ export class AdminUserFormComponent implements OnInit {
 
     // let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}`;
     let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}&status=${filters.status}`;
-    // console.log("params for getUserList()= ", params);
+    // // console.log("params for getUserList()= ", params);
 
     this.userService.getUsers(params).subscribe((data: any) => {
-      // console.log("getUsers()- ", data);
+      // // console.log("getUsers()- ", data);
       this.showIndeterminateProgress = false;
       let allUsers = [];
       if (data.status === HttpStatusCodeEnum.Success) {
@@ -605,9 +605,9 @@ export class AdminUserFormComponent implements OnInit {
         //   this.userPaginator.firstPage();
         // }
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
-      // console.log("this.users= ", this.users);
+      // // console.log("this.users= ", this.users);
     });
   }
 
@@ -780,7 +780,7 @@ export class AdminUserFormComponent implements OnInit {
     // API call
     // if (this.rejectedUsersList.length > 0) {
     //   this.userService.downloadRejectedUserList(this.rejectedUsersList).subscribe((data: any) => {
-    //     console.log("downloadRejectedUserList() response= ", data);
+    //     // console.log("downloadRejectedUserList() response= ", data);
     //     window.open(data,'_blank')
     //   })
     // }

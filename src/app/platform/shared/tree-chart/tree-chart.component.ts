@@ -32,7 +32,7 @@ export class TreeChartComponent implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId, private zone: NgZone) { }
 
   ngOnInit(): void {
-    // console.log(this.chartFilter,this.selectedGraphFilter);
+    // // console.log(this.chartFilter,this.selectedGraphFilter);
     this.selectedGraphFilter = {
       id: this.graphId,
       type: this.graphType,
@@ -70,7 +70,7 @@ export class TreeChartComponent implements OnInit {
       }
     }
 
-    console.log("DRIVER VIOLATION GRAPH DATA== ", this.data);
+    // console.log("DRIVER VIOLATION GRAPH DATA== ", this.data);
     this.generateChart(this.data);
   }
 

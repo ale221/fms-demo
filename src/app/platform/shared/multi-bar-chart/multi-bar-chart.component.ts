@@ -31,7 +31,7 @@ export class MultiBarChartComponent implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId, private zone: NgZone) { }
 
   ngOnInit() {
-    // console.log("chartFilter ==== ", this.chartFilter);
+    // // console.log("chartFilter ==== ", this.chartFilter);
     // this.generateGraphData();
     this.selectedGraphFilter = {
       id: this.graphId,
@@ -101,14 +101,14 @@ export class MultiBarChartComponent implements OnInit {
 
   ngOnChanges() {
     // this.generateGraphData();
-    // console.log(this.chartOptions[0].Customer);
+    // // console.log(this.chartOptions[0].Customer);
     // this.chartOptions[0].Fleet.length=9;
-    // console.log(this.chartOptions);
+    // // console.log(this.chartOptions);
     this.finalObj = [];
     for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
       this.finalObj.push({ "name": this.chartOptions.categories[x], "value": this.chartOptions.values[x] });
     }
-    // console.log("this.finalObj== ", this.finalObj);
+    // // console.log("this.finalObj== ", this.finalObj);
     this.generateChart(this.finalObj);
   }
 

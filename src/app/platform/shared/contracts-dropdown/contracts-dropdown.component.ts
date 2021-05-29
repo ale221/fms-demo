@@ -36,13 +36,13 @@ export class ContractsDropdownComponent implements OnInit, OnChanges, AfterViewI
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    console.log(changes['client_id']['currentValue']);
+    // console.log(changes);
+    // console.log(changes['client_id']['currentValue']);
     if ('client_id' in changes) {
       this.appLoader.visibility = true;
       this.getContracts(changes['client_id']['currentValue']);
     } else {
-      console.log('here');
+      // console.log('here');
       this.contract_list = [];
       this.selectedValue = [];
       this.selected.emit([]);
@@ -73,11 +73,11 @@ export class ContractsDropdownComponent implements OnInit, OnChanges, AfterViewI
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {
-            console.log(apiResponse);
+            // console.log(apiResponse);
 
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.contract_list = apiResponse.response.map(
@@ -85,7 +85,7 @@ export class ContractsDropdownComponent implements OnInit, OnChanges, AfterViewI
               );
 
             } else {
-              console.log(apiResponse.message);
+              // console.log(apiResponse.message);
             }
           }
         }(this.appLoader)

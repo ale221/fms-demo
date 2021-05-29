@@ -288,11 +288,11 @@ export class DriversDashboardComponent implements OnInit {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner", this.breadcrumbInner);
+        // console.log("this.breadcrumbInner", this.breadcrumbInner);
       }
     })
 
-    console.log("this.breadcrumbInner", this.breadcrumbInner);
+    // console.log("this.breadcrumbInner", this.breadcrumbInner);
     if (this.breadcrumbInner[0] == 'admin/config') {
       setTimeout(() => {
         this.editpop.nativeElement.click();
@@ -301,16 +301,16 @@ export class DriversDashboardComponent implements OnInit {
 
     var d = new Date();
 
-    console.log("d", d);
-    console.log("aaaaaaaaaaaaaa", (d.getFullYear() - 18));
+    // console.log("d", d);
+    // console.log("aaaaaaaaaaaaaa", (d.getFullYear() - 18));
     this.yearsBeforeNow = d.getFullYear() - 18;
     var month = d.getMonth();
     var date = d.getDate();
-    console.log("moth", month);
+    // console.log("moth", month);
     this.minDateForBirth = new Date(this.yearsBeforeNow, month, date);
-    console.log("this.minDateForBirth", this.minDateForBirth);
+    // console.log("this.minDateForBirth", this.minDateForBirth);
     this.defaultDate = new Date(1950, 1, 1);
-    console.log("goooooddddd", this.defaultDate)
+    // console.log("goooooddddd", this.defaultDate)
     // this.driverForm.get('dob').setValue(new Date(this.yearsBeforeNow));
 
     this.statusList.forEach((element: any) => {
@@ -369,7 +369,7 @@ export class DriversDashboardComponent implements OnInit {
 
     this.formService.getOptionsforDropDown('dropdown_data', { option_key: 'gender' })
       .subscribe((data: any) => {
-        console.log("getOptionsforDropDown() response=== ", data.response['option_values']);
+        // console.log("getOptionsforDropDown() response=== ", data.response['option_values']);
 
         if (data.status === HttpStatusCodeEnum.Success) {
           // this.itemListGenders = data.response['option_values'].map(function (obj) {
@@ -381,18 +381,18 @@ export class DriversDashboardComponent implements OnInit {
         } else {
           this.swalService.getErrorSwal(data.message);
         }
-        console.log("itemListGenders (from ngOninIt)", this.itemListGenders);
+        // console.log("itemListGenders (from ngOninIt)", this.itemListGenders);
       })
 
 
     this.formService.getOptionsforDropDown('dropdown_data', { option_key: 'maritalstatus' })
       .subscribe((data: any) => {
-        console.log("getOptionsforDropDown() response- ", data)
+        // console.log("getOptionsforDropDown() response- ", data)
         if (data.status === HttpStatusCodeEnum.Success) {
           this.itemListMaritalStatus = data.response['option_values'].map(
             item => ({ value: item['id'], label: item['label'] })
           );
-          console.log(this.itemListMaritalStatus)
+          // console.log(this.itemListMaritalStatus)
         } else {
           this.swalService.getErrorSwal(data.message);
         }
@@ -611,7 +611,7 @@ export class DriversDashboardComponent implements OnInit {
 
   }
   getGroupListingType(filters) {
-    console.log(filters);
+    // console.log(filters);
     this.loadingFilter = true;
     this.mapLoader = {
       visibility: this.loadingFilter,
@@ -622,7 +622,7 @@ export class DriversDashboardComponent implements OnInit {
       filters.search = '';
     }
     let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search_key}`;
-    console.log("params== ", params);
+    // console.log("params== ", params);
     this.entityService.getFeetType(params).subscribe(apiResponse => {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
         this.loadingFilter = false;
@@ -630,12 +630,12 @@ export class DriversDashboardComponent implements OnInit {
           visibility: this.loadingFilter,
           dataError: false
         }
-        console.log(apiResponse['data'].data);
+        // console.log(apiResponse['data'].data);
         this.driverGroupListing = apiResponse['data'].data;
         this.totalFuelReportingLength = apiResponse['data'].count;
         this.driverGroupListing.sort = this.sort;
         this.driverGroupListing.paginator = this.paginator;
-        console.log(this.driverGroupListing);
+        // console.log(this.driverGroupListing);
       }
     })
   }
@@ -649,10 +649,10 @@ export class DriversDashboardComponent implements OnInit {
     this.getGroupListingType(this.filters);
   }
   getGroupList() {
-    console.log("coming in getDriversGroup");
+    // console.log("coming in getDriversGroup");
     this.driverService.getDriverGroup().subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
-        console.log(data.data);
+        // console.log(data.data);
         this.driverGroup = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
@@ -660,9 +660,9 @@ export class DriversDashboardComponent implements OnInit {
         this.driverLists = [];
         this.typeList = [];
         //  this.reportTypeTable=0;
-        console.log("coming in drivers", this.driverGroup);
+        // console.log("coming in drivers", this.driverGroup);
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -671,7 +671,7 @@ export class DriversDashboardComponent implements OnInit {
     this.filters.driver_group = this.searchForm.get('selectGroup').value;
     this.searchForm.get('selectedDriver').reset();
     this.filters.driver_id = '';
-    console.log(this.filters);
+    // console.log(this.filters);
     this.downloadableLink = 'search=' + this.filters.search_key + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
     this.downloadableLink1 = 'search=' + this.filters.search_key + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
     this.getDriversListing(this.filters);
@@ -679,7 +679,7 @@ export class DriversDashboardComponent implements OnInit {
   }
 
   selectDriverDropDownChange($event) {
-    console.log(this.searchForm.get('selectedDriver').value)
+    // console.log(this.searchForm.get('selectedDriver').value)
     this.filters.driver_group = this.searchForm.get('selectGroup').value;
     this.filters.driver_id = this.searchForm.get('selectedDriver').value;
     this.downloadableLink = 'search=' + this.filters.search_key + '&driver_group=' + this.filters.driver_group + '&driver_id=' + this.filters.driver_id;
@@ -697,7 +697,7 @@ export class DriversDashboardComponent implements OnInit {
   }
 
   getDrivers(driverGroupID) {
-    console.log("coming in drivers");
+    // console.log("coming in drivers");
     this.driverService.getDriver(driverGroupID).subscribe((data: any) => {
 
       if (data.status === HttpStatusCodeEnum.Success) {
@@ -706,13 +706,13 @@ export class DriversDashboardComponent implements OnInit {
         );
         this.typeList = [];
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
 
   getDriversDropdown(filters) {
-    console.log("coming in driverdropdown", filters);
+    // console.log("coming in driverdropdown", filters);
     this.loadingFilter = true;
     this.mapLoader = {
       visibility: this.loadingFilter,
@@ -744,9 +744,9 @@ export class DriversDashboardComponent implements OnInit {
     if (filters.search_key === undefined || filters.search_key === null) {
       filters.search = '';
     }
-    // console.log(filters,"fillllllllllllllllllllllll");
+    // // console.log(filters,"fillllllllllllllllllllllll");
     let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search_key}&driver_id=${filters.driver_id}&driver_group=${filters.driver_group}`;
-    console.log("params== ", params);
+    // console.log("params== ", params);
     this.formService.getEntitiesTool(params).subscribe(apiResponse => {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
         this.loadingFilter = false;
@@ -758,7 +758,7 @@ export class DriversDashboardComponent implements OnInit {
         this.totalLength = apiResponse['data'].count;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        console.log(this.dataSource);
+        // console.log(this.dataSource);
       }
     })
   }
@@ -782,7 +782,7 @@ export class DriversDashboardComponent implements OnInit {
     this.getDriversListing(this.filters);
     this.getGroupListingType(this.filters)
     // this.searchForm.get("search").setValue(this.searchText);
-    //     console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+    //     // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
     this.filtersUser.search = "";
     this.filtersUser = { type_id: 213, limit: 10, offset: 0, order_by: '', order: '', search: '', status: '' };
     this.getUsers(this.filtersUser);
@@ -937,7 +937,7 @@ export class DriversDashboardComponent implements OnInit {
         this.subscription = newMessage.subscribe((response: string) => {
           const signalRresponse = JSON.parse(response) as SignalRresponse;
 
-          console.log('signalResponse', signalRresponse);
+          // console.log('signalResponse', signalRresponse);
           if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
             return;
           }
@@ -1057,10 +1057,10 @@ export class DriversDashboardComponent implements OnInit {
     this.selectedGroupID = 0;
     // this.getDrivers(this.filterDrivers)
     this.closeForm.nativeElement.click();
-    console.log("==============>", this.driverForm);
+    // console.log("==============>", this.driverForm);
     // this.driverForm.get('email').value.setValue('');
     // this.driverForm.get('password').value.setValue('');
-    console.log(this.driverForm.get('email').value, this.driverForm.get('password').value)
+    // console.log(this.driverForm.get('email').value, this.driverForm.get('password').value)
     this.driverForm.get('email').setValue('');
     this.driverForm.get('password').setValue('');
     this.inactiveRecord = false;
@@ -1078,7 +1078,7 @@ export class DriversDashboardComponent implements OnInit {
     this.show_password = false;
     this.selectedCheckbox = false;
     this.submitted = false;
-    console.log("==============>", this.driverForm);
+    // console.log("==============>", this.driverForm);
   }
   clearForm2() {
     this.btnText = "Save";
@@ -1089,7 +1089,7 @@ export class DriversDashboardComponent implements OnInit {
   }
   getListGroupDriver() {
     this.driverService.getDriverForGroupAdd().subscribe(res => {
-      console.log(res);
+      // console.log(res);
       this.groupDriverList = res['data'].map(
         item => new DropDownItem(item['id'], item['name'])
       );
@@ -1098,17 +1098,17 @@ export class DriversDashboardComponent implements OnInit {
   getTrucks(value) {
     this.formService.getOptions('unassigned_trucks', {})
       .subscribe((data: any) => {
-        console.log('getOptions() response* ', data);
+        // console.log('getOptions() response* ', data);
 
         if (data.status === HttpStatusCodeEnum.Success) {
           this.itemListTrucks = data.response.map(
             item => new PrimengDropdownItem(item['id'], item['label'])
           );
           if (!(value === null)) {
-            console.log(value);
+            // console.log(value);
             // this.context.itemListTrucks.push(new PrimengDropdownItem(value['id'], value['itemName']));
             this.itemListTrucks.unshift(value);
-            console.log('trucks', this.itemListTrucks);
+            // console.log('trucks', this.itemListTrucks);
           }
 
         } else {
@@ -1157,7 +1157,7 @@ export class DriversDashboardComponent implements OnInit {
     this.poly = [];
     this.markers = {};
     this.bounds1 = new google.maps.LatLngBounds();
-    // console.log('markers', this.markers);
+    // // console.log('markers', this.markers);
   }
   onSearch(formValue) {
     if (this.add_btn === 0) {
@@ -1190,7 +1190,7 @@ export class DriversDashboardComponent implements OnInit {
 
     }
     else if (this.add_btn === 1) {
-      console.log(this.searchForm.get('search').value);
+      // console.log(this.searchForm.get('search').value);
       this.filters.search_key = this.searchForm.get('search').value
       this.getGroupListingType(this.filters);
       // this.downloadableLink = environment.baseUrl + '/iof/excletab/?search=' + this.filters.search_key + '&customer_id=' + this.customerID;
@@ -1205,9 +1205,9 @@ export class DriversDashboardComponent implements OnInit {
   // async deleteDriv(user)
   // {
   //   const shouldDelete = await this.swalService.getDeleteSwal(user, 'What do you want to do with ' + user.email + ' ?');
-  //   console.log('shouldDelete', shouldDelete);
+  //   // console.log('shouldDelete', shouldDelete);
   //   if (shouldDelete) {
-  //     console.log("coming in should del");
+  //     // console.log("coming in should del");
   //     const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : '  ';
   //     // this.deleteUser(user.id, shouldDelete, 'Record has been' + message +
   //     //   'successfully');
@@ -1224,7 +1224,7 @@ export class DriversDashboardComponent implements OnInit {
   //         this.swalService.getSuccessSwal(data.message);
   //       } else {
   //         this.swalService.getErrorSwal(data.message);
-  //         console.log(data.message);
+  //         // console.log(data.message);
   //       }
   //     }
   //     );
@@ -1232,22 +1232,22 @@ export class DriversDashboardComponent implements OnInit {
 
   async showSwal(user, tab) {
     this.selectedUserId = user;
-    console.log('user', user);
+    // console.log('user', user);
 
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
     const shouldDelete = await this.swalService.getDeleteSwal(user, 'What do you want to do with ' + user.email + ' ?');
-    console.log('shouldDelete', shouldDelete);
+    // console.log('shouldDelete', shouldDelete);
     if (tab == 'driverList') {
-      console.log("coming in check");
+      // console.log("coming in check");
       if (shouldDelete) {
-        console.log("coming in should del");
+        // console.log("coming in should del");
         const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
         this.deleteUser(user.id, shouldDelete, 'Record has been' + message +
           'successfully');
       }
     } else {
       if (shouldDelete) {
-        console.log("coming in should del2");
+        // console.log("coming in should del2");
         const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
         this.deleteDriverGroup(user.id, shouldDelete, 'Record has been' + message +
           'successfully');
@@ -1262,7 +1262,7 @@ export class DriversDashboardComponent implements OnInit {
     params['id'] = (userId);
     params['status'] = actionType;
 
-    console.log('params', params);
+    // console.log('params', params);
     this.formService.deleteDataCheck(params)
       .subscribe((data: any) => {
 
@@ -1271,7 +1271,7 @@ export class DriversDashboardComponent implements OnInit {
           this.getDriversListing(this.filters);
           this.getGroupListingType(this.filters);
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           this.swalService.getErrorSwal(data.message)
         }
       })
@@ -1281,7 +1281,7 @@ export class DriversDashboardComponent implements OnInit {
     params['id'] = (userId);
     params['status'] = actionType;
 
-    console.log('params', params);
+    // console.log('params', params);
     this.entityService.deleteGroup(params)
       .subscribe((data: any) => {
 
@@ -1291,7 +1291,7 @@ export class DriversDashboardComponent implements OnInit {
           this.getGroupListingType(this.filters);
           this.getGroupList();
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           this.swalService.getErrorSwal(data.message)
         }
       })
@@ -1299,7 +1299,7 @@ export class DriversDashboardComponent implements OnInit {
 
   openEditModal1(group) {
     this.finallist = group;
-    console.log(group)
+    // console.log(group)
     this.selectedGroupID = group.id;
     this.updateEdit2 = false;
     this.formTitle = "Update Driver Group";
@@ -1307,14 +1307,14 @@ export class DriversDashboardComponent implements OnInit {
 
     let drivers_group = [];
 
-    console.log(group.associated_group_driver)
+    // console.log(group.associated_group_driver)
 
     if (group.associated_group_driver && group.associated_group_driver.length > 0) {
       group.associated_group_driver.forEach(element => {
         drivers_group.push(element);
       });
     }
-    console.log(group.other_group_driver);
+    // console.log(group.other_group_driver);
 
 
     if (group.other_group_driver && group.other_group_driver.length > 0) {
@@ -1352,12 +1352,12 @@ export class DriversDashboardComponent implements OnInit {
 
     for (let i = 0; i < this.statusList.length; i++) {
       if (driver.status == this.statusList[i].id) {
-        console.log("this.statusList[i]== ", this.statusList[i]);
+        // console.log("this.statusList[i]== ", this.statusList[i]);
         driver.status = this.statusList[i].id;
         this.selectedStatus = { value: this.statusList[i].id, label: this.statusList[i].name, id: this.statusList[i].id, name: this.statusList[i].name }
       }
     }
-    console.log("driver data- ", driver)
+    // console.log("driver data- ", driver)
     this.selectedUserId = driver.id;
     this.passwordVisible = false;
     this.show_password = false;
@@ -1387,10 +1387,10 @@ export class DriversDashboardComponent implements OnInit {
         break;
       }
     }
-    console.log("found=== ", found);
+    // console.log("found=== ", found);
 
     // this.selectedMaritalStatus = { value: driver['marital_status'], label: driver['marital_status_label'] };
-    // console.log("this.selectedMaritalStatus= ", this.selectedMaritalStatus);
+    // // console.log("this.selectedMaritalStatus= ", this.selectedMaritalStatus);
 
     // this.inactiveRecord = (driver.status === this.EntityStatusEnum.Inactive);
 
@@ -1442,7 +1442,7 @@ export class DriversDashboardComponent implements OnInit {
   }
 
   togglePassword(value) {
-    console.log(value);
+    // console.log(value);
     this.show_password = value;
     // this.hidePassword=false;
   }
@@ -1456,39 +1456,39 @@ export class DriversDashboardComponent implements OnInit {
   converToFormdata(data) {
     var form_data = new FormData();
     for (var key in data) {
-      // console.log(key,data[key]);
+      // // console.log(key,data[key]);
       form_data.append(key, data[key]);
     }
     return form_data;
   }
   onSubmitDriver(formValue) {
     this.submitted = true;
-    // console.log(formValue);
+    // // console.log(formValue);
     // if(formValue['driver_group_id'] === null || formValue['driver_group_id'] === undefined)
     // {
     //   formValue['driver_group_id']=1;
     // }
     if (this.validate2()) {
       if (formValue.countNumber != null) {
-        console.log("patch");
+        // console.log("patch");
         this.patchGroup(formValue);
         // formValue['id']=id;entityService
         // this.patchDriver(formValue);
         // this.driverForm.reset();
       } else {
-        console.log(formValue);
+        // console.log(formValue);
         this.postGroup(formValue);
         // this.postDriverForm(formValue);
       }
     }
     else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
   // deleteGroup(id) {
-  //   console.log(id);
+  //   // console.log(id);
   //   this.entityService.deleteGroup(id).subscribe(res => {
-  //     console.log('postData() response=', res);
+  //     // console.log('postData() response=', res);
   //     if (res.status === HttpStatusCodeEnum.Success) {
   //       this.swalService.getSuccessSwal(res.message);
   //       this.getGroupListingType(this.filters);
@@ -1498,7 +1498,7 @@ export class DriversDashboardComponent implements OnInit {
 
   //       // this.getDrivers(this.filterDrivers);
   //     } else {
-  //       console.log(res.message);
+  //       // console.log(res.message);
   //       this.swalService.getErrorSwal(res.message);
   //     }
   //   })
@@ -1512,7 +1512,7 @@ export class DriversDashboardComponent implements OnInit {
       });
       params.driver_group_ids = selectedIds;
       this.entityService.updateDriverGroup(this.finallist.id, params).subscribe((data: any) => {
-        console.log('postData() response=', data);
+        // console.log('postData() response=', data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.swalService.getSuccessSwal(data.message);
           this.getDriversListing(this.filters);
@@ -1524,7 +1524,7 @@ export class DriversDashboardComponent implements OnInit {
 
           // this.getDrivers(this.filterDrivers);
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           this.swalService.getErrorSwal(data.message);
         }
       })
@@ -1536,7 +1536,7 @@ export class DriversDashboardComponent implements OnInit {
     for (let x = 0; x < param.selectDriver.length; x++) {
       array.push(param.selectDriver[x].id);
     }
-    console.log(array);
+    // console.log(array);
     // let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}&status=${filters.status}`;
     // let params =`name=${param.name}&driver_list=${array}`;
     let params =
@@ -1546,11 +1546,11 @@ export class DriversDashboardComponent implements OnInit {
     params['name'] = param.name;
     params['driver_list'] = array;
     // param['photo']=null;
-    console.log(params, "21");
+    // console.log(params, "21");
 
     this.entityService.setDriverGroup(params)
       .subscribe((data: any) => {
-        console.log('postData() response=', data);
+        // console.log('postData() response=', data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.swalService.getSuccessSwal(data.message);
           this.getDriversListing(this.filters);
@@ -1560,7 +1560,7 @@ export class DriversDashboardComponent implements OnInit {
           this.closeForm2.nativeElement.click();
           this.closeForm2.closeModal();
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           this.swalService.getErrorSwal(data.message);
         }
       })
@@ -1600,7 +1600,7 @@ export class DriversDashboardComponent implements OnInit {
       }
 
       formValue['email'] = formValue.email.toLowerCase();
-      console.log('formValue', formValue);
+      // console.log('formValue', formValue);
 
       // this.disableSubmitButton();
       if (id) {
@@ -1611,7 +1611,7 @@ export class DriversDashboardComponent implements OnInit {
         this.postDriverForm(formValue);
       }
     } else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
   postDriverForm(param) {
@@ -1622,7 +1622,7 @@ export class DriversDashboardComponent implements OnInit {
 
     this.formService.postData(param)
       .subscribe((data: any) => {
-        console.log('postData() response=', data);
+        // console.log('postData() response=', data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.submitted = false;
           this.closeForm.nativeElement.click();
@@ -1632,7 +1632,7 @@ export class DriversDashboardComponent implements OnInit {
           this.getListGroupDriver();
           // this.getDrivers(this.filterDrivers);
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           // this.closeForm.nativeElement.click();
           this.swalService.getErrorSwal(data.message);
         }
@@ -1652,7 +1652,7 @@ export class DriversDashboardComponent implements OnInit {
 
     this.formService.patchData(driver)
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.driverForm.reset();
           this.submitted = false;
@@ -1667,7 +1667,7 @@ export class DriversDashboardComponent implements OnInit {
         } else {
           this.swalService.getErrorSwal(data.message);
           // this.closeForm.nativeElement.click();
-          console.log(data.message);
+          // console.log(data.message);
         }
       })
   }
@@ -1676,10 +1676,10 @@ export class DriversDashboardComponent implements OnInit {
 
     // let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}`;
     let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}&status=${filters.status}`;
-    console.log("params for getUserList()= ", params);
+    // console.log("params for getUserList()= ", params);
 
     this.userService.getUsers(params).subscribe((data: any) => {
-      console.log("getUsers()- ", data);
+      // console.log("getUsers()- ", data);
       this.showIndeterminateProgress = false;
 
       if (data.status === HttpStatusCodeEnum.Success) {
@@ -1687,9 +1687,9 @@ export class DriversDashboardComponent implements OnInit {
         this.totalUserLength = data['data'].count;
         this.users.pagination = this.totalUserLength;
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
-      console.log("this.users= ", this.users);
+      // console.log("this.users= ", this.users);
     });
   }
   returndob() {
@@ -1698,7 +1698,7 @@ export class DriversDashboardComponent implements OnInit {
         if (this.date_of_joining) {
           const a: any = (this.dob.valueOf());
           const b: any = (this.date_of_joining.valueOf());
-          console.log(a, b);
+          // console.log(a, b);
           if (a >= b) {
             this.date_of_joining = null;
           }
@@ -1889,7 +1889,7 @@ export class DriversDashboardComponent implements OnInit {
   }
 
   // bulkUploadSubmit(formValue) {
-  //   console.log("inside submit function(formValue)= ", formValue);
+  //   // console.log("inside submit function(formValue)= ", formValue);
   //   const params: FormData = new FormData();
 
   //   if (!isNullOrUndefined(formValue['csvFiles'])) {
@@ -1897,7 +1897,7 @@ export class DriversDashboardComponent implements OnInit {
   //   }
 
   //   // this.userService.uploadUserBulkUpload(params).subscribe((data: any) => {
-  //   //   console.log("uploadBulk() response= ", data);
+  //   //   // console.log("uploadBulk() response= ", data);
 
   //   //   if (data.status === HttpStatusCodeEnum.Success) {
   //   //     this.closeFormBulk.nativeElement.click();
@@ -1906,7 +1906,7 @@ export class DriversDashboardComponent implements OnInit {
   //   //     this.clear();
   //   //     this.bulkUploadForm.reset();
   //   //   } else {
-  //   //     console.log("data.message== ", data.message)
+  //   //     // console.log("data.message== ", data.message)
   //   //     this.swalService.getErrorSwal(data.message['error_message']);
   //   //   }
 
@@ -1934,7 +1934,7 @@ export class DriversDashboardComponent implements OnInit {
       for (let i = 0; i < this.selection.selected.length; i++) {
         this.selectedIDToDelete.push(this.selection.selected[i].id);
       }
-      console.log("this.selectedIDToDelete=== ", this.selectedIDToDelete)
+      // console.log("this.selectedIDToDelete=== ", this.selectedIDToDelete)
     }
   }
 
@@ -1942,9 +1942,9 @@ export class DriversDashboardComponent implements OnInit {
 
     const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this record(s)?');
     // const shouldDelete = await this.swalService.getDeleteSwal(user, 'What do you want to do with this record? ');
-    console.log('shouldDelete', shouldDelete);
+    // console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      console.log("coming in should del");
+      // console.log("coming in should del");
       this.deleteThroughCheckbox()
     }
 
@@ -1964,7 +1964,7 @@ export class DriversDashboardComponent implements OnInit {
 
     if (this.add_btn === 0) {
       this.formService.downloadDriverListingXLS(download).subscribe((apiResponse: any) => {
-        console.log("downloadXLS response== ", apiResponse)
+        // console.log("downloadXLS response== ", apiResponse)
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)
@@ -1972,7 +1972,7 @@ export class DriversDashboardComponent implements OnInit {
       })
     } else {
       this.formService.downloadDriverGroupXLS(download).subscribe((apiResponse: any) => {
-        console.log("downloadXLS response== ", apiResponse)
+        // console.log("downloadXLS response== ", apiResponse)
         const data = apiResponse;
         const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
         const url = window.URL.createObjectURL(blob)

@@ -102,7 +102,7 @@ export class CollectionReportingComponent implements OnDestroy {
       index_b: index_b
     };
 
-    console.log(this.entity);
+    // console.log(this.entity);
 
 
 
@@ -140,13 +140,13 @@ export class CollectionReportingComponent implements OnDestroy {
           onError(errorMessage: string, err: any) {
             // do
             this.context.swalService.getErrorSwal(errorMessage);
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: TestApiResponse<TruckResponse[]>): void {
             results_remaining = apiResponse.remaining;
 
-            console.log('collections', apiResponse);
+            // console.log('collections', apiResponse);
 
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.collections = [...apiResponse.response, ...this.context.collections];

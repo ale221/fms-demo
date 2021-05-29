@@ -52,20 +52,20 @@ export class UtillsService {
     const separator = ',';
     const keys = Object.keys(rows[0]);
     const keyss = this.filterData(csvCoumns);
-    console.log(keys)
+    // console.log(keys)
     const csvData =
       keyss.join(separator) +
       '\n' +
       rows.map(row => {
         return keys.map(k => {
           let cell = row[k] === null || row[k] === undefined ? '' : row[k];
-          // console.log("ashdka",cell);
+          // // console.log("ashdka",cell);
           // cell = cell instanceof Date
           //   ? cell.toLocaleString()
           //   : cell.toString().replace(/"/g, '""');
           // if (cell.search(/("|,|\n)/g) >= 0) {
           //   cell = `"${cell}"`;
-          //   console.log(cell,'akshdlkashld')
+          //   // console.log(cell,'akshdlkashld')
           // }
           return cell;
         }).join(separator);
@@ -96,7 +96,7 @@ export class UtillsService {
     const separator = ',';
     const keys = Object.keys(rows[0]);
     const keyss = this.filterData(csvCoumns);
-    console.log(keys)
+    // console.log(keys)
     const csvData = keyss.join(separator) + '\n' + rows.map(row => {
       return keys.map(k => {
         let cell = row[k] === null || row[k] === undefined ? '' : row[k];

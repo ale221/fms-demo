@@ -42,7 +42,7 @@ export class GlobalSearchBar implements OnInit {
         switchMap(term => this.searchService.getSearch('search_iol', { search: term }))
       )
       .subscribe((result) => {
-        console.log(result.response);
+        // console.log(result.response);
         if (result.response.length) {
           this.result = result.response;
         } else {
@@ -63,7 +63,7 @@ export class GlobalSearchBar implements OnInit {
   onOptionSelected(opt: any) {
     const entity_type = opt.entity_type;
     const client_type = opt.client_type;
-    console.log("entity_type= ", entity_type)
+    // console.log("entity_type= ", entity_type)
     if (entity_type === 'Truck') {
       this.gotoPageWithRouteParams('fleets', opt['id']);
     } else if (entity_type === 'Bin') {

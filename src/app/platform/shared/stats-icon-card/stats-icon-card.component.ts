@@ -33,7 +33,7 @@ export class StatsIconCardComponent implements OnInit {
     if (this.data.footer) {
       this.colMd = Math.round(12 / this.data.footer.length);
       this.colMd = 'col-md-'+ this.colMd;
-      console.log(this.colMd)
+      // console.log(this.colMd)
     }
   }
 

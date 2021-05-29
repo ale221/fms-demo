@@ -165,7 +165,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
     this.add_btn = 0;
-    // console.log("EntityType.FUEL= ", EntityType.FUEL)
+    // // console.log("EntityType.FUEL= ", EntityType.FUEL)
     this.getTrucks(this.filtersFuel);
     this.getDropDownData(null);
 
@@ -180,7 +180,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
       this.searchText = newValue;
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+        // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
 
         if (this.add_btn == 0) {
           this.filtersFuel.search = this.searchForm.get('search').value;
@@ -216,9 +216,9 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
         this.trucks = data['data'].data;
         this.trucks.paginator = this.fuelListPaginator;
         this.totalFuelLength = data['data'].count;
-        // console.log(this.trucks);
+        // // console.log(this.trucks);
       } else {
-        console.log("Failed to getEntitiesFuel")
+        // console.log("Failed to getEntitiesFuel")
       }
 
     })
@@ -237,7 +237,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    // console.log('hashmap', this.hashMap);
+    // // console.log('hashmap', this.hashMap);
   }
   getprogress(area) {
     return this.hashMap[area.id];
@@ -246,36 +246,36 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
   getDropDownData(value) {
     this.formService.getBinsData('get_entity_dropdown', { customer: this.authService.getUser().customer.id, entity: EntityType.TERRITORY })
       .subscribe((data: any) => {
-        // console.log("getBinsData() response-- ", data.response);
+        // // console.log("getBinsData() response-- ", data.response);
 
         if (data.status === HttpStatusCodeEnum.Success) {
           this.territoriesList = data.response.map(
             item => new DropDownItem(item['id'], item['label'])
           );
         } else {
-          console.log(data.message);
+          // console.log(data.message);
         }
 
       })
 
     this.truckService.getCustomerDevicesFuelFilup({ type_id: EntityType.TRUCK }).subscribe((data: any) => {
-      // console.log('getCustomerDevicesFuel()- ', data.response);
+      // // console.log('getCustomerDevicesFuel()- ', data.response);
       if (data.status === HttpStatusCodeEnum.Success) {
         this.customerDevices = data.response;
         if (!(value === null)) {
           this.customerDevices.push(value);
         }
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
-      // console.log("this.customerDevices[]= ", this.customerDevices)
+      // // console.log("this.customerDevices[]= ", this.customerDevices)
     })
 
     this.truckService.getPurchaseTypes({ option_key: 'payment_method' }).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.purchaseTypes = data.response['option_values'];
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
 
@@ -283,7 +283,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.truckTypes = data.response['option_values'];
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
   }
@@ -323,7 +323,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
         this.patchTruck(formValue);
       }
     } else {
-      console.log("FORM is invalid", this.errorMessages);
+      // console.log("FORM is invalid", this.errorMessages);
     }
   }
   validate(): boolean {
@@ -499,7 +499,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
     // params['status'] = actionType;
 
     this.formService.deleteDataFuel(truckId).subscribe((data: any) => {
-      // console.log("deleteDataFuel()-- ", data.response);
+      // // console.log("deleteDataFuel()-- ", data.response);
       if (data.status === HttpStatusCodeEnum.Success) {
         this.swalService.getSuccessSwal("Record deleted successfully");
         this.inputValue = '';
@@ -538,7 +538,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
 
   activeTabFuction(index) {
     this.add_btn = index.index;
-    console.log("this.add_btn== ", this.add_btn);
+    // console.log("this.add_btn== ", this.add_btn);
   }
 
   onSearch(formValue) {
@@ -565,7 +565,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
         this.fuelReporting.paginator = this.fuelReportingPaginator;
         this.totalFuelReportingLength = data['data'].count;
       } else {
-        console.log("Failed to getEntitiesFuel")
+        // console.log("Failed to getEntitiesFuel")
       }
 
     });
@@ -592,7 +592,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
   //           let info = '';
   //           if (data.status === HttpStatusCodeEnum.Success) {
   //             const response = ((data.response[0]['fillups']));
-  //             // console.log(response);
+  //             // // console.log(response);
   //             let fields = [];
   //             if (response && response.length) {
   //               response.forEach(element => {
@@ -644,7 +644,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
 
   downloadXLS(download) {
     this.truckService.downloadXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -654,7 +654,7 @@ export class AdminFuelFormComponent implements OnInit, OnDestroy {
 
   downloadPDF(download1) {
     this.truckService.downloadPDF(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

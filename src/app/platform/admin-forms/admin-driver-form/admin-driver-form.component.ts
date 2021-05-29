@@ -263,7 +263,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         if (this.date_of_joining) {
           const a: any = (this.dob.valueOf());
           const b: any = (this.date_of_joining.valueOf());
-          console.log(a, b);
+          // console.log(a, b);
           if (a >= b) {
             this.date_of_joining = null;
           }
@@ -288,15 +288,15 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
     this.breadcrumbService.getValue().subscribe(res => {
       if (res && res.length) {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner", this.breadcrumbInner);
+        // console.log("this.breadcrumbInner", this.breadcrumbInner);
       }
     })
 
@@ -307,10 +307,10 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
     }
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
-    // console.log("Tool typeID", EntityType.IMEI_DEVICE)
-    // console.log("Driver typeID", EntityType.DRIVER)
-    // console.log("Technian typeID", EntityType.Workshop_Technician)
-    // console.log("Labor typeID", EntityType.LABOUR);
+    // // console.log("Tool typeID", EntityType.IMEI_DEVICE)
+    // // console.log("Driver typeID", EntityType.DRIVER)
+    // // console.log("Technian typeID", EntityType.Workshop_Technician)
+    // // console.log("Labor typeID", EntityType.LABOUR);
 
     this.csvRows = [];
     this.deleteAllButton = false;
@@ -350,7 +350,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
       this.searchText = newValue;
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+        // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
         this.filterDrivers.search = this.searchForm.get('search').value;
         this.getDrivers(this.filterDrivers);
       }
@@ -380,10 +380,10 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
           );
         }
         if (!(value === null)) {
-          console.log(value);
+          // console.log(value);
           // this.context.itemListTrucks.push(new PrimengDropdownItem(value['id'], value['itemName']));
           this.itemListTrucks.unshift(value);
-          console.log('trucks', this.itemListTrucks);
+          // console.log('trucks', this.itemListTrucks);
         }
       } else {
 
@@ -392,7 +392,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
   }
 
   unassignedTruck() {
-    console.log(this.selectedTruck);
+    // console.log(this.selectedTruck);
     const item = this.driverForm.value.truck;
     this.selectedTruck = '';
     // this.itemListTrucks = [...this.itemListTrucks , (new DropDownItem( item.id, item.itemName))];
@@ -404,7 +404,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
     this.drivers = [];
 
     let params = `type_id=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}`;
-    console.log("params== ", params);
+    // console.log("params== ", params);
 
     this.showIndeterminateProgress = true;
     this.formService.getEntitiesTool(params).subscribe((data: any) => {
@@ -429,7 +429,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    // console.log('hashmap' , this.hashMap);
+    // // console.log('hashmap' , this.hashMap);
   }
 
   getprogress(area) {
@@ -531,7 +531,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         this.postDriverForm(formValue);
       }
     } else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
 
@@ -583,7 +583,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
 
 
   postDriverForm(param) {
-    console.log("param=== ", param)
+    // console.log("param=== ", param)
 
     this.formService.postData(param).subscribe((data: any) => {
       this.enableSubmitButton();
@@ -593,7 +593,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         this.swalService.getSuccessSwal(data.message);
         this.getDrivers(this.filterDrivers);
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.swalService.getErrorSwal(data.message);
       }
     })
@@ -726,7 +726,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
 
   onClearSearch() {
     this.searchForm.reset();
-    console.log(this.searchForm.value, this.searchForm.value.search);
+    // console.log(this.searchForm.value, this.searchForm.value.search);
     if (this.searchForm.value.search === null || this.searchForm.value.search === undefined) {
       this.filterDrivers.search = '';
     }
@@ -737,7 +737,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
   }
 
   binEncode(data) {
-    // console.log(data);
+    // // console.log(data);
     var binArray = []
     var datEncode = "";
 
@@ -757,7 +757,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         s = c + s;
       } return s;
     }
-    console.log(binArray);
+    // console.log(binArray);
   }
 
   patchDriver(driver) { //driver: FormData
@@ -776,7 +776,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         this.swalService.getSuccessSwal(data.message);
       } else {
         this.swalService.getErrorSwal(data.message);
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
   }
@@ -821,12 +821,12 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
 
     }, { emitEvent: false })
 
-    console.log("this.driverForm.value== ", this.driverForm.value)
+    // console.log("this.driverForm.value== ", this.driverForm.value)
 
   }
 
   togglePassword(value) {
-    console.log(value);
+    // console.log(value);
     this.show_password = value;
   }
   togglePassword1() {
@@ -864,7 +864,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         this.swalService.getSuccessSwal(data.message);
       } else {
         this.swalService.getErrorSwal(data.message);
-        console.log(data.message);
+        // console.log(data.message);
       }
     }
     );
@@ -880,13 +880,13 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
       }
 
       onError(errorMessage: string, err: any) {
-        console.log(errorMessage);
+        // console.log(errorMessage);
         this.context.swalService.getErrorSwal(errorMessage);
       }
 
       onNext(apiResponse: ApiResponse<any>): void {
         this.context.swalService.getSuccessSwal(message);
-        console.log(type);
+        // console.log(type);
         if (type === EntityType.LABOUR) {
           this.context.selectedLaborRows = [];
         } else if (type === EntityType.DRIVER) {
@@ -992,20 +992,20 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
     }
   }
   bulkUploadSubmit(formValue: Object) {
-    console.log("inside submit function(formValue)= ", formValue);
+    // console.log("inside submit function(formValue)= ", formValue);
     const params: FormData = new FormData();
 
     if (!isNullOrUndefined(formValue['csvFiles'])) {
       params.append('source_file', this.selectedFile);
     }
-    console.log("params== ", params)
+    // console.log("params== ", params)
 
     this.formService.uploadUserBulkUpload(params).subscribe((data: any) => {
-      console.log("uploadBulk() response= ", data);
+      // console.log("uploadBulk() response= ", data);
 
       if (data.status === HttpStatusCodeEnum.Success) {
         this.bulkUploadApiResponse = data.data[0];
-        // console.log("this.bulkUploadApiResponse- ", this.bulkUploadApiResponse);
+        // // console.log("this.bulkUploadApiResponse- ", this.bulkUploadApiResponse);
 
         if (data.data[0].rejected_users.length > 0) {
           this.rejectedUsersList = data.data[0].rejected_users;
@@ -1025,7 +1025,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         }
 
       } else {
-        console.log("data.message== ", data.message)
+        // console.log("data.message== ", data.message)
         this.swalService.getErrorSwal(data.message);
       }
 
@@ -1041,7 +1041,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
           this.selectedIDToDelete.push(this.selection.selected[i].id);
         }
       }
-      console.log("this.selectedIDToDelete=== ", this.selectedIDToDelete)
+      // console.log("this.selectedIDToDelete=== ", this.selectedIDToDelete)
     }
 
     if (this.selectedIDToDelete && this.selectedIDToDelete.length === 0) {
@@ -1059,7 +1059,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
         this.swalService.getSuccessSwal('Record(s) has been deleted successfully');
         this.getDrivers(this.filterDrivers);
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.swalService.getErrorSwal(data.message)
       }
     })
@@ -1081,15 +1081,15 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
   async showSwalBulk() {
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
     const shouldDelete = await this.swalService.getDeleteSwalBulk("Do You Want to delete this record");
-    console.log('shouldDelete', shouldDelete);
+    // console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      console.log("coming in should del");
+      // console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteThroughCheckbox();
     }
   }
   downloadRejectedUser() {
-    console.log("rejectedUsersList= ", this.rejectedUsersList);
+    // console.log("rejectedUsersList= ", this.rejectedUsersList);
     // if (this.rejectedUsersList.length > 0) {
     //   const result = this.rejectedUsersList.map(({
     //     first_name, last_name, email, password
@@ -1104,7 +1104,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
     // API call
     // if (this.rejectedUsersList.length > 0) {
     //   this.userService.downloadRejectedUserList(this.rejectedUsersList).subscribe((data: any) => {
-    //     console.log("downloadRejectedUserList() response= ", data);
+    //     // console.log("downloadRejectedUserList() response= ", data);
     //     window.open(data,'_blank')
     //   })
     // }
@@ -1124,13 +1124,13 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
 
   }
   pageReload() {
-    console.log("coming");
+    // console.log("coming");
     window.location.reload()
   }
 
   downloadXLS(download) {
     this.formService.downloadXLSStaff(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -1141,7 +1141,7 @@ export class AdminDriverFormComponent implements OnInit, OnDestroy {
 
   downloadPDF(download1) {
     this.formService.downloadPDFStaff(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

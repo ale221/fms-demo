@@ -311,12 +311,12 @@ export class FunnelChartComponent {
     };
     this.events1 = {
       dataPlotClick: function (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
     this.events = {
       dataPlotClick: function (e) {
-        console.log(e);
+        // console.log(e);
       }
     };
   }

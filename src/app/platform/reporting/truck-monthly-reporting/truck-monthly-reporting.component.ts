@@ -73,11 +73,11 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-            console.log('types', apiResponse);
+            // console.log('types', apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.truckTypes = apiResponse.response['option_values'].map(function (obj) {
                 return {label: obj.label, value: obj.value};
@@ -86,7 +86,7 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
               this.context.truckTypes.unshift({label: 'All'});
 
             } else {
-              console.log(apiResponse.message);
+              // console.log(apiResponse.message);
             }
 
           }
@@ -109,7 +109,7 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
       this.reportErrorMessages = null;
       this.isValidMonthDateGiven = !isNullOrUndefined(this.selectedMonth) && !isNullOrUndefined(this.selectedYear);
     }
-    console.log(this.reportErrorMessages, this.isValidMonthDateGiven);
+    // console.log(this.reportErrorMessages, this.isValidMonthDateGiven);
   }
 
 
@@ -135,7 +135,7 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
     if (this.driverReporting) {
       params['drivers'] = 1;
     }
-    console.log('event from reporting', event, this.selectedTruckType, params);
+    // console.log('event from reporting', event, this.selectedTruckType, params);
     this.reportingCols = [
       {field: 'total_collections', header: 'Total Collections'},
       {field: 'total_trips', header: 'Total Trips'},
@@ -181,17 +181,17 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
       .subscribe(new class extends HttpController <LoginApiResponse<DropDownItem[]>> {
 
         onComplete(): void {
-          console.log('csv', this.context.csvRows[2]);
-          console.log('reportingMonthlyRows', this.context.reportingMonthlyRows[2]);
+          // console.log('csv', this.context.csvRows[2]);
+          // console.log('reportingMonthlyRows', this.context.reportingMonthlyRows[2]);
         }
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          console.log('reporting', apiResponse);
+          // console.log('reporting', apiResponse);
 
           // const pieChartData = [];
           // const pieChartLabels = [];
@@ -265,7 +265,7 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
             // this.context.shiftDurationPieChartLabel = pieChartLabels;
             this.context.reportErrorMessages = null;
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
 
         }
@@ -281,11 +281,11 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          console.log('reporting', apiResponse);
+          // console.log('reporting', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.csvRows = apiResponse.response;
             this.context.temp = apiResponse.response;
@@ -348,7 +348,7 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
             this.context.reportErrorMessages = null;
 
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
 
         }
@@ -358,7 +358,7 @@ export class TruckMonthlyReportingComponent implements OnInit, AfterContentInit 
   generateMonthlyReport() {
     const start_month = startOfMonth(new Date(this.selectedYear, this.selectedMonth - 1, 1));
     const end_month = endOfMonth(new Date(this.selectedYear, this.selectedMonth - 1, 1));
-    console.log('start date', start_month, end_month);
+    // console.log('start date', start_month, end_month);
     this.generateReport([[start_month, end_month], 'monthly']);
   }
 

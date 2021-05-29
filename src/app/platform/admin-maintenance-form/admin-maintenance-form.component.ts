@@ -186,7 +186,7 @@ export class AdminMaintenanceFormComponent implements OnInit, AfterContentInit {
 
   onSubmit(formValue: Object) {
     this.disableSaveButton = true;
-    console.log('form', formValue);
+    // console.log('form', formValue);
     let id = null;
     if (this.validate()) {
       if (!isNullOrUndefined(this.preFilledData)) {
@@ -204,7 +204,7 @@ export class AdminMaintenanceFormComponent implements OnInit, AfterContentInit {
         this.patchMaintenance(formValue);
       }
     } else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
 

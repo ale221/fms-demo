@@ -62,14 +62,14 @@ export class MantinanceprobabilitychartComponent implements OnInit {
     //   var z = this.chartOptions.categories[x].substring(0, 5) + '...';
     //   this.finalObj.push({ "category": z, "value1": this.chartOptions.series[0].data[x], "value2": this.chartOptions.series[1].data[x], "value3": this.chartOptions.series[2].data[x] });
     // }
-    // // console.log(this.finalObj);
+    // // // console.log(this.finalObj);
     // // var x=JSON.stringify(this.finalObj)
 
     // if (this.finalObj.length > 0) {
-    //   console.log("in");
+    //   // console.log("in");
     //   this.generateChar(this.finalObj);
     // }
-    // console.log(x);
+    // // console.log(x);
   }
 
 
@@ -326,7 +326,7 @@ export class MantinanceprobabilitychartComponent implements OnInit {
     //   }
     // }
     // this.chartOptions1 = graphData;
-    // console.log(this.chartOptions,"111111111");
+    // // console.log(this.chartOptions,"111111111");
     // this.generateChar(this.chartOptions);
   }
 

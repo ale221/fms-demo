@@ -92,8 +92,8 @@ export class AdminPermissionsFormComponent implements OnInit {
   ngOnInit() {
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
@@ -238,7 +238,7 @@ export class AdminPermissionsFormComponent implements OnInit {
   }
 
   openEditModal(row) {
-    console.log("role access>>>>>>>>>>=", row);
+    // console.log("role access>>>>>>>>>>=", row);
     this.selectedGroup_new.id=row.id;
     this.roleaccessedit = row;
     this.selectedGroup_new.name=row.name;
@@ -320,7 +320,7 @@ export class AdminPermissionsFormComponent implements OnInit {
 
   openViewModal(row) {
     this.selectedGroup = row;
-    console.log(this.selectedGroup)
+    // console.log(this.selectedGroup)
     const menuitems = (row.menuitems);
     if (menuitems && menuitems.length > 0) {
       let selectedMenu = [];
@@ -457,7 +457,7 @@ export class AdminPermissionsFormComponent implements OnInit {
     //   this.btnloading = true;
     // }
 
-    console.log("formData before api call= ", formData)
+    // console.log("formData before api call= ", formData)
 
     this.formService.createGroup(formData).subscribe(apiResponse => {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
@@ -474,11 +474,11 @@ export class AdminPermissionsFormComponent implements OnInit {
 
   onSearch($event) {
     this.searchText = $event.search;
-    console.log("this.searchText", this.searchText);
+    // console.log("this.searchText", this.searchText);
 
     if (this.searchText?.length > 0 || this.searchText?.length === 0) {
       this.searchForm.get("search").setValue(this.searchText);
-      console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+      // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
 
       this.filters.search_key = this.searchForm.get('search').value;
       this.getGroupListingType(this.filters);
@@ -496,7 +496,7 @@ export class AdminPermissionsFormComponent implements OnInit {
   onClearSearch() {
     this.searchForm.get("search").reset();
     // this.searchForm.get("search").setValue(this.searchText);
-    //     console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+    //     // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
     this.filters.search_key = "";
     this.getGroupListingType(this.filters);
 
@@ -505,18 +505,18 @@ export class AdminPermissionsFormComponent implements OnInit {
 
   }
   sortRoles(event) {
-    console.log("event= ", event, event.active)
+    // console.log("event= ", event, event.active)
     this.filters.order_by = event.active;
     this.filters.order = event.direction;
     this.getGroupListingType(this.filters);
   }
   pageReload(){
-    console.log("coming");
+    // console.log("coming");
     window.location.reload()
   }
   downloadXLS(download) {
     this.formService.downloadXLSPermission(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -527,7 +527,7 @@ export class AdminPermissionsFormComponent implements OnInit {
 
   downloadPDF(download1) {
     this.formService.downloadPDFPermission(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

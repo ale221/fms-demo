@@ -50,7 +50,7 @@ export class FormService {
 
   test(key, params) {
     const url = `/hypernet/entity/` + key;
-    console.log(url);
+    // console.log(url);
     return this.http.get(url, { params: params });
   }
   getData(key, params: any) {
@@ -75,7 +75,7 @@ export class FormService {
   }
   deleteClient(params: any) {
     const url = `${'/hypernet/entity/delete_clients'}`;
-    console.log(this.http.patch(url, params))
+    // console.log(this.http.patch(url, params))
 
     return this.http.patch(url, params);
   }
@@ -96,7 +96,7 @@ export class FormService {
     // params['modified_by_id'] = this.authService.getUser().customer.id;
     // params['status'] = EntityStatusEnum.Active;
     // params['use-case'] = 1;
-    // console.log("params= ", params);
+    // // console.log("params= ", params);
     // let newData = this.converToFormdata(params);
     // old url
     // const url = `${'/hypernet/entity/add_new_entity'}`;
@@ -111,7 +111,7 @@ export class FormService {
     params['modified_by_id'] = this.authService.getUser().customer.id;
     params['status'] = EntityStatusEnum.Active;
     params['use-case'] = 1;
-    console.log("params= ", params);
+    // console.log("params= ", params);
     let newData = this.converToFormdata(params);
     // old url
     // const url = `${'/hypernet/entity/add_new_entity'}`;
@@ -124,7 +124,7 @@ export class FormService {
     // params['modified_by_id'] = this.authService.getUser().customer.id;
     // params['status'] = EntityStatusEnum.Active;
     // params['use-case'] = 1;
-    // console.log("params= ", params);
+    // // console.log("params= ", params);
     // let newData = this.converToFormdata(params);
     // old url
     // const url = `${'/hypernet/entity/add_new_entity'}`;
@@ -136,7 +136,7 @@ export class FormService {
     return this.http.get(url);
   }
   patchVehicleShift(params, id) {
-    console.log("params for EDIT TOOL= ", params['id'], params)
+    // console.log("params for EDIT TOOL= ", params['id'], params)
     //  let newpatchData = this.converToFormdata(params);
     const url = `${'/iof/vasign/' + id + '/'}`;
     return this.http.patch(url, params);
@@ -156,7 +156,7 @@ export class FormService {
     // params['modified_by_id'] = this.authService.getUser().customer.id;
     // params['status'] = EntityStatusEnum.Active;
     // params['use-case'] = 1;
-    // console.log("params= ", params);
+    // // console.log("params= ", params);
     let newData = this.converToFormdata(params);
     // old url
     // const url = `${'/hypernet/entity/add_new_entity'}`;
@@ -164,13 +164,13 @@ export class FormService {
     return this.http.post(url, newData);
   }
   postPoiZone(params) {
-    console.log("services", params)
+    // console.log("services", params)
     // params['customer'] = this.authService.getUser().customer.id;
     // params['module_id'] = 1;
     // params['modified_by_id'] = this.authService.getUser().customer.id;
     // params['status'] = EntityStatusEnum.Active;
     // params['use-case'] = 1;
-    // console.log("params= ", params);
+    // // console.log("params= ", params);
     let newData = this.converToFormdata(params);
     // old url
     // const url = `${'/hypernet/entity/add_new_entity'}`;
@@ -184,7 +184,7 @@ export class FormService {
     // params['modified_by_id'] = this.authService.getUser().customer.id;
     // params['status'] = EntityStatusEnum.Active;
     // params['use-case'] = 1;
-    // console.log("params= ", params);
+    // // console.log("params= ", params);
     //  let newData = this.converToFormdata(params);
     // old url
     // const url = `${'/hypernet/entity/add_new_entity'}`;
@@ -247,7 +247,7 @@ export class FormService {
 
     let newData = this.converToFormdata(params);
 
-    console.log("params for fuel creation", newData);
+    // console.log("params for fuel creation", newData);
 
 
     // const url = `${'/iof/fuel_fill_up/'}`;
@@ -418,7 +418,7 @@ export class FormService {
   }
 
   patchData(params) {
-    console.log("params for EDIT TOOL= ", params['id'], params)
+    // console.log("params for EDIT TOOL= ", params['id'], params)
     let newData = this.converToFormdata(params);
     //  let newpatchData = this.converToFormdata(params);
     const url = `${'/hypernet/entity/add_driver/' + params['id'] + '/'}`;
@@ -429,7 +429,7 @@ export class FormService {
 
   }
   patchDriver(params) {
-    console.log("params for EDIT TOOL= ", params['id'], params)
+    // console.log("params for EDIT TOOL= ", params['id'], params)
     //  let newpatchData = this.converToFormdata(params);
     const url = `${'/hypernet/entity/add_driver/' + params['id'] + '/'}`;
     return this.http.patch(url, params);
@@ -445,7 +445,7 @@ export class FormService {
 
   }
   patchDataTerritory(params) {
-    console.log("params for EDIT TOOL= ", params['id'])
+    // console.log("params for EDIT TOOL= ", params['id'])
     const url = `${'/hypernet/entity/edit_entity'}`;
     return this.http.patch(url, params);
 
@@ -454,7 +454,7 @@ export class FormService {
 
   }
   patchPoi(params) {
-    console.log("params for EDIT TOOL= ", params['id'])
+    // console.log("params for EDIT TOOL= ", params['id'])
     const url = `${'/iof/pois_manage/'}`;
     return this.http.patch(url, params);
 
@@ -467,9 +467,9 @@ export class FormService {
     params['customer'] = this.authService.getUser().customer.id;
     params['module'] = 1;
     // params['modified_by'] = this.authService.getUser().customer.id;
-    // console.log("ahmahmahmahmahm",params['modified_by']);
+    // // console.log("ahmahmahmahmahm",params['modified_by']);
     params['status'] = EntityStatusEnum.Active;
-    console.log("params for EDIT TOOL= ", params);
+    // console.log("params for EDIT TOOL= ", params);
 
     const url = `/iof/entity/${id}/`;
     return this.http.patch(url, params);
@@ -496,7 +496,7 @@ export class FormService {
   }
 
   deleteDataCheck(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/hypernet/entity/add_driver/' + params['id'] + '/'}`;
     // return this.http.delete(url, { params: params });
     return this.http.patch(url, params);
@@ -504,12 +504,12 @@ export class FormService {
   deleteStaff(params?) {
     const url = `/hypernet/entity/add_driver/` + params['id'] + '/';
     return this.http.patch(url, params);
-    // console.log(params);
+    // // console.log(params);
     // const url = `${'/hypernet/entity/add_driver/' + params['id'] + '/'}`;
     // return this.http.delete(url, params);
   }
   deleteVehicleId(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/iof/delete_vehicle/'}`;
     // const url = `${'/iof/vehicle/' + params['id'] + '/'}`;       add mark as inactve
     // return this.http.delete(url, { params: params });
@@ -517,13 +517,13 @@ export class FormService {
     return this.http.patch(url, params);
   }
   deleteVehicleTypeId(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/hypernet/delete_entity_vehicle_type/' + params['id']}`;
     // return this.http.delete(url, { params: params });
     return this.http.patch(url, params);
   }
   deleteContract(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/hypernet/entity/delete_contract/' + params['id'] + '/'}`;
     // return this.http.delete(url, { params: params });
     return this.http.patch(url, params);
@@ -537,46 +537,46 @@ export class FormService {
     return this.http.patch(url, params);
   }
   deleteFleet(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/iof/fleet/' + params['id']}/`;
     return this.http.delete(url);
   }
 
   deleteCategory(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/iof/category'}`;
     return this.http.delete(url, { params: params });
   }
 
   postTemplate(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/hypernet/entity/V2/add_new_job'}`;
-    console.log(url);
+    // console.log(url);
     return this.http.post(url, params);
   }
   patchTemplate(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/hypernet/entity/V2/edit_activity_scehdule'}`;
-    console.log(url);
+    // console.log(url);
     return this.http.patch(url, params);
   }
   postReview(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/iof/edit_activity'}`;
-    console.log(url);
+    // console.log(url);
     return this.http.post(url, params);
   }
   postContract(params: any) {
-    console.log(params);
+    // console.log(params);
     const url = `${'/hypernet/entity/add_new_entity'}`;
-    console.log(url);
+    // console.log(url);
     return this.http.post(url, params);
   }
   postContractWithUploadStatus(params: any) {
-    console.log(params);
+    // console.log(params);
     params['type_id'] = params['type'];
     const url = `${'/hypernet/entity/add_new_entity'}`;
-    console.log(url);
+    // console.log(url);
     return this.http.post(url, params, {
       reportProgress: true, observe: 'events'
     });
@@ -611,7 +611,7 @@ export class FormService {
 
   }
   genericPost(key, params: any) {
-    console.log('generic post params', params);
+    // console.log('generic post params', params);
     const url = `${AppConfig.APIOptionsHandler(key)}`;
     return this.http.post(url, params);
   }

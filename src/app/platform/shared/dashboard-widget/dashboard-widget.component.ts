@@ -106,7 +106,7 @@ export class DashboardWidgetComponent implements OnInit {
 
   downloadExcelPdf(item) {
     if (item.dashboard_Type === "fleet") {
-      // console.log("fleet dashboard")
+      // // console.log("fleet dashboard")
       if (item.name === "PDF") {
         let param = 'time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
         this.entityService.fleetdashboardExportPDF(param).subscribe((apiResponse: any) => {
@@ -128,7 +128,7 @@ export class DashboardWidgetComponent implements OnInit {
 
     }
     else if (item.dashboard_Type === "driver") {
-      // console.log("driver dashboard")
+      // // console.log("driver dashboard")
       if (item.name === "PDF") {
         let param = 'export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
         this.entityService.driverdashboardExportPDF(param).subscribe((apiResponse: any) => {

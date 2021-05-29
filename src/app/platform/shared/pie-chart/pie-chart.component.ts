@@ -89,29 +89,29 @@ export class PieChartComponent implements OnInit {
       }
 
       if (this.arry2.length == 0) {
-        // console.log("this.arry2 (HarshBraking) is EMPTY")
+        // // console.log("this.arry2 (HarshBraking) is EMPTY")
         for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
           this.finalObj.push({ "driver": this.chartOptions?.categories[x], "Speed": this.arry1[x], "HarshAcceleration": this.arry3[x], "SharpTurn": this.arry4[x], "total Point": this.arry5[x] });
         }
       }
       else if (this.arry3.length == 0) {
-        // console.log("this.arry3 (HarshAcceleration) is EMPTY")
+        // // console.log("this.arry3 (HarshAcceleration) is EMPTY")
         for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
           this.finalObj.push({ "driver": this.chartOptions?.categories[x], "Speed": this.arry1[x], "HarshBraking": this.arry2[x], "SharpTurn": this.arry4[x], "total Point": this.arry5[x] });
         }
       }
       else if (this.arry4.length == 0) {
-        // console.log("this.arry4 (SHARPTURN) is EMPTY")
+        // // console.log("this.arry4 (SHARPTURN) is EMPTY")
         for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
           this.finalObj.push({ "driver": this.chartOptions?.categories[x], "Speed": this.arry1[x], "HarshBraking": this.arry2[x], "HarshAcceleration": this.arry3[x], "total Point": this.arry5[x] });
         }
       } else if (this.arry5.length == 0) {
-        // console.log("this.arry5 (TOTAL POINT) is EMPTY")
+        // // console.log("this.arry5 (TOTAL POINT) is EMPTY")
         for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
           this.finalObj.push({ "driver": this.chartOptions?.categories[x], "Speed": this.arry1[x], "HarshBraking": this.arry2[x], "HarshAcceleration": this.arry3[x], "SharpTurn": this.arry4[x] });
         }
       } else {
-        // console.log("IN ELSE PART")
+        // // console.log("IN ELSE PART")
         for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
           this.finalObj.push({ "driver": this.chartOptions?.categories[x], "Speed": this.arry1[x], "HarshBraking": this.arry2[x], "HarshAcceleration": this.arry3[x], "SharpTurn": this.arry4[x], "total Point": this.arry5[x] });
         }
@@ -122,7 +122,7 @@ export class PieChartComponent implements OnInit {
         this.finalObj.length = 5;
       }
 
-      // console.log("ngOnChanges_this.finalObj-- ", this.finalObj);
+      // // console.log("ngOnChanges_this.finalObj-- ", this.finalObj);
       this.generateChart(this.finalObj);
 
       if (this.translateDetector && this.translateDetector.menuData) {
@@ -145,7 +145,7 @@ export class PieChartComponent implements OnInit {
 
       // Add data
       chart.data = chartData;
-      // console.log("apiResponse.data[0]= ", this.finalObj)
+      // // console.log("apiResponse.data[0]= ", this.finalObj)
       chart.legend = new am4charts.Legend();
       chart.legend.useDefaultMarker = false;
       let markerTemplate = chart.legend.markers.template;

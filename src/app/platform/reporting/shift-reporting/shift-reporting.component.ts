@@ -105,11 +105,11 @@ export class ShiftReportingComponent implements OnInit {
           onError(errorMessage: string, err: any) {
             // do
             this.context.swalService.getErrorSwal(errorMessage);
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any[]>): void {
-            console.log(apiResponse);
+            // console.log(apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.shifts = apiResponse.response;
               for (let i = 0; i < this.context.shifts.length; i++) {

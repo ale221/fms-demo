@@ -134,7 +134,7 @@ export class DriverDetailComponent implements OnInit, OnDestroy {
       this.getUserProfileAnTravellingDetails(this.filtersTruck);
       this.getDistanceTraveledAlerts();
     }
-    // console.log('graphsData== ', this.graphsData)
+    // // console.log('graphsData== ', this.graphsData)
 
     // get cards data
     this.getCardsData(hypernymModules[6], DashboardEnum.DriverDetail, this.entityId);
@@ -238,7 +238,7 @@ export class DriverDetailComponent implements OnInit, OnDestroy {
         this.driverScoreboardChartData = data.data['driverScoreBoard'];
         this.drawDriverScoreboardChart();
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
   }
@@ -252,13 +252,13 @@ export class DriverDetailComponent implements OnInit, OnDestroy {
     this.getUserProfileAnTravellingDetails(this.filtersTruck);
   }
   sortData(event) {
-    // console.log("event= ", event, event.active)
+    // // console.log("event= ", event, event.active)
     this.filtersTruck.order_by = event.active;
     this.filtersTruck.order = event.direction;
     this.getUserProfileAnTravellingDetails(this.filtersTruck);
   }
   onUserPagination(event) {
-    // console.log("coming in pagination", event);
+    // // console.log("coming in pagination", event);
     this.filtersTruck.offset = (event.pageIndex * event.pageSize);
     this.getUserProfileAnTravellingDetails(this.filtersTruck);
   }

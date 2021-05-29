@@ -86,7 +86,7 @@ export class FiltersComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("activePage in filters component==== ", this.activePage)
+    // console.log("activePage in filters component==== ", this.activePage)
 
 
     this.getFleetFilters();
@@ -324,7 +324,7 @@ export class FiltersComponent implements OnInit {
 
   POIChange(event, playback) {
     this.changeZoneName = event.value.name;
-    console.log("coming in POI CHange", this.changeZoneName)
+    // console.log("coming in POI CHange", this.changeZoneName)
 
     this.entityService.getPOIDropdownChange(this.changeZoneName).subscribe(apiResponse => {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
@@ -332,7 +332,7 @@ export class FiltersComponent implements OnInit {
         this.filters.poi_id = this.changeZoneName;
         this.filtersService.setValue(this.filters);
         this.filtersService.setPlaybackValue(this.filters);
-        console.log("filters in poi change", this.filters);
+        // console.log("filters in poi change", this.filters);
       }
     })
   }
@@ -341,22 +341,22 @@ export class FiltersComponent implements OnInit {
   poiOptionChange(event, playback) {
     this.selectedPoiOption = event.value.name;
     this.selectedPoiString = event.value.name;
-     console.log("eventtttttttt",event,"playbackkkkkk",playback );
-    console.log("this.selectedPoiOption", this.selectedPoiOption);
+     // console.log("eventtttttttt",event,"playbackkkkkk",playback );
+    // console.log("this.selectedPoiOption", this.selectedPoiOption);
     this.poi_id = event.value.id;
     this.filters.poi_id = this.poi_id;
 
     if (playback == 'playback') {
-      console.log("this.selectedPoiOption1", this.selectedPoiOption);
+      // console.log("this.selectedPoiOption1", this.selectedPoiOption);
       // this.filtersForm.reset();
       this.filtersService.setPlaybackPolyValue(this.filtersForm.value);
     } else if (playback == 'fleets' || playback === 'playbackAdditional') {
-      console.log("this.selectedPoiOption2", this.selectedPoiOption);
+      // console.log("this.selectedPoiOption2", this.selectedPoiOption);
       this.vehicleFleet = true;
       this.selectedPoiOption = event.value.id;
       this.POIChange(event, playback);
     } else {
-      console.log("this.selectedPoiOption3", this.selectedPoiOption);
+      // console.log("this.selectedPoiOption3", this.selectedPoiOption);
       this.filtersService.setPlaybackValue(this.filters);
       this.setDropdownValuesForAPI();
     }
@@ -470,7 +470,7 @@ export class FiltersComponent implements OnInit {
       this.filters.end_time = event
     }
     this.filters.stop_time = this.filtersForm.value.stop_time;
-    // console.log("this.filters-- ", this.filters)
+    // // console.log("this.filters-- ", this.filters)
     this.filtersService.setPlaybackValue(this.filters);
   }
 

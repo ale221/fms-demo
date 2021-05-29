@@ -170,7 +170,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
       this.searchText = newValue;
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+        // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
         this.filterTool.search = this.searchForm.get('search').value;
         this.getTrucks(this.filterTool);
       }
@@ -201,10 +201,10 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
 
     let params = `type_id=${filterTool.type_id}&limit=${filterTool.limit}&offset=${filterTool.offset}&order=${filterTool.order}&order_by=${filterTool.order_by}&search=${filterTool.search}`;
 
-    console.log("params for tool listing--", params);
+    // console.log("params for tool listing--", params);
 
     this.formService.getEntitiesTool(params).subscribe((data: any) => {   //{type_id: EntityType.IMEI_DEVICE, index_a: 0, index_b: 100}
-      console.log("getEntities()= ", data);
+      // console.log("getEntities()= ", data);
       if (data.status === HttpStatusCodeEnum.Success) {
         this.searchPlaceHolder = 'Search';
         this.enableSearch = false;
@@ -215,14 +215,14 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
         // this.trucks = [...this.context.trucks, ...apiResponse.response];
         this.trucks = data['data'].data[0];
 
-        console.log("trucks------ ", this.trucks)
+        // console.log("trucks------ ", this.trucks)
 
         this.totalToolLength = data['data'].count;
         this.trucks.pagination = this.totalToolLength;
         // this.populateHashmap(data.response);
         // this.temp = data.response;
-        console.log("this.trucks---- ", this.trucks)
-        console.log("this.trucks.length---- ", this.trucks.length)
+        // console.log("this.trucks---- ", this.trucks)
+        // console.log("this.trucks.length---- ", this.trucks.length)
       } else {
         this.swalService.getErrorSwal(data.message);
         this.trucks.pagination = 0;
@@ -236,7 +236,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    console.log('hashmap', this.hashMap);
+    // console.log('hashmap', this.hashMap);
   }
 
   getprogress(area) {
@@ -246,7 +246,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
   getDropDownData(value) {
     this.formService.getData('animal_dropdown', { customer: 1, entity: 'Truck' })
       .subscribe((data: any) => {
-        console.log("getData() response= ", data);
+        // console.log("getData() response= ", data);
 
         // if (data.status === HttpStatusCodeEnum.Success) {
 
@@ -259,33 +259,33 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
         });
 
         // }
-        console.log("this.itemListTrucks-- ", this.itemListTrucks);
+        // console.log("this.itemListTrucks-- ", this.itemListTrucks);
       })
   }
 
   setVehicleDropdown(truck) {
-    console.log("kop", truck)
+    // console.log("kop", truck)
     this.itemListTrucks = [];
 
     this.formService.getData('animal_dropdown', { customer: 1, entity: 'Truck' })
       .subscribe((data: any) => {
-        // console.log("getData() response= ", data);
+        // // console.log("getData() response= ", data);
 
         this.itemListTrucks = data.response.map(function (obj) {
           return { id: obj.id, name: obj.label };
         });
 
-        console.log("itemListTrucks after api call = ", this.itemListTrucks)
+        // console.log("itemListTrucks after api call = ", this.itemListTrucks)
 
         if (truck != null) {
-          console.log("setting vehicle value= ", truck.id, truck.name);
+          // console.log("setting vehicle value= ", truck.id, truck.name);
           this.itemListTrucks.unshift({ id: truck.id, name: truck.name })
           this.selectedDevice = { id: truck.id, name: truck.name }
         } else {
-          console.log("Sorry....")
+          // console.log("Sorry....")
         }
 
-        // console.log("this.itemListTrucks-- ", this.itemListTrucks);
+        // // console.log("this.itemListTrucks-- ", this.itemListTrucks);
       })
   }
 
@@ -314,15 +314,15 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
       if (!isNullOrUndefined(formValue['truck'] && this.selectedDevice)) { formValue['truck'] = this.selectedDevice.id; }
 
       this.disableSubmitButton();
-      console.log('form', formValue);
+      // console.log('form', formValue);
       if (isNullOrUndefined(id)) {
         this.postTrucks(formValue);
       } else {
-        console.log("ID of selected tool= ", id);
+        // console.log("ID of selected tool= ", id);
         this.patchTruck(formValue, id);
       }
     } else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
   onClearSearch() {
@@ -387,7 +387,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
         } else {
           // this.enableSubmitButton();
           this.submitted = false;
-          // console.log("in");
+          // // console.log("in");
           this.closeForm.nativeElement.click();
           this.truckForm.reset();
           this.swalService.getErrorSwal(data.message);
@@ -410,16 +410,16 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
 
   selectedTerri: string[] = [];
   openEditModal(truck) {
-    console.log(truck);
-    // console.log("this.itemListTrucks (before unshift)= ", this.itemListTrucks);
+    // console.log(truck);
+    // // console.log("this.itemListTrucks (before unshift)= ", this.itemListTrucks);
     this.formTitle = 'Update Tool';
     this.btnText = "Update";
     this.inactiveRecord = this.disableButton(truck);
 
     this.setVehicleDropdown(truck.truck)
 
-    console.log("this.itemListTrucks (after unshift)= ", this.itemListTrucks);
-    // console.log("this.selectedDevice=== ", this.selectedDevice)
+    // console.log("this.itemListTrucks (after unshift)= ", this.itemListTrucks);
+    // // console.log("this.selectedDevice=== ", this.selectedDevice)
 
     this.truckForm.patchValue({
       id: truck.id || {},
@@ -444,7 +444,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
     truck['type'] = EntityType.IMEI_DEVICE;
 
     truck['modified_by'] = this.user_id;
-    console.log("patchtruck", truck['modified_by']);
+    // console.log("patchtruck", truck['modified_by']);
     // truck['status'] =
 
     this.formService.patchToolData(truck, id)
@@ -459,7 +459,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
         } else {
           // this.enableSubmitButton();
           this.submitted = false;
-          console.log("in");
+          // console.log("in");
           this.closeForm.nativeElement.click();
           this.truckForm.reset();
           this.swalService.getErrorSwal("Unable to update record");
@@ -471,7 +471,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
   async showDeleteConfirmation(row) {
     const response = await this.swalService.getConfirmSwal();
     if (response == true) {
-      console.log("call delete fuction()")
+      // console.log("call delete fuction()")
       this.deleteTool(row);
     }
   }
@@ -512,13 +512,13 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
 
         // onError(errorMessage: string, err: any) {
         //   // do
-        //   console.log(errorMessage);
+        //   // console.log(errorMessage);
         //   this.context.hashMap[truck.id] = false;
         //   this.context.swalService.getErrorSwal(errorMessage);
         // }
 
         // async onNext(apiResponse: ApiResponseNew<any>) {
-        //   console.log(apiResponse);
+        //   // console.log(apiResponse);
         //   this.context.hashMap[truck.id] = false;
         //   if (apiResponse.status === HttpStatusCodeEnum.Success) {
         //     const shouldDeleteOrInactive = await this.context.swalService.getDeleteSwal(truck);
@@ -569,13 +569,13 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
   }
 
   onSearch(formValue) {
-    console.log("inside onsearch function-- ", formValue);
+    // console.log("inside onsearch function-- ", formValue);
 
     this.searchText = formValue.search;
     if (this.searchText.length > 0 || this.searchText.length === 0) {
 
       this.searchForm.get("search").setValue(this.searchText);
-      console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+      // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
       this.filterTool.search = this.searchForm.get('search').value;
       this.getTrucks(this.filterTool);
 
@@ -609,7 +609,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
         invalid.push(name);
       }
     }
-    // console.log(invalid);
+    // // console.log(invalid);
   }
 
   onPaginateTool(event) {
@@ -624,7 +624,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
 
   downloadXLS(download) {
     this.formService.downloadXLSTool(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -634,7 +634,7 @@ export class AdminToolFormComponent implements OnInit, OnDestroy {
 
   downloadPDF(download1) {
     this.formService.downloadPDFTool(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

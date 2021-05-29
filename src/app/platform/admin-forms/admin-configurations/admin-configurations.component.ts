@@ -156,7 +156,7 @@ export class AdminConfigurationsComponent implements OnInit {
     this.formService.getNotificationValue().subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.notifications = data.data[0];
-        // console.log("this.notifications (from ngoninit)== ", this.notifications)
+        // // console.log("this.notifications (from ngoninit)== ", this.notifications)
         this.notificationAlert = this.notifications.notification;
         this.emailAlert = this.notifications.email;
         this.SMSAlert = this.notifications.sms;
@@ -165,12 +165,12 @@ export class AdminConfigurationsComponent implements OnInit {
 
 
     this.formService.getGatewayDropdownData().subscribe((data: any) => {
-      // console.log("getGatewayDropdownData ", data);
+      // // console.log("getGatewayDropdownData ", data);
       if (data.status === HttpStatusCodeEnum.Success) {
         this.DropDowmData = data.data.data;
-        // console.log("this.DropDowmData --- ", this.DropDowmData);
+        // // console.log("this.DropDowmData --- ", this.DropDowmData);
       } else {
-        console.log("Failed to getEntitiesFuel")
+        // console.log("Failed to getEntitiesFuel")
       }
     })
 
@@ -182,7 +182,7 @@ export class AdminConfigurationsComponent implements OnInit {
 
   activeTabFuction(index) {
     // this.add_btn = index.index;
-    // console.log("index== ", index.index);
+    // // console.log("index== ", index.index);
 
     if (index.index == 1) {
       // initialize the default array for tab change
@@ -229,10 +229,10 @@ export class AdminConfigurationsComponent implements OnInit {
       this.showIndeterminateProgress = true;
       this.formService.getDriverScoreCardData().subscribe((data: any) => {
         this.showIndeterminateProgress = false;
-        // console.log("getDriverScoreCardData ++ ", data.data);
+        // // console.log("getDriverScoreCardData ++ ", data.data);
 
         delete data?.data[0]?.id
-        // console.log("after deleteing ID+ ", data?.data[0]);
+        // // console.log("after deleteing ID+ ", data?.data[0]);
 
         if (data.status === HttpStatusCodeEnum.Success) {
 
@@ -264,7 +264,7 @@ export class AdminConfigurationsComponent implements OnInit {
             }]
           }
         } else {
-          console.log("Failed to getEntitiesFuel")
+          // console.log("Failed to getEntitiesFuel")
         }
       })
 
@@ -282,7 +282,7 @@ export class AdminConfigurationsComponent implements OnInit {
       this.showIndeterminateProgress = true;
       this.formService.getDriverScoreCardData().subscribe((data: any) => {
         this.showIndeterminateProgress = false;
-        // console.log("getDriverScoreCardData ++ ", data.data);
+        // // console.log("getDriverScoreCardData ++ ", data.data);
 
         if (data.status === HttpStatusCodeEnum.Success) {
 
@@ -300,7 +300,7 @@ export class AdminConfigurationsComponent implements OnInit {
             });
           }
         } else {
-          console.log("Failed to getEntitiesFuel")
+          // console.log("Failed to getEntitiesFuel")
         }
       })
     } else if (index.index == 3) {
@@ -317,7 +317,7 @@ export class AdminConfigurationsComponent implements OnInit {
       this.showIndeterminateProgress = true;
       this.formService.getDriverScoreCardData().subscribe((data: any) => {
         this.showIndeterminateProgress = false;
-        // console.log("getDriverScoreCardData ++ ", data.data);
+        // // console.log("getDriverScoreCardData ++ ", data.data);
 
         if (data.status === HttpStatusCodeEnum.Success) {
 
@@ -335,7 +335,7 @@ export class AdminConfigurationsComponent implements OnInit {
             });
           }
         } else {
-          console.log("Failed to get driverScoreCard data")
+          // console.log("Failed to get driverScoreCard data")
         }
       })
     }
@@ -345,10 +345,10 @@ export class AdminConfigurationsComponent implements OnInit {
     this.submitted = true;
 
     if (this.varType == undefined || this.varType == '') {
-      // console.log("Group Name is undefined = ", this.varType);
+      // // console.log("Group Name is undefined = ", this.varType);
       this.showInputErrorMsg = true;
     } else {
-      // console.log("Group Name is = ", this.varType);
+      // // console.log("Group Name is = ", this.varType);
       this.showInputErrorMsg = false;
 
 
@@ -361,7 +361,7 @@ export class AdminConfigurationsComponent implements OnInit {
           }
         }
 
-        // console.log("notEmpty=", notEmpty)
+        // // console.log("notEmpty=", notEmpty)
 
         if (notEmpty) {
           this.showVehicleInputMsg = false;
@@ -376,18 +376,18 @@ export class AdminConfigurationsComponent implements OnInit {
 
           }
 
-          // console.log("this.gatewayThreshold==== ", this.gatewayThreshold);
+          // // console.log("this.gatewayThreshold==== ", this.gatewayThreshold);
 
           let paramsToSend = { vehicle_type: parseInt(this.varType) }
           for (let k = 0; k < this.gatewayThreshold.length; k++) {
             paramsToSend[this.gatewayThreshold[k].paramKey] = this.gatewayThreshold[k].value;
           }
-          // console.log("paramsToSend", paramsToSend);
+          // // console.log("paramsToSend", paramsToSend);
           this.showIndeterminateProgress = true;
 
           this.formService.saveGatewayData(paramsToSend).subscribe((data: any) => {
             this.showIndeterminateProgress = false;
-            // console.log("getGatewayDropdownData ", data);
+            // // console.log("getGatewayDropdownData ", data);
             if (data.status === HttpStatusCodeEnum.Success) {
 
               // this.varType = '';
@@ -395,13 +395,13 @@ export class AdminConfigurationsComponent implements OnInit {
 
               this.swalService.getSuccessSwal('Gateway updated successfully');
             } else {
-              console.log("Failed to getEntitiesFuel")
+              // console.log("Failed to getEntitiesFuel")
               this.swalService.getErrorSwal('Failed to update gateway');
             }
           })
 
         } else {
-          console.log("Select ATLEAST ONE VEHICLE VALUE");
+          // console.log("Select ATLEAST ONE VEHICLE VALUE");
           this.showVehicleInputMsg = true;
         }
       }
@@ -417,9 +417,9 @@ export class AdminConfigurationsComponent implements OnInit {
   }
 
   saveDriverScoreCard() {
-    // console.log("inputValuesDriverScore== ", this.inputValuesDriverScore._results)
+    // // console.log("inputValuesDriverScore== ", this.inputValuesDriverScore._results)
     for (let i = 0; i < this.inputValuesDriverScore._results.length; i++) {
-      // console.log("this.inputValuesDriverScore._results[i].nativeElement.value== ", this.inputValuesDriverScore._results[i].nativeElement.value)
+      // // console.log("this.inputValuesDriverScore._results[i].nativeElement.value== ", this.inputValuesDriverScore._results[i].nativeElement.value)
       if (this.inputValuesDriverScore._results[i].nativeElement.value != '') {
         this.DriverScoreArray[i].value = parseInt(this.inputValuesDriverScore._results[i].nativeElement.value);
       } else {
@@ -427,7 +427,7 @@ export class AdminConfigurationsComponent implements OnInit {
       }
 
     }
-    // console.log("this.driverScoreCard== ", this.driverScoreCard)
+    // // console.log("this.driverScoreCard== ", this.driverScoreCard)
     this.DriverScoreArray.forEach(element => {
       for (var key in this.driverScoreCard) {
         if (this.driverScoreCard.hasOwnProperty(key)) {
@@ -448,7 +448,7 @@ export class AdminConfigurationsComponent implements OnInit {
     }
     this.formService.saveDriverScoreCardData(this.driverScoreCard).subscribe((data: any) => {
       this.showIndeterminateProgress = false;
-      // console.log("getGatewayDropdownData ", data);
+      // // console.log("getGatewayDropdownData ", data);
       if (data.status === HttpStatusCodeEnum.Success) {
         this.swalService.getSuccessSwal('Score card updated successfully');
       } else {
@@ -459,25 +459,25 @@ export class AdminConfigurationsComponent implements OnInit {
   }
 
   typeDropdownChange(event) {   //SelectType dropdown change
-    // console.log('dropdown change== ', event);
+    // // console.log('dropdown change== ', event);
     this.varType = event;
 
     if (this.varType != undefined && this.varType != '') {
-      // console.log("inside if")
+      // // console.log("inside if")
       this.showInputErrorMsg = false;
     } else {
-      // console.log("inside else")
+      // // console.log("inside else")
       this.showInputErrorMsg = true;
     }
 
     this.formService.getGatewayData(this.varType).subscribe((data: any) => {
-      // console.log("getGatewayDropdownData ", data);
+      // // console.log("getGatewayDropdownData ", data);
       if (data.status === HttpStatusCodeEnum.Success) {
-        // console.log("data.data= ", data.data);
-        // console.log("this.inputValues._results= ", this.inputValues._results)
+        // // console.log("data.data= ", data.data);
+        // // console.log("this.inputValues._results= ", this.inputValues._results)
 
         if (data.data['id'] == undefined) {
-          console.log("Data not found");
+          // console.log("Data not found");
 
           if (this.inputValues._results.length > 0) {
             for (let l = 0; l < this.inputValues._results.length; l++) {
@@ -486,7 +486,7 @@ export class AdminConfigurationsComponent implements OnInit {
           }
 
         } else {
-          console.log("Data found")
+          // console.log("Data found")
           if (this.inputValues._results.length > 0) {
             let count = 0;
             delete data.data.id
@@ -497,7 +497,7 @@ export class AdminConfigurationsComponent implements OnInit {
           }
         }
       } else {
-        console.log("Failed to getEntitiesFuel")
+        // console.log("Failed to getEntitiesFuel")
         this.swalService.getErrorSwal('Failed to update gateway');
       }
     })
@@ -506,18 +506,18 @@ export class AdminConfigurationsComponent implements OnInit {
 
   saveGeozone() {
     if (this.inputValuesGeoZone._results.length > 0) {
-      // console.log("RADIUS is entered by user")
+      // // console.log("RADIUS is entered by user")
       if (this.inputValuesGeoZone._results[0].nativeElement.value != '') {
         this.geoZoneArray[0].value = parseInt(this.inputValuesGeoZone._results[0].nativeElement.value);
       } else {
         this.geoZoneArray[0].value = 200;
       }
       let params = { 'radius': this.geoZoneArray[0].value }
-      // console.log("params for save geozone=== ", params)
+      // // console.log("params for save geozone=== ", params)
       this.showIndeterminateProgress = true;
       this.formService.saveDriverScoreCardData(params).subscribe((data: any) => {
         this.showIndeterminateProgress = false;
-        // console.log("Geozone save api response-- ", data);
+        // // console.log("Geozone save api response-- ", data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.swalService.getSuccessSwal('Geozone updated successfully');
         } else {
@@ -525,7 +525,7 @@ export class AdminConfigurationsComponent implements OnInit {
         }
       })
     } else {
-      console.log("RADIUS is empty");
+      // console.log("RADIUS is empty");
       this.swalService.getWarningSwal('Please enter the radius');
     }
   }
@@ -533,7 +533,7 @@ export class AdminConfigurationsComponent implements OnInit {
 
   saveFuelThreshold() {
     if (this.inputValuesFuelThres._results.length > 0) {
-      // console.log("RADIUS is entered by user")
+      // // console.log("RADIUS is entered by user")
       if (this.inputValuesFuelThres._results[0].nativeElement.value != '') {
 
         if (this.inputValuesFuelThres._results[0].nativeElement.value == '0' || this.inputValuesFuelThres._results[0].nativeElement.value == '1' || this.inputValuesFuelThres._results[0].nativeElement.value == '2' || this.inputValuesFuelThres._results[0].nativeElement.value == '3' || this.inputValuesFuelThres._results[0].nativeElement.value == '4') {
@@ -551,12 +551,12 @@ export class AdminConfigurationsComponent implements OnInit {
         this.fuelThresholdArray[0].value = 100;
       }
       let params = { 'fuel_threshold': this.fuelThresholdArray[0].value }
-      // console.log("params for save geozone=== ", params)
+      // // console.log("params for save geozone=== ", params)
       this.showIndeterminateProgress = true;
 
       this.formService.saveDriverScoreCardData(params).subscribe((data: any) => {
         this.showIndeterminateProgress = false;
-        // console.log("Geozone save api response-- ", data);
+        // // console.log("Geozone save api response-- ", data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.swalService.getSuccessSwal('Fuel Threshold updated successfully');
         } else {
@@ -564,20 +564,20 @@ export class AdminConfigurationsComponent implements OnInit {
         }
       })
     } else {
-      console.log("FUEL THRESHOLD is empty");
+      // console.log("FUEL THRESHOLD is empty");
       this.swalService.getWarningSwal('Please enter the fuel threshold');
     }
   }
 
   setAll(event, type) {
-    // console.log("type + event++ ", type, event);
+    // // console.log("type + event++ ", type, event);
 
     if (type == "email") {
       this.emailAlert = event;
     } else if (type == 'notification') {
       this.notificationAlert = event;
     } else {
-      // console.log("coming in 2222 ", event);
+      // // console.log("coming in 2222 ", event);
       this.SMSAlert = event;
     }
 
@@ -608,7 +608,7 @@ export class AdminConfigurationsComponent implements OnInit {
 
   }
   pageReload() {
-    // console.log("coming");
+    // // console.log("coming");
     window.location.reload()
   }
 

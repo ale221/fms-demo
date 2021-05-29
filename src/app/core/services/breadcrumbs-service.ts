@@ -14,7 +14,7 @@ export class BreadcrumbsService {
   }
 
   public getValue(): Observable < any > {
-    console.log("ingetvalueeeeeeee",this.valueObs);
+    // console.log("ingetvalueeeeeeee",this.valueObs);
       return this.valueObs;
   }
 

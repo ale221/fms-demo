@@ -20,7 +20,7 @@ export class ExportCsvComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    console.log("THIS.ROWS= ", this.rows)
+    // console.log("THIS.ROWS= ", this.rows)
     if ((this.dateGenerated)) {
       this.dateGenerated = DateUtils.getMMMMDY(this.dateGenerated);
       this.fileName = this.fileName + '_' + this.dateGenerated;
@@ -36,7 +36,7 @@ export class ExportCsvComponent implements OnInit, AfterContentInit {
       for (let i = 0; i < timeFields.length; i++) {
         const date = timeFields[i].format ? timeFields[i].format : 'd-MMM-yy';
         item[timeFields[i].field] = this.datePipe.transform(item[timeFields[i].field], date);
-        // console.log(date, item[timeFields[i].field]);
+        // // console.log(date, item[timeFields[i].field]);
       }
     });
   }

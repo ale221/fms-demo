@@ -75,7 +75,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, AfterContentInit
     public breadcrumbsService : BreadcrumbsService,
     private eRef: ElementRef
   ) {
-    // console.log('Pages Component');
+    // // console.log('Pages Component');
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     // tslint:disable-next-line: deprecation
@@ -160,9 +160,9 @@ export class SidebarComponent implements OnInit, AfterViewInit, AfterContentInit
       this.menu = menuArray;
     }
 
-    // console.log("This.Menu--- ", this.menu)
+    // // console.log("This.Menu--- ", this.menu)
     this.packageType = PackageType;
-    // console.log("packageType= ", PackageType, this.packageType)
+    // // console.log("packageType= ", PackageType, this.packageType)
     this.user = this.authService.getUser() as User;
     // this.menu = JSON.parse(this.menu);
     // this.getGroupData();
@@ -313,7 +313,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, AfterContentInit
   checkMenuAccess(menu) {
     if (this.displayMenu) {
       let a = this.displayMenu.find(x => x.name === (menu).toLowerCase())
-      console.log(a)
+      // console.log(a)
       return (a && a['display']) ? true : false;
     }
   }
@@ -380,7 +380,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, AfterContentInit
   }
 
   navItemClicked(nav) {
-    console.log("coming in sidebar",nav);
+    // console.log("coming in sidebar",nav);
     let route=[];
     route[0]=nav.route;
     route[1]=nav.name;

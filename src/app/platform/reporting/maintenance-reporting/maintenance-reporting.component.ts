@@ -66,9 +66,9 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.loggedInUser = this.authService.getUser();
-    console.log("LoggedInUser object- ", this.loggedInUser.customer.id)
+    // console.log("LoggedInUser object- ", this.loggedInUser.customer.id)
 
-    // console.log("this.entity--- ", this.entity)
+    // // console.log("this.entity--- ", this.entity)
     if (this.filters && this.filters.truck_id) {
       this.getMaintenanceReport(this.filters)
     }
@@ -83,7 +83,7 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
 
 
   setupReport(event) {
-    console.log("Event of Maintenance tab", event)
+    // console.log("Event of Maintenance tab", event)
     const start_date = DateUtils.getUtcDateTimeStart(event[0][0]);
     const end_date = DateUtils.getUtcDateTimeStart(event[0][1]);
 
@@ -113,7 +113,7 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
   }
 
   sortData(event) {
-    // console.log("event= ", event)
+    // // console.log("event= ", event)
     this.filters.order_by = event.active;
     this.filters.order = event.direction;
     this.getMaintenanceReport(this.filters);
@@ -135,7 +135,7 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
     } else {
       this.reportObj.cols = ['Type', 'Truck', 'Status', 'Start Date', 'End Date', 'Issued Date'];
     }
-    console.log("this.dataSource(generatepdfReport)= ", this.dataSource)
+    // console.log("this.dataSource(generatepdfReport)= ", this.dataSource)
     for (let i = 0; i < this.dataSource.length; i++) {
 
       let a = moment(this.dataSource[i].issued_datetime * 1000).format('LLLL')
@@ -156,14 +156,14 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
         });
     }
 
-    console.log(this.reportObj)
+    // console.log(this.reportObj)
 
     this.pdfReportObj.emit(this.reportObj);
   }
 
 
   onSelect({ selected }, type) {
-    // console.log(selected);
+    // // console.log(selected);
 
     if (!isNullOrUndefined(selected[0].start_lat_lng) && !isNullOrUndefined(selected[0].end_lat_lng)) {
       this.mMap.zoomToMarker({
