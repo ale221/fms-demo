@@ -1298,7 +1298,7 @@ export class AuditDocumentComponent implements OnInit {
         this.formService.deleteDocument({ 'id': [row.driver_id], 'documentTypeId': [row.document_type_id] }).subscribe((data: any) => {
           if (!data.error) {
             this.closeForm.nativeElement.click();
-            this.swalService.getSuccessSwal('Contract deleted successfully');
+            this.swalService.getSuccessSwal('Document deleted successfully');
             this.selectedType='driver';
             this.getContracts();
           } else {
@@ -1309,7 +1309,7 @@ export class AuditDocumentComponent implements OnInit {
         this.formService.deleteDocumentFleet({ 'id': [row.vehicle_id], 'documentTypeId': [row.document_type_id] }).subscribe((data: any) => {
           if (!data.error) {
             this.closeForm.nativeElement.click();
-            this.swalService.getSuccessSwal('Contract deleted successfully');
+            this.swalService.getSuccessSwal('Document deleted successfully');
             this.getContracts();
           } else {
             this.swalService.getWarningSwal(data.message);
