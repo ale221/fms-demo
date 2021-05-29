@@ -354,7 +354,7 @@
                     <th mat-header-cell *matHeaderCellDef>Driver</th>
                     <td mat-cell *matCellDef="let row">
                       <div style="width: 120px; float: left">
-                        <div class="media-body pointer" [routerLink]="gotoService.gotoTruck(row.id)">
+                        <div class="media-body pointer" [routerLink]="gotoService.gotoDriver(row.id)">
                           <a class="font-weight-600">{{ row.driver_name || 'N/A' }}</a>
                           <!-- <span style="font-size: 12px; font-style: italic;">{{ row.vehicle_type || 'N/A' }}</span> -->
                         </div>
