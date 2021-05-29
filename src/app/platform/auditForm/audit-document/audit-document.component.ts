@@ -256,7 +256,7 @@ export class AuditDocumentComponent implements OnInit {
           item => new DropDownItem(item['id'], item['name'])
         );
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -336,7 +336,7 @@ export class AuditDocumentComponent implements OnInit {
           item => new DropDownItem(item['id'], item['name'])
         );
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -349,7 +349,7 @@ export class AuditDocumentComponent implements OnInit {
             item => new DropDownItem(item['id'], item['name'])
           );
         } else {
-          console.log(data.message);
+          // console.log(data.message);
         }
       });
     } else {
@@ -360,7 +360,7 @@ export class AuditDocumentComponent implements OnInit {
             item => new DropDownItem(item['id'], item['name'])
           );
         } else {
-          console.log(data.message);
+          // console.log(data.message);
         }
       });
     }
@@ -377,7 +377,7 @@ export class AuditDocumentComponent implements OnInit {
   //     //   // this.typeList = [];
   //     //   //  this.reportTypeTable=0;
   //     // } else {
-  //     //   console.log(data.message);
+  //     //   // console.log(data.message);
   //     // }
   //   });
   // }
@@ -416,7 +416,7 @@ export class AuditDocumentComponent implements OnInit {
     const param: FormData = new FormData();
     this.submitted = true;
     if (this.validate()) {
-      // console.log("this.uploader== ", this.uploader);
+      // // console.log("this.uploader== ", this.uploader);
       if (this.uploader.files.length > 0) { //&& this.uploader.files.length <= 10
         for (let i = 0; i < this.uploader.files.length; i++) {
           param.append('files', this.uploader.files[i]);
@@ -427,7 +427,7 @@ export class AuditDocumentComponent implements OnInit {
       //   this.swalService.getWarningSwal('You cannot upload more than 10 documents');
       //   return;
       // }
-      // console.log("coming1",value['documentName'].name)
+      // // console.log("coming1",value['documentName'].name)
       if (value['documentName'].name == "Driver") {
         param.append('driver_group_id', value['select_group']['id']);
         param.append('driver_id', value['select_driver']['id']);
@@ -448,14 +448,14 @@ export class AuditDocumentComponent implements OnInit {
 
       this.disableSubmitButton();
       if (this.selectedUser) {
-        console.log("coming5", param)
+        // console.log("coming5", param)
         this.patchContract(param);
       } else {
-        console.log("coming4")
+        // console.log("coming4")
         this.postContract(param);
       }
     } else {
-      console.log("Form is invalid[in else condition]", this.errorMessages);
+      // console.log("Form is invalid[in else condition]", this.errorMessages);
     }
 
   }
@@ -463,7 +463,7 @@ export class AuditDocumentComponent implements OnInit {
   postContract(param) {
     this.uploadedPercentage = 0;
     if (this.selectedType == "driver") {
-      // console.log("param before creating  document api= ", param)
+      // // console.log("param before creating  document api= ", param)
       this.formService.postDocument(param).subscribe((data: any) => {
         if (data.status === HttpStatusCodeEnum.Success) {
           this.closeForm.nativeElement.click();
@@ -505,7 +505,7 @@ export class AuditDocumentComponent implements OnInit {
     }
 
     this.uploadedPercentage = 0;
-    // console.log("param before updating  document= ", truck);
+    // // console.log("param before updating  document= ", truck);
     if (this.selectedType == 'driver') {
       this.formService.patchDocument(truck).subscribe(new class extends HttpController<HttpEvent<any>> {
         onComplete(): void {
@@ -518,7 +518,7 @@ export class AuditDocumentComponent implements OnInit {
           this.context.swalService.getErrorSwal(errorMessage);
           this.context.fileUploadStatus = false;
           this.context.closeP.nativeElement.click();
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: HttpEvent<any>): void {
@@ -581,7 +581,7 @@ export class AuditDocumentComponent implements OnInit {
           this.context.swalService.getErrorSwal(errorMessage);
           this.context.fileUploadStatus = false;
           this.context.closeP.nativeElement.click();
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: HttpEvent<any>): void {
@@ -707,7 +707,7 @@ export class AuditDocumentComponent implements OnInit {
         }
 
         onError(errorMessage: string, err: any) {
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.loader_flag = false;
         }
 
@@ -733,7 +733,7 @@ export class AuditDocumentComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.loader_flag = false;
         }
 
@@ -759,7 +759,7 @@ export class AuditDocumentComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.loader_flag = false;
         }
 
@@ -769,7 +769,7 @@ export class AuditDocumentComponent implements OnInit {
               item => new DropDownItem(item['id'], item['label'])
             );
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
           this.context.clients_loader_flag = false;
         }
@@ -786,7 +786,7 @@ export class AuditDocumentComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: ApiResponse<any>): void {
@@ -802,7 +802,7 @@ export class AuditDocumentComponent implements OnInit {
                 obj[i]['name'])];
             }
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
         }
       }(this)
@@ -935,7 +935,7 @@ export class AuditDocumentComponent implements OnInit {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -985,7 +985,7 @@ export class AuditDocumentComponent implements OnInit {
       //   } else {
       //     this.context.searchPlaceHolderExpiringInThreeMonths = 'Search';
       //     this.context.tempExpiringInThreeMonths = this.context.expiringInThreeMonths;
-      //     console.log('temp', this.context.tempExpiringInThreeMonths);
+      //     // console.log('temp', this.context.tempExpiringInThreeMonths);
 
 
       //   }
@@ -995,13 +995,13 @@ export class AuditDocumentComponent implements OnInit {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
       // onNext(apiResponse: TestApiResponse<any[]>): void {
       //   if (apiResponse.status === HttpStatusCodeEnum.Success) {
-      //     console.log('expirung in 3', apiResponse.response);
+      //     // console.log('expirung in 3', apiResponse.response);
       //     this.context.results_remaining = apiResponse.remaining;
       //     this.context.expiringInThreeMonths = [];
       //     this.context.expiringInThreeMonths = [...this.context.expiringInThreeMonths, ...apiResponse.response];
@@ -1058,7 +1058,7 @@ export class AuditDocumentComponent implements OnInit {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1121,7 +1121,7 @@ export class AuditDocumentComponent implements OnInit {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1185,7 +1185,7 @@ export class AuditDocumentComponent implements OnInit {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1248,7 +1248,7 @@ export class AuditDocumentComponent implements OnInit {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1346,7 +1346,7 @@ export class AuditDocumentComponent implements OnInit {
 
         // onError(errorMessage: string, err: any) {
         //   // do
-        //   console.log(errorMessage);
+        //   // console.log(errorMessage);
         //   this.context.swalService.getErrorSwal(errorMessage);
         // }
 
@@ -1386,7 +1386,7 @@ export class AuditDocumentComponent implements OnInit {
 
         // onError(errorMessage: string, err: any) {
         //   // do
-        //   console.log(errorMessage);
+        //   // console.log(errorMessage);
         //   this.context.deleteAllButton = false;
         //   for (let single_id = 0; single_id < id_list.length; single_id++) {
         //     this.context.hashMap[id_list[single_id]] = false;
@@ -1395,7 +1395,7 @@ export class AuditDocumentComponent implements OnInit {
         // }
 
         // async onNext(apiResponse: ApiResponseNew<any>) {
-        //   console.log(apiResponse);
+        //   // console.log(apiResponse);
         //   this.context.deleteAllButton = false;
         //   for (let single_id = 0; single_id < id_list.length; single_id++) {
         //     this.context.hashMap[id_list[single_id]] = false;
@@ -1635,7 +1635,7 @@ export class AuditDocumentComponent implements OnInit {
     this.optimized_contract_call(0, 100, this.filters);
   }
   onSearch(formval) {
-    // console.log(this.searchForm.value.search);
+    // // console.log(this.searchForm.value.search);
   }
 
   enableSubmitButton() {

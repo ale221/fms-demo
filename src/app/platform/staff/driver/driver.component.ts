@@ -191,7 +191,7 @@ export class DriverComponent implements OnInit {
           onError(errorMessage: string, err: any) {
             this.context.swalService.getErrorSwal(errorMessage);
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {
@@ -327,7 +327,7 @@ export class DriverComponent implements OnInit {
         onError(errorMessage: string, err: any) {
           // do
           this.context.swalService.getErrorSwal(errorMessage);
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<TruckResponse[]>): void {
@@ -363,11 +363,11 @@ export class DriverComponent implements OnInit {
           onError(errorMessage: string, err: any) {
             // do
             this.context.swalService.getErrorSwal(errorMessage);
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<ViolationResponse[]>): void {
-            console.log(apiResponse);
+            // console.log(apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               const response = apiResponse.response[0]['violations'];
               this.context.violations = response;
@@ -410,7 +410,7 @@ export class DriverComponent implements OnInit {
       end_datetime: end_date
     };
     // params.start_datetime += ' 00:00:00';
-    console.log(params);
+    // console.log(params);
     this.maintenanceService.getMaintenances(params)
       .subscribe(new class extends HttpController<LoginApiResponse<any[]>> {
 
@@ -419,11 +419,11 @@ export class DriverComponent implements OnInit {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any[]>): void {
-            console.log('maintenaces', apiResponse.response);
+            // console.log('maintenaces', apiResponse.response);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.maintenances = apiResponse.response;
             }
@@ -450,11 +450,11 @@ export class DriverComponent implements OnInit {
           onError(errorMessage: string, err: any) {
             // do
             this.context.swalService.getErrorSwal(errorMessage);
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any[]>): void {
-            console.log(apiResponse);
+            // console.log(apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.fines = apiResponse.response;
             }
@@ -494,13 +494,13 @@ export class DriverComponent implements OnInit {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
 
           }
 
           onNext(apiResponse: ApiResponse<any[]>): void {
             if (apiResponse.status) {
-              console.log(apiResponse.response);
+              // console.log(apiResponse.response);
               const response = apiResponse.response['activity'];
               // this.context.activities = response['activity'];
               for (let i = 0; i < response.length; i++) {
@@ -554,11 +554,11 @@ export class DriverComponent implements OnInit {
           // do
           this.context.swalService.getErrorSwal(errorMessage);
 
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<TruckResponse[]>): void {
-          console.log('activities list Range', apiResponse);
+          // console.log('activities list Range', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.activities = apiResponse.response['activity'];
 
@@ -594,7 +594,7 @@ export class DriverComponent implements OnInit {
       }
       for (let i = 0; i < temp.length; i++) {
         if (temp[i].hasOwnProperty('job_status')) {
-          console.log(temp[i]);
+          // console.log(temp[i]);
         }
         if (temp[i]['job_status__label'] === JobStatusEnum[JobStatusEnum.Aborted]) {
           this.truckJobs.failed.push(temp[i]);
@@ -751,7 +751,7 @@ export class DriverComponent implements OnInit {
       start_datetime: this.reportObj.start_datetime,
       end_datetime: this.reportObj.end_datetime
     };
-    console.log('params', params, typeof (params.meta));
+    // console.log('params', params, typeof (params.meta));
     this.truckService.generatePDFreport(params)
       .subscribe(new class extends HttpController<LoginApiResponse<any>> {
 
@@ -761,11 +761,11 @@ export class DriverComponent implements OnInit {
           onError(errorMessage: string, err: any) {
             // do
             this.context.swalService.getErrorSwal(errorMessage);
-            // console.log(errorMessage);
+            // // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {
-            console.log('report', apiResponse);
+            // console.log('report', apiResponse);
             if (apiResponse.status === 200) {
               window.open('http://' + apiResponse.response.file);
             }

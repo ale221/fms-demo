@@ -254,7 +254,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onSearch() {
-    // console.log("this.filtersobject", this.filtersObject);
+    // // console.log("this.filtersobject", this.filtersObject);
 
     if (!this.filtersObject) {
       this.swalService.getWarningSwal("Please select vehicle");
@@ -448,11 +448,11 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
         onError(errorMessage: string, err: any) {
           // do
           this.context.swalService.getErrorSwal(errorMessage);
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<EntitySummaryResponse>): void {
-          // console.log('summary', apiResponse);
+          // // console.log('summary', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.trucksSummaryResponse = apiResponse.response;
           }
@@ -494,18 +494,18 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<any>): void {
-          // console.log('territories', apiResponse);
+          // // console.log('territories', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.territoriesList = apiResponse.response.map(
               item => new DropDownItem(item['id'], item['label'])
             );
 
           } else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
         }
       }(this)
@@ -518,11 +518,11 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItemVehicle[]>): void {
-          // console.log('devices', apiResponse);
+          // // console.log('devices', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.customerDevices = apiResponse.response;
             if (!(value === null)) {
@@ -530,7 +530,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
             }
           }
           else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
         }
 
@@ -544,17 +544,17 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          // console.log('purchase', apiResponse);
+          // // console.log('purchase', apiResponse);
 
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.purchaseTypes = apiResponse.response['option_values'];
           }
           else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
 
         }
@@ -568,16 +568,16 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          // console.log('types', apiResponse);
+          // // console.log('types', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.truckTypes = apiResponse.response['option_values'];
           }
           else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
 
         }
@@ -610,7 +610,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
       onError(errorMessage: string, err: any) {
         // do
         this.context.swalService.getErrorSwal(errorMessage);
-        console.log(errorMessage);
+        // console.log(errorMessage);
       }
 
       onNext(apiResponse: TestApiResponse<TruckResponse[]>): void {
@@ -763,9 +763,9 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   setupSignalR(){
     if (this.signalRService && this.signalRService.mxChipData) {
       this.signalRSubscription = this.signalRService.mxChipData.subscribe(response => {
-        // console.log(response);
+        // // console.log(response);
         const signalRresponse = JSON.parse(response) as SignalRresponse;
-        // console.log('signalResponse', signalRresponse);
+        // // console.log('signalResponse', signalRresponse);
         if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
           return;
         }
@@ -809,7 +809,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.rows = [...this.trucks];
               }
               if (AppConfig.DEBUG) {
-                console.log(this.trucks[i].signalRresponse);
+                // console.log(this.trucks[i].signalRresponse);
               }
             }
 
@@ -825,7 +825,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
       .then((c) => {
         this.trucks.forEach((bin, i) => {
           this.setSignalRresponse(i);
-          // console.log(bin.device_id, this.connection);
+          // // console.log(bin.device_id, this.connection);
           this.connection.invoke('register', bin.device_id)
             .catch((err: any) => console.warn(bin.device_id + ' Failed to invoke. Error occurred. Error:' + err));
         });
@@ -835,9 +835,9 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         // subscribe to event
         this.subscription = newMessage.subscribe((response: string) => {
-          // console.log(response);
+          // // console.log(response);
           const signalRresponse = JSON.parse(response) as SignalRresponse;
-          // console.log('signalResponse', signalRresponse);
+          // // console.log('signalResponse', signalRresponse);
           if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
             return;
           }
@@ -881,7 +881,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
                   this.rows = [...this.trucks];
                 }
                 if (AppConfig.DEBUG) {
-                  console.log(this.trucks[i].signalRresponse);
+                  // console.log(this.trucks[i].signalRresponse);
                 }
               }
 
@@ -1004,7 +1004,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
             const selectedVehicle = apiResponse.data.vehicle_detail;
             const stop_times = apiResponse.data.stops;
             if (response.length && response.length > 1) {
-              // console.log(this.context.map.createSnapToRoadQuickView(response));
+              // // console.log(this.context.map.createSnapToRoadQuickView(response));
               for (let j = 0; j < stop_times.length; j++) {
                 markers.push({
                   latitude: stop_times[j].latitude,
@@ -1063,7 +1063,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
               // this.context.map.createTrail(this.context.violationMarkers, this.context.violationInfoWindows, false);
               this.context.map.createSnapToRoad(this.context.violationMarkers, this.context.violationInfoWindows);
             }
-            // console.log(this.context.map.createSnapToRoad(this.context.violationMarkers, this.context.violationInfoWindows));
+            // // console.log(this.context.map.createSnapToRoad(this.context.violationMarkers, this.context.violationInfoWindows));
           }
           //
           if (apiResponse.status === HttpStatusCodeEnum.Error) {
@@ -1164,7 +1164,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<any[]>): void {
@@ -1173,7 +1173,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
               item => ({ label: item.label, value: item.id })
             );
             this.context.maintenancesStatus.unshift({ label: 'All In Maintenances', value: '-' });
-            // console.log('maintenance status', this.context.maintenancesStatus);
+            // // console.log('maintenance status', this.context.maintenancesStatus);
 
           }
         }
@@ -1190,11 +1190,11 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          // console.log('types', apiResponse);
+          // // console.log('types', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.truckTypes = apiResponse.response['option_values'].map(function (obj) {
               return { label: obj.label, value: obj.value };
@@ -1203,7 +1203,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.context.truckTypes.unshift({ label: 'All' });
 
           } else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
 
         }
@@ -1218,7 +1218,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
       { label: 'Online', value: true },
       { label: 'Offline', value: false }
     ];
-    // console.log(typeOfFilterDropdown);
+    // // console.log(typeOfFilterDropdown);
 
     // if (isNullOrUndefined(this.selectedFilter) || isNullOrUndefined(this.selectedSecondaryFilter)) {
     //   this.rows = [...this.trucks];
@@ -1259,7 +1259,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   filterThroughCards(typeOfCard) {
     // this.appLoader.visibility = true;
-    // console.log('type of card', typeOfCard);
+    // // console.log('type of card', typeOfCard);
     if (typeOfCard === 'Trucks') {
       this.selectedFilter = null;
       this.selectedSecondaryFilter = null;
@@ -1295,7 +1295,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   lala() {
     if (this.selectedFilter === TruckPrimaryFiltersEnum.By_Gateway_Status) {
-      // console.log(this.datatableService.updateTestFilter(this.selectedSecondaryFilter, this.temp, this.selectedFilter));
+      // // console.log(this.datatableService.updateTestFilter(this.selectedSecondaryFilter, this.temp, this.selectedFilter));
     }
   }
 
@@ -1369,7 +1369,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getStopsListing(filters) {
-    // console.log("filters before getStops= ", filters)
+    // // console.log("filters before getStops= ", filters)
     this.showIndeterminateProgress = true;
     // let params = `limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&start_datetime=${filters.start_datetime}&end_datetime=${filters.end_datetime}`;
     this.entityService.getStops2(filters).subscribe(apiResponse => {
@@ -1486,7 +1486,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   exportExcel(download) {
     this.downloadableLink = 'limit=' + this.filtersTravelHistory.limit + '&offset=' + this.filtersTravelHistory.offset + '&order=' + this.filtersTravelHistory.order + '&order_by=' + this.filtersTravelHistory.order_by + '&search_key=&truck_id=' + this.selectedDevice + '&start_datetime=' + this.st_date + '&end_datetime=' + this.end_date + '&export=excel&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.entityService.downloadTravelHistoryQuickViewXLS(this.downloadableLink).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -1504,7 +1504,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   exportPdf(download) {
     this.downloadableLink1 = 'limit=' + this.filtersTravelHistory.limit + '&offset=' + this.filtersTravelHistory.offset + '&order=' + this.filtersTravelHistory.order + '&order_by=' + this.filtersTravelHistory.order_by + '&search_key=&truck_id=' + this.selectedDevice + '&start_datetime=' + this.st_date + '&end_datetime=' + this.end_date + '&export=pdf&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
     this.entityService.downloadTravelHistoryQuickViewXLS(this.downloadableLink1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)

@@ -460,7 +460,7 @@ export class ManageShiftsComponent implements OnInit {
     //   if(this.getDayName[d] === "Sunday" && d === 0)
     //   {
     //     val=getDateArray[d];
-    //     // console.log(this.getDayName[d]);
+    //     // // console.log(this.getDayName[d]);
     //     // params['days'].push(this.getDayName[d]);
     //     // this.getDayName.shift();
     //     break;
@@ -469,12 +469,12 @@ export class ManageShiftsComponent implements OnInit {
     //   {
     //     // params['days'].push(this.getDayName[d]);
     //     // this.getDayName.shift();
-    //     console.log(this.getDayName[d]);
+    //     // console.log(this.getDayName[d]);
     //     break;
 
     //   }
     //   else{
-    //     console.log(this.getDayName[d]);
+    //     // console.log(this.getDayName[d]);
     //     params['days'].push(this.getDayName[d]);
     //     this.getDayName.shift();
     //   }
@@ -485,7 +485,7 @@ export class ManageShiftsComponent implements OnInit {
     //     {
     //       this.getDayName.shift();
     //     }
-    //     console.log(this.getDayName,"oiuutyyut");
+    //     // console.log(this.getDayName,"oiuutyyut");
     //     break;
     //   }
     //   if(this.getDayName[d] !== "Sunday")
@@ -496,7 +496,7 @@ export class ManageShiftsComponent implements OnInit {
     //   }
     //   this.finalistArry.push(params);
     // }
-    // console.log(this.finalistArry);
+    // // console.log(this.finalistArry);
 
 
 
@@ -510,7 +510,7 @@ export class ManageShiftsComponent implements OnInit {
     let xse=this.getRandomInt(weeknumberss);
 
     // let wyulsmkd=Math.random(weeknumberss);
-    // console.log("weeknumbers",xse);
+    // // console.log("weeknumbers",xse);
     for(let xy=1;xy<=weeknumberss;xy++)
     {
       this.weekarraylist.push('week'+xy);
@@ -538,14 +538,14 @@ export class ManageShiftsComponent implements OnInit {
       var dateArr = getDateArray(startDate, endDate);
 
       // Output
-      console.log("<p>Start Date: " + startDate + "</p>");
-      console.log("<p>End Date: " + endDate + "</p>");
-      console.log("<p>Date Array</p>")
+      // console.log("<p>Start Date: " + startDate + "</p>");
+      // console.log("<p>End Date: " + endDate + "</p>");
+      // console.log("<p>Date Array</p>")
       for (var i = 0; i < dateArr.length; i++) {
-        console.log("<p>" + dateArr[i] + "</p>");
+        // console.log("<p>" + dateArr[i] + "</p>");
         this.getDayName.push(moment(dateArr[i]).format('dddd'))
       }
-      console.log(this.getDayName);
+      // console.log(this.getDayName);
       let params={
         week:'',
         days:[]
@@ -567,7 +567,7 @@ export class ManageShiftsComponent implements OnInit {
         //   if(this.getDayName[d] === "Sunday" && d === 0)
         //   {
         //     val=getDateArray[d];
-        //     // console.log(this.getDayName[d]);
+        //     // // console.log(this.getDayName[d]);
         //     // params['days'].push(this.getDayName[d]);
         //     // this.getDayName.shift();
         //     break;
@@ -576,12 +576,12 @@ export class ManageShiftsComponent implements OnInit {
         //   {
         //     // params['days'].push(this.getDayName[d]);
         //     // this.getDayName.shift();
-        //     console.log(this.getDayName[d]);
+        //     // console.log(this.getDayName[d]);
         //     break;
 
         //   }
         //   else{
-        //     console.log(this.getDayName[d]);
+        //     // console.log(this.getDayName[d]);
         //     params['days'].push(this.getDayName[d]);
         //     this.getDayName.shift();
         //   }
@@ -592,7 +592,7 @@ export class ManageShiftsComponent implements OnInit {
           {
             this.getDayName.shift();
           }
-          console.log(this.getDayName,"oiuutyyut");
+          // console.log(this.getDayName,"oiuutyyut");
 
 
           break;
@@ -605,7 +605,7 @@ export class ManageShiftsComponent implements OnInit {
         }
         this.finalistArry.push(params);
       }
-      console.log(this.finalistArry);
+      // console.log(this.finalistArry);
 
 
       */
@@ -768,7 +768,7 @@ export class ManageShiftsComponent implements OnInit {
         this.typeList = [];
         //  this.reportTypeTable=0;
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -791,7 +791,7 @@ export class ManageShiftsComponent implements OnInit {
     this.getDrivers($event.value);
   }
   selectDriverDropDownChange($event) {
-    console.log($event)
+    // console.log($event)
   }
   selectTypeDropDownChange($event) {
 
@@ -811,7 +811,7 @@ export class ManageShiftsComponent implements OnInit {
         );
         this.typeList = [];
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -1010,7 +1010,7 @@ export class ManageShiftsComponent implements OnInit {
   //       this.subscription = newMessage.subscribe((response: string) => {
   //         const signalRresponse = JSON.parse(response) as SignalRresponse;
 
-  //         console.log('signalResponse', signalRresponse);
+  //         // console.log('signalResponse', signalRresponse);
   //         if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
   //           return;
   //         }
@@ -1194,7 +1194,7 @@ export class ManageShiftsComponent implements OnInit {
     this.poly = [];
     this.markers = {};
     this.bounds1 = new google.maps.LatLngBounds();
-    // console.log('markers', this.markers);
+    // // console.log('markers', this.markers);
   }
   onSearch(formValue) {
     this.filters.search_key = this.searchForm.get('search').value;
@@ -1327,7 +1327,7 @@ export class ManageShiftsComponent implements OnInit {
         this.postDriverForm(formValue);
       }
     } else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
 
@@ -1367,7 +1367,7 @@ export class ManageShiftsComponent implements OnInit {
         this.getDayName = [];
         // this.getDrivers(this.filterDrivers);
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.swalService.getErrorSwal(data.message);
       }
     })
@@ -1409,7 +1409,7 @@ export class ManageShiftsComponent implements OnInit {
         this.getDriversListing(this.filters);
       } else {
         this.swalService.getErrorSwal(data.message);
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
   }
@@ -1432,7 +1432,7 @@ export class ManageShiftsComponent implements OnInit {
         this.totalUserLength = data['data'].count;
         this.users.pagination = this.totalUserLength;
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -1624,7 +1624,7 @@ export class ManageShiftsComponent implements OnInit {
         this.swalService.getSuccessSwal(message);
         this.getDriversListing(this.filters);
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.swalService.getErrorSwal(data.message)
       }
     })

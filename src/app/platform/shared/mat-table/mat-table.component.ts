@@ -46,8 +46,8 @@ export class MatTableComponent implements OnInit {
               }
             });
             this.displayedColumns = this.dataSource.map(col => col.columnDef);
-            console.log(this.dataSource)
-            console.log(this.displayedColumns)
+            // console.log(this.dataSource)
+            // console.log(this.displayedColumns)
           }
         }
       }

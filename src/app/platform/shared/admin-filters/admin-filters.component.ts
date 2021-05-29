@@ -31,14 +31,14 @@ export class AdminFiltersComponent implements OnInit {
     private formService: FormService,
     private entityService: EntityService) {
 
-    console.log("INSIDE ADMIN FILTER COMPONENT")
+    // console.log("INSIDE ADMIN FILTER COMPONENT")
     this.theme = this.brandingService.styleObject();
 
   }
 
   ngOnInit(): void {
-    console.log("this.activePage====== ", this.activePage);
-    console.log("this.activeTab====== ", this.activeTab);
+    // console.log("this.activePage====== ", this.activePage);
+    // console.log("this.activeTab====== ", this.activeTab);
 
     this.searchForm = this.formBuilder.group({
       modalNumber: [null]

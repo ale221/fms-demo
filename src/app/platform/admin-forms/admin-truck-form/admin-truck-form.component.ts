@@ -295,8 +295,8 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;
-      console.log("ressssssssssssss1", res);
-      console.log("ressssssssssssss2", this.sidebarCheck);
+      // console.log("ressssssssssssss1", res);
+      // console.log("ressssssssssssss2", this.sidebarCheck);
     })
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
@@ -317,8 +317,8 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         delay(500),
       )),
     ).subscribe(newValue => {
-      console.log("current tab = ", this.add_btn);
-      console.log("newValue== ", newValue);
+      // console.log("current tab = ", this.add_btn);
+      // console.log("newValue== ", newValue);
       this.searchText = newValue;
 
       if (this.searchText.length > 0 || this.searchText.length === 0) {
@@ -345,7 +345,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
           this.getCategory(this.filtersCategory);
 
         } else {
-          console.log("inside else condition of search input")
+          // console.log("inside else condition of search input")
         }
 
       }
@@ -355,7 +355,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
     this.filtersService.getValue().subscribe(data => {
       if (data) {
-        console.log("data= ", data)
+        // console.log("data= ", data)
         if (data.modalNumber === 0) {
           // debugger
           this.testOpen.nativeElement.click();
@@ -375,7 +375,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         } else {
           this.swalService.getErrorSwal(data.message);
         }
-        console.log("this.purchaseTypes[] ", this.purchaseTypes)
+        // console.log("this.purchaseTypes[] ", this.purchaseTypes)
       }
       );
 
@@ -383,12 +383,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.setExportUrls(this.filtersTruck);
 
     this.breadcrumbService.getValue().subscribe(res => {
-      console.log("coming in ressssssssssss", res);
+      // console.log("coming in ressssssssssss", res);
       if (res && res.length) {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log(this.breadcrumbInner);
+        // console.log(this.breadcrumbInner);
       }
     })
 
@@ -397,18 +397,18 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   FleetDropdown() {
     this.entityService.getFleetFiltersDropdown().subscribe(apiResponse => {
       this.fleets2 = apiResponse.data.data;
-      console.log("this.fleets2----", this.fleets2);
+      // console.log("this.fleets2----", this.fleets2);
     })
   }
 
   getTruckTypeForm() {
     this.truckService.getPurchaseTypes1().subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
-        console.log(data.data['data']);
+        // console.log(data.data['data']);
         this.truckTypes = data.data['data'].map(
           item => ({ value: item['id'], label: item['label'] })
         );
-        console.log("trucktype1", this.truckType);
+        // console.log("trucktype1", this.truckType);
         // this.truckTypes = data.response['option_values'];
       } else {
         this.swalService.getErrorSwal(data.message);
@@ -428,7 +428,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.customerDevices = []
     // get Device attached
     this.truckService.getCustomerDevices({ type: EntityType.TRUCK, assigned: 0 }).subscribe((data: any) => {
-      console.log("getCustomerDevices() response= ", data.response)
+      // console.log("getCustomerDevices() response= ", data.response)
       if (data.status === HttpStatusCodeEnum.Success) {
         this.customerDevices = data.response.map(function (obj) {
           return { id: obj.device, name: obj.device_name };
@@ -450,11 +450,11 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   notImage = false;
   onSearch($event) {
     this.searchText = $event.search;
-    console.log("this.searchText", this.searchText);
+    // console.log("this.searchText", this.searchText);
     if (this.searchText?.length > 0 || this.searchText?.length === 0) {
       this.searchForm.get("search").setValue(this.searchText);
-      console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
-      console.log("add button", this.add_btn);
+      // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+      // console.log("add button", this.add_btn);
       if (this.add_btn == 0) {  //searching for vehicle tab
         this.filtersTruck.search = this.searchForm.get('search').value;
         this.getTrucks(this.filtersTruck);
@@ -474,19 +474,19 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         this.setExportUrls(this.filtersCategory);
 
       } else {
-        console.log("inside else condition of search input")
+        // console.log("inside else condition of search input")
       }
 
     }
 
-    // console.log("this.users= ", this.users);;
+    // // console.log("this.users= ", this.users);;
   }
 
   onClearSearch() {
     this.searchForm.reset();
     this.searchForm.get("search").reset();
     // this.searchForm.get("search").setValue(this.searchText);
-    //     console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+    //     // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
 
     // this.filtersTruck.search = "";
     // this.filtersTruckType.search = "";
@@ -550,7 +550,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   fleetDropdownChanged(value, tab) {
-    console.log("checking", tab);
+    // console.log("checking", tab);
     if (tab == 0) {
       this.filtersTruck.limit = 10;
       this.filtersTruck.offset = 0;
@@ -578,7 +578,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   categoryDropdownChanged(value) {
-    console.log("category changed== ", value);
+    // console.log("category changed== ", value);
 
     this.filtersTruck.limit = 10;
     this.filtersTruck.offset = 0;
@@ -610,7 +610,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   typeDropdownChanged(value, add_btn) {
-    console.log("vehicleType changed== ", value);
+    // console.log("vehicleType changed== ", value);
     if (add_btn == 0) {
       this.filtersTruck.limit = 10;
       this.filtersTruck.offset = 0;
@@ -763,7 +763,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.setExportUrls(this.filtersCategory);
 
     }
-    console.log("this.add_btn== ", this.add_btn);
+    // console.log("this.add_btn== ", this.add_btn);
   }
 
   getTruckTypes(filtersTruckType) {
@@ -772,10 +772,10 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     let params = `limit=${filtersTruckType.limit}&offset=${filtersTruckType.offset}&order=${filtersTruckType.order}&order_by=${filtersTruckType.order_by}&entity_sub_type_id=${filtersTruckType.entity_sub_type_id}&search=${filtersTruckType.search}`;
     this.showIndeterminateProgress = true;
 
-    console.log("params for truck type tab= ", params);
+    // console.log("params for truck type tab= ", params);
     this.truckService.getEntitySubType({ key: 'trucktypes' }, params).subscribe((data: any) => {
       this.showIndeterminateProgress = false;
-      console.log("getEntitySubType() response -- ", data);
+      // console.log("getEntitySubType() response -- ", data);
 
       this.vehicleTypes = data['data'].data;
       this.totalLengthTrucksType = data['data'].count;
@@ -783,7 +783,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       // this.trucks.paginator = this.paginatorTrucksTypes;
       // this.truckTypeFilters = this.truckTypes;
 
-      console.log("vehicleTypes[]= ", this.vehicleTypes);
+      // console.log("vehicleTypes[]= ", this.vehicleTypes);
     });
 
     this.truckService.getPurchaseTypes({ key: 'trucktypes' })
@@ -791,7 +791,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
         if (data.status === HttpStatusCodeEnum.Success) {
           this.truckTypes = data.response['option_values'].map(function (obj) {
-            console.log("trucktypes2", this.truckTypes);
+            // console.log("trucktypes2", this.truckTypes);
             return { label: obj.label, value: obj.value };
           });
 
@@ -823,7 +823,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
           }, 300);
 
         } else {
-          console.log(data.message);
+          // console.log(data.message);
         }
 
       }
@@ -836,15 +836,15 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     let params = `limit=${filtersTruckType.limit}&offset=${filtersTruckType.offset}&order=${filtersTruckType.order}&order_by=${filtersTruckType.order_by}&entity_sub_type_id=${filtersTruckType.entity_sub_type_id}&search=${filtersTruckType.search}`;
     this.showIndeterminateProgress = true;
 
-    console.log("params for truck type tab= ", params);
+    // console.log("params for truck type tab= ", params);
     this.truckService.getEntitySubType({ key: 'trucktypes' }, params).subscribe((data: any) => {
       this.showIndeterminateProgress = false;
-      console.log("getEntitySubType() response -- ", data);
+      // console.log("getEntitySubType() response -- ", data);
 
       this.vehicleTypesDropDown = data['data'].data;
 
 
-      console.log("vehicleTypes[]= ", this.vehicleTypesDropDown);
+      // console.log("vehicleTypes[]= ", this.vehicleTypesDropDown);
     });
 
 
@@ -862,10 +862,10 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     //let params = `limit=${filtersTruck.limit}&offset=${filtersTruck.offset}&order=${filtersTruck.order}&order_by=${filtersTruck.order_by}`;
     let params = `limit=${filtersTruck.limit}&offset=${filtersTruck.offset}&order=${filtersTruck.order}&order_by=${filtersTruck.order_by}&fleet_id=${filtersTruck.fleet_id}&category_id=${filtersTruck.category_id}&driver_id=${filtersTruck.driver_id}&vehicle_id=${filtersTruck.vehicle_id}&entity_sub_type_id=${filtersTruck.entity_sub_type_id}&search=${filtersTruck.search}`;
 
-    console.log("params for vehicle tab== ", params);
+    // console.log("params for vehicle tab== ", params);
 
     this.formService.getVehiclesList(params).subscribe((data: any) => {
-      console.log("getVehiclesList()-", data);
+      // console.log("getVehiclesList()-", data);
       if (!data.error) {
         this.trucks = data['data'].data;
         this.totalLengthTrucks = data['data'].count;
@@ -891,9 +891,9 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.formService.getFleetsList(params)
       .subscribe((data: any) => {
         if (!data.error) {
-          console.log("this.fleets=this.fleets=this.fleets=",data);
+          // console.log("this.fleets=this.fleets=this.fleets=",data);
           this.fleets = data['data'].data;
-          console.log("this.fleets= ", this.fleets);
+          // console.log("this.fleets= ", this.fleets);
           this.totalLengthFleet = data['data'].count;
           this.showIndeterminateProgress = false;
           // this.fleets.paginator = this.paginatorFleet;
@@ -910,7 +910,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         if (!data.error) {
           this.vehicles_list = data.data;
           this.vehicles_list = [...this.vehicles_list];
-          console.log("vehicles_listvehicles_list", this.vehicles_list);
+          // console.log("vehicles_listvehicles_list", this.vehicles_list);
           //  this.showIndeterminateProgress = false;
         } else {
           this.swalService.getErrorSwal(data.message);
@@ -925,12 +925,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     let params = `limit=${filtersCategory.limit}&offset=${filtersCategory.offset}&order=${filtersCategory.order}&order_by=${filtersCategory.order_by}&fleet_id=${filtersCategory.fleet_id}&entity_sub_type_id=${filtersCategory.entity_sub_type_id}&search=${filtersCategory.search}`;
     this.showIndeterminateProgress = true;
 
-    console.log("params for category tab= ", params)
+    // console.log("params for category tab= ", params)
     this.formService.getCategoryList(params)
       .subscribe((data: any) => {
         if (!data.error) {
           this.category_list = data['data'].data;
-          console.log("this.category_list= ", this.category_list, this.category_list.length)
+          // console.log("this.category_list= ", this.category_list, this.category_list.length)
           this.totalLengthCategory = data['data'].count;
           this.showIndeterminateProgress = false;
           this.category_list.paginator = this.paginatorCategory;
@@ -943,12 +943,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
   getDrivers(value) {
     this.showIndeterminateProgress = true;
-    console.log("params for drivers= ", value);
+    // console.log("params for drivers= ", value);
     this.formService.getDriverList(value)
       .subscribe((data: any) => {
         if (!data.error) {
           this.driver_list = data['data'];
-          console.log("this.driver_list= ", this.driver_list)
+          // console.log("this.driver_list= ", this.driver_list)
           // this.totalLengthCategory = data['data'].count;
           // this.showIndeterminateProgress = false;
           // this.category_list.paginator = this.paginatorCategory;
@@ -971,7 +971,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
     this.truckService.getEntitySummary(params1)
       .subscribe((data: any) => {
-        console.log('getEntitySummary() response', data);
+        // console.log('getEntitySummary() response', data);
 
         if (data.status === HttpStatusCodeEnum.Success) {
           this.trucksSummaryResponse = data.response;
@@ -1005,13 +1005,13 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   sortDataTrucks(event) {
-    console.log("event= ", event, event.active)
+    // console.log("event= ", event, event.active)
     this.filtersTruck.order_by = event.active;
     this.filtersTruck.order = event.direction;
     this.getTrucks(this.filtersTruck);
   }
   sortDataTrucksType(event) {
-    console.log("event= ", event, event.active)
+    // console.log("event= ", event, event.active)
     this.filtersTruckType.order_by = event.active;
     this.filtersTruckType.order = event.direction;
     // this.getTrucks(this.filtersTruckType);
@@ -1034,7 +1034,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    console.log('hashmap', this.hashMap);
+    // console.log('hashmap', this.hashMap);
   }
 
   getprogress(area) {
@@ -1068,16 +1068,16 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   fleetDropdown(event) {
-    console.log("event== ", event)
-    console.log("event.value= ", event.value);
+    // console.log("event== ", event)
+    // console.log("event.value= ", event.value);
     // this.categories: //= [];
     this.categories = event.value.category;
-    console.log("this.categories= ", this.categories);
+    // console.log("this.categories= ", this.categories);
   }
 
   speedChanged(event) {
-    console.log("speed checkbox= ", event);
-    console.log("this.truckForm.controls['speed'].value== ", this.truckForm.controls['speed'].value)
+    // console.log("speed checkbox= ", event);
+    // console.log("this.truckForm.controls['speed'].value== ", this.truckForm.controls['speed'].value)
 
     if (this.truckForm.controls['speed'].value) {
       this.truckForm.controls['speed_threshold'].setValidators(Validators.required);
@@ -1094,9 +1094,9 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   //Submit Form
   onSubmit(formValue: Object) {
     this.vehicleSubmitted = true;
-    console.log("formvalue", formValue);
+    // console.log("formvalue", formValue);
     if (this.validate()) {
-      console.log("Form is valid");
+      // console.log("Form is valid");
 
       const d = this.getParams(this.startDateTime);
       const id = this.truckForm.getRawValue().id;
@@ -1110,17 +1110,17 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       if (!isNullOrUndefined(formValue['fleet'])) {
         formValue['fleet'] = this.fleetType.id ? this.fleetType.id : '';
       } else {
-        console.log("coming in fleet")
+        // console.log("coming in fleet")
         formValue['fleet'] = '';
       }
 
       if (!isNullOrUndefined(formValue['category'])) {
         formValue['category'] = this.categoryType.id ? this.categoryType.id : '';
       } else {
-        console.log("coming in category")
+        // console.log("coming in category")
         formValue['category'] = '';
       }
-      console.log("formvalue", formValue);
+      // console.log("formvalue", formValue);
 
       if (!formValue['speed']) {
         formValue['speed_threshold'] = "";
@@ -1136,7 +1136,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       this.disableSubmitButton();
       formValue['registration'] = formValue['name'];
 
-      console.log("this.avatar= ", this.avatar);
+      // console.log("this.avatar= ", this.avatar);
       if (this.avatar) {
         formValue['photo'] = this.avatar;
       }
@@ -1155,28 +1155,28 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         }
       }
 
-      console.log("formValu====e", formValue)
+      // console.log("formValu====e", formValue)
 
       if (isNullOrUndefined(id)) {
         this.postTrucks(formValue);
         formValue['entity_sub_type'] = ' ';
       } else {
         this.patchTruck(formValue);
-        console.log("coming in patchtruckkkkkk");
+        // console.log("coming in patchtruckkkkkk");
         formValue['entity_sub_type'] = ' ';
       }
     } else {
-      console.log("Form is invalid[in else condition]", this.errorMessages);
+      // console.log("Form is invalid[in else condition]", this.errorMessages);
     }
   }
 
   converToFormdata(data) {
     var form_data = new FormData();
     for (var key in data) {
-      // console.log(key,data[key]);
+      // // console.log(key,data[key]);
       form_data.append(key, data[key]);
     }
-    console.log(form_data);
+    // console.log(form_data);
     return form_data;
   }
 
@@ -1185,12 +1185,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.vehicleTypeSubmitted = true;
 
     if (this.validateTypes()) {
-      console.log("Form is valid");
+      // console.log("Form is valid");
 
       // let id = null;
       // if (this.globalTruckType)
       //   id = this.globalTruckType['id'];
-      // console.log("id- ", id);
+      // // console.log("id- ", id);
 
       formValue['marker'] = this.avatar;
 
@@ -1198,8 +1198,8 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         formValue['marker'] = "Deleted";
       }
 
-      console.log("formValue", formValue);
-      console.log("formValue", this.globalTruckType);
+      // console.log("formValue", formValue);
+      // console.log("formValue", this.globalTruckType);
 
       //this.disableSubmitButton();
 
@@ -1211,7 +1211,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       }
 
     } else {
-      console.log("Form is In-valid", this.errorMessages);
+      // console.log("Form is In-valid", this.errorMessages);
     }
 
   }
@@ -1219,12 +1219,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   //SubmitFleet Form
   onSubmitFleet(formValue: Object) {
     this.fleetSubmitted = true;
-    console.log("sdfsd", formValue['vehicle_name']);
+    // console.log("sdfsd", formValue['vehicle_name']);
 
     if (this.FleetForm.valid) {
-      console.log("FORM is valid")
+      // console.log("FORM is valid")
     } else {
-      console.log("FORM is invalid");
+      // console.log("FORM is invalid");
       return;
     }
 
@@ -1235,7 +1235,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         testArr.push(formValue['vehicle_name'][i].id)
       }
 
-      console.log("testArr= ", testArr);
+      // console.log("testArr= ", testArr);
       this.obj = {
         "name": formValue['name'],
         "vehicles": testArr
@@ -1246,14 +1246,14 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log(this.globalFleet)
+    // console.log(this.globalFleet)
     if (this.globalFleet) {
       id = this.globalFleet['id'];
-      console.log(id, "id")
+      // console.log(id, "id")
     }
     this.disableSubmitButton();
     if (isNullOrUndefined(id)) {
-      console.log("obj", this.obj);
+      // console.log("obj", this.obj);
       this.postFleet(this.obj);
     } else {
       this.obj['id'] = this.globalFleet['id']
@@ -1264,23 +1264,23 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
   //SubmitCategory Form
   onSubmitCategory(formValue: Object) {
-    console.log("formValue= ", formValue)
+    // console.log("formValue= ", formValue)
     this.categorySubmitted = true;
 
     if (this.CategoryForm.valid) {
-      console.log("Form is valid");
+      // console.log("Form is valid");
     } else {
-      console.log("Form is invalid");
+      // console.log("Form is invalid");
       return;
     }
 
     this.fleet_id_bkp = formValue['fleet_id'];
     let fleet_id = formValue['fleet_id'].id;
-    console.log("fleet_id", fleet_id);
+    // console.log("fleet_id", fleet_id);
     let id = null;
     if (this.globalCategory)
       id = this.globalCategory['id'];
-    console.log(id, "id")
+    // console.log(id, "id")
 
     formValue['fleet_id'] = fleet_id;
     this.disableSubmitButton();
@@ -1446,10 +1446,10 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       formValue['territory'] = false;
     if (formValue['sharp_turning'] == null)
       formValue['sharp_turning'] = false;
-    console.log("data before calling add vehicle api", formValue);
+    // console.log("data before calling add vehicle api", formValue);
 
     this.formService.postDataTrck(this.converToFormdata(formValue)).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (!data.error) {
         this.vehicleSubmitted = false;
         this.truckForm.reset();
@@ -1468,11 +1468,11 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   // create / post truck type
   postTrucksType(formValue): void {
     formValue['key'] = "trucktypes";
-    console.log("ajaaaaaaaa", formValue);
+    // console.log("ajaaaaaaaa", formValue);
 
     this.formService.postDataTrucktype(this.converToFormdata(formValue))
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (!data.error) {
           this.vehicleTypeSubmitted = false;
           this.truckTypeForm.reset();
@@ -1496,7 +1496,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
     this.formService.postFleet(formValue)
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (!data.error) {
           this.fleetSubmitted = false;
           this.FleetForm.reset();
@@ -1592,7 +1592,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   }
 
   openEditModal(truck) {  //Edit Modal for Vehicle List
-    console.log(truck)
+    // console.log(truck)
     this.formTitle = 'Update Vehicle';
     this.avatar_url = null;
     this.enableUpdateButton();
@@ -1600,13 +1600,13 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.truckForm.get('status').enable();
     }, 200);
-    console.log("this.inactiveRecord= ", this.inactiveRecord);
+    // console.log("this.inactiveRecord= ", this.inactiveRecord);
     const truck_data = { id: truck.d_id, itemName: truck.device_id, code: truck.d_id, name: truck.device_id };
     const matrial_data = { id: truck.entity_sub_type, itemName: truck.entity_sub_type_name, code: truck.entity_sub_type, name: truck.entity_sub_type_name };
 
     this.getAllDevices(truck);
 
-    console.log("this.fleets2--- ", this.fleets2);
+    // console.log("this.fleets2--- ", this.fleets2);
 
     let setFleet = {};
     let setCategory = {};
@@ -1636,7 +1636,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       }
     }
     this.categoryType = setCategory[0];
-    console.log("cominggggdddsssaaaa", setCategory);
+    // console.log("cominggggdddsssaaaa", setCategory);
     if (truck.status == 1) {
       this.truckForm.controls.status.setValue(true);
     } else {
@@ -1682,15 +1682,15 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     //   this.truckForm.patchValue({ device_name: null });
     // }
 
-    console.log("this.avatar_url===== ", this.avatar_url)
-    console.log("this.truckForm.controls['device_name'].value= ", this.truckForm.controls['device_name'].value)
-    console.log("this.fleetType= ", this.fleetType)
-    console.log("this.categoryType= ", this.categoryType)
+    // console.log("this.avatar_url===== ", this.avatar_url)
+    // console.log("this.truckForm.controls['device_name'].value= ", this.truckForm.controls['device_name'].value)
+    // console.log("this.fleetType= ", this.fleetType)
+    // console.log("this.categoryType= ", this.categoryType)
     this.checkValidity();
   }
 
   openEditModalType(truckType) {  ///Edit Modal for Vehicle Type
-    console.log("truckType= ", truckType)
+    // console.log("truckType= ", truckType)
     this.formTitleType = 'Update Vehicle Type';
     this.markerMC = null;
     // this.removeImage();
@@ -1705,12 +1705,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.truckTypeForm.patchValue({
       label: truckType.label,
     })
-    console.log("thi.markerMC= ", this.markerMC)
+    // console.log("thi.markerMC= ", this.markerMC)
     this.selectedTruckType = truckType;
   }
 
   openEditModalFleet(fleet) {  //Edit Modal for Fleet
-    console.log(fleet)
+    // console.log(fleet)
     let idfleet = fleet.id;
     this.getFleetsTruck(null, idfleet);
     this.formTitleFleet = 'Update Fleet';
@@ -1721,7 +1721,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     for (let i = 0; i < fleet.vehicles.length; i++) {
       this.selectedTruckoption.push({ id: fleet.vehicles[i]['id'], name: fleet.vehicles[i]['name'], registration: fleet.vehicles[i]['registration'] });
     }
-    console.log("selectedTruckoption", this.selectedTruckoption);
+    // console.log("selectedTruckoption", this.selectedTruckoption);
     this.FleetForm.patchValue({
       name: fleet.name,
       vehicle_name: this.selectedTruckoption,
@@ -1733,7 +1733,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
   openEditModalCategory(category) {  //Edit Modal for Category
     this.globalCategory = '';
-    console.log("category== ", category);
+    // console.log("category== ", category);
     this.formTitleCategory = 'Update Category';
     this.enableUpdateButton();
     this.inactiveRecordCategory = this.disableButton(category);
@@ -1752,7 +1752,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       fleet_id: this.foundFleet
     });
     // this.selectedCategory = category.fleet_id;
-    console.log("this.CategoryForm.value= ", this.CategoryForm.value)
+    // console.log("this.CategoryForm.value= ", this.CategoryForm.value)
   }
 
   patchTruck(truck) {
@@ -1760,12 +1760,12 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     truck['type'] = EntityType.TRUCK;
     if (truck.threshold == "") ///threshold is not
       truck.threshold = ''; //null
-    console.log("truckkkkkkkk", truck)
+    // console.log("truckkkkkkkk", truck)
     var formdata = this.converToFormdata(truck)
 
     this.formService.patchTruckData(formdata)
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (!data.error) {
           this.vehicleSubmitted = false;
           this.truckForm.reset();
@@ -1795,11 +1795,11 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       truck.marker = "Deleted";
     }
     var formdata = this.converToFormdata(truck);
-    console.log("before calling update api()====", formdata)
+    // console.log("before calling update api()====", formdata)
 
     this.formService.patchDataTrucktype(formdata)
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (!data.error) {
           this.vehicleTypeSubmitted = false;
           this.truckTypeForm.reset();
@@ -1818,7 +1818,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   patchFleet(fleet) {
     // fleet['id'] = String(this.selectedTruck.id);
     // var formdata = this.converToFormdata(truck)
-    console.log("fleet data", fleet)
+    // console.log("fleet data", fleet)
     this.formService.patchFleet(fleet)
       .subscribe((data: any) => {
         if (!data.error) {
@@ -1842,10 +1842,10 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
   patchCategory(category) {
     category['fleet'] = category['fleet_id']
     delete category['fleet_id'];
-    console.log("after changing keys== ", category);
+    // console.log("after changing keys== ", category);
     this.formService.patchCategory(category)
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (!data.error) {
           this.categorySubmitted = false;
           this.inactiveRecordCategory = false;
@@ -1926,31 +1926,31 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
         invalid.push(name);
       }
     }
-    // console.log(invalid);
+    // // console.log(invalid);
   }
 
   async showDeleteCategoryConfirmation(id, currentTab) {
-    console.log("idToDelete:: ", id);
-    console.log("currentTab:: ", currentTab);
+    // console.log("idToDelete:: ", id);
+    // console.log("currentTab:: ", currentTab);
 
     const response = await this.swalService.getConfirmSwal();
 
     if (response == true && currentTab == 'category') {
-      console.log("call delete category()")
+      // console.log("call delete category()")
       this.deleteCategoryById(id);
     }
 
     if (response == true && currentTab == 'fleet') {
-      console.log("call delete fleet()")
+      // console.log("call delete fleet()")
       this.deleteFleetById(id);
     }
 
     // if (response == true && currentTab == 'vehicle') {
-    //   console.log("call delete vehicle()")
+    //   // console.log("call delete vehicle()")
     //   this.deleteVehicleById(id);
     // }
     if (response == true && currentTab == 'vehicle_type') {
-      console.log("call delete vehicle()")
+      // console.log("call delete vehicle()")
       this.deleteVehicleTypeById(id);
     }
   }
@@ -1958,13 +1958,13 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
   async showSwal(vehicle) {
     // this.selectedUser = user;
-    console.log('user', vehicle);
+    // console.log('user', vehicle);
 
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
     const shouldDelete = await this.swalService.getDeleteSwal(vehicle, 'What do you want to do with ' + vehicle.name + ' ?');
-    console.log('shouldDelete', shouldDelete);
+    // console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      console.log("coming in should del");
+      // console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteVehicleById(vehicle.id, shouldDelete, 'Record has been' + message +
         'successfully');
@@ -2020,7 +2020,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.showIndeterminateProgress = true;
     this.formService.deleteFleet({ 'id': id })
       .subscribe((data: any) => {
-        //console.log("deleteFleet()= ", data);
+        //// console.log("deleteFleet()= ", data);
         this.showIndeterminateProgress = false;
         if (!data.error) {
           this.closeForm.nativeElement.click();
@@ -2041,7 +2041,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     this.showIndeterminateProgress = true;
     this.formService.deleteCategory({ 'id': id })
       .subscribe((data: any) => {
-        //console.log("deleteCategory()= ", data);
+        //// console.log("deleteCategory()= ", data);
         this.showIndeterminateProgress = false;
         if (!data.error) {
           this.closeCategory.nativeElement.click();
@@ -2059,15 +2059,15 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
       );
   }
   toggle(event) {
-    console.log("toffle", event);
+    // console.log("toffle", event);
   }
 
 
   closeFleetForm() {
-    console.log("coming l");
+    // console.log("coming l");
   }
   exportExcel(add_btn) {
-    console.log("coming in exportExcel", add_btn);
+    // console.log("coming in exportExcel", add_btn);
 
     window.open(
       environment.baseUrl + `/iof/manage_xls/?report_id=${add_btn}&timeZone=${(Intl.DateTimeFormat().resolvedOptions().timeZone)}`,
@@ -2075,7 +2075,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
     );
   }
   exportPdf(add_btn) {
-    console.log("coming in pdf");
+    // console.log("coming in pdf");
     // this.filtersUser.export = "pdf";
 
     window.open(
@@ -2088,7 +2088,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
   downloadXLS(download) {
     this.formService.downloadFleetListingXLS(this.downloadableLink1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -2098,7 +2098,7 @@ export class AdminTruckFormComponent implements OnInit, OnDestroy {
 
   downloadPDF(download) {
     this.formService.downloadFleetListingPDF(this.downloadableLink1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)

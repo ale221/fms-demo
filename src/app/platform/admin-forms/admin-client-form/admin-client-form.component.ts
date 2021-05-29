@@ -168,11 +168,11 @@ export class AdminClientFormComponent implements OnInit {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner", this.breadcrumbInner);
+        // console.log("this.breadcrumbInner", this.breadcrumbInner);
       }
     })
 
-    console.log("this.breadcrumbInner", this.breadcrumbInner);
+    // console.log("this.breadcrumbInner", this.breadcrumbInner);
     if (this.breadcrumbInner[0] == 'admin/config') {
       setTimeout(() => {
         this.editpop.nativeElement.click();
@@ -200,7 +200,7 @@ export class AdminClientFormComponent implements OnInit {
       this.searchText = newValue;
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+        // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
         this.filtersUser.search = this.searchForm.get('search').value;
         this.getUsers(this.filtersUser);
       }
@@ -222,15 +222,15 @@ export class AdminClientFormComponent implements OnInit {
 
   // getGroupList(filters) {
   //   let params = `type=${filters.type}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}`;
-  //   console.log("params for Group List= ", params);
+  //   // console.log("params for Group List= ", params);
 
   //   this.userService.getAllGroups(params).subscribe(
   //     (response: any) => {
-  //       console.log("getAllGroups() [response.data] =", response.data['data']);
+  //       // console.log("getAllGroups() [response.data] =", response.data['data']);
 
   //       if (!response.error) {
   //         // this.groups = response.data['data'];
-  //         // console.log("this.groups= ", this.groups)
+  //         // // console.log("this.groups= ", this.groups)
 
   //         // TOlD BY MUSHAHID BHAI
   //         // this.mapArrayGroups = response.data['data'].map(
@@ -244,7 +244,7 @@ export class AdminClientFormComponent implements OnInit {
   //           element.value = element.id;
   //         });
 
-  //         console.log("mapArrayGroups== ", this.mapArrayGroups);
+  //         // console.log("mapArrayGroups== ", this.mapArrayGroups);
 
   //       } else {
   //         this.swalService.getErrorSwal(response.message);
@@ -290,7 +290,7 @@ export class AdminClientFormComponent implements OnInit {
         this.swalService.getSuccessSwal(message);
         this.getUsers(this.filtersUser);
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.swalService.getErrorSwal(data.message)
       }
     })
@@ -301,23 +301,23 @@ export class AdminClientFormComponent implements OnInit {
     this.formTitle = 'Update Customer';
     this.btnText = 'Update';
     this.clientForm.get('status').setValue(user.status === 1 ? true : false);
-    // console.log("this.mapArrayGroups== ", this.mapArrayGroups);
+    // // console.log("this.mapArrayGroups== ", this.mapArrayGroups);
 
     // let setGroup = {};
     // for (let i = 0; i < this.mapArrayGroups.length; i++) {
     //   if (user.group.id == this.mapArrayGroups[i].id) {
-    //     console.log("this.mapArrayGroups[i]== ", this.mapArrayGroups[i]);
+    //     // console.log("this.mapArrayGroups[i]== ", this.mapArrayGroups[i]);
     //     setGroup = this.mapArrayGroups[i].id;
     //     //this.selectedGroup = this.mapArrayGroups[i];
     //     this.selectedGroup = { value: this.mapArrayGroups[i].id, label: this.mapArrayGroups[i].name };
     //   }
     // }
-    // console.log("setGroup = ", setGroup);
+    // // console.log("setGroup = ", setGroup);
 
-    // console.log("this.statusList== ", this.statusList);
+    // // console.log("this.statusList== ", this.statusList);
     // for (let i = 0; i < this.statusList.length; i++) {
     //   if (user.status == this.statusList[i].id) {
-    //     console.log("this.statusList[i]== ", this.statusList[i]);
+    //     // console.log("this.statusList[i]== ", this.statusList[i]);
     //     user.status = this.statusList[i].id;
     //     // this.clientForm.get['status'] = this.statusList[i]
     //     this.clientForm.controls.status.setValue(this.statusList[i]);
@@ -352,7 +352,7 @@ export class AdminClientFormComponent implements OnInit {
   converToFormdata(data) {
     var form_data = new FormData();
     for (var key in data) {
-      // console.log(key,data[key]);
+      // // console.log(key,data[key]);
       form_data.append(key, data[key]);
     }
     return form_data;
@@ -411,7 +411,7 @@ export class AdminClientFormComponent implements OnInit {
           this.submitted = false;
           this.clientForm.reset();
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           this.addUser = true;
           this.enableSubmitButton();
           this.swalService.getErrorSwal(data.message);
@@ -420,7 +420,7 @@ export class AdminClientFormComponent implements OnInit {
 
     } else {
       this.addUser = true;
-      console.log("Form is invalid[in else condition]", this.errorMessages);
+      // console.log("Form is invalid[in else condition]", this.errorMessages);
     }
   }
 
@@ -516,7 +516,7 @@ export class AdminClientFormComponent implements OnInit {
   //       if (data.status === HttpStatusCodeEnum.Success) {
   //         this.swalService.getInfoSwal('Please check ' + row.email + ' for further assistance');
   //       } else {
-  //         console.log(data.message)
+  //         // console.log(data.message)
   //       }
   //     })
   // }
@@ -537,7 +537,7 @@ export class AdminClientFormComponent implements OnInit {
         }
 
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
 
     });
@@ -572,14 +572,14 @@ export class AdminClientFormComponent implements OnInit {
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
-      console.log("file= ", file);
+      // console.log("file= ", file);
       this.selectedFile = file;
 
       if (this.selectedFile.type.indexOf('.sheet') != -1 || this.selectedFile.type.indexOf('.ms-excel') != -1) {
-        console.log("inside IF condition")
+        // console.log("inside IF condition")
         this.notCSVExcel = false;
       } else {
-        console.log("inside ELSE condition")
+        // console.log("inside ELSE condition")
         this.notCSVExcel = true;
       }
       this.selectedFileName = this.selectedFile.name;
@@ -595,26 +595,26 @@ export class AdminClientFormComponent implements OnInit {
 
     // OLD CODE BY WAHAB
     // this.userService.uploadUserBulkUpload(params).subscribe((res: any) => {
-    //   console.log("uploadUserBulkUpload res ", res);
+    //   // console.log("uploadUserBulkUpload res ", res);
     //   if (res.status == 200) {
-    //     console.log("inside if condition");
+    //     // console.log("inside if condition");
     //     this.swalService.getSuccessSwal('User list has been uploaded successfully');
 
     //     this.clear();
     //   } else {
-    //     console.log("inside else condition");
+    //     // console.log("inside else condition");
     //     this.swalService.getErrorSwal(res.message);
 
     //   }
     // }, err => {
     //   this.swalService.getErrorSwal('Invalid file structure');
-    //   console.log("unable to upload user bulk upload");
+    //   // console.log("unable to upload user bulk upload");
     // })
 
 
     // NEW CODE FOR MODAL BY WAHAB
     // this.userService.uploadUserBulkUpload(params).subscribe((data: any) => {
-    //   console.log("uploadBulk() response= ", data);
+    //   // console.log("uploadBulk() response= ", data);
 
     //   if (data.status === HttpStatusCodeEnum.Success) {
     //     this.closeForm.nativeElement.click();
@@ -623,7 +623,7 @@ export class AdminClientFormComponent implements OnInit {
     //     this.clear();
     //     this.bulkUploadForm.reset();
     //   } else {
-    //     console.log("data.message== ", data.message)
+    //     // console.log("data.message== ", data.message)
     //     this.swalService.getErrorSwal(data.message['error_message']);
     //   }
 
@@ -634,7 +634,7 @@ export class AdminClientFormComponent implements OnInit {
     this.searchText = $event.search;
     if (this.searchText.length > 0 || this.searchText.length === 0) {
       this.searchForm.get("search").setValue(this.searchText);
-      console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+      // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
       this.filtersUser.search = this.searchForm.get('search').value;
       this.getUsers(this.filtersUser);
     }
@@ -650,7 +650,7 @@ export class AdminClientFormComponent implements OnInit {
   }
 
   sortUserList(event) {
-    console.log(event);
+    // console.log(event);
     this.filtersUser.order_by = event.active;
     this.filtersUser.order = event.direction;
     this.getUsers(this.filtersUser);
@@ -664,7 +664,7 @@ export class AdminClientFormComponent implements OnInit {
   }
   downloadXLS(download) {
     this.clientService.downloadXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -675,7 +675,7 @@ export class AdminClientFormComponent implements OnInit {
 
   downloadPDF(download1) {
     this.clientService.downloadPDF(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

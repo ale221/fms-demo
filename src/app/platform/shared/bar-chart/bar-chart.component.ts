@@ -164,12 +164,12 @@ export class BarChartComponent implements OnInit {
     //   }
     // }
     // this.chartOptions1 = graphData;
-    // console.log(this.chartOptions,"111111111");
+    // // console.log(this.chartOptions,"111111111");
     for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
       var z = this.chartOptions?.categories[x].substring(0, 5) + '...';
       this.finalObj.push({ "name": z, "value": this.chartOptions?.values[x] });
     }
-    // console.log(this.finalObj);
+    // // console.log(this.finalObj);
     this.generateChar(this.finalObj);
   }
 

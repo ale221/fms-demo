@@ -31,7 +31,7 @@ export class SearchService {
   // }
 
   getSearch(key, params: any) :  Observable<LoginApiResponse<SearchResponse[]>> {
-    console.log(params);
+    // console.log(params);
     const url = `${AppConfig.APIOptionsHandler(key)}`;
     return this.http.get<LoginApiResponse<SearchResponse[]>>(url, {params: params});
   }

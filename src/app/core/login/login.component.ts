@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit {
       }
     })
     // this.RememberControl.valueChanges.subscribe(isMe => {
-    //   console.log(isMe)
+    //   // console.log(isMe)
     //   if(isMe){
     //     localStorage.setItem('setvalue', "true");
     //   }  else {
@@ -183,10 +183,10 @@ export class LoginComponent implements OnInit {
     params['email'] = this.currentEmailSave.email; //localStorage.getItem('emailForgetPassword');
     params['password'] = this.createPasswordForm.value.confirmpassword
     params['token'] = this.verifyForm.value.otp;
-    // console.log("params======= ", params)
+    // // console.log("params======= ", params)
 
     this.userService.createNewPassword(params).subscribe((res: any) => {
-      // console.log(res);
+      // // console.log(res);
       try {
         if (res['error'] === true) {
           this.swalService.getErrorSwal(res.message); //"Please enter password again"
@@ -216,9 +216,9 @@ export class LoginComponent implements OnInit {
     let params = {};
     params['token'] = this.verifyForm.value.otp;
     params['email'] = this.currentEmailSave.email;
-    // console.log(this.verifyForm.value.otp);
+    // // console.log(this.verifyForm.value.otp);
     this.userService.verifyCode(params).subscribe(res => {
-      // console.log(res);
+      // // console.log(res);
       try {
         if (res['error'] === true) {
           // this.invalidEmail=true;
@@ -248,7 +248,7 @@ export class LoginComponent implements OnInit {
   forgotPassword() {
     let params = {};
     params['email'] = this.forgotPasswordForm.value.currentEmail;
-    // console.log(params);
+    // // console.log(params);
     this.userService.forgotPasword(params)
       .subscribe(new class extends HttpController<ApiResponse<any[]>> {
         onComplete(): void {
@@ -257,7 +257,7 @@ export class LoginComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
 
         }
 
@@ -309,7 +309,7 @@ export class LoginComponent implements OnInit {
     this.currentEmailSave = params;
     this.forgotPasswordForm.reset();
     this.userService.sendEmailForForgetPassword(params).subscribe(res => {
-      // console.log(res['error']);
+      // // console.log(res['error']);
 
       // try {
       // if (res['error'] === true) {
@@ -344,7 +344,7 @@ export class LoginComponent implements OnInit {
   sendEmailAgain() {
     this.swalService.getSuccessSwal("OTP sent successfully on the email");
     this.userService.sendEmailForForgetPassword(this.currentEmailSave).subscribe(res => {
-      // console.log(res['error']);
+      // // console.log(res['error']);
       if (res['error'] === true) {
         // this.invalidEmail=true;
         this.swalService.getErrorSwal("Please send email again");
@@ -361,19 +361,19 @@ export class LoginComponent implements OnInit {
     this.firstTimeUser = false;
   }
   onFilterChange(event) {
-    // console.log(event,event.target.checked);
+    // // console.log(event,event.target.checked);
     if (event.target.checked === true) {
       localStorage.setItem('setvalue', "true");
       // localStorage.setItem('useremail',this.loginForm.value.email);
       // localStorage.setItem('userpassword',this.loginForm.value.password);
-      // console.log(this.loginForm.value.email,this.loginForm.value.password);
+      // // console.log(this.loginForm.value.email,this.loginForm.value.password);
     }
     else if (event.target.checked === false) {
       localStorage.setItem('setvalue', "false");
       // localStorage.setItem('useremail','');
       // localStorage.setItem('userpassword','');
-      // console.log(this.loginForm.value.email,this.loginForm.value.password);
-      // console.log(localStorage.getItem('setvalue'),"login");
+      // // console.log(this.loginForm.value.email,this.loginForm.value.password);
+      // // console.log(localStorage.getItem('setvalue'),"login");
     }
 
   }
@@ -502,7 +502,7 @@ export class LoginComponent implements OnInit {
         }
 
         onError(errorMessage: string, err: any) {
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.authService.unsetUser();
         }
 

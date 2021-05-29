@@ -1019,7 +1019,7 @@ export class PlaybackGoogleMapComponent implements OnInit, AfterViewInit {
       this.coordinates.push(new google.maps.LatLng(this.response[i].lat, this.response[i].long));
     }
 
-    //console.log(coordinates)
+    //// console.log(coordinates)
     debugger
     var flightPath = new google.maps.Polyline({
       path: this.coordinates,

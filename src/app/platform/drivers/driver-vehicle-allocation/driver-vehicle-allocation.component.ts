@@ -243,7 +243,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
         if (this.date_of_joining) {
           const a: any = (this.dob.valueOf());
           const b: any = (this.date_of_joining.valueOf());
-          console.log(a, b);
+          // console.log(a, b);
           if (a >= b) {
             this.date_of_joining = null;
           }
@@ -256,10 +256,10 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // console.log("Tool typeID", EntityType.IMEI_DEVICE)
-    // console.log("Driver typeID", EntityType.DRIVER)
-    // console.log("Technian typeID", EntityType.Workshop_Technician)
-    // console.log("Labor typeID", EntityType.LABOUR);
+    // // console.log("Tool typeID", EntityType.IMEI_DEVICE)
+    // // console.log("Driver typeID", EntityType.DRIVER)
+    // // console.log("Technian typeID", EntityType.Workshop_Technician)
+    // // console.log("Labor typeID", EntityType.LABOUR);
 
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;
@@ -309,7 +309,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
       this.searchText = newValue;
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+        // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
         this.filterDrivers.search = this.searchForm.get('search').value;
         this.getDrivers(this.filterDrivers);
       }
@@ -329,7 +329,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   }
 
   dateFinal(event) {
-    console.log(this.contractStartDate);
+    // console.log(this.contractStartDate);
   }
   getTrucks(value) {
     this.formService.getOptions('unassigned_trucks', {}).subscribe((data: any) => {
@@ -357,7 +357,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
           item => new DropDownItem(item['id'], item['name'])
         );
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -386,7 +386,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
           item => new DropDownItem(item['id'], item['label'])
         );
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -440,7 +440,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    // console.log('hashmap' , this.hashMap);
+    // // console.log('hashmap' , this.hashMap);
   }
 
   getprogress(area) {
@@ -508,7 +508,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
       }
     }
     else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
 
@@ -552,10 +552,10 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   }
 
   postDriverForm(param) {
-    console.log("cominf in post", param);
+    // console.log("cominf in post", param);
     this.formService.postVehicleShift(param)
       .subscribe((data: any) => {
-        console.log('postData() response=', data);
+        // console.log('postData() response=', data);
         this.enableSubmitButton();
         if (data.status === HttpStatusCodeEnum.Success) {
           this.submitted = false;
@@ -565,7 +565,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
           this.getDrivers(this.filterDrivers);
           this.getDriversDropdown(this.filters)
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           this.swalService.getErrorSwal(data.message);
         }
       })
@@ -602,10 +602,10 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   }
   onClearSearch() {
     // this.searchForm.get("search").setValue(this.searchText);
-    // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+    // // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
     // this.filterDrivers.search = this.searchForm.get('search').value;
     //   this.searchForm.reset();
-    //  console.log(this.searchForm.value,this.searchForm.value.search);
+    //  // console.log(this.searchForm.value,this.searchForm.value.search);
     //  if(this.searchForm.value.search === null || this.searchForm.value.search === undefined)
     //  {
     //    this.filterDrivers.search='';
@@ -626,10 +626,10 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
     // driver.append('id', String(this.selectedDriver.id));
     // driver.append('type', String(this.selectedRole));
     // Display the values
-    console.log("coming in patch", driver);
+    // console.log("coming in patch", driver);
     this.formService.patchVehicleShift(driver, id)
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         this.enableSubmitButton();
         if (data.status === HttpStatusCodeEnum.Success) {
           this.submitted = false;
@@ -639,14 +639,14 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
           this.getDriversDropdown(this.filters)
         } else {
           this.swalService.getErrorSwal(data.message);
-          console.log(data.message);
+          // console.log(data.message);
         }
       })
   }
 
   onShift = null;
   openEditModal(driver) {
-    console.log("openEditModal", driver);
+    // console.log("openEditModal", driver);
     this.selectedUserID = driver.id;
     // this.clearForm(driver);
     this.formTitle = 'Update Allocation';
@@ -668,7 +668,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   }
 
   togglePassword(value) {
-    console.log(value);
+    // console.log(value);
     this.show_password = value;
   }
 
@@ -688,11 +688,11 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
             this.swalService.getSuccessSwal(data.message);
           } else {
             this.swalService.getErrorSwal(data.message);
-            console.log(data.message);
+            // console.log(data.message);
           }
 
           //  onNext(data) {
-          //   console.log(data);
+          //   // console.log(data);
           //   this.context.hashMap[driver.id] = false;
           //   if (data.status === HttpStatusCodeEnum.Success) {
           //     const shouldDeleteOrInactive = await this.context.swalService.getDeleteSwal(driver);
@@ -728,13 +728,13 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.swalService.getErrorSwal(errorMessage);
         }
 
         onNext(apiResponse: ApiResponse<any>): void {
           this.context.swalService.getSuccessSwal(message);
-          console.log(type);
+          // console.log(type);
           if (type === EntityType.LABOUR) {
             this.context.selectedLaborRows = [];
           } else if (type === EntityType.DRIVER) {
@@ -772,7 +772,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
     // params['email'] = this.email;
     this.userService.forgotPasword(params)
       .subscribe((data: any) => {
-        console.log("forgotPasword() response=, ", data);
+        // console.log("forgotPasword() response=, ", data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.swalService.getInfoSwal('Please check your email for further assistance');
         } else {
@@ -801,14 +801,14 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
   }
 
   onSearch(formValue) {
-    console.log(formValue, "Runnign");
+    // console.log(formValue, "Runnign");
     //  this.searchForm.get("search")
-    //         console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
+    //         // console.log("this.searchForm.get('search')== ", this.searchForm.get('search').value);
     this.filterDrivers.search = formValue['search'];
     if (this.filterDrivers.search != null || this.filterDrivers.search != undefined) {
       this.filterDrivers.search = formValue['search'];
     }
-    console.log(formValue);
+    // console.log(formValue);
     this.getDrivers(this.filterDrivers);
   }
 
@@ -832,7 +832,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
 
   downloadXLS(download) {
     this.formService.downloadXLSVehicleAllocation(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -842,7 +842,7 @@ export class DriverVehicleAllocationComponent implements OnInit, OnDestroy {
 
   downloadPDF(download1) {
     this.formService.downloadPDFVehicleAllocation(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

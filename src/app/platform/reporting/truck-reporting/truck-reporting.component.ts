@@ -72,11 +72,11 @@ export class TruckReportingComponent implements OnInit, AfterContentInit {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-            console.log('types', apiResponse);
+            // console.log('types', apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.truckTypes = apiResponse.response['option_values'].map(function (obj) {
                 return {label: obj.label, value: obj.value};
@@ -85,7 +85,7 @@ export class TruckReportingComponent implements OnInit, AfterContentInit {
               this.context.truckTypes.unshift({label: 'All'});
 
             } else {
-              console.log(apiResponse.message);
+              // console.log(apiResponse.message);
             }
 
           }
@@ -114,7 +114,7 @@ export class TruckReportingComponent implements OnInit, AfterContentInit {
     if (this.is_customer_client) {
       params['truck_ids'] = [10259, 10265];
     }
-    console.log('event from reportingg', params);
+    // console.log('event from reportingg', params);
     this.reportingCols = [
       {field: 'truck', header: 'Trucks'},
       // {field: 'shifts', header: 'No. of Shifts'},
@@ -163,11 +163,11 @@ export class TruckReportingComponent implements OnInit, AfterContentInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          console.log('reporting', apiResponse);
+          // console.log('reporting', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.csvRows = apiResponse.response;
             this.context.temp = apiResponse.response;
@@ -231,7 +231,7 @@ export class TruckReportingComponent implements OnInit, AfterContentInit {
 
 
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
 
         }
@@ -247,11 +247,11 @@ export class TruckReportingComponent implements OnInit, AfterContentInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          console.log('reporting', apiResponse);
+          // console.log('reporting', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.csvRows = apiResponse.response;
             this.context.temp = apiResponse.response;
@@ -313,7 +313,7 @@ export class TruckReportingComponent implements OnInit, AfterContentInit {
             }
             this.context.reportErrorMessages = null;
           } else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
 
         }

@@ -163,7 +163,7 @@ export class CustomValidators {
 
   static MyAwesomeRangeValidator: ValidatorFn = (fg: FormGroup) => {
     const dimension = fg.get('dimension');
-    console.log('dimension', dimension);
+    // console.log('dimension', dimension);
     return null;
     // const start = fg.get('rangeStart').value;
     // const end = fg.get('rangeEnd').value;

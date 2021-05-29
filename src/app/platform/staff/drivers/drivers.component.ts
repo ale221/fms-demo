@@ -148,7 +148,7 @@ export class DriversComponent implements OnInit, OnDestroy {
    * Refreshes the list of data of current active tab, flters data according to data list
    */
   refreshCurrentTabData() {
-    console.log('this.currentActiveTab  : ', this.currentActiveTab);
+    // console.log('this.currentActiveTab  : ', this.currentActiveTab);
     this.enableSearch = true;
     this.showIndeterminateProgress = true;
     if (this.currentActiveTab == 1) {
@@ -235,7 +235,7 @@ export class DriversComponent implements OnInit, OnDestroy {
         }
 
         onNext(apiResponse: LoginApiResponse<any[]>): void {
-          console.log('driver count', apiResponse);
+          // console.log('driver count', apiResponse);
 
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.driversLength = apiResponse.response;
@@ -258,7 +258,7 @@ export class DriversComponent implements OnInit, OnDestroy {
         }
 
         onNext(apiResponse: LoginApiResponse<any[]>): void {
-          console.log('labor count', apiResponse);
+          // console.log('labor count', apiResponse);
 
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.laborsLength = apiResponse.response;
@@ -282,7 +282,7 @@ export class DriversComponent implements OnInit, OnDestroy {
         }
 
         onNext(apiResponse: LoginApiResponse<any[]>): void {
-          console.log('technician count', apiResponse);
+          // console.log('technician count', apiResponse);
 
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.techniciansLength = apiResponse.response;
@@ -390,7 +390,7 @@ export class DriversComponent implements OnInit, OnDestroy {
 
           this.enableSearch = false;
           this.showIndeterminateProgress = false;
-          console.log('call completed and list of all staff', this.allStaffList.length, this.temp.length);
+          // console.log('call completed and list of all staff', this.allStaffList.length, this.temp.length);
         }
       }
       if (data.status === HttpStatusCodeEnum.Error) {
@@ -421,7 +421,7 @@ export class DriversComponent implements OnInit, OnDestroy {
           this.allStaffList = this.allStaffList.concat(this.totalTechnicians);
           this.temp = this.allStaffList;
 
-          console.log('call completed and list of all staff', this.allStaffList.length, this.temp.length);
+          // console.log('call completed and list of all staff', this.allStaffList.length, this.temp.length);
         }
       }
       if (data.status === HttpStatusCodeEnum.Error) {
@@ -438,15 +438,15 @@ export class DriversComponent implements OnInit, OnDestroy {
 
   fineSaved(event) {
     if (event) {
-      console.log('saved successfully');
+      // console.log('saved successfully');
     } else {
-      console.log('saved unsuccessfully');
+      // console.log('saved unsuccessfully');
     }
   }
 
   filter(event, id) {
     if (event.target.checked) {
-      console.log(id);
+      // console.log(id);
       this.currentActiveTab = id;
     }
   }
@@ -480,7 +480,7 @@ export class DriversComponent implements OnInit, OnDestroy {
 
 
   toggleExpandRow(row) {
-    console.log('Toggled Expand Row!', row);
+    // console.log('Toggled Expand Row!', row);
 
     this.table.rowDetail.toggleExpandRow(row);
   }
@@ -498,23 +498,23 @@ export class DriversComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          console.log('types', apiResponse);
+          // console.log('types', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.truckTypes = apiResponse.response['option_values'].map(function (obj) {
               return { label: obj.label, value: obj.value };
             });
-            console.log('lala', this.context.truckTypes);
+            // console.log('lala', this.context.truckTypes);
 
-            console.log('types', apiResponse);
+            // console.log('types', apiResponse);
 
             this.context.truckTypes.unshift({ label: 'All' });
 
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
 
         }
@@ -536,7 +536,7 @@ export class DriversComponent implements OnInit, OnDestroy {
       this.reportErrorMessages = null;
       this.isValidMonthDateGiven = true;
     }
-    console.log(this.reportErrorMessages, this.isValidMonthDateGiven);
+    // console.log(this.reportErrorMessages, this.isValidMonthDateGiven);
   }
 
   generateReport(event) {
@@ -613,7 +613,7 @@ export class DriversComponent implements OnInit, OnDestroy {
             { field: 'Medical Waste', header: 'Medical Waste' },
           ];
         } else {
-          console.log(data.message);
+          // console.log(data.message);
         }
       });
     // }
@@ -623,7 +623,7 @@ export class DriversComponent implements OnInit, OnDestroy {
   }
 
   generateMonthlyReport() {
-    // console.log(new Date(this.selectedYear, this.selectedMonth, 1));
+    // // console.log(new Date(this.selectedYear, this.selectedMonth, 1));
     const start_month = startOfMonth(new Date(this.selectedYear, this.selectedMonth - 1, 1));
     const end_month = endOfMonth(new Date(this.selectedYear, this.selectedMonth - 1, 1));
 
@@ -631,8 +631,8 @@ export class DriversComponent implements OnInit, OnDestroy {
     // var firstDay = new Date(this.selectedYear, this.selectedMonth, 1);
     // var lastDay = new Date(this.selectedYear, this.selectedMonth, 0);
 
-    // console.log(firstDay, lastDay);
-    console.log('start date', start_month, end_month);
+    // // console.log(firstDay, lastDay);
+    // console.log('start date', start_month, end_month);
     this.generateReport([[start_month, end_month], 'monthly']);
   }
 

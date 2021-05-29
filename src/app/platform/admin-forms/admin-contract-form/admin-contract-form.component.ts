@@ -203,8 +203,8 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
     this.breadcrumbService.getValue().subscribe(res => {
       if (res && res.length) {
@@ -296,7 +296,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       }
 
       setTimeout(() => {
-        console.log("For debuggggggggggginggg= ", param);
+        // console.log("For debuggggggggggginggg= ", param);
       }, 500);
 
       const id = this.contractForm.getRawValue().id;
@@ -307,7 +307,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
         this.patchContract(param);
       }
     } else {
-      console.log("Form is invalid[in else condition]", this.errorMessages);
+      // console.log("Form is invalid[in else condition]", this.errorMessages);
     }
   }
   validate(): boolean {
@@ -357,14 +357,14 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.contract_type_list = apiResponse.response['option_values'];
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
 
         }
@@ -381,7 +381,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
@@ -405,7 +405,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
@@ -423,7 +423,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
   patchContract(truck: FormData) {
     truck.append('id', String(this.selectedRow.id));
-    // console.log("patchContract: ", truck);
+    // // console.log("patchContract: ", truck);
     this.uploadedPercentage = 0;
     this.formService.patchDataWithUploadStatus(truck)
       .subscribe(new class extends HttpController<HttpEvent<any>> {
@@ -436,7 +436,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
           this.context.swalService.getErrorSwal(errorMessage);
           this.context.fileUploadStatus = false;
           this.context.closeP.nativeElement.click();
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: HttpEvent<any>): void {
@@ -499,7 +499,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   }
 
   postContract(param) {
-    // console.log("postcontarct: ", param);
+    // // console.log("postcontarct: ", param);
     this.uploadedPercentage = 0;
     this.formService.postContractWithUploadStatus(param)
       .subscribe(new class extends HttpController<HttpEvent<any>> {
@@ -512,7 +512,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
           this.context.swalService.getErrorSwal(errorMessage);
           this.context.fileUploadStatus = false;
           // this.context.closeP.nativeElement.click();
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: HttpEvent<any>): void {
@@ -576,7 +576,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   onClientChange(event) {
     // this.param_clients = [];
     // this.param_clients.push(event['id']);
-    // console.log(this.param_areas);
+    // // console.log(this.param_areas);
     // // this.resetMap();
     // this.getBins();
   }
@@ -622,12 +622,12 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.loader_flag = false;
         }
 
         onNext(apiResponse: LoginApiResponse<any>): void {
-          console.log('areas', apiResponse);
+          // console.log('areas', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             if (apiResponse.response !== undefined) {
               this.context.area_list = apiResponse.response.map(
@@ -649,12 +649,12 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.loader_flag = false;
         }
 
         onNext(apiResponse: LoginApiResponse<any>): void {
-          console.log('locations', apiResponse);
+          // console.log('locations', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             if (apiResponse.response !== undefined) {
               this.context.location_list = apiResponse.response.map(
@@ -676,7 +676,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
           this.context.loader_flag = false;
         }
 
@@ -687,7 +687,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
             );
 
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
           this.context.clients_loader_flag = false;
         }
@@ -703,12 +703,12 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
       onError(errorMessage: string, err: any) {
         // do
-        console.log(errorMessage);
+        // console.log(errorMessage);
       }
 
       onNext(apiResponse: ApiResponse<any>): void {
         if (apiResponse.status) {
-          console.log('bins ', apiResponse.response);
+          // console.log('bins ', apiResponse.response);
           this.context.binsList = apiResponse.response;
           if (apiResponse.response !== undefined) {
             this.context.itemListBins = apiResponse.response.map(
@@ -721,7 +721,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
           }
 
         } else {
-          console.log(apiResponse.message);
+          // console.log(apiResponse.message);
         }
       }
     }(this)
@@ -748,7 +748,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   }
 
   getContracts(filters) {
-    console.log("coming in ");
+    // console.log("coming in ");
     this.inputValue = '';
     this.searchPlaceHolder = 'Loading...';
     this.enableSearch = true;
@@ -761,11 +761,11 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   }
 
   optimized_contract_call(filters) {
-    console.log("coming in 3");
+    // console.log("coming in 3");
     this.showIndeterminateProgress = true;
     let params = `type=${filters.type_id}&limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}`;
-    console.log("let params", params);
-    console.log("filters")
+    // console.log("let params", params);
+    // console.log("filters")
     this.optimizedCall = this.formService.getContractsListing({
       type_id: filters.type_id,
       limit: filters.limit,
@@ -778,7 +778,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       .subscribe((data: any) => {
 
         if (!data.error) {
-          console.log("coming in 4");
+          // console.log("coming in 4");
           // this.contracts=data.data['data'];
           this.contracts = data.response;
           this.temp = this.contracts;
@@ -787,11 +787,11 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
         } else {
           this.swalService.getWarningSwal(data.message);
         }
-        console.log("contracts: ", data['data'].data);
+        // console.log("contracts: ", data['data'].data);
         // this.contracts=data.data['data'];
 
         this.totalContractsLength = data.data.count;
-        console.log("totalContractsLength", this.totalContractsLength);
+        // console.log("totalContractsLength", this.totalContractsLength);
         this.contracts = data['data'].data;
         this.contracts.paginator = this.paginator;
 
@@ -834,7 +834,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -884,7 +884,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   } else {
       //     this.context.searchPlaceHolderExpiringInThreeMonths = 'Search';
       //     this.context.tempExpiringInThreeMonths = this.context.expiringInThreeMonths;
-      //     console.log('temp', this.context.tempExpiringInThreeMonths);
+      //     // console.log('temp', this.context.tempExpiringInThreeMonths);
 
 
       //   }
@@ -894,13 +894,13 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
       // onNext(apiResponse: TestApiResponse<any[]>): void {
       //   if (apiResponse.status === HttpStatusCodeEnum.Success) {
-      //     console.log('expirung in 3', apiResponse.response);
+      //     // console.log('expirung in 3', apiResponse.response);
       //     this.context.results_remaining = apiResponse.remaining;
       //     this.context.expiringInThreeMonths = [];
       //     this.context.expiringInThreeMonths = [...this.context.expiringInThreeMonths, ...apiResponse.response];
@@ -957,7 +957,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1019,7 +1019,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1082,7 +1082,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1144,7 +1144,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   // do
       //   this.context.swalService.getErrorSwal(errorMessage);
 
-      //   // console.log(errorMessage);
+      //   // // console.log(errorMessage);
 
       // }
 
@@ -1173,7 +1173,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    console.log('hashmap', this.hashMap);
+    // console.log('hashmap', this.hashMap);
   }
 
   getprogress(area) {
@@ -1182,7 +1182,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
 
   onSelect({ selected }) {
-    console.log("onSelect: ", selected);
+    // console.log("onSelect: ", selected);
     this.selectedRows.splice(0, this.selectedRows.length);
     this.selectedRows.push(...selected);
   }
@@ -1205,13 +1205,13 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
           // onError(errorMessage: string, err: any) {
           //   // do
-          //   console.log(errorMessage);
+          //   // console.log(errorMessage);
           //   this.context.hashMap[row.id] = false;
           //   this.context.swalService.getErrorSwal(errorMessage);
           // }
 
           // async onNext(apiResponse: ApiResponseNew<any>) {
-          //   console.log(apiResponse);
+          //   // console.log(apiResponse);
           //   this.context.hashMap[row.id] = false;
           //   if (apiResponse.status === HttpStatusCodeEnum.Success) {
           //     const shouldDeleteOrInactive = await this.context.swalService.getDeleteSwal(row);
@@ -1293,12 +1293,12 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   //   }
   // }
   async showSwal(row) {
-    console.log('user', row);
+    // console.log('user', row);
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
     const shouldDelete = await this.swalService.getDeleteSwal(row, 'What do you want to do with ' + row.name + ' ?');
-    console.log('shouldDelete', shouldDelete);
+    // console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      console.log("coming in should del");
+      // console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
 
       this.deleteContract(row.id, shouldDelete, 'Record has been' + message + 'successfully');
@@ -1327,7 +1327,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         // onError(errorMessage: string, err: any) {
         //   // do
-        //   console.log(errorMessage);
+        //   // console.log(errorMessage);
         //   this.context.swalService.getErrorSwal(errorMessage);
         // }
 
@@ -1367,7 +1367,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
         // onError(errorMessage: string, err: any) {
         //   // do
-        //   console.log(errorMessage);
+        //   // console.log(errorMessage);
         //   this.context.deleteAllButton = false;
         //   for (let single_id = 0; single_id < id_list.length; single_id++) {
         //     this.context.hashMap[id_list[single_id]] = false;
@@ -1376,7 +1376,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
         // }
 
         // async onNext(apiResponse: ApiResponseNew<any>) {
-        //   console.log(apiResponse);
+        //   // console.log(apiResponse);
         //   this.context.deleteAllButton = false;
         //   for (let single_id = 0; single_id < id_list.length; single_id++) {
         //     this.context.hashMap[id_list[single_id]] = false;
@@ -1461,7 +1461,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   rowIndexBeingEdited = null;
 
   openEditModal(row, index) {
-    console.log("row= ", row);
+    // console.log("row= ", row);
     this.AdButtonClick();
     this.rowIndexBeingEdited = index;
     this.isFileImage = true;
@@ -1520,7 +1520,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     this.changeMaterial();
     this.source_latlong = row.source_latlong;
     if (!isNullOrUndefined(this.source_latlong)) {
-      console.log(JSON.parse(this.source_latlong));
+      // console.log(JSON.parse(this.source_latlong));
       // this.binMap.placeMarkerAndPanTo(event.latLng);
       this.binMap.createMarker(JSON.parse(row.source_latlong), null, null, null, 'mouseover', 10, true).getPosition();
     }
@@ -1528,7 +1528,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       this.avatar_url = row.photo_method;
       let arr = row.photo_method.split('/');
       this.picName = arr[arr.length - 1];
-      console.log(arr, this.picName);
+      // console.log(arr, this.picName);
       // this.createFile(row.photo, this.picName);
     } else {
       this.contractForm.patchValue({ photo_method: null });
@@ -1543,7 +1543,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
           picTooltip = picName;
           // picName = picName.substring(0, 33) + '...';
         }
-        console.log(arr, picName);
+        // console.log(arr, picName);
 
         this.createFile(row.files_name[i], picName, picTooltip);
       }
@@ -1551,7 +1551,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       this.contractForm.patchValue({ files: null });
     }
 
-    console.log(this.avatar_url);
+    // console.log(this.avatar_url);
     this.btnText = "Update";
     this.fileUploadProgressBar = false;
   }
@@ -1573,14 +1573,14 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     let data = await response.blob();
     let file = new File([data], filename);
     file['tooltip'] = fileTooltip;
-    console.log('new file', file);
+    // console.log('new file', file);
     this.uploader.files.push(file);
     this.fileUploadProgressBar = false;
   }
 
   onBinChange(obj) {
     if ('itemValue' in obj) {
-      console.log(obj);
+      // console.log(obj);
       if (obj.value.indexOf(obj.itemValue) > -1) {
         // this.tempMarkers[obj.itemValue['id']].setIcon(this.getMapIcon(true));
       } else {
@@ -1599,10 +1599,10 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   }
 
   updateFilter(val) {
-    console.log(this.searchForm.value.search);
+    // console.log(this.searchForm.value.search);
     this.downloadableLink = 'search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
     this.downloadableLink1 = 'search=' + this.searchForm.value.search + '&time_zone=' + Intl.DateTimeFormat().resolvedOptions().timeZone ;
-    console.log("coming in updatefilter", this.downloadableLink);
+    // console.log("coming in updatefilter", this.downloadableLink);
     this.filters.search = this.searchForm.value.search;
     this.filters.offset = 0;
     this.contracts.paginator.pageIndex = 0;
@@ -1610,7 +1610,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       this.filters.search = '';
     }
     this.optimized_contract_call(this.filters);
-    console.log("coming in ");
+    // console.log("coming in ");
 
     // this.inputValue = '';
     // this.searchPlaceHolder = 'Loading...';
@@ -1639,7 +1639,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     //     } else {
     //       this.swalService.getWarningSwal(data.message);
     //     }
-    //     console.log("asaaaaaaaaaaaaa", data['data'].data);
+    //     // console.log("asaaaaaaaaaaaaa", data['data'].data);
     //     // this.contracts=data.data['data'];
     //     this.totalContractsLength = data.data.count;
     //     this.contracts = data['data'].data;
@@ -1661,7 +1661,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
     this.optimized_contract_call(this.filters);
   }
   onSearch(formval) {
-    // console.log(this.searchForm.value.search);
+    // // console.log(this.searchForm.value.search);
   }
 
   enableSubmitButton() {
@@ -1680,7 +1680,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   uploadedFiles = [];
 
   fileChange(event) {
-    console.log("filechange: ", event);
+    // console.log("filechange: ", event);
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
@@ -1690,7 +1690,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
       //   this.notImage = true;
       // }
       this.isFileImage = fileList[0].type.indexOf('png') > -1 || fileList[0].type.indexOf('jpg') > -1 || fileList[0].type.indexOf('jpeg') > -1;
-      console.log('file type', fileList[0].type, this.isFileImage);
+      // console.log('file type', fileList[0].type, this.isFileImage);
       if (this.isFileImage) {
 
         if (file.size > 1000000000) { // 1MB
@@ -1704,7 +1704,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
           reader.onload = (function (aImg) {
             return function (e) {
               aImg.src = e.target.result;
-              console.log(aImg, 'image');
+              // console.log(aImg, 'image');
               self.avatar_url = aImg.src;
             };
           })(img);
@@ -1739,7 +1739,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
   changeMaterial() {
     if (this.selected_skip_size) {
-      console.log('option', this.getIconsService.getMaterialLabel(SkipSizeToMaterialEnum['_' + this.selected_skip_size]));
+      // console.log('option', this.getIconsService.getMaterialLabel(SkipSizeToMaterialEnum['_' + this.selected_skip_size]));
       this.selected_entity_sub_type = this.getIconsService.getMaterialLabel(SkipSizeToMaterialEnum['_' + this.selected_skip_size]);
     } else {
       this.selected_entity_sub_type = null;
@@ -1747,7 +1747,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   }
 
   remove(file: File, uploader: FileUpload) {
-    console.log("remove...");
+    // console.log("remove...");
     const index = uploader.files.indexOf(file);
     uploader.remove(null, index);
   }
@@ -1761,7 +1761,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   }
 
   fileSelected(event) {
-    console.log('file selected', event);
+    // console.log('file selected', event);
   }
 
   onPaginateTool(event) {
@@ -1776,12 +1776,12 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
   }
 
   showPDF(row) {
-    // console.log("data- ", row)
-    // console.log("Download PDF= ", row.document_file[0])
+    // // console.log("data- ", row)
+    // // console.log("Download PDF= ", row.document_file[0])
     window.open(row, '_blank');
   }
   pageReload() {
-    console.log("coming");
+    // console.log("coming");
     window.location.reload()
   }
 
@@ -1792,7 +1792,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
   downloadXLS(download) {
     this.formService.downloadXLSContract(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -1803,7 +1803,7 @@ export class AdminContractFormComponent implements OnInit, OnDestroy {
 
   downloadPDF(download1) {
     this.formService.downloadPDFContract(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

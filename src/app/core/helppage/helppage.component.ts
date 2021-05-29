@@ -22,8 +22,8 @@ export class HelppageComponent implements OnInit {
 
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
     const mapProp = GoogleMapModel.getMapProp();
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);

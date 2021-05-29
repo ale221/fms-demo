@@ -24,7 +24,7 @@ export class JobService {
 
   getJobsSummary(key, params: any) {
     const url = `${AppConfig.APIOptionsHandler(key)}`;
-    console.log(url);
+    // console.log(url);
     return this.http.get (url, {params: params});
   }
 

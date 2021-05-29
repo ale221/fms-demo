@@ -36,7 +36,7 @@ export class AreaDropdownComponent implements OnInit, AfterViewInit {
   }
 
   onAreaChange(event) {
-    console.log(event);
+    // console.log(event);
     this.valueChanged.emit(event);
 
   }
@@ -50,12 +50,12 @@ export class AreaDropdownComponent implements OnInit, AfterViewInit {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
             this.context.loader_flag = false;
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {
-            console.log('areas', apiResponse);
+            // console.log('areas', apiResponse);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               if (!isNullOrUndefined(apiResponse.response)) {
                 this.context.area_list = apiResponse.response.map(

@@ -172,8 +172,8 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
 
     this.breadcrumbService.getValue().subscribe(res => {
@@ -181,18 +181,18 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner",this.breadcrumbInner);
+        // console.log("this.breadcrumbInner",this.breadcrumbInner);
       }
     })
 
-    console.log("this.breadcrumbInner",this.breadcrumbInner);
+    // console.log("this.breadcrumbInner",this.breadcrumbInner);
   if(this.breadcrumbInner[0]=='admin/config'){
     setTimeout(() => {
       this.editpop.nativeElement.click();
     }, 1000);
   }
     this.loggedInUser = this.authService.getUser();
-    // console.log("entity.territory-- ", EntityType.TERRITORY);
+    // // console.log("entity.territory-- ", EntityType.TERRITORY);
     this.deleteAllButton = false;
     this.getGeoFenceTypes();
     this.getTruckList(this.filtersTruck);   //for vehicles
@@ -214,19 +214,19 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
       this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
     }, 1000);
     // this.mapZone = new google.maps.Map(this.gmapElementZone.nativeElement, mapProp);
-    console.log("this.map (after adding map)= ", this.map)
+    // console.log("this.map (after adding map)= ", this.map)
   }
 
   // Initialize google map
   initMap() {
-    // console.log("this.map= ", this.map)
+    // // console.log("this.map= ", this.map)
     // const mapProp = {
     //   center: { lat: 33.6844, lng: 73.047 },
     //   zoom: 6,
     // };
     // const mapProp = GoogleMapModel.getMapProp();
     // this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-    // console.log("this.map (after adding map)= ", this.map)
+    // // console.log("this.map (after adding map)= ", this.map)
   }
 
   // setup drawing tools
@@ -270,11 +270,11 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
 
   getTruckList(filtersTruck) {
     let params = `limit=${filtersTruck.limit}&offset=${filtersTruck.offset}&order=${filtersTruck.order}&order_by=${filtersTruck.order_by}`;
-    console.log("params for getVehicleList= ", params);
+    // console.log("params for getVehicleList= ", params);
 
     this.formService.getVehiclesListNew(params)
       .subscribe((data: any) => {
-        console.log("getVehiclesList()-", data);
+        // console.log("getVehiclesList()-", data);
         if (!data.error) {
           this.itemListTrucks = data['data'].data.map(
             item => new DropDownItem(item['id'], item['name'])
@@ -283,7 +283,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
         } else {
           this.swalService.getErrorSwal(data.message);
         }
-        console.log("this.itemListTrucks= ", this.itemListTrucks)
+        // console.log("this.itemListTrucks= ", this.itemListTrucks)
       }
       );
   }
@@ -291,7 +291,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
   getGeoFenceTypes() {
     this.formService.getOptions('dropdown_data', { option_key: 'territorytype' })
       .subscribe((data: any) => {
-        console.log("getOptions() response= ", data);
+        // console.log("getOptions() response= ", data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.itemListTerritoryType = data.response['option_values'].map(
             item => new DropDownItem(item['id'], item['label'])
@@ -349,7 +349,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(formValue: Object) {
-    console.log("formvalue", formValue);
+    // console.log("formvalue", formValue);
     this.submitted = true;
     if (this.validate()) {
       const id = this.territoryForm.getRawValue().id;
@@ -360,7 +360,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
           formValue['trucks_list'].push(this.selectedTruck[i].id);
         }
       }
-      console.log("formvalue2", formValue);
+      // console.log("formvalue2", formValue);
       this.disableSubmitButton();
       if (isNullOrUndefined(id)) {
         this.postTerritory(formValue);
@@ -368,7 +368,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
         this.patchTerritory(formValue);
       }
     } else {
-      console.log("form is inValid.", this.errorMessages);
+      // console.log("form is inValid.", this.errorMessages);
     }
   }
   postTerritory(formValue): void {
@@ -376,7 +376,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
     formValue.is_poi = (formValue.is_poi === null || formValue.is_poi === false) ? false : true;
 
     this.formService.postData(formValue).subscribe((data: any) => {
-      console.log("reponse of update= ", data);
+      // console.log("reponse of update= ", data);
       if (data.status === HttpStatusCodeEnum.Success) {
         this.submitted = false;
         this.closeForm.nativeElement.click();
@@ -387,7 +387,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
         this.swalService.getErrorSwal(data.message);
         this.btnText = "Save";
         this.btnLoading = false;
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
   }
@@ -413,11 +413,11 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
     this.drawingManager.setDrawingMode(null);
     // this.mapZone.resetMap();
     let params = `zone_access_type=${filter.zone_access_type}&type_id=${filter.type_id}&limit=${filter.limit}&offset=${filter.offset}&order=${filter.order}&order_by=${filter.order_by}&search=${filter.search}`;
-    // console.log("params--", params);
+    // // console.log("params--", params);
 
     this.formService.getTerritoryEntity(params)
       .subscribe((data: any) => {
-        console.log("getEntities() response= ", data);
+        // console.log("getEntities() response= ", data);
         this.showIndeterminateProgress = false;
         this.submittedTerritory = false;
         if (data.status === HttpStatusCodeEnum.Success) {
@@ -428,7 +428,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
           this.territories = data['data'].data;
           this.totalTerritoryLength = data['data'].count;
           this.territories.pagination = this.totalTerritoryLength
-          console.log("this.territories== ", this.territories, this.territories.length)
+          // console.log("this.territories== ", this.territories, this.territories.length)
           // this.populateHashmap(data.response);
           this.temp = this.territories;
           this.drawGeozones(this.territories);
@@ -455,7 +455,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
     for (const entry of list) {
       this.hashMap[entry.id] = false;
     }
-    console.log('hashmap', this.hashMap);
+    // console.log('hashmap', this.hashMap);
   }
   getprogress(area) {
     return this.hashMap[area.id];
@@ -465,11 +465,11 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
   patchTerritory(territory) {
     territory['id'] = String(this.selectedTerritory.id);
     territory['type'] = EntityType.TERRITORY;
-    console.log(territory);
+    // console.log(territory);
     territory.status = territory.status === true ? 1 : 2;
     territory.is_poi = (territory.is_poi === null || territory.is_poi === false) ? false : true;
     this.formService.patchDataTerritory(territory).subscribe((data: any) => {
-      console.log("response of update - ", data);
+      // console.log("response of update - ", data);
       if (data.status === HttpStatusCodeEnum.Success) {
         this.submitted = false;
         this.closeForm.nativeElement.click();
@@ -480,7 +480,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
         this.getTerritories(this.filterTerritory);
         // window.location.reload();
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.btnText = "Update";
         this.btnLoading = false;
         this.swalService.getErrorSwal(data.message);
@@ -488,7 +488,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
     })
   }
   openEditModal(territory, readOnly = false) {
-    console.log("openeditmodel", territory);
+    // console.log("openeditmodel", territory);
     this.formTitle = 'Update Zone';
     this.btnText = "Update";
     this.inactiveRecord = this.disableButton(territory);
@@ -534,7 +534,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
     const shouldDelete = await this.swalService.getDeleteSwal(territory, 'What do you want to do with this record?');
 
     if (shouldDelete) {
-      console.log("coming in should del");
+      // console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.confirmDelete(territory.id, shouldDelete, 'Record has been' + message + 'successfully');
     }
@@ -558,7 +558,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
         this.inputValue = '';
         this.selectedRows = [];
       } else {
-        console.log(message); //data.message
+        // console.log(message); //data.message
         this.swalService.getErrorSwal(message); //data.message
       }
     }
@@ -580,7 +580,7 @@ export class AdminTerritoryFormComponent implements OnInit, OnDestroy {
           this.inputValue = '';
           this.selectedRows = [];
         } else {
-          console.log(data.message);
+          // console.log(data.message);
           this.swalService.getErrorSwal(data.message)
         }
 

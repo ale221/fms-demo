@@ -41,7 +41,7 @@ export class StatisticschartComponent implements OnInit {
     this.arry1 = this.chartOptions?.series[0].data;
     this.arry2 = this.chartOptions?.series[1].data;
     this.arry3 = this.chartOptions?.series[2].data;
-    // console.log(this.chartOptions);
+    // // console.log(this.chartOptions);
     for (let x = 0; x < this.chartOptions?.categories.length; x++) {
       var z = this.chartOptions?.categories[x].substring(0, 5) + '...';
       this.finalObj.push({ "name": z, "Fuel": this.arry1[x], "Engine": this.arry2[x], "Tire": this.arry3[x] });
@@ -206,7 +206,7 @@ export class StatisticschartComponent implements OnInit {
       }
     }
     this.chartOptions1 = graphData;
-    // console.log(this.chartOptions,"111111111");
+    // // console.log(this.chartOptions,"111111111");
     // this.generateChar(this.chartOptions);
   }
 

@@ -13,7 +13,7 @@ export class GetRouteParamService {
   getParams(routeObj) {
     routeObj.params.subscribe(params => {
       this.selectedId = +params['id']; // (+) converts string 'id' to a number
-      console.log('id changed', this.selectedId);
+      // console.log('id changed', this.selectedId);
 
     });
     return this.selectedId;

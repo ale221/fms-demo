@@ -278,7 +278,7 @@ export class PredictiveMaintenanceComponent implements OnInit {
 
     // Add data
     chart.data = this.vehicleEfficiencyChart;
-    // console.log("vehicleEfficiencyChart- ", this.vehicleEfficiencyChart)
+    // // console.log("vehicleEfficiencyChart- ", this.vehicleEfficiencyChart)
     // Create axes
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "vehicle_name";//"country";
@@ -338,7 +338,7 @@ export class PredictiveMaintenanceComponent implements OnInit {
   }
 
   fleetDropdownChangedEfficiency(event) {
-    console.log("event=-= ", event)
+    // console.log("event=-= ", event)
     this.efficiencyFleet = event;
 
     this.maintenanceService.getVehicleOperationalEfficiencyChart(this.efficiencyFleet, this.efficiency).subscribe((data: any) => {
@@ -364,7 +364,7 @@ export class PredictiveMaintenanceComponent implements OnInit {
   }
 
   performanceDropdownChanged(event) {
-    // console.log("which performance is= ", event)
+    // // console.log("which performance is= ", event)
     this.efficiency = event;
 
     if (this.efficiencyFleet == undefined) {
@@ -418,7 +418,7 @@ export class PredictiveMaintenanceComponent implements OnInit {
 
 
   categoryChanged(event) {
-    // console.log("category Change value== ", event);
+    // // console.log("category Change value== ", event);
     this.showIndeterminateProgress = true;
     let params = `offset=0&limit=10&order=&order_by=&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=&search=&export=&timeZone=&start_date=&end_date=&category=${event}&upcoming=1`;
     this.maintenanceService.getMaintanceData(params).subscribe((data: any) => {
@@ -431,7 +431,7 @@ export class PredictiveMaintenanceComponent implements OnInit {
   }
 
   dateFilterChanged(event) {
-    // console.log("date filter change value== ", event)
+    // // console.log("date filter change value== ", event)
     this.showIndeterminateProgress = true;
     let params = `offset=0&limit=10&order=&order_by=&vehicle_group_id=&vehicle_id=&maintenance_type_id=&date_filter=${event}&search=&export=&timeZone=&start_date=&end_date=&upcoming=1`;
     this.maintenanceService.getMaintanceData(params).subscribe((data: any) => {

@@ -64,7 +64,7 @@ export class AreaChartComponent implements OnInit {
 
   ngOnChanges() {
     this.finalObj_data = [];
-    // console.log('this.chartOptions================== ', this.chartOptions)
+    // // console.log('this.chartOptions================== ', this.chartOptions)
     this.categories1 = this.chartOptions?.categories;
     this.series = this.chartOptions?.series;
 
@@ -119,9 +119,9 @@ export class AreaChartComponent implements OnInit {
       element.series = element.series1;
       myArray.push(element);
     }
-    // console.log("myARRAY= ", myArray)
+    // // console.log("myARRAY= ", myArray)
     this.finalObj = myArray;
-    // console.log("MUSHAHID BHAI DATA= ", this.finalObj)
+    // // console.log("MUSHAHID BHAI DATA= ", this.finalObj)
 
     for (let i = 0; i < this.finalObj.length; i++) {
       var dic = new Dictionary();
@@ -312,7 +312,7 @@ export class AreaChartComponent implements OnInit {
 
       // Add data
       chart.data = chartData;
-      console.log("GRAPHHH=++= ", chartData)
+      // console.log("GRAPHHH=++= ", chartData)
       // Create axes
       var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
       categoryAxis.dataFields.category = "category";
@@ -438,12 +438,12 @@ export class AreaChartComponent implements OnInit {
       categories
     }
     this.chartOptions1 = graphData;
-    // console.log(this.chartOptions1.series,"111111111");
-    // console.log(this.chartOptions1.xaxis.categories,"222222222222");
+    // // console.log(this.chartOptions1.series,"111111111");
+    // // console.log(this.chartOptions1.xaxis.categories,"222222222222");
     this.categories = this.chartOptions1.xaxis.categories.filter(function (elem, index, self) {
       return index === self.indexOf(elem);
     })
-    // console.log(this.categories);
+    // // console.log(this.categories);
     // }
   }
 

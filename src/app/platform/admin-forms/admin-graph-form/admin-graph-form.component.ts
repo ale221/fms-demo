@@ -104,7 +104,7 @@ export class AdminGraphFormComponent implements OnInit {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
 
         if (this.loggedInUser.package[0].package_id == this.packageType.standard) {
-          // console.log("inside if confition")
+          // // console.log("inside if confition")
           // show all graphs to standard user
           this.usecasesDashboard = apiResponse['data'];
 
@@ -112,7 +112,7 @@ export class AdminGraphFormComponent implements OnInit {
             for (let i = 0; i < this.usecasesDashboard?.length; i++) {
               if (this.usecasesDashboard[i].name == 'Vehicle Maintenance Graph') {
                 this.vehicleMaintenanceObject = this.usecasesDashboard[i]
-                // console.log(" this.vehicleMaintenanceObject == ", this.vehicleMaintenanceObject)
+                // // console.log(" this.vehicleMaintenanceObject == ", this.vehicleMaintenanceObject)
                 setTimeout(() => {
                   this.generateChart(this.vehicleMaintenanceObject.data.chart_data);
                 }, 500);
@@ -124,9 +124,9 @@ export class AdminGraphFormComponent implements OnInit {
             }
           }
 
-          // console.log("this.usecasesDashboard---><--", this.usecasesDashboard)
+          // // console.log("this.usecasesDashboard---><--", this.usecasesDashboard)
         } else {
-          // console.log("inside else confition")
+          // // console.log("inside else confition")
           // show specific graphs to plug & go user
           let dataFromResponse = [];
           let filterArray = [];
@@ -203,7 +203,7 @@ export class AdminGraphFormComponent implements OnInit {
       chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
 
       chart.data = chartData;
-      // console.log("GEN CHART func= ", chartData);
+      // // console.log("GEN CHART func= ", chartData);
       chart.colors.step = 5;
 
       // Add legend

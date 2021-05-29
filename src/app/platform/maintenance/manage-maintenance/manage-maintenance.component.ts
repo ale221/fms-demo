@@ -188,7 +188,7 @@ export class ManageMaintenanceComponent implements OnInit {
 
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
-    // console.log("this.loggedInUser- ", this.loggedInUser, this.loggedInUser.package[0].package_id);
+    // // console.log("this.loggedInUser- ", this.loggedInUser, this.loggedInUser.package[0].package_id);
 
     const appendExport = 'order=&order_by=&vehicle_group_id=&vehicle_id=&maintenance_type_id=&maintenance_id=&date_filter=&search=';
     // this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?' + appendExport + '&export=excel&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone + '&customer_id=' + this.customerID + '&start_date=&end_date=';
@@ -214,7 +214,7 @@ export class ManageMaintenanceComponent implements OnInit {
 
     // Get Technician Listing
     this.maintenanceService.getTechnicianListing().subscribe((data: any) => {
-      // console.log("getTechnicianListing== ", data);
+      // // console.log("getTechnicianListing== ", data);
       if (!data.error) {
         this.technicianListing = data.data.data.map(
           item => new PrimengDropdownItem(item['id'], item['name'])
@@ -224,7 +224,7 @@ export class ManageMaintenanceComponent implements OnInit {
 
     // Get Vehicle Listing
     this.maintenanceService.getVehicleListing().subscribe((data: any) => {
-      // console.log("getVehicleListing== ", data);
+      // // console.log("getVehicleListing== ", data);
       if (!data.error) {
         this.vehicleListingFromResponse = data.data.data;
         this.vehicleListing = data.data.data.map(
@@ -318,7 +318,7 @@ export class ManageMaintenanceComponent implements OnInit {
         this.serviceTypeList = data.data.map(
           item => new PrimengDropdownItem(item['id'], item['label'])
         );
-        // console.log("serviceTypeList== ", this.serviceTypeList);
+        // // console.log("serviceTypeList== ", this.serviceTypeList);
       }
     })
   }
@@ -327,11 +327,11 @@ export class ManageMaintenanceComponent implements OnInit {
     this.showIndeterminateProgress = true;
 
     let params = `offset=${filters.offset}&limit=${filters.limit}&order=${filters.order}&order_by=${filters.order_by}&vehicle_group_id=${filters.vehicle_group_id}&vehicle_id=${filters.vehicle_id}&maintenance_type_id=${filters.maintenance_type_id}&maintenance_id=${filters.maintenance_id}&date_filter=${filters.date_filter}&search=${filters.search}&export=${filters.export}&timeZone=${filters.timeZone}&start_date=${filters.start_date}&end_date=${filters.end_date}`;
-    // console.log("params for getMaintanceData()= ", params);
+    // // console.log("params for getMaintanceData()= ", params);
 
     this.maintenanceService.getMaintanceData(params).subscribe((data: any) => {
       this.showIndeterminateProgress = false;
-      // console.log("getMaintanceData()== ", data)
+      // // console.log("getMaintanceData()== ", data)
       if (!data.error) {
         this.dataSource = data.data.data;
         this.totalLength = data.data.count;
@@ -415,7 +415,7 @@ export class ManageMaintenanceComponent implements OnInit {
     this.getMaintanceTableData(this.filters)
   }
   selectFilterServiceType(event) {
-    // console.log("event-- ", event.value)
+    // // console.log("event-- ", event.value)
     this.filters.maintenance_type_id = event.value;
     this.resetFiltersExport(this.filters);
     this.getMaintanceTableData(this.filters)
@@ -441,7 +441,7 @@ export class ManageMaintenanceComponent implements OnInit {
   }
   selectPeriod(event) {
     const selectPeriodDate = DateUtils.getUtcDateTimeStart(event);
-    // console.log("", selectPeriodDate);
+    // // console.log("", selectPeriodDate);
     this.filters.date_filter = selectPeriodDate;
     this.resetFiltersExport(this.filters);
     this.getMaintanceTableData(this.filters);
@@ -450,7 +450,7 @@ export class ManageMaintenanceComponent implements OnInit {
   //////////////////////////////////////////
 
   selectGroupDropDownChange(event) {
-    // console.log("device_id== ", this.maintainForm.controls['device_id'].value)
+    // // console.log("device_id== ", this.maintainForm.controls['device_id'].value)
     for (let i = 0; i < this.vehicleListingFromResponse.length; i++) {
       if (event.value == this.vehicleListingFromResponse[i].id) {
         if (this.vehicleListingFromResponse[i].fleet_name != null) {
@@ -467,17 +467,17 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   selectServiceTypeDropDownChange(event) {
-    // console.log("ServiceTypeChanged- ", event.value);
-    // console.log("maintenance_type_id== ", this.maintainForm.controls['maintenance_type_id'].value)
+    // // console.log("ServiceTypeChanged- ", event.value);
+    // // console.log("maintenance_type_id== ", this.maintainForm.controls['maintenance_type_id'].value)
   }
 
   selectDriverDropDownChange(event) {
-    // console.log("event= ", event.value);
-    // console.log("driver_id== ", this.maintainForm.controls['driver_id'].value)
+    // // console.log("event= ", event.value);
+    // // console.log("driver_id== ", this.maintainForm.controls['driver_id'].value)
   }
   selectMaintenaceStatusDownChange(event) {
-    // console.log("event= ", event.value);
-    // console.log("maintenance_status_id== ", this.maintainForm.controls['maintenance_status_id'].value)
+    // // console.log("event= ", event.value);
+    // // console.log("maintenance_status_id== ", this.maintainForm.controls['maintenance_status_id'].value)
   }
 
   clearForm() {
@@ -534,7 +534,7 @@ export class ManageMaintenanceComponent implements OnInit {
         this.postMaintenaceForm(formValue);
       }
     } else {
-      console.log("else condition", this.errorMessages);
+      // console.log("else condition", this.errorMessages);
     }
   }
 
@@ -589,7 +589,7 @@ export class ManageMaintenanceComponent implements OnInit {
         this.getMaintanceTableData(this.filters);
         this.getCardsData();
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.swalService.getErrorSwal(data.message);
       }
 
@@ -607,7 +607,7 @@ export class ManageMaintenanceComponent implements OnInit {
         this.swalService.getSuccessSwal(data.message);
       } else {
         this.swalService.getErrorSwal(data.message);
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
 
@@ -699,43 +699,43 @@ export class ManageMaintenanceComponent implements OnInit {
     this.selectedMaintenaceId = row.id;
     this.formTitle = 'Edit Maintenace Work Order';
     this.btnText = 'Update';
-    // console.log("this.serviceTypeList-- ", this.serviceTypeList);
+    // // console.log("this.serviceTypeList-- ", this.serviceTypeList);
     for (let i = 0; i < this.serviceTypeList.length; i++) {
       if (row.maintenance_type == this.serviceTypeList[i].label) {
-        // console.log("this.serviceTypeList[i]== ", this.serviceTypeList[i]);
+        // // console.log("this.serviceTypeList[i]== ", this.serviceTypeList[i]);
         row.maintenance_type = this.serviceTypeList[i].label;
         this.selectedServiceType = { value: this.serviceTypeList[i].value, label: this.serviceTypeList[i].label, id: this.serviceTypeList[i].value, name: this.serviceTypeList[i].label }
       }
     }
 
-    // console.log("this.vehicleListing-- ", this.vehicleListing);
+    // // console.log("this.vehicleListing-- ", this.vehicleListing);
     for (let i = 0; i < this.vehicleListing.length; i++) {
       if (row.vehicle_name == this.vehicleListing[i].label) {
-        // console.log("this.vehicleListing[i]== ", this.vehicleListing[i]);
+        // // console.log("this.vehicleListing[i]== ", this.vehicleListing[i]);
         row.vehicle_name = this.vehicleListing[i].label;
         this.selectedVehicle = { value: this.vehicleListing[i].value, label: this.vehicleListing[i].label, id: this.vehicleListing[i].value, name: this.vehicleListing[i].label }
       }
     }
 
-    // console.log("this.driversList-- ", this.driversList);
+    // // console.log("this.driversList-- ", this.driversList);
     for (let i = 0; i < this.driversList.length; i++) {
       if (row.driver_name == this.driversList[i].label) {
-        // console.log("this.driversList[i]== ", this.driversList[i]);
+        // // console.log("this.driversList[i]== ", this.driversList[i]);
         row.driver_name = this.driversList[i].label;
         this.selectedDriver = { value: this.driversList[i].value, label: this.driversList[i].label, id: this.driversList[i].value, name: this.driversList[i].label }
       }
     }
 
-    // console.log("this.maintanceStatusListing-- ", this.maintanceStatusListing);
+    // // console.log("this.maintanceStatusListing-- ", this.maintanceStatusListing);
     for (let i = 0; i < this.maintanceStatusListing.length; i++) {
       if (row.maintenance_status == this.maintanceStatusListing[i].label) {
-        // console.log("this.maintanceStatusListing[i]== ", this.maintanceStatusListing[i]);
+        // // console.log("this.maintanceStatusListing[i]== ", this.maintanceStatusListing[i]);
         row.maintenance_status = this.maintanceStatusListing[i].label;
         this.selectedMaintenaceStatus = { value: this.maintanceStatusListing[i].value, label: this.maintanceStatusListing[i].label, id: this.maintanceStatusListing[i].value, name: this.maintanceStatusListing[i].label }
       }
     }
 
-    // console.log("this.vehicleListingFromResponse===", this.vehicleListingFromResponse)
+    // // console.log("this.vehicleListingFromResponse===", this.vehicleListingFromResponse)
     for (let i = 0; i < this.vehicleListingFromResponse.length; i++) {
       if (row?.device_id == this.vehicleListingFromResponse[i].id) {
         if (this.vehicleListingFromResponse[i].fleet_name != null) {
@@ -800,15 +800,15 @@ export class ManageMaintenanceComponent implements OnInit {
 
     this.maintenanceService.deleteMaintenace(id).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
-        console.log("deleted Successfully")
+        // console.log("deleted Successfully")
         this.getMaintanceTableData(this.filters)
         this.closeForm.nativeElement.click();
         this.swalService.getSuccessSwal(data.message);
         this.getCardsData();
       } else {
-        console.log("unanle to delete")
+        // console.log("unanle to delete")
         this.swalService.getErrorSwal(data.message);
-        console.log(data.message);
+        // console.log(data.message);
       }
     })
   }
@@ -855,7 +855,7 @@ export class ManageMaintenanceComponent implements OnInit {
         this.getCardsData();
       } else {
         this.swalService.getErrorSwal(data.message);
-        // console.log(data.message);
+        // // console.log(data.message);
       }
     })
   }
@@ -876,10 +876,10 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   downloadXLS(download) {
-    console.log("download XLS= ", download)
+    // console.log("download XLS= ", download)
 
     this.maintenanceService.downloadXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -888,10 +888,10 @@ export class ManageMaintenanceComponent implements OnInit {
   }
 
   downloadPDF(download1) {
-    console.log("download PDF= ", download1)
+    // console.log("download PDF= ", download1)
     
     this.maintenanceService.downloadPDF(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
