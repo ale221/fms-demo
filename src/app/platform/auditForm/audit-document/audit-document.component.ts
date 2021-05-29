@@ -440,9 +440,9 @@ export class AuditDocumentComponent implements OnInit {
 
       param.append('document_type_id', value['document_type'].id);
 
-      delete value['select_driver'];
-      delete value['document_type'];
-      delete value['select_group'];
+      // delete value['select_driver'];
+      // delete value['document_type'];
+      // delete value['select_group'];
 
       // delete value['select_fleet'];
 
