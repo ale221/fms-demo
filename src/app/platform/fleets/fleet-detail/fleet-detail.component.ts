@@ -265,13 +265,13 @@ export class FleetDetailComponent implements OnInit {
     this.isAuthorized = value;
     this.selectedPkg = this.authService.getUser();
     this.selectedPkg = this.selectedPkg['package'][0].package_id;
-    console.log("loggedIn user package id= ", this.selectedPkg)
+    // console.log("loggedIn user package id= ", this.selectedPkg)
 
     if (this.selectedPkg != PackageType.standard) {
-      // console.log("user's package id is not standard")
+      // // console.log("user's package id is not standard")
       this.classToApply = "col-md-4";
     } else {
-      // console.log("user's package id is standard")
+      // // console.log("user's package id is standard")
       this.classToApply = "col-md-3";
     }
   }
@@ -287,12 +287,12 @@ export class FleetDetailComponent implements OnInit {
       // this.mileageFilter.push(new PrimengDropdownItem(year - i, 'year - i'),)
     }
     // this.mileageFilter = range;
-    // console.log("range== ", range);
+    // // console.log("range== ", range);
 
     for (let i = 0; i < range.length; i++) {
       this.mileageFilter.push({ value: range[i], label: range[i] });
     }
-    console.log("this.mileageFilter== ", this.mileageFilter);
+    // console.log("this.mileageFilter== ", this.mileageFilter);
     this.mileageFilter.forEach((element: any) => {
       element.label = element.label;
       element.value = element.value;
@@ -318,7 +318,7 @@ export class FleetDetailComponent implements OnInit {
     this.drawerService.getValue().subscribe(res => {
       this.sidebarCheck = res;
     })
-    // console.log("jobTrailMap=== ", this.gmap);
+    // // console.log("jobTrailMap=== ", this.gmap);
     this.packageType = PackageType;
     this.route.params.subscribe(params => {
       this.entityId = params['id'];
@@ -346,7 +346,7 @@ export class FleetDetailComponent implements OnInit {
       }
     })
 
-    // console.log("this.entityId== ", this.entityId)
+    // // console.log("this.entityId== ", this.entityId)
     this.onYearMonthChange(this.currentyear);
     this.getFleetDetail(this.entityId);
     this.getJobSummary();
@@ -486,29 +486,29 @@ export class FleetDetailComponent implements OnInit {
       this.yearfuelFilledTotal = 0;
       this.yeardistance = 0;
       this.yearMileage = 0;
-      console.log("event", event);
+      // console.log("event", event);
       this.FilterTypeTable = 1;
       this.selectedYear = event;
       this.selectedMonth = '';
       this.MileageForm.controls.month.setValue('');
       this.truckService.getMilageData(event, this.entityId).subscribe((data: any) => {
-        // console.log("getMilageData ", data)
+        // // console.log("getMilageData ", data)
         this.milageData = data.data;
-        console.log("milageData ", this.milageData)
+        // console.log("milageData ", this.milageData)
         for (let i = 0; i < this.milageData.length; i++) {
           this.yearfuelFilledTotal = this.milageData[i]?.fuel_filled + this.yearfuelFilledTotal;
           this.yeardistance = this.milageData[i]?.distance + this.yeardistance;
-          console.log("ths.yearfuelFilledTotal",this.yearfuelFilledTotal)
-          console.log("ths.yeardistance",this.yeardistance)
+          // console.log("ths.yearfuelFilledTotal",this.yearfuelFilledTotal)
+          // console.log("ths.yeardistance",this.yeardistance)
           if (this.monthfuelfilledTotal == 0 && this.monthdistance == 0) {
             this.yearMileage = this.yeardistance / this.yearfuelFilledTotal;
-            console.log("ths.yearMileage1",this.yearMileage)
+            // console.log("ths.yearMileage1",this.yearMileage)
           } else {
             this.yearMileage = this.yeardistance / this.yearfuelFilledTotal;
-            console.log("ths.yearMileage2",this.yearMileage)
+            // console.log("ths.yearMileage2",this.yearMileage)
           }
           
-          console.log("ths.yearMileageeeeeeeee",this.yearMileage)
+          // console.log("ths.yearMileageeeeeeeee",this.yearMileage)
 
         }
         let lastRow = {
@@ -548,7 +548,7 @@ export class FleetDetailComponent implements OnInit {
       this.FilterTypeTable = 2;
       this.selectedMonth = event;
       this.truckService.getmonthData(this.selectedYear, this.entityId, event).subscribe((data: any) => {
-        console.log("getmonthData ", data)
+        // console.log("getmonthData ", data)
         this.monthData = data.data;
 
         for (let i = 0; i < this.monthData.length; i++) {
@@ -558,7 +558,7 @@ export class FleetDetailComponent implements OnInit {
             this.monthmileage = 0;
           } else {
             this.monthmileage = this.monthdistance / this.monthfuelfilledTotal;
-            console.log("this.monthmilage",this.monthmileage);
+            // console.log("this.monthmilage",this.monthmileage);
           }
         }
         let lastRow = {
@@ -589,7 +589,7 @@ export class FleetDetailComponent implements OnInit {
 
   getFleetJobSummary(id) {
     this.truckService.getFleetJobSummary(id).subscribe((data: any) => {
-      // console.log("getFleetJobSummary() response-+ ", data.data[0])
+      // // console.log("getFleetJobSummary() response-+ ", data.data[0])
       if (!data.error) {
         this.fleetJobSummary = data.data[0];
         this.start_dateViewJob = DateUtils.getMMMMDY(this.fleetJobSummary?.created_datetime);
@@ -598,7 +598,7 @@ export class FleetDetailComponent implements OnInit {
         this.fleetJobSummary = null;
       }
     })
-    // console.log("fleetJobSummary=== ", this.fleetJobSummary)
+    // // console.log("fleetJobSummary=== ", this.fleetJobSummary)
   }
 
   getMaintanceSummary(id) {
@@ -611,7 +611,7 @@ export class FleetDetailComponent implements OnInit {
 
   getMaintanceTypeCategory(id) {
     this.maintenanceService.getMaintanceTypeCategory(id).subscribe((data: any) => {
-      console.log("getMaintanceTypeCategory() response-+ ", data)
+      // console.log("getMaintanceTypeCategory() response-+ ", data)
       if (!data.error) {
 
       }
@@ -639,7 +639,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   private setSignalRresponse() {
-    // console.log('setSignalRresponse fired');
+    // // console.log('setSignalRresponse fired');
     this.truck['signalRresponse'] = new SignalRresponse(
       null,
       null,
@@ -680,8 +680,8 @@ export class FleetDetailComponent implements OnInit {
 
   setupLocations() {
     this.trafficLayer();
-    // console.log(this.truck['location_address']);
-    // console.log('setupLocations fired');
+    // // console.log(this.truck['location_address']);
+    // // console.log('setupLocations fired');
     this.lastUpdatedCard = DateUtils.getLocalMMDDYYYYhhmmss(this.truck.last_updated);
     this.locations = new Array(new AppLocation(
       this.truck.id,
@@ -717,7 +717,7 @@ export class FleetDetailComponent implements OnInit {
   markerCount = 0;
   private createMarker(lat, long, heading = 0) {
 
-    // console.log('createMarker fired');
+    // // console.log('createMarker fired');
     // TODO: check if polyline not create, than remove @if (this.marker && this.marker.setMap) check
     // if (!isNullOrUndefined(this.marker)) {
     //   this.marker.setMap(null);
@@ -805,7 +805,7 @@ export class FleetDetailComponent implements OnInit {
         if (signalRresponse.id !== this.truck.device_id) {
           return false;
         } else {
-          console.log('signalResponse', signalRresponse);
+          // console.log('signalResponse', signalRresponse);
         }
 
         this.truck.online_status = true;
@@ -850,7 +850,7 @@ export class FleetDetailComponent implements OnInit {
           //   }
           // });
 
-          // console.log(this.truck);
+          // // console.log(this.truck);
 
           // if(this.showSignals){
           //   this.mss = this.truck.signalRresponse.mss;
@@ -898,8 +898,8 @@ export class FleetDetailComponent implements OnInit {
 
 
   private setupSignalR() {
-    console.log("coming in setupsignalr");
-    // console.log('setupSignalR fired');
+    // console.log("coming in setupsignalr");
+    // // console.log('setupSignalR fired');
     if (!isNullOrUndefined(this.connection)) {
       this.connection.start().then((c) => {
         this.connection.invoke('register', this.truck.device_id)
@@ -959,7 +959,7 @@ export class FleetDetailComponent implements OnInit {
             //   }
             // });
 
-            // console.log(this.truck);
+            // // console.log(this.truck);
 
             // if(this.showSignals){
             //   this.mss = this.truck.signalRresponse.mss;
@@ -1007,7 +1007,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   private verifyFirmware(d?) {
-    // console.log('verifyFirmware fired');
+    // // console.log('verifyFirmware fired');
     const version = d.split(',');
     this.showSignals = version[0] > '6.2.2';
     this.signalsStrength = version[2];
@@ -1045,7 +1045,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   private transition(_newLatLng, spd) {
-    // console.log('transition fired');
+    // // console.log('transition fired');
     this.i = 0;
     if (isNullOrUndefined(this._oldLatLng)) {
       this._oldLatLng = [0, 0];
@@ -1065,7 +1065,7 @@ export class FleetDetailComponent implements OnInit {
 
 
   verifySignalRData(signalRresponse) {
-    // console.log('verifySignalRData fired');
+    // // console.log('verifySignalRData fired');
     return (signalRresponse.lat !== 0 && signalRresponse.lon !== 0)
       &&
       (!isNullOrUndefined(signalRresponse.lat) && (!isNullOrUndefined(signalRresponse.lon)))
@@ -1104,7 +1104,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   getFleetDetail(entityId) {
-    console.log("getFleetDetailgetFleetDetail");
+    // console.log("getFleetDetailgetFleetDetail");
     this.truckService.getFleetDetailById(entityId).subscribe(data => {
       if (data.status === HttpStatusCodeEnum.Success) {
         this.truck = data['data'];
@@ -1114,14 +1114,14 @@ export class FleetDetailComponent implements OnInit {
         if (data['data'].job_task && data['data'].job_task && data['data'].job_task.job_tasks.length > 0) {
           this.violation_count = data['data'].job_task.violation_count;
           this.distance_travelled_job = data['data'].job_task.distance_travelled;
-          console.log("distance_travelled_job", this.distance_travelled_job);
+          // console.log("distance_travelled_job", this.distance_travelled_job);
           this.source_address = data['data'].job_task.job_tasks[0].source_address;
 
           this.destination_address = data['data'].job_task.job_tasks[data['data'].job_task.job_tasks.length - 1].destination_address;
           this.current_address = data['data'].current_address;
 
           this.trail_start_date = data['data'].job_task.job_tasks[0].started_at_unix;
-          console.log("data['data'].job_task.job_tasks[0].started_at_unix======== ", data['data'].job_task.job_tasks[0].started_at_unix)
+          // console.log("data['data'].job_task.job_tasks[0].started_at_unix======== ", data['data'].job_task.job_tasks[0].started_at_unix)
           this.trail_start_date = DateUtils.getLocalMMDDYYYYhhmmss(this.trail_start_date);
           this.trail_end_date = data['data'].job_task.job_tasks[data['data'].job_task.job_tasks.length - 1].ended_at_unix;
           this.trail_end_date = DateUtils.getLocalMMDDYYYYhhmmss(this.trail_end_date);
@@ -1132,11 +1132,11 @@ export class FleetDetailComponent implements OnInit {
         this.truck.marker = 'assets/images/iol/sedan.svg#markerOne';
 
 
-        // console.log("this.truckkkkkkkkkk", this.truck);
+        // // console.log("this.truckkkkkkkkkk", this.truck);
         this.lastupdated = DateUtils.getLocalMMDDYYYYhhmmss(this.truck.last_updated);
         this.lastFillUp = DateUtils.getLocalMMDDYYYYhhmmss(this.truck.fill_up_date);
-        // console.log("---------222222", this.truck.fill_up_date);
-        // console.log("-----------", this.lastFillUp);
+        // // console.log("---------222222", this.truck.fill_up_date);
+        // // console.log("-----------", this.lastFillUp);
         this.setSignalRresponse();
         this.setupLocations();
         this.setupSignalR();
@@ -1295,9 +1295,9 @@ export class FleetDetailComponent implements OnInit {
   }
 
   showMarkerValueChanges() {
-    // console.log('showMarkerValueChanges fired');
-    console.log("trailDateRange===== ", this.trailDateRange)
-    console.log("this.showMarkersForTrail2== ", this.showMarkersForTrail2)
+    // // console.log('showMarkerValueChanges fired');
+    // console.log("trailDateRange===== ", this.trailDateRange)
+    // console.log("this.showMarkersForTrail2== ", this.showMarkersForTrail2)
     if (this.trailDateRange) {
       this.getReport(this.trailDateRange, 'trail', this.showMarkersForTrail2);
     }
@@ -1308,14 +1308,14 @@ export class FleetDetailComponent implements OnInit {
   // }
 
   setupReport(event) {
-    // console.log('setupReport fired');
+    // // console.log('setupReport fired');
     this.getReport(event[0], event[1]);
   }
 
   // Reporting Section
 
   private getReport(dateRange, type, actual?) {
-    // console.log('getReport fired');
+    // // console.log('getReport fired');
     this.violationMarkers = [];
     this.violationInfoWindows = [];
 
@@ -1347,7 +1347,7 @@ export class FleetDetailComponent implements OnInit {
 
 
   private getFillupReport(start_date, end_date) {
-    // console.log('getFillupReport fired');
+    // // console.log('getFillupReport fired');
     const params = {
       truck_id: this.entityId,
       start_datetime: start_date,
@@ -1407,7 +1407,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   private getSnapshot() {
-    // console.log('getSnapshot fired');
+    // // console.log('getSnapshot fired');
     this.snapshotData = new SnapshotResponse();
     const params = {
       truck_id: this.entityId,
@@ -1450,7 +1450,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   private getTrailReport(start_date, end_date) {
-    // console.log('getTrailReport fired');
+    // // console.log('getTrailReport fired');
     this.trailWithStopsInfo = [];
     const params = {
       truck_id: this.entityId,
@@ -1500,7 +1500,7 @@ export class FleetDetailComponent implements OnInit {
 
           if (this.showMarkersForTrail) {
 
-            // console.log(stop_times);
+            // // console.log(stop_times);
             this.trailWithStopsInfo = stop_times;
 
             for (let j = 0; j < stop_times.length; j++) {
@@ -1586,7 +1586,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   validate(): boolean {
-    // console.log('validate fired');
+    // // console.log('validate fired');
     if (this.snapForm.value) {
       return true;
     }
@@ -1594,14 +1594,14 @@ export class FleetDetailComponent implements OnInit {
   }
 
   onSubmit(formValue: Object) {
-    // console.log('onSubmit fired');
+    // // console.log('onSubmit fired');
     if (this.validate()) {
       this.getReport(this.snapshotDate, 'snapshot');
     }
   }
 
   createInfowindowTemplate(msg, title?) {
-    // console.log('createInfowindowTemplate fired');
+    // // console.log('createInfowindowTemplate fired');
     // InfoWindow content
     let content = `<div id="iw-container"> <div class="iw-content">`;
     if (title) {
@@ -1614,7 +1614,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   getFinesReport(startDate, endDate) {
-    // console.log('getFinesReport fired');
+    // // console.log('getFinesReport fired');
     const params = {
       truck_id: this.entityId,
       start_datetime: startDate,
@@ -1784,7 +1784,7 @@ export class FleetDetailComponent implements OnInit {
   }
 
   private getPDFReport() {
-    // console.log('getPDFReport fired');
+    // // console.log('getPDFReport fired');
     const params = {
       report_title: this.reportObj.report_title,
       meta: JSON.stringify(this.reportObj.meta),
@@ -2133,7 +2133,7 @@ export class FleetDetailComponent implements OnInit {
       }
 
     })
-    // console.log(" this.idleDuration===== ", this.idleDuration)
+    // // console.log(" this.idleDuration===== ", this.idleDuration)
   }
 
   convert(date) {

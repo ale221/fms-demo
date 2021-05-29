@@ -24,7 +24,7 @@ export class AnonymousGuardService implements CanActivate {
         this.router.navigate(['/iol/' + module]);
       }
       else {
-        console.log("redirect",hypernymModules[module_id]);
+        // console.log("redirect",hypernymModules[module_id]);
         if(isNullOrUndefined(hypernymModules[module_id])) this.authService.unsetUser();
         else this.router.navigate(['/' + hypernymModules[module_id]]);
       }

@@ -135,7 +135,7 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
             })
             this.graphsArray = filterArray;
           }
-          // console.log("graphsArray+graphsArray= ", this.graphsArray);
+          // // console.log("graphsArray+graphsArray= ", this.graphsArray);
           let multiRowsArr = [];
           this.multiRows = false;
           if (this.cardsArray.length === 7 || this.cardsArray.length === 8) {
@@ -176,7 +176,7 @@ export class IolDashboardComponent implements OnInit, AfterViewInit {
         visibility: false
       }
     }
-    // console.log("this.this.graphsArray--- ", this.graphsArray)
+    // // console.log("this.this.graphsArray--- ", this.graphsArray)
   }
 
 

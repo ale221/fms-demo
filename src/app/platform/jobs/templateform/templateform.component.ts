@@ -252,7 +252,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   }
 
   getAllContracts() {
-    console.log(this.priority);
+    // console.log(this.priority);
     let index_a = 0;
     let index_b = 100;
     let results_remaining = true;
@@ -277,7 +277,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
           item => ({ id: item['id'], client: item['client'], source_latlng: item['source_latlong'], name: item['client_name'] + '-' + item['name'], label: item['client_name'] + '-' + item['name'] })
         );
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     }
     );
@@ -299,11 +299,11 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   //       onError(errorMessage: string, err: any) {
   //         // do
   //         this.context.swalService.getErrorSwal(errorMessage);
-  //         // console.log(errorMessage);
+  //         // // console.log(errorMessage);
   //       }
 
   //       onNext(apiResponse: LoginApiResponse<TemplatesModel[]>): void {
-  //         // console.log('templates', apiResponse);
+  //         // // console.log('templates', apiResponse);
   //         if (apiResponse.status === HttpStatusCodeEnum.Success) {
   //           this.context.templates = apiResponse.response as TemplatesModel[];
   //         }
@@ -361,7 +361,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   updateTask(job, count) {
     if (this.isExecuted) return;
     this.isExecuted = true;
-    console.log("Update task ...");
+    // console.log("Update task ...");
 
     this.getJobFormArray.clear();
     this.getJobFormArray.reset();
@@ -376,7 +376,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
       destination_contract: [job.destination_contract],
       priority: [job.priority, [Validators.required]]
     });
-    console.log(task);
+    // console.log(task);
     this.getJobFormArray.insert(count, task);
   }
 
@@ -404,7 +404,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   }
 
   deleteChecked(event, index) {
-    // console.log(event.target.checked);
+    // // console.log(event.target.checked);
     if (event.target.checked) {
       let exists = this.to_delete.includes(index);
       if (!exists)
@@ -467,8 +467,8 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
 
 
   onSubmitTemplate(formValue) {
-    console.log(formValue)
-    console.log(this.templateForm);
+    // console.log(formValue)
+    // console.log(this.templateForm);
     this.completeEdit = true;
     this.submitFormLoader.visibility = true;
     this.submitted = true;
@@ -558,7 +558,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   }
 
   patchTemplate(formValue) {
-    console.log('patch', formValue);
+    // console.log('patch', formValue);
 
     this.templateRouteService.patchTemplateForm(formValue).subscribe(res => {
       this.enableSubmitButton();
@@ -593,7 +593,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   openEditModal(row, type) {
     this.formTitle = 'Update';
     this.userId = row.id;
-    console.log("row", row);
+    // console.log("row", row);
     this.edit = true;
     // this.resetEverything();
     this.editModel = true;
@@ -679,7 +679,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   /////////////////////////////////////// FORM FUNCTIONS END /////////////////////////////////////////////
 
   openEditModal2(row, type) {
-    console.log(row);
+    // console.log(row);
     this.viewJob = row;
     this.start_dateViewJob = DateUtils.getMMMMDY(row.created_datetime);
     this.end_dateViewjob = DateUtils.getMMMMDY(row.end_datetime);
@@ -711,7 +711,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
     let waypts = [];
     let icons = [];
     let infowindow = [];
-    console.log(this.viewJob.job_tasks);
+    // console.log(this.viewJob.job_tasks);
     this.viewJob.job_tasks.forEach((element, i) => {
       let newLatStart = element.source_latlng;
       let newLngStart = element.source_latlng;
@@ -793,7 +793,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
 
     // tasksArr = ["Karachi", "Lahore", "Islamabad"];
     // waypts.push({location: tasksArr}, {suppressMarkers: true});
-    // console.log(waypts);
+    // // console.log(waypts);
 
 
 
@@ -880,11 +880,11 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<any>): void {
-          // console.log(apiResponse);
+          // // console.log(apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.contract_list1 = apiResponse.response.map(
               item => new PrimengDropdownItem(item['id'], item['label'])
@@ -895,7 +895,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
             );
 
           } else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
         }
       }(this)
@@ -903,8 +903,8 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   }
 
   onContractChanged(event: any, index) {
-    console.log('contracts', event);
-    console.log('cominffff', this.selectedContract);
+    // console.log('contracts', event);
+    // console.log('cominffff', this.selectedContract);
     let ind = this.contract_list.findIndex(x => x.id == event.target.value);
     let contract = this.contract_list[ind];
 
@@ -919,7 +919,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   onContractChanged1(event: any, index) {
     let ind = this.contract_list.findIndex(x => x.id == event.target.value);
     let contract = this.contract_list[ind];
-    console.log('cd', contract);
+    // console.log('cd', contract);
     let array = this.templateForm.get('job_tasks') as FormArray;
     array.at(index).patchValue({
       destination_contract: contract.id,
@@ -988,11 +988,11 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          // console.log('devices', apiResponse);
+          // // console.log('devices', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.customerDevices = apiResponse.response;
             this.context.trucks_list = apiResponse.response.map(
@@ -1000,7 +1000,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
             );
           }
           else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
         }
 
@@ -1017,7 +1017,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<any>): void {
@@ -1026,7 +1026,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
               item => new PrimengDropdownItem(item['id'], item['label'])
             );
           } else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
         }
       }(this)
@@ -1078,14 +1078,14 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
   }
 
   async showSwal(job) {
-    console.log("job---- ", job)
+    // console.log("job---- ", job)
     this.selectedJobToDelete = job;
 
     // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this job?');
     const shouldDelete = await this.swalService.getDeleteSwal(job, 'What do you want to do with this record?');
-    // console.log('shouldDelete', shouldDelete);
+    // // console.log('shouldDelete', shouldDelete);
     if (shouldDelete) {
-      // console.log("coming in should del");
+      // // console.log("coming in should del");
       const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
       this.deleteJob(job.id, shouldDelete, 'Record has been' + message + 'successfully');
     }
@@ -1098,7 +1098,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
     // params['id'] = (jobId);
     // params['status'] = actionType;
 
-    // console.log('params', params);
+    // // console.log('params', params);
 
     this.templateRouteService.deleteJob(jobId).subscribe((data: any) => {
 
@@ -1106,7 +1106,7 @@ export class TemplateformComponent implements OnInit, AfterViewInit {
         this.swalService.getSuccessSwal(message);
         this.getTemplates(this.filtersUser);
       } else {
-        console.log(data.message);
+        // console.log(data.message);
         this.swalService.getErrorSwal(data.message)
       }
 

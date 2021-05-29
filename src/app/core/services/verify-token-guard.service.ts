@@ -36,11 +36,11 @@ export class VerifyTokenGuardService {
 
           onError(errorMessage: string, err: any): void {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: ApiResponse<any[]>): void {
-            console.log(apiResponse.status);
+            // console.log(apiResponse.status);
             if(apiResponse.status)
               this.context.isValidToken = true;
             else

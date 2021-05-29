@@ -89,7 +89,7 @@ export class IgnitionReportingComponent implements OnInit {
         this.totalLength = data.response['count'];
         this.violationMarkers = [];
         if (response.length) {
-          console.log(response)
+          // console.log(response)
           for (let i = 0; i < response.length; i++) {
             response[i].duration = DateUtils.getDuration(response[i].duration);
 

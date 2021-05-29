@@ -51,7 +51,7 @@ export class RadialChartComponent implements OnInit {
   }
   ngOnChanges() {
     this.finalObj = [];
-    // console.log("inside ngOnchanges--", this.chartOptions);
+    // // console.log("inside ngOnchanges--", this.chartOptions);
     if (this.chartOptions?.categories && this.chartOptions?.categories.length > 0) {
       for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
         this.finalObj.push({ "name": this.chartOptions?.categories[x], "value": this.chartOptions?.values[x] });

@@ -37,7 +37,7 @@ export class ClientDropdownComponent implements OnInit {
 
   ngOnInit() {
     this.getClients();
-    // console.log(this.selected);
+    // // console.log(this.selected);
   }
 
   getClients() {
@@ -48,20 +48,20 @@ export class ClientDropdownComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<any>): void {
-          console.log('clients', apiResponse);
+          // console.log('clients', apiResponse);
 
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.client_list = apiResponse.response.map(
               item => new PrimengDropdownItem(item['id'], item['label'])
             );
-            console.log(this.context.client_list);
+            // console.log(this.context.client_list);
             this.context.selected = 88;
           } else {
-            console.log(apiResponse.message);
+            // console.log(apiResponse.message);
           }
         }
       }(this)

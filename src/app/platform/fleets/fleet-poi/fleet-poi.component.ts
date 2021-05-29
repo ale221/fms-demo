@@ -178,8 +178,8 @@ export class FleetPoiComponent implements OnInit {
 
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
 
     this.breadcrumbService.getValue().subscribe(res => {
@@ -187,11 +187,11 @@ export class FleetPoiComponent implements OnInit {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner",this.breadcrumbInner);
+        // console.log("this.breadcrumbInner",this.breadcrumbInner);
       }
     })
 
-    console.log("this.breadcrumbInner",this.breadcrumbInner);
+    // console.log("this.breadcrumbInner",this.breadcrumbInner);
   if(this.breadcrumbInner[0]=='admin/config'){
     setTimeout(() => {
       this.editpop.nativeElement.click();

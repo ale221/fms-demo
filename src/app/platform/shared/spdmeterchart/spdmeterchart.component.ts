@@ -62,7 +62,7 @@ export class SpdmeterchartComponent implements OnInit {
       // using chart.setTimeout method as the timeout will be disposed together with a chart
       chart.setTimeout(randomValue, 2000);
       let speed = this.speed;
-      console.log("ahmmmm",speed);
+      // console.log("ahmmmm",speed);
       function randomValue() {
         if (speed) {
           hand.showValue(speed, 1000, am4core.ease.cubicOut);
@@ -75,12 +75,12 @@ export class SpdmeterchartComponent implements OnInit {
   }
 
   ngOnChanges() {
-    console.log(this.speed, 'updating');
+    // console.log(this.speed, 'updating');
     if(this.speed>0){
       this.updated_speed=this.speed
     }
 
-    console.log("this.updated_speed-= ", this.updated_speed);
+    // console.log("this.updated_speed-= ", this.updated_speed);
 
     this.browserOnly(() => {
       let chart = am4core.create("spdmeter", am4charts.GaugeChart);
@@ -124,7 +124,7 @@ export class SpdmeterchartComponent implements OnInit {
       chart.setTimeout(randomValue, 2000);
       
       let speed = this.updated_speed;
-      console.log("ahmmmm",speed);
+      // console.log("ahmmmm",speed);
       function randomValue() {
         if (speed) {
           hand.showValue(speed, 5000, am4core.ease.cubicOut);

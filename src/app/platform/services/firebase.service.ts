@@ -12,10 +12,10 @@ export class FireBaseService {
         this._messaging = firebase.messaging(this._firebaseApp);
         this._messaging.requestPermission()
             .then((result) => { 
-                console.log(result)
+                // console.log(result)
             })
             .catch((error) => { 
-                console.log(error)
+                // console.log(error)
              });
     }
 }

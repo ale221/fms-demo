@@ -92,10 +92,10 @@ export class ReportingButtonsComponent implements OnInit {
         this.weekClicked(this.type);
       }
       if (this.type === 'violation') {
-        console.log(this.type);
+        // console.log(this.type);
       }
       if (this.type === 'driverDetail') {
-        console.log(this.type);
+        // console.log(this.type);
       }
       if (this.selected === DaysRange.month) {
         this.monthClicked(this.type);
@@ -169,7 +169,7 @@ export class ReportingButtonsComponent implements OnInit {
 
 
   verifyDateRange(dateRange, type: string) {
-    console.log(dateRange);
+    // console.log(dateRange);
     if (!isNullOrUndefined(dateRange) && !isNullOrUndefined(dateRange[1])) {
       if (type === 'basic') {
         this.dateRange = [];
@@ -193,7 +193,7 @@ export class ReportingButtonsComponent implements OnInit {
         } else {
           if (this.dateRangeStart.getDate() === this.dateRangeEnd.getDate()) {
             const timeDiff = (this.dateRangeEnd.getTime() - this.dateRangeStart.getTime()) / 60000;
-            // console.log(timeDiff,"time");
+            // // console.log(timeDiff,"time");
             if (timeDiff > 10) {
               this.go = true;
             } else {
@@ -259,8 +259,8 @@ export class ReportingButtonsComponent implements OnInit {
     if (!isNullOrUndefined(this.dateRangeStart)) {
       if (this.timeRange && !isNullOrUndefined(this.dateRangeEnd)) {
         this.messageOnEndDate = '';
-        // console.log("this.dateRangeStart= ", this.dateRangeStart)
-        // console.log("this.dateRangeEnd= ", this.dateRangeEnd)
+        // // console.log("this.dateRangeStart= ", this.dateRangeStart)
+        // // console.log("this.dateRangeEnd= ", this.dateRangeEnd)
         if (this.dateRangeStart >= this.dateRangeEnd) {
           this.messageOnEndDate = '';
           this.message = 'End date should be greater than Start date';
@@ -269,7 +269,7 @@ export class ReportingButtonsComponent implements OnInit {
           this.messageOnEndDate = '';
           if (this.dateRangeStart.getDate() == this.dateRangeEnd.getDate()) {
             const timeDiff = (this.dateRangeEnd.getTime() - this.dateRangeStart.getTime()) / 60000;
-            // console.log(timeDiff,"time");
+            // // console.log(timeDiff,"time");
             if (timeDiff > 10) {
               return true;
             } else {

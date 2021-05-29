@@ -106,7 +106,7 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
     this.getTrucks();
     this.getDrivers();
     if (this.rowToEdit) {
-      // console.log('inside the form component', this.rowToEdit);
+      // // console.log('inside the form component', this.rowToEdit);
       this.openEditModal(this.rowToEdit);
       this.formTitle = 'Edit Fine';
     }
@@ -114,8 +114,8 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges) {
     const name: SimpleChange = changes.rowToEdit;
-    console.log('prev value: ', name.previousValue);
-    console.log('got name: ', name.currentValue);
+    // console.log('prev value: ', name.previousValue);
+    // console.log('got name: ', name.currentValue);
     this.rowToEdit = name.currentValue;
     this.openEditModal(name.currentValue);
   }
@@ -127,11 +127,11 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any[]>): void {
-            console.log('trucks', apiResponse.response);
+            // console.log('trucks', apiResponse.response);
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
               this.context.itemListTrucks = apiResponse.response.map(
                 item => new DropDownItem(item['id'], item['label'])
@@ -149,18 +149,18 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
-              console.log('driver list', apiResponse.response);
+              // console.log('driver list', apiResponse.response);
               this.context.itemListDrivers = apiResponse.response.map(
                 item => new DropDownItem(item['id'], item['label'])
               );
 
             } else {
-              console.log(apiResponse.message);
+              // console.log(apiResponse.message);
             }
           }
         }(this)
@@ -169,7 +169,7 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
   }
 
   openEditModal(formValue) {
-    // console.log('edit modal', formValue);
+    // // console.log('edit modal', formValue);
     this.selectedDriver = formValue.driver;
     this.selectedTruck = formValue.truck;
     this.cost = (formValue.cost);
@@ -184,10 +184,10 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
       driver: this.selectedDriver,
       timestamp: this.timestamp
     });
-    // console.log('after edit', this.selectedId, this.selectedDriver, this.selectedTruck);
+    // // console.log('after edit', this.selectedId, this.selectedDriver, this.selectedTruck);
   }
   onSubmit(formValue: Object) {
-    console.log('form', formValue, this.rowToEdit);
+    // console.log('form', formValue, this.rowToEdit);
     if (this.validate()) {
       const id = this.selectedId;
       formValue['truck'] = this.selectedTruck ? this.selectedTruck : null;
@@ -198,11 +198,11 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
         this.postFine(formValue);
       }
     } else {
-      console.log(this.errorMessages);
+      // console.log(this.errorMessages);
     }
   }
   patchFine(formValue) {
-    // console.log('editing', formValue);
+    // // console.log('editing', formValue);
     this.formService.addFine(formValue)
       .subscribe(new class extends HttpController <LoginApiResponse<any>> {
           onComplete(): void {
@@ -210,7 +210,7 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
             this.context.swalService.getErrorSwal(errorMessage);
           }
 
@@ -229,7 +229,7 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
       );
   }
   postFine(formValue): void {
-    console.log('posting', formValue);
+    // console.log('posting', formValue);
     this.formService.addFine(formValue)
       .subscribe(new class extends HttpController <LoginApiResponse<any>> {
           onComplete(): void {
@@ -238,12 +238,12 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
           onError(errorMessage: string, err: any) {
             // do
             this.context.swalService.getErrorSwal(errorMessage);
-            console.log(errorMessage);
+            // console.log(errorMessage);
           }
 
           onNext(apiResponse: LoginApiResponse<any>): void {
             if (apiResponse.status === HttpStatusCodeEnum.Success) {
-              console.log(apiResponse);
+              // console.log(apiResponse);
               this.context.closeForm.nativeElement.click();
               this.context.swalService.getSuccessSwal('Record has been added');
               this.context.clearForm();
@@ -276,7 +276,7 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
 // openEditModal(maintenance) {
 //   this.formTitle = 'Update Maintenance';
 //   this.inactiveRecord = this.disableButton(maintenance);
-//   console.log(maintenance);
+//   // console.log(maintenance);
 //   this.maintenanceForm.setValue({
 //     id: maintenance.id,
 //     maintenance_type: new DropDownItem(maintenance.maintenance_type_id, maintenance.maintenance_type),
@@ -324,7 +324,7 @@ export class AdminFineFormComponent implements OnInit, OnChanges {
 
           onError(errorMessage: string, err: any) {
             // do
-            console.log(errorMessage);
+            // console.log(errorMessage);
             this.context.swalService.getErrorSwal(errorMessage);
           }
 

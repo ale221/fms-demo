@@ -89,8 +89,8 @@ export class AdminConfigFormComponent implements OnInit {
   ngOnInit() {
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
     // this.defaultLoader = {
     //   visibility: false
@@ -125,14 +125,14 @@ export class AdminConfigFormComponent implements OnInit {
 
   //     onError(errorMessage: string, err: any) {
   //       this.context.enableSearch = false;
-  //       console.log(errorMessage);
+  //       // console.log(errorMessage);
   //     }
 
   //     onNext(apiResponse: LoginApiResponse<any>): void {
   //       this.context.defaultLoader = {
   //         visibility: false
   //       }
-  //       // console.log('count', apiResponse.response);
+  //       // // console.log('count', apiResponse.response);
   //       if (apiResponse.status === HttpStatusCodeEnum.Success) {
   //         this.context.rolesCount.admin = apiResponse.response[UserRoleEnum.Admin] || 0;
   //         this.context.rolesCount.manager = apiResponse.response[UserRoleEnum.Manager] || 0;
@@ -147,11 +147,11 @@ export class AdminConfigFormComponent implements OnInit {
 
   // }
   pageReload(){
-    console.log("coming");
+    // console.log("coming");
     window.location.reload()
   }
   navItemClicked(){
-    console.log("cominggggg on nav");
+    // console.log("cominggggg on nav");
     let route=[];
     route[0]="admin/config";
     route[1]="Admin";

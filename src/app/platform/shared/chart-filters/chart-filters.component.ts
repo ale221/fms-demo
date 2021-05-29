@@ -19,7 +19,7 @@ export class ChartFiltersComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // console.log("filterData== ", this.filterData)
+    // // console.log("filterData== ", this.filterData)
     this.selectedGraphObj = this.filterData[0]
   }
 

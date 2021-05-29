@@ -75,7 +75,7 @@ export class StackedBarChartComponent implements OnInit {
       use_case_id: this.graphUseCaseId,
     }
     this.chartOptions1 = this.chartOptions;
-    console.log("Metis change request-- ", this.chartOptions)
+    // console.log("Metis change request-- ", this.chartOptions)
     this.fleets = this.chartOptions;
   }
 
@@ -160,8 +160,8 @@ export class StackedBarChartComponent implements OnInit {
     this.chartOptions1 = graphData;
     this.serial = graphData.series;
     this.categories = graphData.xaxis.categories;
-    // console.log("(this.serial)==", this.serial);
-    // console.log("(this.categories)== ", this.categories);
+    // // console.log("(this.serial)==", this.serial);
+    // // console.log("(this.categories)== ", this.categories);
   }
 
   getSelectedGraphData(data) {
@@ -188,7 +188,7 @@ export class StackedBarChartComponent implements OnInit {
       // this.data.push({ "name": this.categories[x], "value1": this.serial[0].data[x], "value2": this.serial[1].data[x], "value3": this.serial[2].data[x], "value4": this.serial[3].data[x] });
       this.data.push({ "name": this.categories[x], "value1": this.serial[0]?.data[x], "value2": this.serial[1]?.data[x], "value3": this.serial[2]?.data[x] });
     }
-    // console.log("this.data= ", this.data)
+    // // console.log("this.data= ", this.data)
     this.generateChart(this.data);
   }
 
@@ -198,7 +198,7 @@ export class StackedBarChartComponent implements OnInit {
 
       var chart = am4core.create("chartdiv", am4charts.XYChart);
       chart.data = chartData;
-      console.log("chartData_____==== ", chartData);
+      // console.log("chartData_____==== ", chartData);
       //chart.colors.step = 2;
 
       // Add legend

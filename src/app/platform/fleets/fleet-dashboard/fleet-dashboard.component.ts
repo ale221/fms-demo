@@ -292,7 +292,7 @@ export class FleetDashboardComponent implements OnInit {
           if (this.filters['status'].includes(1) && this.filters['status'].includes(2)) {
             this.trucks = this.mapData;
             const dataSource = JSON.parse(localStorage.getItem('vehiclesListing'));
-            // console.log("dataSourcedataSource1",dataSource);
+            // // console.log("dataSourcedataSource1",dataSource);
             this.dataSource = dataSource.filter(function (data) {
               return data.online_status === true || data.online_status === false;
             });
@@ -307,11 +307,11 @@ export class FleetDashboardComponent implements OnInit {
             this.totalLength = this.dataSource.length;
           } else if (this.filters['status'].includes(1)) {
             const dataSource = JSON.parse(localStorage.getItem('vehiclesListing'));
-            // console.log("dataSourcedataSource2",dataSource);
+            // // console.log("dataSourcedataSource2",dataSource);
             this.dataSource = dataSource.filter(function (data) {
               return data.online_status === true;
             });
-            console.log("dataSourcedataSource2", this.dataSource);
+            // console.log("dataSourcedataSource2", this.dataSource);
             this.statusID = [];
             for (let i = 1; i <= this.dataSource.length; i++) {
 
@@ -328,7 +328,7 @@ export class FleetDashboardComponent implements OnInit {
             });
           } else if (this.filters['status'].includes(2)) {
             const dataSource = JSON.parse(localStorage.getItem('vehiclesListing'));
-            // console.log("dataSourcedataSource3",dataSource);
+            // // console.log("dataSourcedataSource3",dataSource);
             this.dataSource = dataSource.filter(function (data) {
               return data.online_status === false;
             });
@@ -388,13 +388,13 @@ export class FleetDashboardComponent implements OnInit {
         delay(500),
       )),
     ).subscribe(newValue => {
-      console.log("current tab = ", this.add_btn);
-      console.log("newValue== ", newValue);
+      // console.log("current tab = ", this.add_btn);
+      // console.log("newValue== ", newValue);
       this.searchText = newValue;
 
       if (this.searchText.length > 0 || this.searchText.length === 0) {
         // this.searchForm.get("search").setValue(this.searchText);
-        console.log("this.search", this.searchText);
+        // console.log("this.search", this.searchText);
         if (this.add_btn == 0) {  //searching for vehicle tab
           this.search_by = 'Search by Vehicle';
           this.filtersDetailedReport.search_key = this.searchForm.get('search').value;
@@ -413,7 +413,7 @@ export class FleetDashboardComponent implements OnInit {
           this.filtersStops.search_key = this.searchForm.get('search').value;
           this.getStopsListing(this.filtersStops);
         } else {
-          console.log("inside else condition of search input")
+          // console.log("inside else condition of search input")
         }
 
       }
@@ -476,9 +476,9 @@ export class FleetDashboardComponent implements OnInit {
 
   ngAfterViewInit() {
     const mapProp = GoogleMapModel.getMapProp();
-    // console.log("this.gmapElement.nativeElement", this.gmapElement.nativeElement)
+    // // console.log("this.gmapElement.nativeElement", this.gmapElement.nativeElement)
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-    // console.log("this.map-----", this.map)
+    // // console.log("this.map-----", this.map)
     this.mapZoom = this.map.getZoom();
   }
 
@@ -509,7 +509,7 @@ export class FleetDashboardComponent implements OnInit {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
         this.cardsArray = apiResponse.data.card;
         this.graphsArray = apiResponse.data.graph;
-        // console.log(this.cardsArray, this.graphsArray);
+        // // console.log(this.cardsArray, this.graphsArray);
       }
     })
   }
@@ -581,7 +581,7 @@ export class FleetDashboardComponent implements OnInit {
 
   activeTabFuction(index) {
     this.add_btn = index.index;
-    // console.log("this.add_btn== ", this.add_btn);
+    // // console.log("this.add_btn== ", this.add_btn);
     if (this.add_btn == 0) {  //searching for vehicle tab
       this.search_by = 'Search by Vehicle';
       this.searchForm.reset();
@@ -916,7 +916,7 @@ export class FleetDashboardComponent implements OnInit {
 
         const signalRresponse = JSON.parse(response) as SignalRresponse;
 
-        console.log('signalResponse', signalRresponse);
+        // console.log('signalResponse', signalRresponse);
         if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
           return;
         }
@@ -1306,7 +1306,7 @@ export class FleetDashboardComponent implements OnInit {
     this.poly = [];
     this.markers = {};
     this.bounds1 = new google.maps.LatLngBounds();
-    // console.log('markers', this.markers);
+    // // console.log('markers', this.markers);
   }
 
   trafficLayer() {
@@ -1327,9 +1327,9 @@ export class FleetDashboardComponent implements OnInit {
 
   getLatLngFromString(ll) {
     const latlng = ll.split(/, ?/);
-    // console.log(ll);
+    // // console.log(ll);
     const loc = new google.maps.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1]));
-    // console.log('Google loc:'+ loc.lat()+','+loc.lng());
+    // // console.log('Google loc:'+ loc.lat()+','+loc.lng());
     return new google.maps.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1]));
   }
 

@@ -81,7 +81,7 @@ export class GoogleMapComponent implements OnInit {
       }
     });
     if (this.cords) {
-      console.log("cords",this.cords)
+      // console.log("cords",this.cords)
       this.drawTerritory(this.cords);
     }
   }
@@ -121,7 +121,7 @@ export class GoogleMapComponent implements OnInit {
         const bounds = new google.maps.LatLngBounds();
         places.forEach(function (place) {
           if (!place.geometry) {
-            console.log('Returned place contains no geometry');
+            // console.log('Returned place contains no geometry');
             return;
           }
           if (place.geometry.viewport) {
@@ -639,7 +639,7 @@ export class GoogleMapComponent implements OnInit {
 
   // Draws the snapped polyline (after processing snap-to-road response).
   drawSnappedPolyline(zoom = null) {
-    // console.log(this.snappedCoordinates);
+    // // console.log(this.snappedCoordinates);
     this.snappedPolyline = new google.maps.Polyline({
       path: this.snappedCoordinates,
       fillColor: '#46be8a',
@@ -827,9 +827,9 @@ export class GoogleMapComponent implements OnInit {
 
   getLatLngFromString(ll) {
     const latlng = ll.split(/, ?/);
-    // console.log(ll);
+    // // console.log(ll);
     const loc = new google.maps.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1]));
-    // console.log('Google loc:'+ loc.lat()+','+loc.lng());
+    // // console.log('Google loc:'+ loc.lat()+','+loc.lng());
     return new google.maps.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1]));
   }
 
@@ -920,7 +920,7 @@ export class GoogleMapComponent implements OnInit {
     this.map.fitBounds(this.bounds);
     // this._markers.push(directionsDisplay);
     this._directionsDisplay = directionsDisplay;
-    // console.log('this.waypoints_order', this.waypoints_order);
+    // // console.log('this.waypoints_order', this.waypoints_order);
     return this.waypoints_order;
 
   }
@@ -1213,7 +1213,7 @@ export class GoogleMapComponent implements OnInit {
     // html2canvas($('#totalimage'), {
     //   useCORS: true,
     //   onrendered: function(canvas) {
-    //     // console.log(canvas.toDataURL("image/png"));
+    //     // // console.log(canvas.toDataURL("image/png"));
     //     $('#img_val').val(canvas.toDataURL('image/png'));
     //     $('#show_img').append(canvas);
     //   }
@@ -1243,9 +1243,9 @@ export class GoogleMapComponent implements OnInit {
     //   });
     // html2canvas(document.getElementById('map'), {useCORS: true}).then((canvas) => {
     //   const img = canvas.toDataURL('image/png');
-    //   console.log(img);
+    //   // console.log(img);
     //   const im = $('#imgMap');
-    //   console.log(im);
+    //   // console.log(im);
     //   im.append(canvas);
     // });
 
@@ -1254,7 +1254,7 @@ export class GoogleMapComponent implements OnInit {
     // html2canvas($("#totalimage"), {
     //   useCORS: true,
     //   onrendered: function(canvas) {
-    //     // console.log(canvas.toDataURL("image/png"));
+    //     // // console.log(canvas.toDataURL("image/png"));
     //     $('#img_val').val(canvas.toDataURL("image/png"))
     //     $("#show_img").append(canvas);
     //   }
@@ -1353,7 +1353,7 @@ export class GoogleMapComponent implements OnInit {
     this.getImage(yourImageUrl).subscribe(data => {
       // this.createImageFromBlob(data);
     }, error => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
@@ -1369,7 +1369,7 @@ export class GoogleMapComponent implements OnInit {
 
   getPositonInCircle(centerPt, angle) {
     const loc = google.maps.geometry.spherical.computeOffset(centerPt, 1, angle);
-    // console.log(loc+"loc");
+    // // console.log(loc+"loc");
     return loc;
   }
 
@@ -1398,9 +1398,9 @@ export class GoogleMapComponent implements OnInit {
       // this.updateInfoWindowContent(info);
       // this.map.setZoom(zoomLevel);
       let point1 = new google.maps.LatLng(current.lat, current.lng);
-      // console.log(current,moveto)
+      // // console.log(current,moveto)
       let heading = google.maps.geometry.spherical.computeHeading(point1,latlng);
-      // console.log(heading)
+      // // console.log(heading)
       marker.rotation = heading;
       if (marker.rotation != 0) {
         marker.setPosition(latlng);
@@ -1464,7 +1464,7 @@ export class GoogleMapComponent implements OnInit {
   current_ind;
 
   animateMarkerWithoutPolylines(arrayOfLatLng, newPos, iconUrl, speed, zoomLevel = 15) {
-    // console.log(this.snappedCoodinatesFormatted);
+    // // console.log(this.snappedCoodinatesFormatted);
     //arrayOfLatLng = this.snappedCoodinatesFormatted;
     clearInterval(this.handle);
     if (this.marker != undefined)
@@ -1612,7 +1612,7 @@ export class GoogleMapComponent implements OnInit {
 
 
   calculateDistance(origin, destinations = []) {
-    // console.log('origin', origin, 'destination', destinations);
+    // // console.log('origin', origin, 'destination', destinations);
 
 
     const sortedArray = destinations.sort((prev, cur) => {
@@ -1632,7 +1632,7 @@ export class GoogleMapComponent implements OnInit {
       }
     });
 
-    // console.log('sortedArray', sortedArray);
+    // // console.log('sortedArray', sortedArray);
     return sortedArray;
     // const service = new google.maps.DistanceMatrixService();
     // service.getDistanceMatrix(
@@ -1643,7 +1643,7 @@ export class GoogleMapComponent implements OnInit {
     //   }, callback);
     //
     // function callback(response, status) {
-    //   console.log(response, status);
+    //   // console.log(response, status);
     //   // See Parsing the Results for
     //   // the basics of a callback function.
     // }

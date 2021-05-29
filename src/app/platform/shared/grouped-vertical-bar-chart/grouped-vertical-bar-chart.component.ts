@@ -133,7 +133,7 @@ export class GroupedVerticalBarChartComponent implements  OnChanges, OnInit{
   }
 
   OnItemDeSelect(item: any) {
-    console.log(item);
+    // console.log(item);
     if (this.variableDropdown.selectedVariables.length === 0) {
       this.variableDropdown.selectedVariables.push(item);
     } else if (this.variableDropdown.selectedVariables[0].selectedAggregations.length === 0) {
@@ -143,11 +143,11 @@ export class GroupedVerticalBarChartComponent implements  OnChanges, OnInit{
   }
 
   onSelectAll(items: any) {
-    // console.log(items);
+    // // console.log(items);
   }
 
   onDeSelectAll(items: any) {
-    // console.log(items);
+    // // console.log(items);
   }
 
   getTruckDrillReport(): void {
@@ -261,8 +261,8 @@ export class GroupedVerticalBarChartComponent implements  OnChanges, OnInit{
         time = time + ' ' + this.stackSeleted[i].series;
       }
     }
-    // console.log(this.stackSeleted[this.stackSeleted.length - 1]);
-    // console.log(time);
+    // // console.log(this.stackSeleted[this.stackSeleted.length - 1]);
+    // // console.log(time);
     return time;
   }
 

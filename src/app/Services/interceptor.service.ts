@@ -54,7 +54,7 @@ export class InterceptorService implements HttpInterceptor {
         cloneReq = req.clone({ url: url + req.url });
       }
     }
-    // console.log("auth new header",cloneReq)
+    // // console.log("auth new header",cloneReq)
     // Pass on the cloned request instead of the original request.
     return next.handle(cloneReq).pipe(
       tap((event => {

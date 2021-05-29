@@ -129,8 +129,8 @@ export class AdminRouteComponent implements OnInit {
 
     this.drawerService.getValue().subscribe(res=>{
       this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-    console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+    // console.log("ressssssssssssss2",this.sidebarCheck);
   })
 
     this.breadcrumbService.getValue().subscribe(res => {
@@ -138,11 +138,11 @@ export class AdminRouteComponent implements OnInit {
         this.breadcrumbInner = []
         this.breadcrumbInner = res;
         this.breadcrumbInner[0] = `${res[0]}`;
-        console.log("this.breadcrumbInner",this.breadcrumbInner);
+        // console.log("this.breadcrumbInner",this.breadcrumbInner);
       }
     })
 
-    console.log("this.breadcrumbInner",this.breadcrumbInner);
+    // console.log("this.breadcrumbInner",this.breadcrumbInner);
   if(this.breadcrumbInner[0]=='admin/config'){
     setTimeout(() => {
       this.editpop.nativeElement.click();
@@ -182,7 +182,7 @@ export class AdminRouteComponent implements OnInit {
       zoom: 6,
     };
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-    console.log("this.map (after adding map)= ", this.map)
+    // console.log("this.map (after adding map)= ", this.map)
   }
 
   getRoutes(filters) {
@@ -196,9 +196,9 @@ export class AdminRouteComponent implements OnInit {
         this.totalRouteListLength = data['data'].count;
         this.routeList.pagination = this.totalRouteListLength;
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
-      console.log("this.routeList[]= ", this.routeList);
+      // console.log("this.routeList[]= ", this.routeList);
     });
   }
 
@@ -325,7 +325,7 @@ export class AdminRouteComponent implements OnInit {
   getGeoFenceTypes() {
     this.formService.getOptions('dropdown_data', { option_key: 'territorytype' })
       .subscribe((data: any) => {
-        console.log("getOptions() response= ", data);
+        // console.log("getOptions() response= ", data);
         if (data.status === HttpStatusCodeEnum.Success) {
           this.itemListTerritoryType = data.response['option_values'].map(
             item => new DropDownItem(item['id'], item['label'])
@@ -445,10 +445,10 @@ export class AdminRouteComponent implements OnInit {
 
   getTruckList(filtersTruck) {
     let params = `limit=${filtersTruck.limit}&offset=${filtersTruck.offset}&order=${filtersTruck.order}&order_by=${filtersTruck.order_by}`;
-    console.log("params for getVehicleList= ", params);
+    // console.log("params for getVehicleList= ", params);
 
     this.formService.getVehiclesListNew(params).subscribe((data: any) => {
-      console.log("getVehiclesList()-", data);
+      // console.log("getVehiclesList()-", data);
       if (!data.error) {
         this.itemListTrucks = data['data'].data.map(
           item => new DropDownItem(item['id'], item['name'])
@@ -457,7 +457,7 @@ export class AdminRouteComponent implements OnInit {
       } else {
         this.swalService.getErrorSwal(data.message);
       }
-      console.log("this.itemListTrucks= ", this.itemListTrucks)
+      // console.log("this.itemListTrucks= ", this.itemListTrucks)
     }
     );
 
@@ -467,14 +467,14 @@ export class AdminRouteComponent implements OnInit {
   //   let params = `limit=${filtersFleet.limit}&offset=${filtersFleet.offset}&order=${filtersFleet.order}&order_by=${filtersFleet.order_by}`;
 
   //   this.showIndeterminateProgress = true;
-  //   console.log("params for fleet tab= ", params)
+  //   // console.log("params for fleet tab= ", params)
 
   //   this.formService.getFleetsList(params).subscribe((data: any) => {
-  //     console.log("getFleetsList() response= ", data);
+  //     // console.log("getFleetsList() response= ", data);
 
   //     if (!data.error) {
   //       this.itemListFleets = data['data'].data;
-  //       console.log("this.itemListFleets= ", this.itemListFleets);
+  //       // console.log("this.itemListFleets= ", this.itemListFleets);
 
   //     } else {
   //       this.swalService.getErrorSwal(data.message);
@@ -484,7 +484,7 @@ export class AdminRouteComponent implements OnInit {
   // }
 
   mapClicked(event) {
-    console.log("mapclicked", event);
+    // console.log("mapclicked", event);
     if (event.latLng) {
       this.binMap.placeMarkerAndPanTo(event.latLng);
       // { "lat": 33.65775396431903, "lng": 73.04599508781457 }
@@ -576,7 +576,7 @@ export class AdminRouteComponent implements OnInit {
   //     'id': id,
   //     'status': actionType
   //   }
-  //   console.log("params== ", params)
+  //   // console.log("params== ", params)
 
   //   this.formService.deleteRoute(params).subscribe((data: any) => {
   //     if (data.status === HttpStatusCodeEnum.Success) {

@@ -116,8 +116,8 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
 
     this.drawerService.getValue().subscribe(res=>{
         this.sidebarCheck=res;
-      console.log("ressssssssssssss1",res);
-      console.log("ressssssssssssss2",this.sidebarCheck);
+      // console.log("ressssssssssssss1",res);
+      // console.log("ressssssssssssss2",this.sidebarCheck);
     })
 
     this.getDropDowns();
@@ -143,7 +143,7 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
 
   public noWhitespaceValidator(control: FormControl) {
     const isWhitespace = (control.value || '').trim().length === 0;
-    console.log("iswhtspace",isWhitespace);
+    // console.log("iswhtspace",isWhitespace);
 
   }
 
@@ -180,7 +180,7 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
       }
 
       onError(errorMessage: string, err: any) {
-        console.log(errorMessage);
+        // console.log(errorMessage);
       }
 
       onNext(data: any): void {
@@ -211,14 +211,14 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
       customer: this.user.customer?.name ? this.user.customer?.name : null
     });
 
-    console.log(this.profileForm)
+    // console.log(this.profileForm)
 
-    console.log("this.avatar_url==", this.avatar_url)
+    // console.log("this.avatar_url==", this.avatar_url)
   }
 
   notImage = false;
   fileChange(event) {
-    console.log('file change', event);
+    // console.log('file change', event);
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
@@ -277,14 +277,14 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
 
   onSubmit(formValue) {
     this.profileSubmitted = true;
-    // console.log('formValue', formValue);
-    // console.log("this.avatar= ", this.avatar)
-    // console.log("this.avatar_url= ", this.avatar_url)
+    // // console.log('formValue', formValue);
+    // // console.log("this.avatar= ", this.avatar)
+    // // console.log("this.avatar_url= ", this.avatar_url)
     const paramUser: FormData = new FormData();
     paramUser['first_name'] = formValue.first_name;
     paramUser['last_name'] = formValue.last_name;
     paramUser['contact_number'] = formValue.contact_number.toString();
-    console.log("numbers",paramUser['contact_number']);
+    // console.log("numbers",paramUser['contact_number']);
     paramUser['id'] = this.user.id;
 
     if (this.validate()) {
@@ -299,7 +299,7 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
       else {
         paramUser['user_image'] = 'remove';
       }
-      // console.log("paramUser before api call= ", paramUser)
+      // // console.log("paramUser before api call= ", paramUser)
       this.userService.modifyUserData2(paramUser)
         .subscribe(apiResponse => {
           if (apiResponse['status'] === 200) {
@@ -363,11 +363,11 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
         }
 
         onError(errorMessage: string, err: any) {
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<any[]>): void {
-          console.log(apiResponse);
+          // console.log(apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.closeForm.nativeElement.click();
             this.context.swalService.getSuccessSwal('Password has been reset');

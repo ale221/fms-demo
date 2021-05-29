@@ -47,7 +47,7 @@ export class ChartComponent implements OnInit {
       type: this.graphType,
       use_case_id: this.graphUseCaseId,
     }
-    // console.log(this.chartOptions);
+    // // console.log(this.chartOptions);
     for (let x = 0; x < this.chartOptions?.categories?.length; x++) {
       this.finalObj.push({ "name": this.chartOptions.categories[x], "children": [] });
     }
@@ -57,7 +57,7 @@ export class ChartComponent implements OnInit {
         this.finalObj[y].children.push({ "name": this.chartOptions.series[z].name, "value": this.chartOptions.series[z].data[y] });
       }
     }
-    // console.log(this.finalObj);
+    // // console.log(this.finalObj);
     this.generateChart(this.finalObj);
   }
   generateGraphData() {
@@ -165,7 +165,7 @@ export class ChartComponent implements OnInit {
   }
   ngOnChanges() {
     this.finalObj = [];
-    // console.log("checkkkkkk");
+    // // console.log("checkkkkkk");
     for (let x = 0; x < this.chartOptions.categories.length; x++) {
       this.finalObj.push({ "name": this.chartOptions.categories[x], "children": [] });
     }
@@ -175,7 +175,7 @@ export class ChartComponent implements OnInit {
         this.finalObj[y].children.push({ "name": this.chartOptions.series[z].name, "value": this.chartOptions.series[z].data[y] });
       }
     }
-    // console.log(this.finalObj);
+    // // console.log(this.finalObj);
     this.generateChart(this.finalObj);
   }
 

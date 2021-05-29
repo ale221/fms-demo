@@ -162,7 +162,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
     // this.optimized_violations_call(1);
   }
   setupReport(event) {
-    // console.log("coming in setup repoert");
+    // // console.log("coming in setup repoert");
     // this.filters.search_text= '';
     // this.inputValue="";
     this.page = 1;
@@ -170,7 +170,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
     this.getReport(event[0], 1, false);
   }
   getReport(dateRange, page, pagination) {
-    // console.log("coming in getreport");
+    // // console.log("coming in getreport");
     this.violationInfoWindows = [];
     this.violationMarkers = [];
     this.violationMarkersIcons = [];
@@ -184,7 +184,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
     this.getViolationReport(this.startDate, this.endDate, page);
   }
   getViolationReport(startDate, endDate, pageNumber?) {
-    // console.log("coming in getViolationReport");
+    // // console.log("coming in getViolationReport");
     this.showIndeterminateProgress = true;
     if (this.map) {
       this.map.resetMap();
@@ -208,7 +208,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
         }
 
         onNext(apiResponse: TestApiResponse<EntityResponse[]>): void {
-          // console.log("apiResponse---", apiResponse)
+          // // console.log("apiResponse---", apiResponse)
           this.context.apiResponse = apiResponse;
           this.context.violations = this.context.apiResponse.results;
           this.context.temp = this.context.violations;
@@ -285,11 +285,11 @@ export class ViolationsComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          // console.log('devices', apiResponse);
+          // // console.log('devices', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.customerDevices = apiResponse.response;
             this.context.trucks_list = apiResponse.response.map(
@@ -298,7 +298,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
             this.context.trucks_list.unshift({ label: 'All' });
           }
           else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
         }
 
@@ -331,7 +331,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
         }
 
         onNext(apiResponse: TestApiResponse<EntityResponse[]>): void {
-          // console.log("apiResponse== ", apiResponse)
+          // // console.log("apiResponse== ", apiResponse)
           this.context.apiResponse = apiResponse;
           this.context.violations = this.context.apiResponse.results;
           this.context.violations.paginator = this.context.paginator;
@@ -486,11 +486,11 @@ export class ViolationsComponent implements OnInit, OnDestroy {
 
         onError(errorMessage: string, err: any) {
           this.context.swalService.getErrorSwal(errorMessage);
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<any[]>): void {
-          // console.log(apiResponse);
+          // // console.log(apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.territoriesCount = apiResponse.response;
           }
@@ -556,7 +556,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
       this.selectedTerritory = null;
     }
     else {
-      // console.log(row);
+      // // console.log(row);
       this.table.rowDetail.collapseAllRows();
       this.table.rowDetail.toggleExpandRow(row);
       this.onSelect(row)
@@ -569,7 +569,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   }
 
   sortData(event) {
-    // console.log("sortData= ", event)
+    // // console.log("sortData= ", event)
     this.filters.order_by = event.active;
     this.filters.order = event.direction;
     this.optimized_violations_call(1, this.searchText);
@@ -596,7 +596,7 @@ export class ViolationsComponent implements OnInit, OnDestroy {
 
   downloadXLS(download) {
     this.formService.downloadXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -605,14 +605,14 @@ export class ViolationsComponent implements OnInit, OnDestroy {
   }
 
   downloadPDF(download1) {
-    console.log("ajaoh ahhh sajna",download1);
+    // console.log("ajaoh ahhh sajna",download1);
     this.formService.downloadPDF(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       this.xlsPdfService.downloadXlsPdf(url,'Violations Report.pdf')
-      console.log("urlllllll",url)
+      // console.log("urlllllll",url)
     })
   }
 

@@ -15,7 +15,7 @@
       var self = this;
 
       this.$instance.on('mouseenter.site.menu', '.site-dashboard-menu-item', function() {
-        console.log($.site.menubar.folded)
+        // console.log($.site.menubar.folded)
         if ($.site.menubar.folded === true && $(this).is('.has-sub')) {
           var $sub = $(this).children('.site-dashboard-menu-sub');
           self.position($(this), $sub);

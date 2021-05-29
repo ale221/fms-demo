@@ -21,7 +21,7 @@ export class BinService extends EntityService {
     return this.http.get<LoginApiResponse<any[]>>(url, {params: params})
   }
   getEventReportNew(params): Observable<LoginApiResponse<any[]>> {
-    console.log(params);
+    // console.log(params);
     const url = `${AppConfig.URL}/hypernet/entity/V2/get_bins_activities`;
     return this.http.get<LoginApiResponse<any[]>>(url, {params: params});
   }

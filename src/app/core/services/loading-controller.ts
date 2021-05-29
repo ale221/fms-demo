@@ -15,7 +15,7 @@ export abstract class HttpController<T> implements Observer<T> {
 
   next(t: T): void {
     this.onNext(t);
-    // console.log(t);
+    // // console.log(t);
   }
 
   error(err: any): void {

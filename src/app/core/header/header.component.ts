@@ -171,26 +171,26 @@ export class HeaderComponent implements OnInit {
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'No longer idle.'
-      console.log(this.idleState);
+      // console.log(this.idleState);
       this.reset();
     });
 
     idle.onTimeout.subscribe(() => {
       this.idleState = 'Timed out!';
       this.timedOut = true;
-      console.log(this.idleState);
+      // console.log(this.idleState);
       this.logout();
     });
 
     idle.onIdleStart.subscribe(() => {
       this.idleState = 'You\'ve gone idle!'
-      console.log(this.idleState);
+      // console.log(this.idleState);
       // this.childModal.show();
     });
 
     idle.onTimeoutWarning.subscribe((countdown) => {
       this.idleState = 'You will time out in ' + countdown + ' seconds!'
-      console.log(this.idleState);
+      // console.log(this.idleState);
     });
 
     // sets the ping interval to 15 seconds
@@ -209,7 +209,7 @@ export class HeaderComponent implements OnInit {
   }
 
   getUpdateUser(data) {
-    console.log("getUpdateUser() from header component= ", data);
+    // console.log("getUpdateUser() from header component= ", data);
   }
 
   ngAfterViewInit() {
@@ -255,7 +255,7 @@ export class HeaderComponent implements OnInit {
 
   Selected(item: SelectedAutocompleteItem) {
     const entity_type = item['item']['original']['entity_type'];
-    // console.log(entity_type)
+    // // console.log(entity_type)
     if (entity_type === 'Truck') {
       this.gotoPageWithRouteParams('trucks', item['item']['id']);
     } else if (entity_type === 'Job') {
@@ -298,7 +298,7 @@ export class HeaderComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: ApiResponse<SearchResponse[]>): void {
@@ -400,8 +400,8 @@ export class HeaderComponent implements OnInit {
    * @param item
    */
   updateAlertCount(item) {
-    // console.log('update --- alert ---- count')
-    // console.log(this.unRead)
+    // // console.log('update --- alert ---- count')
+    // // console.log(this.unRead)
     if (this.unRead) {
       this.alert_count = this.unRead.length;
       // this.renderer.setStyle(
@@ -462,7 +462,7 @@ export class HeaderComponent implements OnInit {
     let params = { 'email': userEmail.email }
 
     this.headerService.logOut(params).subscribe((data: any) => {
-      // console.log("datahhh= ", data)
+      // // console.log("datahhh= ", data)
 
       if (data['status'] === HttpStatusCodeEnum.Success) {
         this.authService.unsetUser();
@@ -487,7 +487,7 @@ export class HeaderComponent implements OnInit {
   alert_count: any;
   /*** Method that hits the API to get the total alerts count from bakend */
   getAlertCount() {
-    // console.log('alert----count')
+    // // console.log('alert----count')
     if (this.authService.isLoggedIn()) {
       this.headerService.getIoLNotificationCount().subscribe(new class extends HttpController<ApiResponse<any>> {
         onComplete(): void {
@@ -495,12 +495,12 @@ export class HeaderComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: ApiResponse<any>): void {
           if (apiResponse.status) {
-            // console.log('notifications count ', apiResponse.response[0].count);
+            // // console.log('notifications count ', apiResponse.response[0].count);
             this.context.alert_count = apiResponse.response[0].count;
           }
 
@@ -514,7 +514,7 @@ export class HeaderComponent implements OnInit {
   dateRange = [];
   /*** Method that hits the API to get Notification list */
   getAlertList() {
-    // console.log('alert----list')
+    // // console.log('alert----list')
     const current_date = new Date();
     const threeHoursEarlier = subHours(current_date, 3);
 
@@ -545,7 +545,7 @@ export class HeaderComponent implements OnInit {
 
   /*** reset the notification counts */
   resetCount() {
-    console.log('reset---count')
+    // console.log('reset---count')
     this.headerService.getIolNotifications('reset_count', {})
       .subscribe(new class extends HttpController<ApiResponse<any>> {
         onComplete(): void {
@@ -553,7 +553,7 @@ export class HeaderComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: ApiResponse<any>): void {
@@ -700,7 +700,7 @@ export class HeaderComponent implements OnInit {
    * @param notification
    */
   goto_alert(notification) {
-    console.log(notification);
+    // console.log(notification);
     this.removeModal();
     const type = notification['notification_type'];
     const value = notification['activity_id'];
@@ -809,7 +809,7 @@ export class HeaderComponent implements OnInit {
   }
 
   navigateToProfile() {
-    // console.log("inside navigate profile func");
+    // // console.log("inside navigate profile func");
     this.router.navigate(['iol/profile']);
   }
 
@@ -838,7 +838,7 @@ export class HeaderComponent implements OnInit {
 
   toggleSideMenu() {
     if ($('.mat-drawer-container.mat-sidenav-container').hasClass('collapseDrawer')) {
-      console.log("coming in iffffffffffff");
+      // console.log("coming in iffffffffffff");
       $('.mat-drawer-container.mat-sidenav-container').removeClass('collapseDrawer');
       $('.page-content.container-fluid').addClass('full-open-sidebar');
       $('.page-content.container-fluid').removeClass('half-open-sidebar');
@@ -848,7 +848,7 @@ export class HeaderComponent implements OnInit {
       $('.navbar-brand-text.hidden-xs').css('display', 'inline');
       this.drawerService.setValue(false);
     } else {
-      console.log("coming in elseeeeeeeeeeeeee");
+      // console.log("coming in elseeeeeeeeeeeeee");
       $('.mat-drawer-container.mat-sidenav-container').addClass('collapseDrawer');
       $('.page-content.container-fluid').addClass('half-open-sidebar');
       $('.page-content.container-fluid').removeClass('full-open-sidebar');

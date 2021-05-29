@@ -112,7 +112,7 @@ export class NotificationsDashboardComponent implements OnInit {
         }
 
         onError(errorMessage: string, err: any) {
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: ApiResponse<any>): void {
@@ -252,11 +252,11 @@ export class NotificationsDashboardComponent implements OnInit {
 
   goto_alert(notification) {
     const type = notification['notification_type'];
-    console.log(type, notification);
+    // console.log(type, notification);
     const value = notification['activity_id'];
     const status = notification['status_id'];
     if (status === 1) {
-      console.log(type);
+      // console.log(type);
       if (type === NotificationTypeEnum.NOTIFICATION_ADMIN_ACTIVITY_REVIEW) {
         this.gotoPagewithParams('job-review', value);
       } else if (type === NotificationTypeEnum.NOTIFICATION_ADMIN_ACTIVITY_REVIEW_DRIVER_REJECT) {
@@ -313,9 +313,9 @@ export class NotificationsDashboardComponent implements OnInit {
   }
 
   gotoPageWithRouteParams(pageName: string, value, value1?) {
-    console.log('/iol/' + pageName + '/' + value);
+    // console.log('/iol/' + pageName + '/' + value);
     if (!isNullOrUndefined(value)) {
-      console.log('value', value);
+      // console.log('value', value);
       this.router.navigate(['/iol/' + pageName, value]);
       return true;
     }
@@ -360,7 +360,7 @@ export class NotificationsDashboardComponent implements OnInit {
   }
 
   onPaginateChange(event) {
-    console.log("paginateChange= ", event)
+    // console.log("paginateChange= ", event)
     // this.showIndeterminateProgress = true;
     // this.filters.offset = (event.pageIndex * event.pageSize);
     // this.optimized_violations_call(event.page, this.searchText);

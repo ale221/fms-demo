@@ -69,7 +69,7 @@ export class ActivityReportingComponent implements OnInit, OnChanges {
 
 
   setupReport(event) {
-    console.log(event);
+    // console.log(event);
     this.getReport(event[0], event[1]);
   }
 
@@ -102,11 +102,11 @@ export class ActivityReportingComponent implements OnInit, OnChanges {
           // do
           this.context.swalService.getErrorSwal(errorMessage);
 
-          console.log(errorMessage);
+          // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<TruckResponse[]>): void {
-          console.log('activities list Range', apiResponse);
+          // console.log('activities list Range', apiResponse);
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.activities = apiResponse.response['activity'];
 

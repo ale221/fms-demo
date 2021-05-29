@@ -238,7 +238,7 @@ export class DriverShiftAllocationComponent implements OnInit {
   updateTask(job, count) {
     if (this.isExecuted) return;
     this.isExecuted = true;
-    // console.log("Update task ...");
+    // // console.log("Update task ...");
 
     this.getJobFormArray.clear();
     this.getJobFormArray.reset();
@@ -251,7 +251,7 @@ export class DriverShiftAllocationComponent implements OnInit {
       destination_contract: [job.destination_contract, [Validators.required]],
       priority: [job.priority, [Validators.required]]
     });
-    // console.log(task);
+    // // console.log(task);
     this.getJobFormArray.insert(count, task);
   }
 
@@ -293,13 +293,13 @@ export class DriverShiftAllocationComponent implements OnInit {
     t.setSeconds(t.getSeconds() + offset);
     let currentDate = DateUtils.getYYYYMMDD(t.toDateString())
     currentDate = DateUtils.getLocalMMDDYYYYhhmmssATimee(currentDate + ' ' + splitted[1]);
-    // console.log(currentDate)
+    // // console.log(currentDate)
     return currentDate;
   }
 
   getTemplates(filters) {
     let params = `limit=${filters.limit}&offset=${filters.offset}&order=${filters.order}&order_by=${filters.order_by}&search=${filters.search}&shift_id=${filters.shift_id}&driver_id=${filters.driver_id}&time_zone=${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
-    // console.log("coming");
+    // // console.log("coming");
     this.showIndeterminateProgress = true;
     this.templates = [];
 
@@ -329,7 +329,7 @@ export class DriverShiftAllocationComponent implements OnInit {
     this.templateRouteService.getShiftDrivers().subscribe((data: any) => {
       this.showIndeterminateProgress = false;
       this.allShifts = data.data.data;
-      // console.log("this.allShifts===== ", this.allShifts);
+      // // console.log("this.allShifts===== ", this.allShifts);
       this.shifts_list = data.data.data.map(
         item => new PrimengDropdownItem(item['id'], item['name'])
       );
@@ -347,22 +347,22 @@ export class DriverShiftAllocationComponent implements OnInit {
           this.swalService.getSuccessSwal(data.message);
         } else {
           this.swalService.getErrorSwal(data.message);
-          console.log(data.message);
+          // console.log(data.message);
         }
       }
       );
     }
   }
   // async showSwal(user) {
-  //   console.log("userrrrrrrr",user);
+  //   // console.log("userrrrrrrr",user);
   //   // this.selectedUser = user;
-  //   // console.log('user', user);
+  //   // // console.log('user', user);
 
   //   // const shouldDelete = await this.swalService.askForDeletion('Do you really want to delete this user?');
   //   const shouldDelete = await this.swalService.getDeleteSwal(user, 'What do you want to do with ' + user.driver_first_name + ' ?');
-  //   console.log('shouldDelete', shouldDelete);
+  //   // console.log('shouldDelete', shouldDelete);
   //   if (shouldDelete) {
-  //     console.log("coming in should del");
+  //     // console.log("coming in should del");
   //     const message = shouldDelete === EntityStatusEnum.Delete ? ' deleted ' : ' marked inactive ';
   //     this.deleteUser(user.id, shouldDelete, 'Record has been' + message +
   //       'successfully');
@@ -375,7 +375,7 @@ export class DriverShiftAllocationComponent implements OnInit {
   //   params['id'] = (userId);
   //   params['status'] = actionType;
 
-  //   console.log('params', params);
+  //   // console.log('params', params);
   //   this.templateRouteService.deleteShiftDrivers(params)
   //     .subscribe((data: any) => {
 
@@ -383,7 +383,7 @@ export class DriverShiftAllocationComponent implements OnInit {
   //         this.swalService.getSuccessSwal(message);
   //         this.getTemplates(this.filters);
   //       } else {
-  //         console.log(data.message);
+  //         // console.log(data.message);
   //         this.swalService.getErrorSwal(data.message)
   //       }
   //     })
@@ -391,7 +391,7 @@ export class DriverShiftAllocationComponent implements OnInit {
   getGroupList() {
     this.templateRouteService.getDriverGroup().subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
-        // console.log(data.data);
+        // // console.log(data.data);
         this.driverGroup = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
@@ -400,7 +400,7 @@ export class DriverShiftAllocationComponent implements OnInit {
         // this.typeList = [];
         //  this.reportTypeTable=0;
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -434,13 +434,13 @@ export class DriverShiftAllocationComponent implements OnInit {
         );
         // this.typeList = [];
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
   onUserPagination(event) {
     this.filters.offset = (event.pageIndex * event.pageSize);
-    // console.log("event= ", event, event.active)
+    // // console.log("event= ", event, event.active)
     // this.filters.order_by = event.active;
     // this.filters.order = event.direction;
     this.getTemplates(this.filters);
@@ -515,7 +515,7 @@ export class DriverShiftAllocationComponent implements OnInit {
       }
     }
     else {
-      console.log("Form is invalid[in else condition]", this.errorMessages);
+      // console.log("Form is invalid[in else condition]", this.errorMessages);
     }
   }
 
@@ -612,7 +612,7 @@ export class DriverShiftAllocationComponent implements OnInit {
   }
 
   get getJobFormArray(): FormArray {
-    // console.log(this.templateForm.get('job_tasks') as FormArray);
+    // // console.log(this.templateForm.get('job_tasks') as FormArray);
     return this.templateForm.get('job_tasks') as FormArray;
   }
 
@@ -729,11 +729,11 @@ export class DriverShiftAllocationComponent implements OnInit {
 
   //       onError(errorMessage: string, err: any) {
   //         // do
-  //         // console.log(errorMessage);
+  //         // // console.log(errorMessage);
   //       }
 
   //       onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-  //         // console.log('devices', apiResponse);
+  //         // // console.log('devices', apiResponse);
   //         if (apiResponse.status === HttpStatusCodeEnum.Success) {
   //           this.context.customerDevices = apiResponse.response;
   //           this.context.trucks_list = apiResponse.response.map(
@@ -741,7 +741,7 @@ export class DriverShiftAllocationComponent implements OnInit {
   //           );
   //         }
   //         else {
-  //           // console.log(apiResponse.message);
+  //           // // console.log(apiResponse.message);
   //         }
   //       }
 
@@ -826,7 +826,7 @@ export class DriverShiftAllocationComponent implements OnInit {
 
   downloadXLS(download) {
     this.templateRouteService.downloadXLS(download).subscribe((apiResponse: any) => {
-      console.log("downloadXLS response== ", apiResponse)
+      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -836,7 +836,7 @@ export class DriverShiftAllocationComponent implements OnInit {
 
   downloadPDF(download1) {
     this.templateRouteService.downloadPDF(download1).subscribe((apiResponse: any) => {
-      console.log("downloadPDF response== ", apiResponse)
+      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);

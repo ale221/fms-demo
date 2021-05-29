@@ -64,17 +64,17 @@ export class AdminFuelReportingComponent implements OnInit {
 
         onError(errorMessage: string, err: any) {
           // do
-          // console.log(errorMessage);
+          // // console.log(errorMessage);
         }
 
         onNext(apiResponse: LoginApiResponse<DropDownItem[]>): void {
-          // console.log('purchase', apiResponse);
+          // // console.log('purchase', apiResponse);
 
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.purchaseTypes = apiResponse.response['option_values'];
           }
           else {
-            // console.log(apiResponse.message);
+            // // console.log(apiResponse.message);
           }
 
         }
@@ -110,7 +110,7 @@ export class AdminFuelReportingComponent implements OnInit {
             let info = '';
             if (data.status === HttpStatusCodeEnum.Success) {
               const response = ((data.response[0]['fillups']));
-              // console.log(response);
+              // // console.log(response);
               let fields = [];
               if (response && response.length) {
                 response.forEach(element => {

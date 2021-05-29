@@ -34,11 +34,11 @@ export class FleetdashboardchartComponent implements OnInit {
 
   ngOnInit() {
     // this.generateGraphData();
-    console.log("in", this.chartOptions);
+    // console.log("in", this.chartOptions);
     for (let x = 0; x < this.chartOptions.categories.length; x++) {
       this.finalObj.push({ "name": this.chartOptions.categories[x], "values": this.chartOptions.values[x] });
     }
-    console.log(this.finalObj);
+    // console.log(this.finalObj);
     this.generateChar(this.finalObj);
     // this.selectedGraphFilter = {
     //   id: this.graphId,
@@ -170,7 +170,7 @@ export class FleetdashboardchartComponent implements OnInit {
       }
     }
     this.chartOptions1 = graphData;
-    // console.log(this.chartOptions,"111111111");
+    // // console.log(this.chartOptions,"111111111");
     // this.generateChar(this.chartOptions);
   }
 

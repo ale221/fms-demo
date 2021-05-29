@@ -55,7 +55,7 @@ export class UserService {
   }
 
   sendEmailForForgetPassword(email: any) {
-    // console.log(email);
+    // // console.log(email);
     const url = `/api/users/regenerate_reset_token/`;
     return this.http.patch(url, email);
 
@@ -67,7 +67,7 @@ export class UserService {
   }
 
   createNewPassword(val: any) {
-    console.log(val);
+    // console.log(val);
     const url = `/api/users/change_password/`;
     return this.http.post(url, val);
   }
@@ -134,7 +134,7 @@ export class UserService {
     // params['modified_by_id'] = this.authService.getUser().customer.id;
     // params['status'] = EntityStatusEnum.Active;
     // params['use-case'] = 1;
-    // console.log("params= ", params);
+    // // console.log("params= ", params);
     // // let newData = this.converToFormdata(params);
     // // old url
     // // const url = `${'/hypernet/entity/add_new_entity'}`;
@@ -143,7 +143,7 @@ export class UserService {
   }
 
   getUserById(param) { //added new api here
-    console.log("params for get specific user by id== ", param);
+    // console.log("params for get specific user by id== ", param);
     const url = `/api/users/vfq_user_get`;
     return this.http.get<LoginApiResponse<any>>(url, { params: param });
   }
@@ -169,7 +169,7 @@ export class UserService {
     return this.http.patch(url, params);
   }
   deleteShift(params?) {
-    console.log("params,", params);
+    // console.log("params,", params);
     const url = `/iof/shifts/?id=${params.id}`;
     return this.http.patch(url, params);
   }
@@ -270,7 +270,7 @@ export class UserService {
   }
 
   uploadUserDocuments(data) {
-    console.log("calling upload API... ", data);
+    // console.log("calling upload API... ", data);
     const url = `/options/upload_document/`;
     return this.http.post(url, data);
   }

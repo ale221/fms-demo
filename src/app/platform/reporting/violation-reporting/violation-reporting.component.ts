@@ -203,7 +203,7 @@ export class ViolationReportingComponent implements OnInit {
 
     if (this.showIndeterminateProgress == false) {
       this.filters.offset = (event.pageIndex * event.pageSize);
-      console.log("this.showintermediateprogress")
+      // console.log("this.showintermediateprogress")
       this.getViolationReport(this.filters);
     }
 

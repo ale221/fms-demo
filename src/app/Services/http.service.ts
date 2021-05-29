@@ -22,7 +22,7 @@ export class HttpService {
     data['company_id'] = this.authService.getUser()['company_id'];
     data['os'] = "web";
     data['status'] = "active";
-    console.log(data);
+    // console.log(data);
     return this.http.post(url, data);
   }
 

@@ -262,13 +262,13 @@ export class DashBoardDriverComponent implements OnInit {
   getGroupList() {
     this.driverService.getDriverGroup().subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
-        // console.log(data.data);
+        // // console.log(data.data);
         this.driverGroup = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
         this.driverLists = [];
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -281,7 +281,7 @@ export class DashBoardDriverComponent implements OnInit {
     this.setExportUrls(this.filters);
     this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
     this.entityService.getFleetDriversForMap(this.filters).subscribe(apiResponse => {
-      // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
+      // // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
 
@@ -305,12 +305,12 @@ export class DashBoardDriverComponent implements OnInit {
   getDrivers(driverGroupID) {
     this.driverService.getDriver(driverGroupID).subscribe((data: any) => {
       if (data.status === HttpStatusCodeEnum.Success) {
-        console.log(data.data);
+        // console.log(data.data);
         this.driverLists = data.data.map(
           item => new DropDownItem(item['id'], item['name'])
         );
       } else {
-        console.log(data.message);
+        // console.log(data.message);
       }
     });
   }
@@ -321,7 +321,7 @@ export class DashBoardDriverComponent implements OnInit {
     this.setExportUrls(this.filters);
     this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
     this.entityService.getFleetDriversForMap(this.filters).subscribe(apiResponse => {
-      // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
+      // // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
 
@@ -358,15 +358,15 @@ export class DashBoardDriverComponent implements OnInit {
     this.selectedPoiOption = event.value.id;
     // this.selectedPoiString = event.value.name;
 
-    console.log("this.selectedPoiOption", this.selectedPoiOption);
+    // console.log("this.selectedPoiOption", this.selectedPoiOption);
     this.poi_id = event.value.id;
 
     // if (this.filtersForm.controls['poi_id'].value.name == 'Fleets') {
-    //   console.log("inside if condition")
+    //   // console.log("inside if condition")
     //   this.showFilterDropdown = true;
 
     // } else {
-    console.log("inside else condition")
+    // console.log("inside else condition")
     this.showFilterDropdown = false;
 
     this.filters.is_poi = true;
@@ -375,7 +375,7 @@ export class DashBoardDriverComponent implements OnInit {
     //Reset all map variables, arrays
     // this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
     this.entityService.getFleetDriversForMap(this.filters).subscribe(apiResponse => {
-      // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
+      // // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
 
@@ -399,17 +399,17 @@ export class DashBoardDriverComponent implements OnInit {
 
     // get geozones
     this.changeZoneName = event.value.name;
-    console.log("this.changeZoneName= ", this.changeZoneName)
+    // console.log("this.changeZoneName= ", this.changeZoneName)
 
     this.entityService.getPOIDropdownChange(this.changeZoneName).subscribe(apiResponse => {
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
 
         this.zoneOptions = apiResponse.data;
-        console.log("this.zoneOptions= ", this.zoneOptions);
+        // console.log("this.zoneOptions= ", this.zoneOptions);
         this.filters.poi_id = this.changeZoneName;
         // this.filtersService.setValue(this.filters);
         // this.filtersService.setPlaybackValue(this.filters);
-        console.log("filters in poi change", this.filters);
+        // console.log("filters in poi change", this.filters);
 
 
       }
@@ -420,7 +420,7 @@ export class DashBoardDriverComponent implements OnInit {
   }
 
   zoneOptionChange(event) {
-    console.log('zoneDropDown change= ', event)
+    // console.log('zoneDropDown change= ', event)
     this.zone_id = event.value.id;
     this.selectedZoneOption = event.value.id;
     this.filters.zone_id = event.value.id;//this.zone_id;
@@ -428,7 +428,7 @@ export class DashBoardDriverComponent implements OnInit {
     //Reset all map variables, arrays
     this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
     this.entityService.getFleetDriversForMap(this.filters).subscribe(apiResponse => {
-      // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
+      // // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
 
@@ -462,7 +462,7 @@ export class DashBoardDriverComponent implements OnInit {
   }
 
   fleetOptionChange(event) {
-    // console.log("event--- ", event.value.id)
+    // // console.log("event--- ", event.value.id)
 
     let params = {
       'is_poi': true,
@@ -470,9 +470,9 @@ export class DashBoardDriverComponent implements OnInit {
       'zone_id': event.value.id
     }
 
-    // console.log("params with zone_id---", params)
+    // // console.log("params with zone_id---", params)
     this.entityService.getFleetDriversForMap(params).subscribe(apiResponse => {
-      // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
+      // // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
 
@@ -597,7 +597,7 @@ export class DashBoardDriverComponent implements OnInit {
           dataError: false
         }
         this.dataSource = apiResponse['data'].data;
-        console.log("this.datasource", this.dataSource);
+        // console.log("this.datasource", this.dataSource);
         this.totalLength = apiResponse['data'].count;
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -630,16 +630,16 @@ export class DashBoardDriverComponent implements OnInit {
 
 
   getDriversForMap(filters) {
-    console.log("params in mappppppppp",filters);
+    // console.log("params in mappppppppp",filters);
     this.loadingFilterForMap="on";
     this.resetMap(); this.locations = []; this.trucks = []; this.mapData = [];
     this.entityService.getFleetDriversForMap(filters).subscribe(apiResponse => {
-      // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
+      // // console.log("apiResponse[getDriversForMap]---> ", apiResponse);
 
       if (apiResponse['status'] === HttpStatusCodeEnum.Success) {
         this.loadingFilterForMap="off";
         this.dataSourceForMap = apiResponse['data'].data;
-        console.log("this.dataSourceforMap",this.dataSourceForMap);
+        // console.log("this.dataSourceforMap",this.dataSourceForMap);
         this.totalLengthForMap = apiResponse['data'].count;
         // this.dataSourceForMap.sort = this.sort;
         // this.dataSourceForMap.paginator = this.paginatorForMap;
@@ -805,7 +805,7 @@ export class DashBoardDriverComponent implements OnInit {
         this.subscription = newMessage.subscribe((response: string) => {
           const signalRresponse = JSON.parse(response) as SignalRresponse;
 
-          console.log('signalResponse', signalRresponse);
+          // console.log('signalResponse', signalRresponse);
           if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
             return;
           }
@@ -941,14 +941,14 @@ export class DashBoardDriverComponent implements OnInit {
     this.poly = [];
     this.markers = {};
     this.bounds1 = new google.maps.LatLngBounds();
-    // console.log('markers', this.markers);
+    // // console.log('markers', this.markers);
   }
 
 
   setupLocations() {
     this.locations = [];
-    console.log("this.trucks--", this.trucks);
-    console.log("this.locations--", this.locations)
+    // console.log("this.trucks--", this.trucks);
+    // console.log("this.locations--", this.locations)
     this.locations = this.trucks.map(item =>
       new EntityWithIconLocation(item.id, item.last_latitude, item.last_longitude,
         [new Item('Name', item.name),
@@ -958,7 +958,7 @@ export class DashBoardDriverComponent implements OnInit {
         new Item('Last Updated', DateUtils.getLocalMMDDYYYYhhmmss(item['last_updated'])),
           // new Item('Location', (item['location_address']) ? item['location_address'] : '-')
         ], item['marker']));
-    console.log("this.locations222--", this.locations)
+    // console.log("this.locations222--", this.locations)
     this.generateMapView(null, this.trucks);
   }
 
@@ -1117,9 +1117,9 @@ export class DashBoardDriverComponent implements OnInit {
 
 
   downloadXLS(download) {
-    console.log("XLS before API= ", download)
+    // console.log("XLS before API= ", download)
     this.entityService.downloadDriverDashboardXLS(download).subscribe(apiResponse => {
-      console.log("downloadDriverDashboardXLS response== ", apiResponse)
+      // console.log("downloadDriverDashboardXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -1128,9 +1128,9 @@ export class DashBoardDriverComponent implements OnInit {
   }
 
   downloadPDF(download) {
-    console.log("PDF before API= ", download)
+    // console.log("PDF before API= ", download)
     this.entityService.downloadDriverDashboardXLS(download).subscribe(apiResponse => {
-      console.log("downloadDriverDashboardXLS response== ", apiResponse)
+      // console.log("downloadDriverDashboardXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
