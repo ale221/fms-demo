@@ -826,7 +826,6 @@ export class DriverShiftAllocationComponent implements OnInit {
 
   downloadXLS(download) {
     this.templateRouteService.downloadXLS(download).subscribe((apiResponse: any) => {
-      // console.log("downloadXLS response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
@@ -836,7 +835,6 @@ export class DriverShiftAllocationComponent implements OnInit {
 
   downloadPDF(download1) {
     this.templateRouteService.downloadPDF(download1).subscribe((apiResponse: any) => {
-      // console.log("downloadPDF response== ", apiResponse)
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
