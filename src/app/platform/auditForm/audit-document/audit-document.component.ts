@@ -1630,9 +1630,12 @@ export class AuditDocumentComponent implements OnInit {
   }
   onClearSearch() {
     this.searchForm.reset();
-    var params;
-    // this.downloadableLink = environment.baseUrl+'/options/get_export_files/?'+params;
-    this.optimized_contract_call(0, 100, this.filters);
+    this.contracts = [];
+    this.totalContractsLength = 0
+    this.showExportFile = false;
+    // commented by wahab because clear serach call the api which shows no records in datatable but count comes as 2
+    // var params;
+    // this.optimized_contract_call(0, 100, this.filters);
   }
   onSearch(formval) {
     // // console.log(this.searchForm.value.search);
