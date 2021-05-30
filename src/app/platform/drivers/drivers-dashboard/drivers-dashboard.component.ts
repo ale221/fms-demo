@@ -1078,14 +1078,18 @@ export class DriversDashboardComponent implements OnInit {
     this.show_password = false;
     this.selectedCheckbox = false;
     this.submitted = false;
+    
     // console.log("==============>", this.driverForm);
   }
   clearForm2() {
+    this.groupDriverList=[]
+    this.getListGroupDriver();
     this.btnText = "Save";
     this.GroupForm.reset();
     this.updateEdit2 = true;
     this.formTitle = 'Add Driver Group';
     this.submitted = false;
+    // this.groupDriverList=[]
   }
   getListGroupDriver() {
     this.driverService.getDriverForGroupAdd().subscribe(res => {
