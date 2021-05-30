@@ -72,11 +72,7 @@
                                     </div>
                                   </span>
                                 </div>
-                                <!-- <div class="font-size-20  margin-bottom-15  text-center">
-                                                                    <div class="battery">
-                                                                        <div class="battery-level" [ngStyle] = "{'height.px': truck?.signal_strength}"></div>
-                                                                      </div>
-                                                                </div>  -->
+
                                 <div class="font-size-20  margin-bottom-15 text-center">
 
                                 </div>
@@ -85,7 +81,7 @@
                                     <div class="table-responsive vscroll"
                                       style="height:255px;border: 1px solid #ebebeb;">
                                       <table style="font-size: 12px;"
-                                        class="table margin-bottom-0 table-bordered1     table-condensed   ">
+                                        class="table margin-bottom-0 table-bordered1 table-condensed ">
                                         <tbody>
                                           <tr>
                                             <th width=""> <b>Vehicle Name/ID</b>
@@ -102,24 +98,21 @@
                                           <tr>
                                             <th> <b> Device Id</b> </th>
                                             <td class="text-left text-break">
-                                              {{truck?.device_id ||
-                                              'N/A'}}
+                                              {{truck?.device_id || 'N/A'}}
                                             </td>
 
                                           </tr>
                                           <tr>
                                             <th> <b> SIM No</b> </th>
                                             <td class="text-left text-break">
-                                              {{truck?.sim_no ||
-                                              'N/A'}}
+                                              {{truck?.sim_no || 'N/A'}}
                                             </td>
 
                                           </tr>
                                           <tr>
                                             <th> <b> Type</b> </th>
                                             <td class="text-left text-break">
-                                              {{truck?.vehicle_type ||
-                                              'N/A'}}
+                                              {{truck?.vehicle_type || 'N/A'}}
                                             </td>
                                           </tr>
                                           <tr>
@@ -153,16 +146,14 @@
                                             </th>
                                             <td class="text-left text-break">
                                               {{(truck?.threshold) ?
-                                              truck?.threshold + '
-                                              km/h' : 'N/A'}}
+                                              truck?.threshold + 'km/h' : 'N/A'}}
                                             </td>
                                           </tr>
                                           <tr>
                                             <th> <b> Engine Capacity </b>
                                             </th>
                                             <td class="text-left text-break">
-                                              {{truck?.engine_capacity ||
-                                              'N/A'}}
+                                              {{truck?.engine_capacity ||'N/A'}}
                                             </td>
                                           </tr>
                                           <tr>
@@ -174,33 +165,22 @@
                                           <tr>
                                             <th> <b> Chassis No.</b></th>
                                             <td class="text-left text-break">
-                                              {{truck?.chassis_number ||
-                                              'N/A'}}
+                                              {{truck?.chassis_number || 'N/A'}}
                                             </td>
                                           </tr>
                                           <tr>
                                             <th> <b> Engine No.</b></th>
                                             <td class="text-left text-break">
-                                              {{truck?.engine_number ||
-                                              'N/A'}}
+                                              {{truck?.engine_number || 'N/A'}}
                                             </td>
                                           </tr>
                                           <tr>
                                             <th> <b> Purchase Type</b>
                                             </th>
                                             <td class="text-left text-break">
-                                              {{truck?.leased_owned_name ||
-                                              'N/A'}}
+                                              {{truck?.leased_owned_name || 'N/A'}}
                                             </td>
                                           </tr>
-                                          <!-- <tr>
-                                                                                        <th> <b> Device Id</b> </th>
-                                                                                        <td
-                                                                                            class="text-left text-break">
-                                                                                            {{truck?.device_id ||
-                                                                                            'N/A'}}
-                                                                                        </td>
-                                                                                    </tr> -->
 
                                         </tbody>
                                       </table>
@@ -214,19 +194,16 @@
                                   <label class="font-size-14 font-weight-600 ">Export:</label>
                                   <div class="btn-group btn-group-justified">
                                     <div class="btn-group" role="group">
-                                      <!-- [href]="downloadableLink" -->
                                       <a (click)="downloadXLS(downloadableLink)">
                                         <button type="button" class="btn btn-outline btn-default"> <img
                                             src="../../../assets/images/icon-xls.png" height="50">
                                           <div class="font-size-12">
-                                            <!-- [href]="downloadableLink" -->
-                                            <a class="enabled">Download XLS </a>
+                                            <a class="enabled">Download XLS</a>
                                           </div>
                                         </button>
                                       </a>
                                     </div>
                                     <div class="btn-group" role="group">
-                                      <!-- [href]="downloadableLink1" -->
                                       <a (click)="downloadPDF(downloadableLink1)">
                                         <button type="button" class="btn btn-outline btn-default"> <img
                                             src="../../../assets/images/icon-pdf.png" height="50">

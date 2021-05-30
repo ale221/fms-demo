@@ -42,6 +42,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import { forkJoin } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { XlsPdfService } from '../../services/xls-pdf.service';
 
 declare var $: any;
 declare var ol: any;
@@ -254,7 +255,7 @@ export class FleetDetailComponent implements OnInit {
     private breadcrumbService: BreadcrumbsService,
     private drawerService: DrawerService,
     private httpCLient: HttpClient,
-    private signalRService: SignalRService,
+    private signalRService: SignalRService, private xlsPdfService: XlsPdfService,
     @Inject(PLATFORM_ID) private platformId, private zone: NgZone
   ) {
     this.theme = this.brandingService.styleObject();
@@ -507,7 +508,7 @@ export class FleetDetailComponent implements OnInit {
             this.yearMileage = this.yeardistance / this.yearfuelFilledTotal;
             // console.log("ths.yearMileage2",this.yearMileage)
           }
-          
+
           // console.log("ths.yearMileageeeeeeeee",this.yearMileage)
 
         }
@@ -1561,7 +1562,7 @@ export class FleetDetailComponent implements OnInit {
           let selectedPackage = JSON.parse(localStorage.getItem('user'));
           selectedPackage = selectedPackage.package[0]
           // this.createSnapToRoad(this.violationMarkers, this.violationInfoWindows);
-          
+
           if (selectedPackage.package_id === this.packageType.png) {
             this.tMap.createTrail(this.violationMarkers, this.violationInfoWindows, false);
           } else {
@@ -1942,7 +1943,6 @@ export class FleetDetailComponent implements OnInit {
                   });
                 }
               })
-
             }
 
             if ((i + 1) === result.length) {
@@ -1970,11 +1970,8 @@ export class FleetDetailComponent implements OnInit {
               this.processSnapToRoadResponse(arrayToProcess);
               // this.drawSnappedPolyline(zoom);
             }
-
-
           });
         }
-
 
       },
         err => {
@@ -1983,9 +1980,6 @@ export class FleetDetailComponent implements OnInit {
             // this.createTrail(locations, info, false);
           }
         });
-
-
-      // return tempMarkersArr;
     }
     return this.snappedCoordinates;
   }
@@ -2090,12 +2084,6 @@ export class FleetDetailComponent implements OnInit {
     });
   }
 
-
-
-
-
-
-
   getMapTrailForIDLE() {
     let end_date = new Date();
     let start_date = new Date(end_date.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -2115,17 +2103,15 @@ export class FleetDetailComponent implements OnInit {
 
     params['ignition'] = true;
     this.idleDuration = null;
-    this.truckService.getMapTrail(params).subscribe((apiResponse: any) => {
 
+    this.truckService.getMapTrail(params).subscribe((apiResponse: any) => {
       if (apiResponse.status === HttpStatusCodeEnum.Success) {
         if (apiResponse['data'].stops.length > 0) {
           this.idleDuration = apiResponse['data'].stops[0].duration;
         } else {
           this.idleDuration = null;
         }
-
       }
-
     })
     // // console.log(" this.idleDuration===== ", this.idleDuration)
   }
@@ -2140,7 +2126,7 @@ export class FleetDetailComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url, 'Users.xls')
     })
   }
 
@@ -2149,7 +2135,7 @@ export class FleetDetailComponent implements OnInit {
       const data = apiResponse;
       const blob = new Blob([data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob)
-      window.open(url);
+      this.xlsPdfService.downloadXlsPdf(url, 'Users.pdf')
     })
   }
 

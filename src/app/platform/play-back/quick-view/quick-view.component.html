@@ -326,12 +326,6 @@
             </mat-tab>
 
             <mat-tab label="Stops">
-              <!-- <div class="row padding-10 padding-bottom-0">
-                  <app-reporting-buttons [calendarDimension]="'col-sm-9'" [type]="'trail'"
-                    [timeRange]="true" [hideBtn]="'today yesterday week month'"
-                    (btnClicked)="filtersStopsListing($event)"></app-reporting-buttons>
-                </div> -->
-
               <div class="table-responsive padding-10" style="border: 1px solid #ebebeb;">
                 <p-progressBar *ngIf="showIndeterminateProgress" [style]="{'height': '3px'}" mode="indeterminate">
                 </p-progressBar>
@@ -345,7 +339,6 @@
                         <img [src]="row.photo" class="img-bordered pull-left margin-right-10" height="36px" />
                         <div class="media-body pointer" [routerLink]="gotoService.gotoTruck(row.id)">
                           <a class="font-weight-600">{{ row.truck_name || 'N/A' }}</a>
-                          <!-- <span style="font-size: 12px; font-style: italic;">{{ row.vehicle_type || 'N/A' }}</span> -->
                         </div>
                       </div>
                     </td>
@@ -356,7 +349,6 @@
                       <div style="width: 120px; float: left">
                         <div class="media-body pointer" [routerLink]="gotoService.gotoDriver(row.id)">
                           <a class="font-weight-600">{{ row.driver_name || 'N/A' }}</a>
-                          <!-- <span style="font-size: 12px; font-style: italic;">{{ row.vehicle_type || 'N/A' }}</span> -->
                         </div>
                       </div>
                     </td>
@@ -367,17 +359,13 @@
                   </ng-container>
                   <ng-container matColumnDef="duration">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Duration</th>
-                    <td mat-cell *matCellDef="let row">{{ getDurationForListing(row.duration) || 'N/A' }}</td>
+                    <td mat-cell *matCellDef="let row">{{ row.duration || 'N/A' }}</td>
                   </ng-container>
                   <div class="noRecordFound" *ngIf="displayedColumnsStops?.length === 0">No Record Found</div>
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsStops"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsStops;"></tr>
                 </table>
-                <!-- <mat-paginator translate="no" #paginatorStops [length]="totalLengthStops" [hidePageSize]="true"
-                    showFirstLastButtons [pageSize]="10" (page)="onPaginateChangeStops($event)">
-                  </mat-paginator> -->
               </div>
-
             </mat-tab>
           </mat-tab-group>
         </div>
