@@ -104,7 +104,7 @@
         } else if ($body.hasClass('site-dashboard-menubar-unfold')) {
           this.auto = 'unfold';
         }
-        console.log("in menubar", this.auto);
+        // console.log("in menubar", this.auto);
 
       }
 
