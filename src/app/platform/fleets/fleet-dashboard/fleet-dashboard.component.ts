@@ -1025,10 +1025,11 @@ export class FleetDashboardComponent implements OnInit {
         this.subscription = newMessage.subscribe((response: string) => {
           const signalRresponse = JSON.parse(response) as SignalRresponse;
 
-          console.log('signalResponse', signalRresponse);
           if (signalRresponse && Number(signalRresponse.rtp) !== 1) {
             return;
           }
+          
+          console.log('signalResponse', signalRresponse);
 
           for (let i = 0; i < this.trucks.length; i++) {
             if (this.trucks[i].device_id === signalRresponse.id) {
