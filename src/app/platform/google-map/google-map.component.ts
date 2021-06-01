@@ -37,6 +37,7 @@ export class GoogleMapComponent implements OnInit {
   @Input() center?= { lat: 25.3548, lng: 51.1839 };
   @Input() zoom_level?= 9;
   @Input() mapType: boolean = true;
+  @Input() recenter?= false;
 
   @Input() poiLocations: any;
   @Input() trucks: any;
@@ -46,7 +47,7 @@ export class GoogleMapComponent implements OnInit {
   @Output() imageUrlGenerated: EventEmitter<any> = new EventEmitter<any>();
 
   infoWindows = {};
-
+  followVehicle = true;
 
   constructor(private httpCLient: HttpClient, private sanitizer: DomSanitizer, public swalService: SwalService) {
   }
@@ -67,6 +68,7 @@ export class GoogleMapComponent implements OnInit {
   // allInfoWindows = []
   circleShape;
   osrmLatLng;
+  recenterImage = '';
 
   playBack = false;
 
@@ -84,6 +86,22 @@ export class GoogleMapComponent implements OnInit {
       // console.log("cords",this.cords)
       this.drawTerritory(this.cords);
     }
+
+    setTimeout(() => {
+      if (this.recenter) {
+        // Create the DIV to hold the control and call the CenterControl()
+        // constructor passing in this DIV.
+        const centerControlDiv = document.createElement("div");
+        this.CenterControl(centerControlDiv, this.map);
+      
+        this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
+      }
+    }, 500);
+
+    this.map.addListener('dragend', (e) => {
+      this.followVehicle = false; 
+    });
+
   }
 
   initMap() {
@@ -352,6 +370,7 @@ export class GoogleMapComponent implements OnInit {
 
     let trailMarker;
     const tempMarkersArr = [];
+    this.snappedCoordinates = [];
     const bounds = new google.maps.LatLngBounds();
     if (locations.length) {
       if (!showCircleMarkers && showMarkers) {
@@ -422,6 +441,9 @@ export class GoogleMapComponent implements OnInit {
       });
       this.map.fitBounds(bounds);
       // this.map.fitBounds(this.bounds);
+
+      this.processSnapToRoadResponsePng(locations);
+
       return tempMarkersArr;
     }
   }
@@ -582,6 +604,27 @@ export class GoogleMapComponent implements OnInit {
 
         var formatted_latlng = {
           lat: data[i][1], lng: data[i][0]
+        }
+
+        this.snappedCoodinatesFormatted.push(formatted_latlng);
+      }
+    }
+
+    this.osrmLatLng = this.snappedCoodinatesFormatted;
+  }
+
+
+  // PNG Users play animation
+  processSnapToRoadResponsePng(data) {
+    for (var i = 0; i < data.length; i++) {
+      if (data.length > 0) {
+        var latlng = new google.maps.LatLng(
+          data[i]?.lat,
+          data[i]?.lng);
+        this.snappedCoordinates.push(latlng);
+
+        var formatted_latlng = {
+          lat: data[i]?.lat, lng: data[i]?.lng
         }
 
         this.snappedCoodinatesFormatted.push(formatted_latlng);
@@ -1383,7 +1426,11 @@ export class GoogleMapComponent implements OnInit {
           'transform': 'rotate('+heading+'deg)'
         });
       }
-      // this.map.setCenter(latlng);
+
+      if (this.followVehicle) {
+        this.map.setCenter(latlng);
+      }
+
     }
   }
 
@@ -1501,6 +1548,8 @@ export class GoogleMapComponent implements OnInit {
     this.handle = setInterval(() => {
       this.animatedMoveQ(this.marker, 1000, this.array[this.current_ind], this.array[this.current_ind + 1], zoomLevel);
       this.current_ind++;
+      this.map.setCenter(this.marker.position);
+      this.followVehicle = true;
       if (this.array[this.current_ind + 1] == undefined) {
         clearInterval(this.handle);
       }
@@ -1813,6 +1862,49 @@ export class GoogleMapComponent implements OnInit {
       this.infoWindows[this.poiLocations[i].entity_id].setContent(iValue);
     }
   }
+
+  CenterControl(controlDiv: Element, map: google.maps.Map) {
+    // Set CSS for the control border.
+    const controlUI = document.createElement("div");
+    controlUI.style.cursor = "pointer";
+    controlUI.style.textAlign = "center";
+    controlUI.style.position = "absolute";
+    controlUI.style.right = "10px";
+    controlUI.style.width = "100px";
+    controlUI.style.marginTop = "10px";
+    controlUI.style.height = "25px";
+    controlUI.style.zIndex = "9999999";
+    controlUI.title = "Click to recenter the map";
+    controlDiv.appendChild(controlUI);
+    
+    // Set CSS for the control interior.
+    const controlText = document.createElement("div");
+    controlText.style.color = "rgb(25,25,25)";
+    controlText.style.fontFamily = "Roboto,Arial,sans-serif";
+    controlText.style.fontSize = "16px";
+    controlText.style.lineHeight = "38px";
+    controlText.style.paddingLeft = "5px";
+    controlText.style.paddingRight = "5px";
+    controlUI.style.backgroundColor = "#fff";
+    controlUI.style.border = "2px solid #fff";
+    controlUI.style.borderRadius = "3px";
+    controlUI.style.marginTop = "8px";
+    controlUI.style.marginBottom = "22px";
+    controlUI.style.marginRight = "60px";
+    controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+    controlText.style.position = "absolute";
+    controlUI.style.height = "40px";
+    controlText.style.width = "100px";
+    controlText.innerHTML = "Re Center";
+    controlUI.appendChild(controlText);
+    
+    // Setup the click event listeners: simply set the map to Chicago.
+    controlUI.addEventListener("click", () => {
+      map.setCenter(this.marker.position);
+      this.followVehicle = true;
+    });
+  }
+
 
 }
 

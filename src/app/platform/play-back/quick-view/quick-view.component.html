@@ -106,7 +106,7 @@
                         {{state}}
                       </div>
 
-                      <app-google-map #trailMap class="trailMapHeight" [markers]="violationMarkers"
+                      <app-google-map #trailMap class="trailMapHeight" [markers]="violationMarkers" [recenter]="true"
                         [poiLocations]="locations" [trucks]="trucks" [signalRstarted]="signalRstarted"
                         [infowindow]="violationInfoWindows">
                       </app-google-map>
