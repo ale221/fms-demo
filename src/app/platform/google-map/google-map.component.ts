@@ -1545,11 +1545,11 @@ export class GoogleMapComponent implements OnInit {
 
 
   resumeAnimation(zoomLevel = 15, speed) {
+    this.map.setCenter(this.marker.position);
+    this.followVehicle = true;
     this.handle = setInterval(() => {
       this.animatedMoveQ(this.marker, 1000, this.array[this.current_ind], this.array[this.current_ind + 1], zoomLevel);
       this.current_ind++;
-      this.map.setCenter(this.marker.position);
-      this.followVehicle = true;
       if (this.array[this.current_ind + 1] == undefined) {
         clearInterval(this.handle);
       }
