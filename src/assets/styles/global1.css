@@ -3292,6 +3292,10 @@ fieldset[disabled] .form-material .form-control ~ .floating-label {
   resize: none;
 }
 
+textarea {
+  resize: none;
+}
+
 .form-material.floating textarea.form-control {
   padding-top: 6px;
 }
