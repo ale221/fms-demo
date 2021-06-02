@@ -1896,7 +1896,7 @@ export class GoogleMapComponent implements OnInit {
     controlUI.style.height = "40px";
     controlText.style.width = "50px";
     controlText.innerHTML = `<i
-    class="icon ion-arrow-resize"></i>`;
+    class="ri-navigation-fill"></i>`;
     controlUI.appendChild(controlText);
     
     // Setup the click event listeners: simply set the map to Chicago.
