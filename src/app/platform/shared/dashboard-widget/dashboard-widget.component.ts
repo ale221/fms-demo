@@ -113,7 +113,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob)
-          this.xlsPdfService.downloadXlsPdf(url, 'Fleets-Report.pdf')
+          this.xlsPdfService.downloadXlsPdf(url, 'Fleet Dashboard.pdf')
         })
       }
       else if (item.name === "XLS") {
@@ -122,7 +122,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
           const url = window.URL.createObjectURL(blob)
-          this.xlsPdfService.downloadXlsPdf(url, 'Fleets-Report.xls')
+          this.xlsPdfService.downloadXlsPdf(url, 'Fleet Dashboard.xls')
         })
       }
 
@@ -135,7 +135,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob)
-          this.xlsPdfService.downloadXlsPdf(url, 'DriversDashboard.pdf')
+          this.xlsPdfService.downloadXlsPdf(url, 'Driver_dashboard.pdf')
         })
       }
       else if (item.name === "XLS") {
@@ -144,7 +144,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
           const url = window.URL.createObjectURL(blob)
-          this.xlsPdfService.downloadXlsPdf(url, 'DriversDashboard.xls')
+          this.xlsPdfService.downloadXlsPdf(url, 'Driver_dashboard.xls')
         })
       }
 
@@ -156,7 +156,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob)
-          this.xlsPdfService.downloadXlsPdf(url, 'MaintenanceDashboard.pdf')
+          this.xlsPdfService.downloadXlsPdf(url, 'Maintenance Records.pdf')
         })
       }
       else if (item.name === "XLS") {
@@ -165,7 +165,7 @@ export class DashboardWidgetComponent implements OnInit {
           const data = apiResponse;
           const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
           const url = window.URL.createObjectURL(blob)
-          this.xlsPdfService.downloadXlsPdf(url, 'MaintenanceDashboard.xls')
+          this.xlsPdfService.downloadXlsPdf(url, 'Maintenance Records.xls')
         })
       }
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { CustomValidators } from '../../core/custom.validator';
-import { FormBuilder, FormGroup, Validators,FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { UserService } from '../../core/services/user.service';
 import { ApiResponse, LoginApiResponse } from '../../core/model/api.response';
 import { HttpController } from '../../core/services/loading-controller';
@@ -15,7 +15,6 @@ import { DataTransferService } from '../../core/services/data-transfer.service';
 import { UserRoleEnum } from '../enum/user-role.enum';
 import { HttpStatusCodeEnum } from '../../core/HttpStatusCodeEnum';
 import { ErrorMessage } from '../error-message';
-// import {ConfirmDialogModule, ConfirmationService} from 'primeng/primeng';
 import { Router } from '@angular/router';
 import { PrimengDropdownItem } from '../data/model/primng-dropdown-item';
 import { CanDeactivateComponent } from '../shared/can-deactivate.service';
@@ -70,10 +69,9 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private brandingService: BrandingService,
-    // private confirmationService: ConfirmationService,
     private getUserService: GetUserService,
     private storageService: StorageService,
-    private drawerService:DrawerService,
+    private drawerService: DrawerService,
     private route: Router) {
 
     this.theme = this.brandingService.styleObject();
@@ -114,24 +112,18 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
   ngOnInit() {
     this.loggedInUser = this.authService.getUser();
 
-    this.drawerService.getValue().subscribe(res=>{
-        this.sidebarCheck=res;
-      // console.log("ressssssssssssss1",res);
-      // console.log("ressssssssssssss2",this.sidebarCheck);
+    this.drawerService.getValue().subscribe(res => {
+      this.sidebarCheck = res;
     })
 
     this.getDropDowns();
-    this.getUser();   // get user profile
+    this.getUser();
     // watch for changes in localStorage, change header properties accordingly for user
     this.userSubscription$ = this.storageService.changes.subscribe(res => {
-      // if (this.apiCall === 0) {
-      //   this.getUser();
-      //   this.apiCall = 1;
-      // }
       setTimeout(() => {
         this.getUser();
       }, 1000);
-      if(this.userSubscription$) {
+      if (this.userSubscription$) {
         this.userSubscription$.unsubscribe();
       }
     });
@@ -143,8 +135,6 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
 
   public noWhitespaceValidator(control: FormControl) {
     const isWhitespace = (control.value || '').trim().length === 0;
-    // console.log("iswhtspace",isWhitespace);
-
   }
 
   // Profile Section
@@ -218,7 +208,6 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
 
   notImage = false;
   fileChange(event) {
-    // console.log('file change', event);
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
@@ -277,14 +266,10 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
 
   onSubmit(formValue) {
     this.profileSubmitted = true;
-    // // console.log('formValue', formValue);
-    // // console.log("this.avatar= ", this.avatar)
-    // // console.log("this.avatar_url= ", this.avatar_url)
     const paramUser: FormData = new FormData();
     paramUser['first_name'] = formValue.first_name;
     paramUser['last_name'] = formValue.last_name;
     paramUser['contact_number'] = formValue.contact_number.toString();
-    // console.log("numbers",paramUser['contact_number']);
     paramUser['id'] = this.user.id;
 
     if (this.validate()) {
@@ -292,39 +277,35 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
         paramUser['user_image'] = this.avatar;
       }
       else if (!isNullOrUndefined(this.avatar_url)) {
-        // let image = this.user['user_image'].split('/');
-        // image = image[image.length - 1];
-        // paramUser['user_image'] = image;
+
       }
       else {
         paramUser['user_image'] = 'remove';
       }
-      // // console.log("paramUser before api call= ", paramUser)
-      this.userService.modifyUserData2(paramUser)
-        .subscribe(apiResponse => {
-          if (apiResponse['status'] === 200) {
-            this.profileForm.markAsPristine();
-            this.swalService.getSuccessSwal('User has been edited successfully');
 
-            const u = this.authService.getUser();
-            u['avatar'] = apiResponse['data']['user_image'];
-            u['first_name'] = apiResponse['data']['first_name'];
-            u['last_name'] = apiResponse['data']['last_name'];
-            u['contact_number'] = apiResponse['data']['contact_number'];
+      this.userService.modifyUserData2(paramUser).subscribe(apiResponse => {
+        if (apiResponse['status'] === 200) {
+          this.profileForm.markAsPristine();
+          this.swalService.getSuccessSwal('User has been edited successfully');
 
-            this.authService.setUser(u);
-            localStorage.setItem('user', JSON.stringify(u));
+          const u = this.authService.getUser();
+          u['avatar'] = apiResponse['data']['user_image'];
+          u['first_name'] = apiResponse['data']['first_name'];
+          u['last_name'] = apiResponse['data']['last_name'];
+          u['contact_number'] = apiResponse['data']['contact_number'];
 
-            this.getUserService.setValue(u);
+          this.authService.setUser(u);
+          localStorage.setItem('user', JSON.stringify(u));
 
-            this.getUser();
-            this.deactivate = true;
-            this.submitted = true;
-            this.profileSubmitted = true;
-          } else if (apiResponse['status'] === 500) {
-            this.swalService.getErrorSwal('Profile not Updated', apiResponse['message']);
-          }
-        })
+          this.getUserService.setValue(u);
+          this.getUser();
+          this.deactivate = true;
+          this.submitted = true;
+          this.profileSubmitted = true;
+        } else if (apiResponse['status'] === 500) {
+          this.swalService.getErrorSwal('Profile not Updated', apiResponse['message']);
+        }
+      })
     }
   }
   // Profile Section End
@@ -345,7 +326,6 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
       this.errorMessages.push('Password cannot be same');
       isValid = false;
     }
-
     return isValid;
   }
 
@@ -406,20 +386,6 @@ export class UserProfileComponent implements OnInit, CanDeactivateComponent {
     if (this.deactivate) {
       return true;
     }
-    //  else if (this.profileForm.touched && this.profileForm.dirty) {
-    //   this.confirmationService.confirm({
-    //     message: 'Are you sure that you want to discard UNSAVED changes?',
-    //     header: 'Confirmation',
-    //     accept: () => {
-    //       this.deactivate = true;
-    //       this.route.navigateByUrl(this.route.parseUrl(this.nextUrl));
-    //     },
-    //     reject: () => {
-    //       this.deactivate = false;
-    //     }
-    //   });
-    //   return this.deactivate;
-    // }
     return true;
   }
 

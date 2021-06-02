@@ -71,7 +71,7 @@ export class ClusteredBarChartComponent implements OnInit {
     let data = mainArray['data'];
 
     if (mainArray) {
-      if (mainArray['fleets'].length > 0) {
+      if (mainArray['fleets']?.length > 0) {
         mainArray['fleets'].forEach((element, i) => {
           let params = {}
           if (i < 5) {

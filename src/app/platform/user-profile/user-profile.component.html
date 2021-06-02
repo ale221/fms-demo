@@ -1,4 +1,5 @@
-<div [className]="sidebarCheck ? 'page-content container-fluid half-open-sidebar' : 'page-content container-fluid full-open-sidebar'">
+<div
+  [className]="sidebarCheck ? 'page-content container-fluid half-open-sidebar' : 'page-content container-fluid full-open-sidebar'">
   <div style="padding: 20px;" class="panel panel-default     ">
     <div class="panel-heading  ">
       <h3 class="panel-title "> <b>My Profile</b></h3>
@@ -47,15 +48,10 @@
 
                     </div>
 
-                    <!-- form.getError( -->
                     <div *ngIf="f.password.errors">
                       <span id="txt" class="error-message" *ngIf="f.password.errors.pattern">At least one lowercase
                         letter, one Uppercase letter, one numeric digit and length greater than 8</span>
                     </div>
-                    <!-- <span class="error-message" *ngIf="form.get('password').getError('required') && submitted">
-                      Please provide password
-                    </span> -->
-
 
                   </div>
                   <div class="form-group">
@@ -145,9 +141,9 @@
                     <label class="control-label">Contact Number<span class="text-danger2">*</span></label>
 
                     <!-- <input type="number" formControlName="contact_number" class="form-control" placeholder="00000" /> -->
-                    <p-inputMask formControlName="contact_number" mask="999-9999-9999" maxlength="15"
-                               minlength="11" characterPattern="[0-9+]" placeholder="999-9999-9999" [styleClass]="'form-control'">
-                              </p-inputMask>
+                    <p-inputMask formControlName="contact_number" mask="999-9999-9999" maxlength="15" minlength="11"
+                      characterPattern="[0-9+]" placeholder="999-9999-9999" [styleClass]="'form-control'">
+                    </p-inputMask>
                     <!-- <p-inputMask formControlName="contact_number" mask="99999-99-9999999" characterPattern="[0-9]"
                       placeholder="99999-99-9999999" [styleClass]="'form-control'"></p-inputMask> -->
                     <span class="error-message"
@@ -260,8 +256,8 @@
           <!--</ul>-->
           <hr />
           <div class="">
-            <button [disabled]="!profileForm.valid && profileForm.get('contact_number').value.length <= 11" type="submit" class="btn btn-sm btn-primary pull-right"
-              form="profileFormID">
+            <button [disabled]="!profileForm.valid && profileForm.get('contact_number').value?.length <= 11"
+              type="submit" class="btn btn-sm btn-primary pull-right" form="profileFormID">
               Update Details
             </button>
           </div>
