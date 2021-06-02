@@ -548,12 +548,13 @@
                   <div class="font-size-18 "> Last Updated </div>
                   <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
                   <!-- <span class="label label-success label-outline "> Enable </span> -->
+                  <div class="font-size-15" style="padding-top: 6px;">{{(lastUpdatedCard | date: 'mediumDate') || '-'}} {{(lastUpdatedCard | date: 'mediumTime')}}
                 </div>
-                <div class="media-right">
+                <!-- <div class="media-right">
                   <div class="font-size-15" style="padding-top: 6px;">{{(lastUpdatedCard | date: 'mediumDate') || '-'}}
                     <br /> {{(lastUpdatedCard | date: 'mediumTime')}}
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="media">
                 <div class="media-left">
@@ -564,11 +565,14 @@
                 <div class="media-body">
                   <div class="font-size-18 "> Location</div>
                   <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
+                  <div class="font-size-15" style="padding-top: 6px; width: 160px;
+                  white-space: break-spaces;
+              ">{{truck?.current_address || '-'}} </div>
                   <span class="label label-success label-outline "> Enable </span>
                 </div>
-                <div class="media-right">
+                <!-- <div class="media-right">
                   <div class="font-size-15" style="padding-top: 6px;">{{truck?.current_address || '-'}} </div>
-                </div>
+                </div> -->
               </div>
               <div class="media">
                 <div class="media-left">
@@ -579,12 +583,12 @@
                 <div class="media-body">
                   <div class="font-size-18 "> Speed</div>
                   <!-- <div class="font-size-12 padding-top-0"> #DHT11</div>  -->
-                  <span class="label label-success label-outline  "> Enable </span>
-                </div>
-                <div class="media-right">
                   <div class="font-size-15">
                     {{ (lastSpeed | number : '1.0-0') || truck?.last_speed}} km/h </div>
+                  <span class="label label-success label-outline  "> Enable </span>
                 </div>
+                <!-- <div class="media-right">
+                </div> -->
               </div>
               <div class="media" *ngIf="selectedPkg === PackageType.standard">
                 <div class="media-left">
@@ -595,15 +599,15 @@
                 <div class="media-body">
                   <div class="font-size-18 "> Temperature</div>
                   <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
-                  <span class="label label-danger label-outline" *ngIf="!truck?.temperature"> Disabled </span>
-                  <span class="label label-success label-outline" *ngIf="truck?.temperature"> Enable </span>
-                </div>
-                <div class="media-right">
                   <div class="font-size-16">
                     {{truck?.signalRresponse?.evTemp ? truck?.signalRresponse?.evTemp : ((truck?.on_board_temperature)
                     ? truck?.on_board_temperature : '-')}}
                   </div>
+                  <span class="label label-danger label-outline" *ngIf="!truck?.temperature"> Disabled </span>
+                  <span class="label label-success label-outline" *ngIf="truck?.temperature"> Enable </span>
                 </div>
+                <!-- <div class="media-right">
+                </div> -->
               </div>
               <!-- <div class="media" *ngIf="selectedPkg === PackageType.standard && truck?.signalRresponse?.vol">
                   <div class="media-left">
@@ -629,12 +633,12 @@
                 </div>
                 <div class="media-body" style="color: gray;">
                   <div class="font-size-18 grey-600 "> Humidity</div>
+                  <div class="font-size-16">0</div>
                   <!-- <div class="font-size-12 padding-top-0"> #DHT11</div> -->
                   <span class=" label label-danger label-outline"> Disabled </span>
                 </div>
-                <div class="media-right" style="color: gray;">
-                  <div class="font-size-16">0</div>
-                </div>
+                <!-- <div class="media-right" style="color: gray;">
+                </div> -->
               </div>
             </div>
           </div>
