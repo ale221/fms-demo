@@ -1545,11 +1545,11 @@ export class GoogleMapComponent implements OnInit {
 
 
   resumeAnimation(zoomLevel = 15, speed) {
+    this.map.setCenter(this.marker.position);
+    this.followVehicle = true;
     this.handle = setInterval(() => {
       this.animatedMoveQ(this.marker, 1000, this.array[this.current_ind], this.array[this.current_ind + 1], zoomLevel);
       this.current_ind++;
-      this.map.setCenter(this.marker.position);
-      this.followVehicle = true;
       if (this.array[this.current_ind + 1] == undefined) {
         clearInterval(this.handle);
       }
@@ -1870,7 +1870,7 @@ export class GoogleMapComponent implements OnInit {
     controlUI.style.textAlign = "center";
     controlUI.style.position = "absolute";
     controlUI.style.right = "10px";
-    controlUI.style.width = "100px";
+    controlUI.style.width = "50px";
     controlUI.style.marginTop = "10px";
     controlUI.style.height = "25px";
     controlUI.style.zIndex = "9999999";
@@ -1888,14 +1888,15 @@ export class GoogleMapComponent implements OnInit {
     controlUI.style.backgroundColor = "#fff";
     controlUI.style.border = "2px solid #fff";
     controlUI.style.borderRadius = "3px";
-    controlUI.style.marginTop = "8px";
+    controlUI.style.marginTop = "9px";
     controlUI.style.marginBottom = "22px";
-    controlUI.style.marginRight = "60px";
+    controlUI.style.marginRight = "50px";
     controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
     controlText.style.position = "absolute";
     controlUI.style.height = "40px";
-    controlText.style.width = "100px";
-    controlText.innerHTML = "Re Center";
+    controlText.style.width = "50px";
+    controlText.innerHTML = `<i
+    class="icon ion-arrow-resize"></i>`;
     controlUI.appendChild(controlText);
     
     // Setup the click event listeners: simply set the map to Chicago.
