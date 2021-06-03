@@ -1404,7 +1404,7 @@ export class GoogleMapComponent implements OnInit {
     return this.map;
   }
 
-  animatedMoveQ(marker, t, current, moveto, zoomLevel) {
+  animatedMoveQ(marker, t, current, moveto, zoomLevel, i) {
     if (current != undefined && moveto != undefined) {
       const deltalat = (moveto.lat - current.lat) / 100;
       const deltalng = (moveto.lng - current.lng) / 100;
@@ -1418,7 +1418,9 @@ export class GoogleMapComponent implements OnInit {
       // let infoArr = [current.timestamp];
       // let info = this.createInfowindowTemplate(infoArr, current.title);
       // this.updateInfoWindowContent(info);
-      // this.map.setZoom(zoomLevel);
+      if (i === 0) {
+        this.map.setZoom(zoomLevel);
+      }
       let point1 = new google.maps.LatLng(current.lat, current.lng);
       // // console.log(current,moveto)
       let heading = google.maps.geometry.spherical.computeHeading(point1,latlng);
@@ -1513,7 +1515,7 @@ export class GoogleMapComponent implements OnInit {
         // let infoArr = [arrayOfLatLng[i].timestamp];
         // let info = this.createInfowindowTemplate(infoArr, arrayOfLatLng[0].title);
         // this.updateInfoWindowContent(info);
-        this.animatedMoveQ(this.marker, 1000, arrayOfLatLng[i], arrayOfLatLng[i + 1], zoomLevel);
+        this.animatedMoveQ(this.marker, 1000, arrayOfLatLng[i], arrayOfLatLng[i + 1], zoomLevel, i);
         this.array = arrayOfLatLng;
         this.current_ind = i;
         i++;
