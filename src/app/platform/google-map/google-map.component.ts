@@ -1554,7 +1554,7 @@ export class GoogleMapComponent implements OnInit {
     this.map.setCenter(this.marker.position);
     this.followVehicle = true;
     this.handle = setInterval(() => {
-      this.animatedMoveQ(this.marker, 1000, this.array[this.current_ind], this.array[this.current_ind + 1], zoomLevel);
+      this.animatedMoveQ(this.marker, 1000, this.array[this.current_ind], this.array[this.current_ind + 1], zoomLevel, 0);
       this.current_ind++;
       if (this.array[this.current_ind + 1] == undefined) {
         clearInterval(this.handle);
