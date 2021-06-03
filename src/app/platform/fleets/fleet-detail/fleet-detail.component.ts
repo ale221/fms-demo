@@ -1542,7 +1542,7 @@ export class FleetDetailComponent implements OnInit {
                 //   im = this.createInfowindowTemplate(info);
                 this.violationInfoWindows.push(im);
               }
-              this.violationMarkers.push({ lat: response[i].lat, lng: response[i].long });
+              this.violationMarkers.push({ lat: response[i].lat, lng: response[i].long, timestamp: response[i].timestamp, });
             }
           }
 

@@ -220,7 +220,7 @@ export class QuickViewComponent implements OnInit, OnDestroy, AfterViewInit {
   playbackLoader = false;
   state: string = null;
   speed_marker: number = 500;
-  zoomLevel = 15;
+  zoomLevel = 16;
   dateRange;
   startDate;
   endDate;
