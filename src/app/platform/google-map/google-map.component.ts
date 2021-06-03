@@ -457,22 +457,26 @@ export class GoogleMapComponent implements OnInit {
       }
       let pathValues = [];
       let timeStamps = [];
+      let radiuses = [];
       this.snappedCoordinates = [];
       this.snappedCoodinatesFormatted = [];
       let count = 0;
       this.totalSnapToRoadCalls = Math.ceil(locations.length / 100);
       const observables: Observable<any>[] = [];
-
+      
       locations.forEach((element, index) => {
         // SnapToRoad only accept 100 paths, therefore we have to send multipe request to Google Roads Api
         if (count === 99 || (index + 1) === locations.length) {
-          observables.push(this.sendSnapToRoadRequest(pathValues, locations, info, zoom));
+          observables.push(this.sendSnapToRoadRequest(pathValues, locations, info, zoom, timeStamps, radiuses));
           pathValues = [];
+          timeStamps = [];
+          radiuses = [];
           count = 0;
         } else {
           count++;
           pathValues.push(element.lng + "," + element.lat);
-          // timeStamps.push(element.times)
+          timeStamps.push(new Date(element.timestamp).getTime() / 1000)
+          radiuses.push(20)
         }
       });
 
@@ -561,11 +565,11 @@ export class GoogleMapComponent implements OnInit {
 
 
 
-  sendSnapToRoadRequest(pathValues, locations, info, zoom = null) {
+  sendSnapToRoadRequest(pathValues, locations, info, zoom = null, timeStamps, radiuses) {
     if (pathValues && pathValues.length) {
       // let url = "https://roads.googleapis.com/v1/snapToRoads?path=" + pathValues.join('|') + "&interpolate=true&key=AIzaSyASI7bo-I7oh_xwVX_IoEHI7fawh3VqSuE";
       // let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=full&geometries=polyline6&steps=true";
-      let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=full&geometries=geojson";
+      let url = environment.sanpToRoadUrl + pathValues.join(';') + "?timestamps="+timeStamps.join(';')+"&radiuses="+radiuses.join(';')+"&overview=full&geometries=geojson";
       return this.httpCLient.get(url);
       // .subscribe(res => {
       //   this.totalSnapToRoadResponses += 1;
