@@ -67,7 +67,7 @@ export class ManageMaintenanceComponent implements OnInit {
   @ViewChild('editpop') private editpop;
   @ViewChild('closeTypeForm') private closeTypeForm;
   dataSource;
-  // dataSourceType = [];
+
   totalLength = 0;
   totalLengthType = 0;
   bsModalRef: BsModalRef;
