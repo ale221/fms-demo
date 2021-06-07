@@ -11,7 +11,6 @@
     <div class="spinner text-center">
       <img src="assets/images/red-loader.gif" height="100px">
     </div>
-    <!-- <h4 style="color:#000;text-align: center !important;">Loading..</h4> -->
   </div>
 </div>
 <!-- loader ends -->
@@ -303,36 +302,3 @@
   </div>
 
 </div>
-<!--
-<form [formGroup]="createPasswordForm" (ngSubmit)="onSubmitCreatePassword()">
-
-  <div class="form-group">
-    <label class="sr-only">New Password {{newPasswordType}}</label>
-    <input type="{{newPasswordType}}" formControlName="newpassword" placeholder="New password" class="form-control"
-      maxlength="15" [ngClass]="{ 'is-invalid':  formForNewPassword.newpassword.errors }" />
-    <span (click)="toggleNewPasswordType()"> <i [class]="newPasswordEye? 'fa fa-eye': 'fa fa-eye-slash'"></i></span>
-    <div *ngIf="formForNewPassword.newpassword.errors">
-       <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.newpassword.errors.required">Password is required</div>
-      <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.newpassword.errors.pattern">
-        At least one lowercase letter, one uppercase letter, one numeric digit and length greater than 8
-      </div>
-    </div>
-
-  </div>
-  <div class="form-group">
-    <label class="sr-only">Confirm Password</label>
-    <input type="{{confirmPasswordType}}" formControlName="confirmpassword" placeholder="Confirm password" class="form-control"
-      maxlength="15" [ngClass]="{ 'is-invalid':  formForNewPassword.confirmpassword.errors }" />
-
-    <span (click)="toggleConfirmPasswordType()" > <i [class]="confirmPasswordEye? 'fa fa-eye': 'fa fa-eye-slash'"></i></span>
-    <div *ngIf="formForNewPassword.confirmpassword.errors">
-     <div class="text-left text-danger errorMessageFont" *ngIf="formForNewPassword.confirmpassword.errors.required">Password is required</div>
-      <div class="text-left text-danger errorMessageFont"
-        *ngIf="formForNewPassword.confirmpassword.errors.confirmedValidator">Password does not match</div>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary btn-round1 btn-block theme-color"
-    [disabled]="createPasswordForm.invalid || submitted">Reset Password
-  </button>
-
-</form> -->

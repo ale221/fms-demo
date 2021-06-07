@@ -16,6 +16,7 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { MaintenanceService } from '../../services/mainenance-service.service';
 
 @Component({
   selector: 'app-maintenance-reporting',
@@ -48,7 +49,6 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
     { field: 'maintenance_type_name', header: 'Type' },
     { field: 'driver_name', header: 'Driver' },
     { field: 'asset_entity_type', header: 'Asset Type' },
-    // { field: 'status_label', header: 'Status' },
     { field: 'start_datetime_new', header: 'Start Date', time: true, format: 'MMM d, y, h:mm:ss a' },
     { field: 'end_datetime_new', header: 'End Date', time: true, format: 'MMM d, y, h:mm:ss a' },
     { field: 'issued_datetime_new', header: 'Issued Date', time: true, format: 'MMM d, y, h:mm:ss a' },
@@ -60,21 +60,19 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
 
   constructor(public gotoService: GotoPageService,
     private swalService: SwalService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private maintenaceService: MaintenanceService) {
 
   }
 
   ngOnInit() {
     this.loggedInUser = this.authService.getUser();
-    // console.log("LoggedInUser object- ", this.loggedInUser.customer.id)
 
-    // // console.log("this.entity--- ", this.entity)
     if (this.filters && this.filters.truck_id) {
       this.getMaintenanceReport(this.filters)
     }
-    // this.isEntityTruck = this.entity.type === EntityType.TRUCK;
 
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?vehicle_group_id=&vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  + '&start_date=&end_date=';
+    this.downloadableLink = 'vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  + '&start_date=&end_date=';
 
   }
 
@@ -83,12 +81,10 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
 
 
   setupReport(event) {
-    // console.log("Event of Maintenance tab", event)
     const start_date = DateUtils.getUtcDateTimeStart(event[0][0]);
     const end_date = DateUtils.getUtcDateTimeStart(event[0][1]);
 
-    this.downloadableLink = environment.baseUrl + '/iof/maintenance/records?vehicle_group_id=&vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  + '&start_date=' + start_date + '&end_date=' + end_date;
-
+    this.downloadableLink = 'vehicle_id=' + this.entity + '&maintenance_type_id=&maintenance_id=&date_filter=&search=&export=csv&timeZone=' + Intl.DateTimeFormat().resolvedOptions().timeZone  + '&start_date=' + start_date + '&end_date=' + end_date;
 
     this.filters.start_datetime = start_date;
     this.filters.end_datetime = end_date;
@@ -161,7 +157,6 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
     this.pdfReportObj.emit(this.reportObj);
   }
 
-
   onSelect({ selected }, type) {
     // // console.log(selected);
 
@@ -173,13 +168,24 @@ export class MaintenanceReportingComponent implements OnInit, OnChanges {
     }
   }
 
-
   getAssetTypeImage(value) {
     if (value.indexOf('Bin') > -1) {
       return 'assets/images/iol/icon_sm_bin.png';
     } else {
       return 'assets/images/iol/icon_sm_truck.png';
     }
+  }
+
+  downloadableExcelLink(download) {
+    this.maintenaceService.downloadXSLFleetDetail(download).subscribe((apiResponse: any) => {
+      const data = apiResponse;
+      const blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      const url = window.URL.createObjectURL(blob)
+      var fileLink = document.createElement('a');
+      fileLink.href = url;
+      fileLink.download = 'Maintaince Records';
+      fileLink.click();
+    })
   }
 
 

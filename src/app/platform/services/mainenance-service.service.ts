@@ -78,7 +78,6 @@ export class MaintenanceService {
   }
 
   getServiceType() {
-    // const url = `/iof/service-types`;
     const url = `/iof/maintenance-types-previous`;
     return this.http.get<LoginApiResponse<any>>(url);
   }
@@ -89,21 +88,18 @@ export class MaintenanceService {
   }
 
   getVehicleListing() {
-    // let params = { 'customer': String(this.authService.getUser().customer.id) };
     const url = `/iof/vehicles`;
-    return this.http.get<LoginApiResponse<any>>(url); //, { params: params }s
+    return this.http.get<LoginApiResponse<any>>(url);
   }
 
   getFleetListing() {
-    // let params = { 'customer': String(this.authService.getUser().customer.id) };
     const url = `/iof/fleet`;
-    return this.http.get<LoginApiResponse<any>>(url); //, { params: params }s
+    return this.http.get<LoginApiResponse<any>>(url);
   }
 
   getDrivers() {
-    // let params = { 'customer': String(this.authService.getUser().customer.id) };
     const url = `/iof/drivers`;
-    return this.http.get<LoginApiResponse<any>>(url);  //, { params: params }
+    return this.http.get<LoginApiResponse<any>>(url);
   }
 
   getMaintanceStatus() {
@@ -161,15 +157,11 @@ export class MaintenanceService {
   }
 
   deleteMaintenace(params) {
-    // console.log("params", params)
-    // let newData2 = this.converToFormdata(params);
     const url = `/iof/maintenance/${params}`;
     return this.http.delete(url);
-    // return this.http.delete(url, newData2);
   }
 
   deleteMaintenaceType(params) {
-    // console.log("params", params)
     const url = `/iof/maintenance-types/${params}`;
     return this.http.delete(url);
   }
@@ -218,9 +210,6 @@ export class MaintenanceService {
   downloadXLS(param): Observable<Blob> {
     const url = `/iof/maintenance/records?${param}`
     const myHeaders = new HttpHeaders();
-    // myHeaders.append('Content-Disposition', 'inline');
-    // myHeaders.append('Content-Disposition', 'attachment');
-    // myHeaders.append('filename', 'MaintainceExcelReport');
     myHeaders.append('Access-Control-Allow-Origin', '*');
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
@@ -232,5 +221,11 @@ export class MaintenanceService {
     return this.http.get(url, { responseType: 'blob', headers: myHeaders });
   }
 
+  downloadXSLFleetDetail(param): Observable<Blob> {
+    const url = `/iof/maintenance/records?vehicle_group_id=&${param}`
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url, { responseType: 'blob', headers: myHeaders });
+  }
 
 }

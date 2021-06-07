@@ -117,8 +117,7 @@ export class LoginComponent implements OnInit {
       //   Validators.pattern('^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=[^0-9]*[0-9]).{8,15}$')])]
 
     });
-    // this.EmailControl.setValue(false)
-    // debugger;
+
     if (this.EmailControl.invalid || this.EmailControl.invalid) {
       this.RememberControl.disable();
     } else {
@@ -139,14 +138,7 @@ export class LoginComponent implements OnInit {
         this.RememberControl.enable();
       }
     })
-    // this.RememberControl.valueChanges.subscribe(isMe => {
-    //   // console.log(isMe)
-    //   if(isMe){
-    //     localStorage.setItem('setvalue', "true");
-    //   }  else {
-    //     localStorage.setItem('setvalue', "false");
-    //   }
-    // })
+
     let val = localStorage.getItem('setvalue');
     if (val == 'true') {
       this.loginForm.patchValue({
@@ -201,9 +193,6 @@ export class LoginComponent implements OnInit {
 
       }
     });
-
-
-
   }
   verify() { }
   onCloseMember() {
@@ -221,7 +210,7 @@ export class LoginComponent implements OnInit {
       // // console.log(res);
       try {
         if (res['error'] === true) {
-          // this.invalidEmail=true;
+
           this.swalService.getErrorSwal("Invalid Code please enter correct code");
           this.waitForPasswordCreation = false;
         } else {
@@ -231,11 +220,9 @@ export class LoginComponent implements OnInit {
           this.createpassword = true;
           this.firstTimeUser = false;
         }
-        // this.waitForPasswordCreation=false;
 
         if (res['status'] === 200) {
-          // this.waitForPasswordCreation=false;
-          // this.createpassword =true;
+
         }
 
       } catch (error) {
@@ -248,7 +235,6 @@ export class LoginComponent implements OnInit {
   forgotPassword() {
     let params = {};
     params['email'] = this.forgotPasswordForm.value.currentEmail;
-    // // console.log(params);
     this.userService.forgotPasword(params)
       .subscribe(new class extends HttpController<ApiResponse<any[]>> {
         onComplete(): void {
@@ -295,7 +281,6 @@ export class LoginComponent implements OnInit {
     return true;
   }
   onSubmitForgotPassword() {
-    // this.forgetPassword=true;
     this.sendEmailOnForgetPassword();
   }
 
@@ -309,17 +294,6 @@ export class LoginComponent implements OnInit {
     this.currentEmailSave = params;
     this.forgotPasswordForm.reset();
     this.userService.sendEmailForForgetPassword(params).subscribe(res => {
-      // // console.log(res['error']);
-
-      // try {
-      // if (res['error'] === true) {
-      //   this.defaultLoader = {
-      //     visibility: false
-      //   }
-      //   // this.invalidEmail=true;
-      //   this.swalService.getErrorSwal("User doesn't exist");
-      // }
-      // else {
       this.defaultLoader = {
         visibility: false
       }
@@ -330,12 +304,6 @@ export class LoginComponent implements OnInit {
       this.createpassword = false;
       this.forgetPassword = true;
       this.firstTimeUser = false;
-      // }
-
-      // } catch (error) {
-
-      // }
-
 
 
     });
@@ -344,9 +312,7 @@ export class LoginComponent implements OnInit {
   sendEmailAgain() {
     this.swalService.getSuccessSwal("OTP sent successfully on the email");
     this.userService.sendEmailForForgetPassword(this.currentEmailSave).subscribe(res => {
-      // // console.log(res['error']);
       if (res['error'] === true) {
-        // this.invalidEmail=true;
         this.swalService.getErrorSwal("Please send email again");
         this.createpassword = false;
         this.forgetPassword = false;
@@ -361,19 +327,11 @@ export class LoginComponent implements OnInit {
     this.firstTimeUser = false;
   }
   onFilterChange(event) {
-    // // console.log(event,event.target.checked);
     if (event.target.checked === true) {
       localStorage.setItem('setvalue', "true");
-      // localStorage.setItem('useremail',this.loginForm.value.email);
-      // localStorage.setItem('userpassword',this.loginForm.value.password);
-      // // console.log(this.loginForm.value.email,this.loginForm.value.password);
     }
     else if (event.target.checked === false) {
       localStorage.setItem('setvalue', "false");
-      // localStorage.setItem('useremail','');
-      // localStorage.setItem('userpassword','');
-      // // console.log(this.loginForm.value.email,this.loginForm.value.password);
-      // // console.log(localStorage.getItem('setvalue'),"login");
     }
 
   }
@@ -404,12 +362,8 @@ export class LoginComponent implements OnInit {
             this.context.userData = apiResponse['data'] as User;
             this.context.authService.setUser(apiResponse['data'] as User);
             const user = this.context.authService.getUser() as User;
-            // this.context.translate.use(user['language'].name === 'English' ? 'en' : 'ar');
             this.context.theme = this.context.brandingService.inititalizeBranding();
             this.context.menu = this.context.menuService.inititalizeMenu();
-            // if (user.user_role_id === UserRoleEnum.User || user.status === EntityStatusEnum.Inactive) {
-            //   this.context.router.navigate(['unauthorized']);
-            // } else {
 
             if (apiResponse['data'].is_first_time_login || apiResponse['data'].is_first_time_login == null) {
               this.context.authService.unsetUser();//remove user from localstorage
@@ -447,21 +401,6 @@ export class LoginComponent implements OnInit {
     }
 
     this.router.navigate(['/' + module + '/' + allowedRoute], { queryParams: { usecase: user['use_cases'].first_use_case_id } });
-
-    // if (isClient) {
-    //   this.router.navigate(['/iol/client/', user['associated_client']]);
-    // }
-    // if (isWorkshopTechnician) {
-    //   this.router.navigate(['/iol/maintenances/']);
-    // } else if (module_id < 2) {
-    //   let module = hypernymModules[module_id];
-    //   if (isNullOrUndefined(module)) {
-    //     module = '';
-    //   }
-    //   this.router.navigate(['/iol/' + module]);
-    // } else {
-    //   this.router.navigate(['/' + module], { queryParams: {usecase: 1}});
-    // }
   }
 
   togglePassword(value) {
