@@ -46,6 +46,10 @@ export class GoogleMapComponent implements OnInit {
   @Output() click: EventEmitter<any> = new EventEmitter<any>();
   @Output() imageUrlGenerated: EventEmitter<any> = new EventEmitter<any>();
 
+  locationsSnap;
+  infoSnap;
+  zoomSnap;
+
   infoWindows = {};
   followVehicle = true;
 
@@ -448,7 +452,7 @@ export class GoogleMapComponent implements OnInit {
     }
   }
 
-  createSnapToRoad(locations, info, zoom = null) {
+  createSnapToRoad(locations, info, zoom = null, error = false) {
     const tempMarkersArr = [];
     const bounds = new google.maps.LatLngBounds();
     if (locations.length) {
@@ -463,11 +467,20 @@ export class GoogleMapComponent implements OnInit {
       let count = 0;
       this.totalSnapToRoadCalls = Math.ceil(locations.length / 100);
       const observables: Observable<any>[] = [];
+      const observablesRoute: Observable<any>[] = [];
+
+      this.locationsSnap = locations;
+      this.infoSnap = info;
+      this.zoomSnap = zoom;
       
       locations.forEach((element, index) => {
         // SnapToRoad only accept 100 paths, therefore we have to send multipe request to Google Roads Api
         if (count === 99 || (index + 1) === locations.length) {
-          observables.push(this.sendSnapToRoadRequest(pathValues, locations, info, zoom, timeStamps, radiuses));
+          if (error) {
+            observablesRoute.push(this.sendSnapToRoadRequestRoute(pathValues, locations, info, zoom, timeStamps, radiuses));
+          } else {
+            observables.push(this.sendSnapToRoadRequest(pathValues, locations, info, zoom, timeStamps, radiuses));
+          }
           pathValues = [];
           timeStamps = [];
           radiuses = [];
@@ -481,91 +494,210 @@ export class GoogleMapComponent implements OnInit {
       });
 
 
-      const result1 = forkJoin(observables);
-      result1.subscribe((result) => {
-        let arrayToProcess = [];
-        if (result && result.length) {
-          result.forEach((element, i) => {
-            if (element.code === 'Ok' && element.matchings && element.matchings.length > 0) {
-              // Trail with OSRM Map 
-              element.matchings.forEach (match => {
-                  if (match.geometry && match.geometry.coordinates && match.geometry.coordinates.length > 0) {
-                    match.geometry.coordinates.forEach(coords => {
-                      arrayToProcess.push(coords);
+      let result1;
+      let result2;
+      let matchAPIError = false;
+      let flag = true;
+      if (error) {
+        result2 = forkJoin(observablesRoute);
+        result2.subscribe((result) => {
+          let arrayToProcess = [];
+          if (result && result.length) {
+            result.forEach((element, i) => {
+              if (element.code === 'Ok' && element.waypoints && element.waypoints.length > 0) {
+                // Trail with OSRM Map 
+                if (element.waypoints && element.waypoints.length > 0) {
+                  element.waypoints.forEach (match => {
+                      if (element.waypoints && element.waypoints.length > 0) {
+                        arrayToProcess.push(match.location);
+                      }
+                  })
+                }
+  
+                // Trail with Google Map
+                // element.matchings.forEach (match => {
+                //   if (match.legs && match.legs.length > 0) {
+                //     match.legs.forEach(legs => {
+                //       if (legs.steps && legs.steps.length > 0) {
+                //         legs.steps.forEach(steps => {
+                //           if (steps.intersections && steps.intersections.length > 0) {
+                //             steps.intersections.forEach(intersection => {
+                //               arrayToProcess.push(intersection);
+                //             });
+                //           }
+                //         });
+                //       }
+                //     });
+                //   }
+                // })
+              }
+  
+              if ((i + 1) === result.length) {
+                const tempMarkersArr = [];
+                const bounds = new google.maps.LatLngBounds();
+                const startIcon = 'assets/images/iol/icon-map-pin-start.png';
+                const endIcon = 'assets/images/iol/icon-map-pin-end.png';
+  
+                // Actual Start and End Points
+                // const trailMarker1 = this.createDummyMarker(startIcon, locations[0].lat, locations[0].lng, info[0]);
+                // const trailMarker2 = this.createDummyMarker(endIcon, locations[locations.length - 1].lat, locations[locations.length - 1].lng, info[1]);
+                // Snapped Start and End Points with Google
+                // const trailMarker1 = this.createDummyMarker(startIcon, this.snappedCoordinates[0].lat(), this.snappedCoordinates[0].lng(), info[0]);
+                // const trailMarker2 = this.createDummyMarker(endIcon, this.snappedCoordinates[this.snappedCoordinates.length - 1].lat(), this.snappedCoordinates[this.snappedCoordinates.length - 1].lng(), info[1]);
+  
+                let trailMarker1;
+                let trailMarker2;
+  
+                if (error) {
+                  if (element.waypoints && element.waypoints.length > 0) {
+                    element.waypoints.forEach(match => {
+                      arrayToProcess.push(match.location);
                     });
                   }
-              })
-
-              // Trail with Google Map
-              // element.matchings.forEach (match => {
-              //   if (match.legs && match.legs.length > 0) {
-              //     match.legs.forEach(legs => {
-              //       if (legs.steps && legs.steps.length > 0) {
-              //         legs.steps.forEach(steps => {
-              //           if (steps.intersections && steps.intersections.length > 0) {
-              //             steps.intersections.forEach(intersection => {
-              //               arrayToProcess.push(intersection);
-              //             });
-              //           }
-              //         });
-              //       }
-              //     });
-              //   }
-              // })
+  
+                  // Snapped Start and End Points with OSRM with GeoJSON
+                  trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0][1], arrayToProcess[0][0], info[0]);
+                  trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1][1], arrayToProcess[arrayToProcess.length - 1][0], info[1]);
+                } else {
+                  // Snapped Start and End Points with OSRM with GeoJSON
+                  trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0][1], arrayToProcess[0][0], info[0]);
+                  trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1][1], arrayToProcess[arrayToProcess.length - 1][0], info[1]);
+                }
+  
+  
+                // Snapped Start and End Points with OSRM with Polyline
+                // const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0].location[1], arrayToProcess[0].location[0], info[0]);
+                // const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1].location[1], arrayToProcess[arrayToProcess.length - 1].location[0], info[1]);
+  
+                tempMarkersArr.push(trailMarker1, trailMarker2);
+                trailMarker1.setMap(this.map);
+                trailMarker2.setMap(this.map);
+                this._markers.push(trailMarker1, trailMarker2);
+                this.bounds.extend(trailMarker1.getPosition());
+                this.bounds.extend(trailMarker2.getPosition());
+                this.processSnapToRoadResponse(arrayToProcess, error);
+                this.drawSnappedPolyline(zoom);
+              }
+  
+  
+            });
+          }
+  
+  
+        },
+        err => {
+          if (err && err.status != 200) {
+            this.swalService.getWarningSwal("Unable to find snapped route, Therefore ploting actual route");
+            
+            if (flag) {
+              flag = false;
+              setTimeout(() => {
+                // get route API if there is any error, in OSRM API
+                this.createTrail(locations, info, false);
+                // this.createSnapToRoad(this.locationsSnap, this.infoSnap, this.zoomSnap, true);
+              }, 500);
             }
-
-            if ((i + 1) === result.length) {
-              const tempMarkersArr = [];
-              const bounds = new google.maps.LatLngBounds();
-              const startIcon = 'assets/images/iol/icon-map-pin-start.png';
-              const endIcon = 'assets/images/iol/icon-map-pin-end.png';
-
-              // Actual Start and End Points
-              // const trailMarker1 = this.createDummyMarker(startIcon, locations[0].lat, locations[0].lng, info[0]);
-              // const trailMarker2 = this.createDummyMarker(endIcon, locations[locations.length - 1].lat, locations[locations.length - 1].lng, info[1]);
-              // Snapped Start and End Points with Google
-              // const trailMarker1 = this.createDummyMarker(startIcon, this.snappedCoordinates[0].lat(), this.snappedCoordinates[0].lng(), info[0]);
-              // const trailMarker2 = this.createDummyMarker(endIcon, this.snappedCoordinates[this.snappedCoordinates.length - 1].lat(), this.snappedCoordinates[this.snappedCoordinates.length - 1].lng(), info[1]);
-              // Snapped Start and End Points with OSRM with GeoJSON
-              const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0][1], arrayToProcess[0][0], info[0]);
-              const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1][1], arrayToProcess[arrayToProcess.length - 1][0], info[1]);
-
-              // Snapped Start and End Points with OSRM with Polyline
-              // const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0].location[1], arrayToProcess[0].location[0], info[0]);
-              // const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1].location[1], arrayToProcess[arrayToProcess.length - 1].location[0], info[1]);
-
-              tempMarkersArr.push(trailMarker1, trailMarker2);
-              trailMarker1.setMap(this.map);
-              trailMarker2.setMap(this.map);
-              this._markers.push(trailMarker1, trailMarker2);
-              this.bounds.extend(trailMarker1.getPosition());
-              this.bounds.extend(trailMarker2.getPosition());
-              this.processSnapToRoadResponse(arrayToProcess);
-              this.drawSnappedPolyline(zoom);
+          }
+        });
+      } else {
+        result1 = forkJoin(observables);
+        result1.subscribe((result) => {
+          let arrayToProcess = [];
+          if (result && result.length) {
+            result.forEach((element, i) => {
+              if (element.code === 'Ok' && element.matchings && element.matchings.length > 0) {
+                element.matchings.forEach (match => {
+                    if (match.geometry && match.geometry.coordinates && match.geometry.coordinates.length > 0) {
+                      match.geometry.coordinates.forEach(coords => {
+                        arrayToProcess.push(coords);
+                      });
+                    }
+                })
+  
+                // Trail with Google Map
+                // element.matchings.forEach (match => {
+                //   if (match.legs && match.legs.length > 0) {
+                //     match.legs.forEach(legs => {
+                //       if (legs.steps && legs.steps.length > 0) {
+                //         legs.steps.forEach(steps => {
+                //           if (steps.intersections && steps.intersections.length > 0) {
+                //             steps.intersections.forEach(intersection => {
+                //               arrayToProcess.push(intersection);
+                //             });
+                //           }
+                //         });
+                //       }
+                //     });
+                //   }
+                // })
+              }
+  
+              if ((i + 1) === result.length) {
+                const tempMarkersArr = [];
+                const bounds = new google.maps.LatLngBounds();
+                const startIcon = 'assets/images/iol/icon-map-pin-start.png';
+                const endIcon = 'assets/images/iol/icon-map-pin-end.png';
+  
+                // Actual Start and End Points
+                // const trailMarker1 = this.createDummyMarker(startIcon, locations[0].lat, locations[0].lng, info[0]);
+                // const trailMarker2 = this.createDummyMarker(endIcon, locations[locations.length - 1].lat, locations[locations.length - 1].lng, info[1]);
+                // Snapped Start and End Points with Google
+                // const trailMarker1 = this.createDummyMarker(startIcon, this.snappedCoordinates[0].lat(), this.snappedCoordinates[0].lng(), info[0]);
+                // const trailMarker2 = this.createDummyMarker(endIcon, this.snappedCoordinates[this.snappedCoordinates.length - 1].lat(), this.snappedCoordinates[this.snappedCoordinates.length - 1].lng(), info[1]);
+  
+                let trailMarker1;
+                let trailMarker2;
+                // Snapped Start and End Points with OSRM with GeoJSON
+                trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0][1], arrayToProcess[0][0], info[0]);
+                trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1][1], arrayToProcess[arrayToProcess.length - 1][0], info[1]);
+  
+                // Snapped Start and End Points with OSRM with Polyline
+                // const trailMarker1 = this.createDummyMarker(startIcon, arrayToProcess[0].location[1], arrayToProcess[0].location[0], info[0]);
+                // const trailMarker2 = this.createDummyMarker(endIcon, arrayToProcess[arrayToProcess.length - 1].location[1], arrayToProcess[arrayToProcess.length - 1].location[0], info[1]);
+  
+                tempMarkersArr.push(trailMarker1, trailMarker2);
+                trailMarker1.setMap(this.map);
+                trailMarker2.setMap(this.map);
+                this._markers.push(trailMarker1, trailMarker2);
+                this.bounds.extend(trailMarker1.getPosition());
+                this.bounds.extend(trailMarker2.getPosition());
+                this.processSnapToRoadResponse(arrayToProcess, error);
+                this.drawSnappedPolyline(zoom);
+              }
+  
+  
+            });
+          }
+  
+  
+        },
+        err => {
+          if (err && err.status != 200) {
+            this.swalService.getWarningSwal("Unable to find snapped route, Please select another time period");
+            // this.createTrail(locations, info, false);
+            
+            if (flag) {
+              flag = false;
+              setTimeout(() => {
+                // get route API if there is any error, in OSRM API
+                this.createSnapToRoad(this.locationsSnap, this.infoSnap, this.zoomSnap, true);
+              }, 500);
             }
+          }
+        });
+      }
 
-
-          });
-        }
-
-
-      },
-      err => {
-        if (err && err.status != 200) {
-          this.swalService.getWarningSwal("Unable to find snapped route, Please select another time period");
-          // this.createTrail(locations, info, false);
-        }
-      });
 
 
       // return tempMarkersArr;
     }
     return this.snappedCoordinates;
   }
+  
 
 
 
-  sendSnapToRoadRequest(pathValues, locations, info, zoom = null, timeStamps, radiuses) {
+  sendSnapToRoadRequest(pathValues, locations, info, zoom = null, timeStamps = [], radiuses = []) {
     if (pathValues && pathValues.length) {
       // let url = "https://roads.googleapis.com/v1/snapToRoads?path=" + pathValues.join('|') + "&interpolate=true&key=AIzaSyASI7bo-I7oh_xwVX_IoEHI7fawh3VqSuE";
       // let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=full&geometries=polyline6&steps=true";
@@ -595,10 +727,18 @@ export class GoogleMapComponent implements OnInit {
     }
   }
 
+  sendSnapToRoadRequestRoute(pathValues, locations, info, zoom = null, timeStamps = [], radiuses = []) {
+    if (pathValues && pathValues.length) {
+      // http://router.project-osrm.org/route/v1/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false
+      let url = environment.sanpToRoadUrlRoute + pathValues.join(';') + "?overview=false";
+      return this.httpCLient.get(url);
+    }
+  }
+
 
   // Store snapped polyline returned by the snap-to-road service.
   // Bkp function is for OSRM with GeoJSON
-  processSnapToRoadResponse(data) {
+  processSnapToRoadResponse(data, error) {
     for (var i = 0; i < data.length; i++) {
       if (data[i] && data[i] && data[i].length > 0) {
         var latlng = new google.maps.LatLng(

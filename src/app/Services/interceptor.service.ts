@@ -20,6 +20,7 @@ export class InterceptorService implements HttpInterceptor {
     const authHeader = this.auth.getToken();
     const url = environment.baseUrl;
     const sanpToRoadUrl = environment.sanpToRoadUrl;
+    const sanpToRoadUrlRoute = environment.sanpToRoadUrlRoute;
     const signalR = environment.signalR;
     const translateUrl = environment.translateUrl;
     let useCaseId = "";
@@ -40,7 +41,7 @@ export class InterceptorService implements HttpInterceptor {
         .set("Authorization", "Token " + authHeader)
         .set("use-case", useCaseId);
 
-      if (req.url.includes(signalR) || req.url.includes(sanpToRoadUrl) || req.url.includes(translateUrl)) {
+      if (req.url.includes(signalR) || req.url.includes(sanpToRoadUrl) || req.url.includes(sanpToRoadUrlRoute) || req.url.includes(translateUrl)) {
         cloneReq = req.clone({ url: req.url });
       } else {
         cloneReq = req.clone({ headers: headers, url: url + req.url });
