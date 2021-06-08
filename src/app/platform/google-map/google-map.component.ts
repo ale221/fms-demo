@@ -587,7 +587,7 @@ export class GoogleMapComponent implements OnInit {
         },
         err => {
           if (err && err.status != 200) {
-            this.swalService.getWarningSwal("Unable to find snapped route, Therefore ploting actual route");
+            this.swalService.getWarningSwal("Unable to find snapped route, Therefore creating actual route");
             
             if (flag) {
               flag = false;
