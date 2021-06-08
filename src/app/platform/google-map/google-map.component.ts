@@ -730,7 +730,8 @@ export class GoogleMapComponent implements OnInit {
   sendSnapToRoadRequestRoute(pathValues, locations, info, zoom = null, timeStamps = [], radiuses = []) {
     if (pathValues && pathValues.length) {
       // http://router.project-osrm.org/route/v1/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false
-      let url = environment.sanpToRoadUrlRoute + pathValues.join(';') + "?overview=false";
+      let url = environment.sanpToRoadUrl + pathValues.join(';') + "?overview=false";
+      // let url = environment.sanpToRoadUrlRoute + pathValues.join(';') + "?overview=false";
       return this.httpCLient.get(url);
     }
   }
