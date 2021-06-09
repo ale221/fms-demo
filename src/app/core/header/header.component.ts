@@ -140,7 +140,7 @@ export class HeaderComponent implements OnInit {
     public translateDetector: TranslateDetector) {
 
     this.user = this.authService.getUser();
-      console.log("this.user===> ", this.user)
+
     if (this.user && this.user.language && this.user.language.name === 'Arabic') {
       this.document.body.classList.add('rtl-direction');
     } else {
