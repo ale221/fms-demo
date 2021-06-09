@@ -134,9 +134,9 @@ export class ViolationsComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.drawerService.getValue().subscribe(res => {
-      this.sidebarCheck = res;
-    })
+    this.drawerService.getValue().subscribe(res=>{
+      this.sidebarCheck=res;
+  })
 
     this.loggedInUser = this.authService.getUser();
     this.customerID = this.loggedInUser.customer.id;
