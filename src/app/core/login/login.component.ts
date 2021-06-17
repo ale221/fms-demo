@@ -205,9 +205,7 @@ export class LoginComponent implements OnInit {
     let params = {};
     params['token'] = this.verifyForm.value.otp;
     params['email'] = this.currentEmailSave.email;
-    // // console.log(this.verifyForm.value.otp);
     this.userService.verifyCode(params).subscribe(res => {
-      // // console.log(res);
       try {
         if (res['error'] === true) {
 
@@ -304,8 +302,6 @@ export class LoginComponent implements OnInit {
       this.createpassword = false;
       this.forgetPassword = true;
       this.firstTimeUser = false;
-
-
     });
 
   }
@@ -445,11 +441,11 @@ export class LoginComponent implements OnInit {
           this.context.authService.unsetUser();
         }
 
-        onNext(apiResponse: LoginApiResponse<any[]>): void {
+        onNext(apiResponse: any): void {
           if (apiResponse.status === HttpStatusCodeEnum.Success) {
             this.context.skipForNow();
           } else if (apiResponse.status === HttpStatusCodeEnum.Error) {
-            this.context.swalService.getErrorSwal(apiResponse.message);
+            this.context.swalService.getErrorSwal(apiResponse.data.message);
             this.context.authService.unsetUser();
           }
         }
