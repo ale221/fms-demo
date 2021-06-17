@@ -787,13 +787,13 @@ export class FleetDetailComponent implements OnInit {
 
   private updateLocation(truck, tooLongOrtooShortDistance?, isUpdateTimeOnly?) { //data in popover
     if (this.locations.length) {
-      this.lastSpeed = Math.round((this.truck.signalRresponse.spd > 5 && tooLongOrtooShortDistance) ? this.truck.signalRresponse.spd : 0);
-      this.lastUpdatedCard = (!isUpdateTimeOnly) ? DateUtils.getMMDDYYYYhhmmssA(this.truck.signalRresponse.t) : DateUtils.getLocalYYYYMMDDHHmmss(isUpdateTimeOnly);
-      this.locations[0].latitude = this.truck.signalRresponse.latitude;
-      this.locations[0].longitude = this.truck.signalRresponse.longitude;
+      this.lastSpeed = Math.round((this.truck.signalRresponse && this.truck.signalRresponse.spd > 5 && tooLongOrtooShortDistance) ? this.truck?.signalRresponse?.spd : 0);
+      this.lastUpdatedCard = (!isUpdateTimeOnly) ? DateUtils.getMMDDYYYYhhmmssA(this.truck?.signalRresponse?.t) : DateUtils.getLocalYYYYMMDDHHmmss(isUpdateTimeOnly);
+      this.locations[0].latitude = this.truck?.signalRresponse?.latitude;
+      this.locations[0].longitude = this.truck?.signalRresponse?.longitude;
       this.locations[0].infoList = [
         new Item('Speed', this.lastSpeed + ' km/h'),
-        new Item('Last Updated', (!isUpdateTimeOnly) ? DateUtils.getMMDDYYYYhhmmssA(this.truck.signalRresponse.t) : DateUtils.getLocalYYYYMMDDHHmmss(isUpdateTimeOnly)),
+        new Item('Last Updated', (!isUpdateTimeOnly) ? DateUtils.getMMDDYYYYhhmmssA(this.truck?.signalRresponse?.t) : DateUtils.getLocalYYYYMMDDHHmmss(isUpdateTimeOnly)),
       ];
     }
     this.updateInfoWindow();
