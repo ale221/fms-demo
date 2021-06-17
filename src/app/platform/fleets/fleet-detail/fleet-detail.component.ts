@@ -762,7 +762,7 @@ export class FleetDetailComponent implements OnInit {
             }
 
           } else if (!signalRresponse.lat && !signalRresponse.lon) {
-            this.truck.signalRresponse.t = DateUtils.getLocalYYYYMMDDHHmmss(signalRresponse?.t);
+            this.truck.signalRresponse['t'] = DateUtils.getLocalYYYYMMDDHHmmss(signalRresponse?.t);
             this.tooLongOrtooShortDistance = true;
             this.updateLocation(this.truck, this.tooLongOrtooShortDistance, signalRresponse?.t);
           } else {
