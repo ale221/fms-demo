@@ -711,7 +711,7 @@ export class FleetDetailComponent implements OnInit {
             this.verifyFirmware(signalRresponse.d); //gate version check
           }
           if (this.verifySignalRData(signalRresponse)) { //validate the lang, long
-            const oldLatLng = new google.maps.LatLng(this.truck.signalRresponse.lat, this.truck.signalRresponse.lon);
+            const oldLatLng = new google.maps.LatLng(this.truck?.signalRresponse?.lat, this.truck?.signalRresponse?.lon);
             this.signalRstarted += 1;
             this.truck.signalRresponse = new SignalRresponse(  //revamp the data to show on frontend
               signalRresponse.comp,
