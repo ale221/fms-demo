@@ -1045,7 +1045,7 @@ export class FleetDashboardComponent implements OnInit {
                 });
               }
               if (this.verifySignalRData(signalRresponse, i)) {
-                const oldLatLng = new google.maps.LatLng(this.trucks[i].signalRresponse.lat, this.trucks[i].signalRresponse.lon);
+                const oldLatLng = new google.maps.LatLng(this.trucks[i]?.signalRresponse?.lat, this.trucks[i]?.signalRresponse?.lon);
 
                 this.signalRstarted[i] += 1;
                 this.trucks[i].signalRresponse = new SignalRresponse(
@@ -1076,15 +1076,15 @@ export class FleetDashboardComponent implements OnInit {
                 //   }
                 // });
 
-                this.trucks[i].signalRresponse.vol = ConvertToGallon.convert_to_gallon(((this.trucks[i].signalRresponse.vol / 100) * this.trucks[i].volume_capacity));
-                this.trucks[i].signalRresponse['ignition_status'] = (this.trucks[i].signalRresponse.spd > 5) || (this.trucks[i].signalRresponse.nw !== 1);
+                this.trucks[i].signalRresponse.vol = ConvertToGallon.convert_to_gallon(((this.trucks[i]?.signalRresponse?.vol / 100) * this.trucks[i]?.volume_capacity));
+                this.trucks[i].signalRresponse['ignition_status'] = (this.trucks[i]?.signalRresponse.spd > 5) || (this.trucks[i]?.signalRresponse.nw !== 1);
 
                 if (signalRresponse.t == 0) {
                   this.trucks[i].last_updated = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
                   this.trucks[i].signalRresponse['t'] = DateUtils.getMMDDYYYYhhmmssA((this.currentDate).toString());
                 }
 
-                const newLatLng = new google.maps.LatLng(signalRresponse.lat, signalRresponse.lon);
+                const newLatLng = new google.maps.LatLng(signalRresponse?.lat, signalRresponse?.lon);
                 const differenceInDistance = (google.maps.geometry.spherical.computeDistanceBetween(newLatLng, oldLatLng));
 
                 const tooLongOrtooShortDistance = 50 < differenceInDistance && differenceInDistance < 200000;
