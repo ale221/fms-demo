@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: 'Checkout Github Action'
-        uses: actions/checkout@staging
+        uses: actions/checkout@main
 
       - name: Cache node modules
         uses: actions/setup-node@v1
