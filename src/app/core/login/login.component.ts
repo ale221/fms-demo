@@ -18,6 +18,9 @@ import { BrandingService } from 'src/app/platform/shared/services/branding.servi
 import { ConfirmedValidator } from 'src/app/core/model/ConfirmedValidator';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuService } from 'src/app/platform/shared/services/menu.service';
+import { AngularFireAuth } from "angularfire2/auth";
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -59,6 +62,7 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService, public router: Router,
     private brandingService: BrandingService,
+    public afAuth: AngularFireAuth,
     public menuService: MenuService,
     public translate: TranslateService,
     private userService: UserService,
@@ -349,7 +353,7 @@ export class LoginComponent implements OnInit {
       onError(errorMessage: string, err: any) {
         this.context.errorMessage = errorMessage;
       }
-
+      
       onNext(apiResponse: LoginApiResponse<User>): void {
         if (apiResponse.status) {
           if (apiResponse.status === 200) {
@@ -360,6 +364,8 @@ export class LoginComponent implements OnInit {
             const user = this.context.authService.getUser() as User;
             this.context.theme = this.context.brandingService.inititalizeBranding();
             this.context.menu = this.context.menuService.inititalizeMenu();
+          
+            this.context.AuthLogin(user['fb_token']);
 
             if (apiResponse['data'].is_first_time_login || apiResponse['data'].is_first_time_login == null) {
               this.context.authService.unsetUser();//remove user from localstorage
@@ -383,6 +389,16 @@ export class LoginComponent implements OnInit {
       }
     }(this)
     );
+  }
+
+  // Auth logic to run auth providers
+  AuthLogin(provider) {
+    return this.afAuth.auth.signInWithCustomToken(provider)
+    .then((result) => {
+      // console.log(result)
+    }).catch((error) => {
+      window.alert(error)
+    })
   }
 
   redirect(module_id: number = 1, user: User) {

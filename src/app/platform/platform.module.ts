@@ -22,18 +22,7 @@ import { MatTableModule } from '@angular/material/table';
 import { DriverSaftyReportingComponent } from './Reports/driver-safty-reporting/driver-safty-reporting.component';
 import { HelppageComponent } from '../core/helppage/helppage.component';
 import {DataViewModule} from 'primeng/dataview';
-
-
-export const firebaseConfig = {
-  apiKey: "AIzaSyDoU99niU2pHgMubeK_sG8XId-3LF4NhRI",
-  authDomain: "vodafone-platform.firebaseapp.com",
-  databaseURL: "https://vodafone-platform-default-rtdb.firebaseio.com",
-  projectId: "vodafone-platform",
-  storageBucket: "vodafone-platform.appspot.com",
-  messagingSenderId: "1035844674036",
-  appId: "1:1035844674036:web:849a59202d75378f60d9a1",
-  measurementId: "G-HFSXDQGLBN"
-};
+import { firebaseConfig } from 'src/environments/environment';
 
 // export const firebaseConfig = {
 //   apiKey: 'AIzaSyBsLwTsCPvk3yTakjF3TQUPmNhPXmW81ac',

@@ -31,6 +31,7 @@ import { Subscription } from 'rxjs';
 import { DrawerService } from '../services/drawer.service';
 import { trim } from '@amcharts/amcharts4/.internal/core/utils/Utils';
 import { TranslateDetector } from '../services/translate-detector.service';
+import { AngularFireAuth } from "angularfire2/auth";
 
 declare var google: any;
 declare var $: any;
@@ -129,6 +130,7 @@ export class HeaderComponent implements OnInit {
     private gotoService: GotoPageService,
     private activatedRoute: ActivatedRoute,
     public translate: TranslateService,
+    public afAuth: AngularFireAuth,
     private toast: ToastrService,
     public storageService: StorageService,
     private headerService: HeaderService,
@@ -468,6 +470,10 @@ export class HeaderComponent implements OnInit {
         this.authService.unsetUser();
         let val = localStorage.getItem('setvalue');
 
+        //Firebase signout
+        this.SignOut();
+        
+
         if (val) {
           this.route.navigateByUrl('/');
         }
@@ -483,6 +489,13 @@ export class HeaderComponent implements OnInit {
 
   }
 
+
+  // firebase signout 
+  SignOut() {
+    return this.afAuth.auth.signOut().then((res) => {
+      console.log(res);
+    })
+  }
 
   alert_count: any;
   /*** Method that hits the API to get the total alerts count from bakend */
