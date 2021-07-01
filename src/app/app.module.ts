@@ -17,6 +17,7 @@ import { InterceptorService } from './Services/interceptor.service';
 import { LoginComponent } from './core/login/login.component';
 
 import { FusionChartsModule } from "angular-fusioncharts";
+import { AngularFireModule } from 'angularfire2';
 
 // Import FusionCharts library and chart modules
 import * as FusionCharts from "fusioncharts";
@@ -28,6 +29,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ToastrModule } from 'ngx-toastr';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
 import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
+import { AngularFireAuthModule, AngularFireAuth } from "angularfire2/auth";
+import { firebaseConfig } from 'src/environments/environment';
 
 FusionChartsModule.fcRoot(FusionCharts, charts, FusionTheme);
 
@@ -47,6 +50,8 @@ FusionChartsModule.fcRoot(FusionCharts, charts, FusionTheme);
     LoadingBarRouterModule,
     ReactiveFormsModule,
     FusionChartsModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
     ToastrModule.forRoot({
       positionClass :'toast-top-right'
     }),
@@ -64,6 +69,7 @@ FusionChartsModule.fcRoot(FusionCharts, charts, FusionTheme);
     AuthService,
     AuthGuardService,
     DataSharingService,
+    AngularFireAuth,
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
