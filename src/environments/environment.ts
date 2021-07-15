@@ -14,7 +14,6 @@ export const environment = {
   signalR: 'https://staging.broadcaster.iot.vodafone.com.qa'
 };
 
-
 // export const firebaseConfig = {
 //   apiKey: "AIzaSyDoU99niU2pHgMubeK_sG8XId-3LF4NhRI",
 //   authDomain: "vodafone-platform.firebaseapp.com",
